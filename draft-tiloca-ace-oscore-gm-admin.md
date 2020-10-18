@@ -402,7 +402,9 @@ If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad 
 
 After a successful processing of the request above, the Group Manager performs the following actions.
 
-First, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME , where GROUPNAME is the group name as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The values specified in the request are used as group configuration information for the newly created OSCORE group. For each configuration parameter not specified in the request, the Group Manager MUST assume the default value specified in {{default-values}}.
+First, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the group name as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. Note that the final decision about the group name to assign is of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
+
+The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each configuration parameter not specified in the request, the Group Manager MUST assume the default value specified in {{default-values}}.
 
 After that, the Group Manager creates a new group-membership resource, accessible to joining nodes and future group members at ace-group/GROUPNAME, as specified in {{I-D.ietf-ace-key-groupcomm-oscore}}. In particular, the Group Manager will rely on the current group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group:
 
