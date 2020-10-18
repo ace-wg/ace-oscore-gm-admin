@@ -200,13 +200,13 @@ Collection  \___/
 ~~~~~~~~~~~
 {: #fig-api title="Resources of a Group Manager" artwork-align="center"}
 
-The Group Manager exports a single group-collection resource. The full interface for the group-collection resource allows the Administrator to:
+The Group Manager exports a single group-collection resource, with resource type "ace.osc.gm" defined in {{iana-rt}} of this specification. The full interface for the group-collection resource allows the Administrator to:
 
 * Retrieve the list of existing OSCORE groups, possibly by filters.
 
 * Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.
 
-The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource is identified by the group name specified upon creating the group. The full interface for a group-configuration resource allows the Administrator to:
+The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "ace.osc.gconf" defined in {{iana-rt}} of this specification, and is identified by the group name specified upon creating the group. The full interface for a group-configuration resource allows the Administrator to:
 
 * Retrieve the current configuration of the OSCORE group.
 
@@ -241,6 +241,8 @@ The CBOR map MUST include the following configuration parameters:
 #### Status Properties #### {#config-repr-status-properties}
 
 The CBOR map MUST include the following status parameters:
+
+* 'rt', with value the resource type "ace.osc.gconf" associated to group-configuration resources, encoded as a CBOR text string.
 
 * 'active', encoding the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this specification.
 
@@ -280,7 +282,7 @@ For the following status parameters, the Group Manager MUST assume a pre-configu
 
 ## Discovery
 
-The Administrator can discover the group-collection resource from a resource directory, for instance {{I-D.ietf-core-resource-directory}} and {{I-D.hartke-t2trg-coral-reef}}, or from .well-known/core , by using the resource type "ace.oscore.gm" defined in {{iana-rt}} of this specification.
+The Administrator can discover the group-collection resource from a resource directory, for instance {{I-D.ietf-core-resource-directory}} and {{I-D.hartke-t2trg-coral-reef}}, or from .well-known/core, by using the resource type "ace.osc.gm" defined in {{iana-rt}} of this specification.
 
 The Administrator can discover group-configuration resources for the group-collection resource as specified below in {{collection-resource-get}} and {{collection-resource-fetch}}.
 
@@ -288,7 +290,11 @@ The Administrator can discover group-configuration resources for the group-colle
 
 A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
 
-The list can be represented as a Link Format document {{RFC6690}} or a CoRAL document {{I-D.ietf-core-coral}}. In the latter case, the CoRAL document contains the group-configuration resources in the list as top-level elements. In particular, the link to each group-configuration resource has http://coreapps.org/ace.oscore.gm#item as relation type.
+The list can be represented as a Link Format document {{RFC6690}} or a CoRAL document {{I-D.ietf-core-coral}}.
+
+In the former case, the link to each group-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "ace.osc.gconf" defined in {{iana-rt}} of this specification.
+
+In the latter case, the CoRAL document contains the group-configuration resources in the list as top-level elements. In particular, the link to each group-configuration resource has http://coreapps.org/ace.osc.gm#item as relation type.
 
 ## Interactions ## {#interactions}
 
@@ -309,9 +315,9 @@ Example in Link Format:
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
 
-   <coap://[2001:db8::ab]/manage/gp1>,
-   <coap://[2001:db8::ab]/manage/gp2>,
-   <coap://[2001:db8::ab]/manage/gp3>
+   <coap://[2001:db8::ab]/manage/gp1>;rt="ace.osc.gconf",
+   <coap://[2001:db8::ab]/manage/gp2>;rt="ace.osc.gconf",
+   <coap://[2001:db8::ab]/manage/gp3>;rt="ace.osc.gconf"
 ~~~~~~~~~~~
 
 Example in CoRAL:
@@ -323,7 +329,7 @@ Example in CoRAL:
 <= 2.05 Content
    Content-Format: TBD1 (application/coral+cbor)
 
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    #base </manage/>
    item <gp1>
    item <gp2>
@@ -353,9 +359,9 @@ Example in custom CBOR and Link Format:
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
 
-   <coap://[2001:db8::ab]/manage/gp1>,
-   <coap://[2001:db8::ab]/manage/gp2>,
-   <coap://[2001:db8::ab]/manage/gp3>
+   <coap://[2001:db8::ab]/manage/gp1>;rt="ace.osc.gconf",
+   <coap://[2001:db8::ab]/manage/gp2>;rt="ace.osc.gconf",
+   <coap://[2001:db8::ab]/manage/gp3>;rt="ace.osc.gconf"
 ~~~~~~~~~~~
 
 Example in CoRAL:
@@ -371,7 +377,7 @@ Example in CoRAL:
 <= 2.05 Content
    Content-Format: TBD1 (application/coral+cbor)
 
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    #base </manage/>
    item <gp1>
    item <gp2>
@@ -388,7 +394,7 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 
 * The CBOR map MAY include any of the status parameter 'group_name', 'group_title', 'exp', 'group_policies', 'as_uri' and 'active' defined in {{config-repr-status-properties}}.
 
-* The CBOR map MUST NOT include any of the status parameter 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
+* The CBOR map MUST NOT include any of the status parameter 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
 If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response, which MAY include additional information to clarify what went wrong.
 
@@ -404,7 +410,7 @@ After a successful processing of the request above, the Group Manager performs t
 
 First, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the group name as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. Note that the final decision about the group name to assign is of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
 
-The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each configuration parameter not specified in the request, the Group Manager MUST assume the default value specified in {{default-values}}.
+The value of the status parameter 'rt' is set to "ace.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each configuration parameter not specified in the request, the Group Manager MUST assume the default value specified in {{default-values}}.
 
 After that, the Group Manager creates a new group-membership resource, accessible to joining nodes and future group members at ace-group/GROUPNAME, as specified in {{I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}} and Section 5 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -468,7 +474,7 @@ Example in CoRAL:
    Uri-Path: manage
    Content-Format: TBD1 (application/coral+cbor)
 
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    alg 10
    hkdf 5
    active True
@@ -480,7 +486,7 @@ Example in CoRAL:
    Location-Path: gp4
    Content-Format: TBD1 (application/coral+cbor)
    
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    group_name "gp4"
    joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
    as_uri <coap://as.example.com/token>
@@ -509,6 +515,7 @@ Example in custom CBOR:
      "cs_params" : [[1], [1, 6]],
      "cs_key_params" : [1, 6],
      "cs_key_enc" : 1,
+     "rt" : "ace.osc.gconf",
      "active" : True,
      "group_name" : "gp4",
      "group_title" : "rooms 1 and 2",
@@ -529,7 +536,7 @@ Example in CoRAL:
 <= 2.05 Content
    Content-Format: TBD1 (application/coral+cbor)
 
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    alg 10
    hkdf 5
    cs_alg -8
@@ -539,6 +546,7 @@ Example in CoRAL:
    cs_key_params.key_type 1
    cs_key_params.curve 6
    cs_key_enc 1
+   rt "ace.osc.gconf",
    active True
    group_name "gp4"
    group_title "rooms 1 and 2"
@@ -599,14 +607,14 @@ Example in CoRAL:
    Uri-Path: gp4
    Content-Format: TBD1 (application/coral+cbor)
 
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    alg 11
    hkdf 5
 
 <= 2.04 Changed
    Content-Format: TBD1 (application/coral+cbor)
    
-   #using <http://coreapps.org/ace.oscore.gm#>
+   #using <http://coreapps.org/ace.osc.gm#>
    group_name "gp4"
    joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
    as_uri <coap://as.example.com/token>
@@ -720,17 +728,20 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 ## Resource Types # {#iana-rt}
 
-IANA is asked to enter the following value into the Resource Type (rt=) Link Target Attribute Values subregistry within the Constrained Restful Environments (CoRE) Parameters registry defined in {{RFC6690}}.
+IANA is asked to enter the following values into the Resource Type (rt=) Link Target Attribute Values subregistry within the Constrained Restful Environments (CoRE) Parameters registry defined in {{RFC6690}}.
 
 ~~~~~~~~~~~
-+---------------+----------------------------+-------------------+
-| Value         | Description                | Reference         |
-+---------------+----------------------------+-------------------+
-|               |                            |                   |
-| ace.oscore.gm | Group-collection resource  | [[this document]] |
-|               | of an OSCORE Group Manager |                   |
-|               |                            |                   |
-+---------------+----------------------------+-------------------+
++---------------+------------------------------+-------------------+
+| Value         | Description                  | Reference         |
++---------------+------------------------------+-------------------+
+|               |                              |                   |
+| ace.osc.gm    | Group-collection resource    | [[this document]] |
+|               | of an OSCORE Group Manager   |                   |
+|               |                              |                   |
+| ace.osc.gconf | Group-configuration resource | [[this document]] |
+|               | of an OSCORE Group Manager   |                   |
+|               |                              |                   |
++---------------+------------------------------+-------------------+
 ~~~~~~~~~~~
 
 --- back
@@ -740,6 +751,8 @@ IANA is asked to enter the following value into the Resource Type (rt=) Link Tar
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -00 to -01 ## {#sec-00-01}
+
+* Added resource type for group-configuration resources.
 
 * Fixes, clarifications and editorial improvements.
 
