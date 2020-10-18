@@ -75,7 +75,6 @@ normative:
   I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-cbor-7049bis:
   RFC2119:
-  RFC3986:
   RFC6690:
   RFC6749:
   RFC7252:
@@ -151,7 +150,7 @@ This document also refers to the following terminology.
 
 * Administrator: entity responsible to create, configure and delete OSCORE groups at a Group Manager.
 
-* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
+* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment.
 
 * Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to create a new OSCORE group, or to retrieve the list of existing OSCORE groups, under that Group Manager. As an example, this document uses /manage as the url-path of the group-collection resource; implementations are not required to use this name, and can define their own instead.
 
