@@ -741,7 +741,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
-* Fixes and editorial improvements.
+* Fixes, clarifications and editorial improvements.
 
 # Acknowledgments # {#acknowldegment}
 {: numbered="no"}
