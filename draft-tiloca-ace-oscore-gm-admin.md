@@ -430,15 +430,19 @@ Finally, the Group Manager replies to the Administrator with a 2.01 (Created) re
 
 * 'as_uri', with value the URI of the Authorization Server associated to the Group Manager for the newly created OSCORE group, encoded as a CBOR text string. This value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'as_uri' status property for the OSCORE group.
 
-At this point, the Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to the CoRE Resource Directory {{I-D.ietf-core-resource-directory}}, as defined in Section 2 of {{I-D.tiloca-core-oscore-discovery}}.
+At this point, the Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to the CoRE Resource Directory {{I-D.ietf-core-resource-directory}}, as defined in Section 2 of {{I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
-Alternatively, the Administrator can perform the registration to the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
+Alternatively, the Administrator can perform the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.01 (Created) response above.
 
 * If present, parameters describing the cryptographic algorithms used in the group MUST follow the values that the Administrator specified in the POST request above, or the corresponding default values specified in {{default-values-conf}} otherwise.
 
 * If also registering a related link to the Authorization Server associated to the OSCORE group, the related link MUST have the URI specified in 'as_uri' from the 2.01 (Created) response above.
+
+Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated to the Group Manager.
+
+Therefore, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
 Example in custom CBOR:
 
@@ -568,13 +572,15 @@ Then, the Group Manager replies to the Administrator with a 2.04 (Changed) respo
 
 If the link to the group-membership resource was registered in the Resource Directory (see {{I-D.ietf-core-resource-directory}}), the GM is responsible to refresh the registration, as defined in Section 3 of {{I-D.tiloca-core-oscore-discovery}}.
 
-Alternatively, the Administrator can update the registration to the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
+Alternatively, the Administrator can update the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.04 (Changed) response above.
 
 * If present, parameters describing the cryptographic algorithms used in the group MUST follow the values that the Administrator specified in the PUT request above, or the corresponding default values as specified in {{default-values-conf}} otherwise.
 
 * If also registering a related link to the Authorization Server associated to the OSCORE group, the related link MUST have the URI specified in 'as_uri' from the 2.04 (Changed) response above.
+
+As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
 Example in custom CBOR:
 
@@ -697,33 +703,33 @@ This document has the following actions for IANA.
 IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
- +---------------+----------+--------------------+-------------------+
- | Name          | CBOR Key | CBOR Type          | Reference         |
- +---------------+----------+--------------------+-------------------+
- |               |          |                    |                   |
- | hkdf          | TBD3     | tstr / int         | [[this document]] |
- |               |          |                    |                   |
- | alg           | TBD4     | tstr / int         | [[this document]] |
- |               |          |                    |                   |
- | cs_alg        | TBD5     | tstr / int         | [[this document]] |
- |               |          |                    |                   |
- | cs_params     | TBD6     | array              | [[this document]] |
- |               |          |                    |                   |
- | cs_key_params | TBD7     | array              | [[this document]] |
- |               |          |                    |                   |
- | cs_key_enc    | TBD8     | int                | [[this document]] |
- |               |          |                    |                   |
- | active        | TBD9     | simple type        | [[this document]] |
- |               |          |                    |                   |
- | group_name    | TBD10    | tstr               | [[this document]] |
- |               |          |                    |                   |
- | group_title   | TBD11    | tstr / simple type | [[this document]] |
- |               |          |                    |                   |
- | joining_uri   | TBD12    | tstr               | [[this document]] |
- |               |          |                    |                   |
- | as_uri        | TBD13    | tstr               | [[this document]] |
- |               |          |                    |                   |
- +---------------+----------+--------------------+-------------------+
++---------------+----------+--------------------+-------------------+
+| Name          | CBOR Key | CBOR Type          | Reference         |
++---------------+----------+--------------------+-------------------+
+|               |          |                    |                   |
+| hkdf          | TBD3     | tstr / int         | [[this document]] |
+|               |          |                    |                   |
+| alg           | TBD4     | tstr / int         | [[this document]] |
+|               |          |                    |                   |
+| cs_alg        | TBD5     | tstr / int         | [[this document]] |
+|               |          |                    |                   |
+| cs_params     | TBD6     | array              | [[this document]] |
+|               |          |                    |                   |
+| cs_key_params | TBD7     | array              | [[this document]] |
+|               |          |                    |                   |
+| cs_key_enc    | TBD8     | int                | [[this document]] |
+|               |          |                    |                   |
+| active        | TBD9     | simple type        | [[this document]] |
+|               |          |                    |                   |
+| group_name    | TBD10    | tstr               | [[this document]] |
+|               |          |                    |                   |
+| group_title   | TBD11    | tstr / simple type | [[this document]] |
+|               |          |                    |                   |
+| joining_uri   | TBD12    | tstr               | [[this document]] |
+|               |          |                    |                   |
+| as_uri        | TBD13    | tstr               | [[this document]] |
+|               |          |                    |                   |
++---------------+----------+--------------------+-------------------+
 ~~~~~~~~~~~
 
 ## Resource Types # {#iana-rt}
@@ -751,6 +757,8 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -00 to -01 ## {#sec-00-01}
+
+* Policies on registration of links to the Resource Directory.
 
 * Added resource type for group-configuration resources.
 
