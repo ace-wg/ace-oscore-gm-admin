@@ -406,7 +406,9 @@ First, the Group Manager creates a new group-configuration resource, accessible 
 
 The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each configuration parameter not specified in the request, the Group Manager MUST assume the default value specified in {{default-values}}.
 
-After that, the Group Manager creates a new group-membership resource, accessible to joining nodes and future group members at ace-group/GROUPNAME, as specified in {{I-D.ietf-ace-key-groupcomm-oscore}}. In particular, the Group Manager will rely on the current group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group:
+After that, the Group Manager creates a new group-membership resource, accessible to joining nodes and future group members at ace-group/GROUPNAME, as specified in {{I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}} and Section 5 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+From then on, the Group Manager will rely on the current group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group:
 
 * The OSCORE Master Secret.
 
