@@ -248,6 +248,14 @@ The CBOR map MUST include the following configuration parameters:
 
 * 'cs\_key\_enc', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the encoding of the public keys of group members, encoded as a CBOR integer. Possible values are the same ones admitted for the 'cs\_key\_enc' parameter of the "OSCORE Security Context Parameters" registry, defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
+* 'pairwise\_mode', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR simple value. Its value is True if the OSCORE group supports the pairwise mode of Group OSCORE, or False otherwise.
+
+* 'ecdh\_alg', defined in {{iana-ace-groupcomm-parameters}} of this document and formatted as follows. If the configuration parameter 'pairwise\_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the ECDH algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'ecdh_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+   
+* 'ecdh\_params', defined in {{iana-ace-groupcomm-parameters}} of this document and formatted as follows. If the configuration parameter 'pairwise\_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the parameters for the ECDH algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_params' parameter of the "OSCORE Security Context Parameters" registry, defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+* 'ecdh\_key\_params', defined in {{iana-ace-groupcomm-parameters}} of this document and formatted as follows. If the configuration parameter 'pairwise\_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the additional parameters for the key used with the ECDH algorithm in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_key_params' parameter of the "OSCORE Security Context Parameters" registry, defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+   
 #### Status Properties #### {#config-repr-status-properties}
 
 The CBOR map MUST include the following status parameters:
@@ -280,9 +288,13 @@ This section defines the default values that the Group Manager assumes for confi
 
 #### Configuration Parameters {#default-values-conf}
 
-For each configuration parameter, the Group Manager MUST assume a pre-configured default value, if none is specified by the Administrator.
+For each configuration parameter, the Group Manager MUST use a pre-configured default value, if none is specified by the Administrator. In particular:
 
-In particular, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+* For 'pairwise\_mode', the Group Manager SHOULD use the CBOR simple value False.
+
+* If 'pairwise\_mode' has value True, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'ecdh_alg', 'ecdh_params' and 'ecdh_key_params'.
+
+* For any other configuration parameter, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 #### Status Parameters
 
@@ -478,6 +490,7 @@ Example in custom CBOR:
    {
      "alg" : 10,
      "hkdf" : 5,
+     "pairwise_mode" : True,
      "active" : True,
      "group_title" : "rooms 1 and 2",
      "app_groups": : ["room1", "room2"],
@@ -506,6 +519,7 @@ Example in CoRAL:
    #using <http://coreapps.org/ace.osc.gm#>
    alg 10
    hkdf 5
+   pairwise_mode True
    active True
    group_title "rooms 1 and 2"
    app_group "room1"
@@ -550,6 +564,10 @@ Example in custom CBOR:
      "cs_params" : [[1], [1, 6]],
      "cs_key_params" : [1, 6],
      "cs_key_enc" : 1,
+     "pairwise_mode" : True,
+     "ecdh_alg" : -27,
+     "ecdh_params" : [[1], [1, 6]],
+     "ecdh_key_params" : [1, 6],
      "rt" : "ace.osc.gconf",
      "active" : True,
      "group_name" : "gp4",
@@ -582,6 +600,13 @@ Example in CoRAL:
    cs_key_params.key_type 1
    cs_key_params.curve 6
    cs_key_enc 1
+   pairwise_mode True
+   ecdh_alg -27
+   ecdh_params.alg_capab.key_type 1
+   ecdh_params.key_type_capab.key_type 1
+   ecdh_params.key_type_capab.curve 6
+   ecdh_key_params.key_type 1
+   ecdh_key_params.curve 6
    rt "ace.osc.gconf",
    active True
    group_name "gp4"
@@ -678,13 +703,17 @@ Every group member, upon learning that the OSCORE group has been deactivated (i.
   
 Every group member, upon learning that the OSCORE group has been reactivated (i.e. 'active' has value True again), can resume communicating in the group.
 
+Every group member, upon learning that the OSCORE group has stopped supporting the pairwise mode of Group OSCORE (i.e. 'pairwise_mode' has value False), SHOULD stop using the pairwise mode to process messages in the group.
+
+Every group member, upon learning that the OSCORE group has resumed supporting the pairwise mode of Group OSCORE (i.e. 'pairwise_mode' has value True again), can resume using the pairwise mode to process messages in the group.
+
 Every group member, upon receiving updated values for 'alg' and 'hkdf', MUST either:
 
 * Leave the OSCORE group (see Section 16 of {{I-D.ietf-ace-key-groupcomm-oscore}}), e.g. if not supporting the indicated new algorithms; or
 
 * Use the new parameter values, and accordingly re-derive the OSCORE Security Context for the OSCORE group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs_key_params' and 'cs_key_enc', MUST either:
+Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs_key_params', 'cs_key_enc', 'ecdh_alg', 'ecdh_params' and 'ecdh_key_params' MUST either:
 
 * Leave the OSCORE group, e.g. if not supporting the indicated new algorithm, parameters and encoding; or
 
@@ -739,35 +768,44 @@ This document has the following actions for IANA.
 IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
-+---------------+----------+--------------------+-------------------+
-| Name          | CBOR Key | CBOR Type          | Reference         |
-+---------------+----------+--------------------+-------------------+
-|               |          |                    |                   |
-| hkdf          | TBD3     | tstr / int         | [[this document]] |
-|               |          |                    |                   |
-| alg           | TBD4     | tstr / int         | [[this document]] |
-|               |          |                    |                   |
-| cs_alg        | TBD5     | tstr / int         | [[this document]] |
-|               |          |                    |                   |
-| cs_params     | TBD6     | array              | [[this document]] |
-|               |          |                    |                   |
-| cs_key_params | TBD7     | array              | [[this document]] |
-|               |          |                    |                   |
-| cs_key_enc    | TBD8     | int                | [[this document]] |
-|               |          |                    |                   |
-| active        | TBD9     | simple type        | [[this document]] |
-|               |          |                    |                   |
-| group_name    | TBD10    | tstr               | [[this document]] |
-|               |          |                    |                   |
-| group_title   | TBD11    | tstr / simple type | [[this document]] |
-|               |          |                    |                   |
-| app_groups    | TBD12    | array              | [[this document]] |
-|               |          |                    |                   |
-| joining_uri   | TBD13    | tstr               | [[this document]] |
-|               |          |                    |                   |
-| as_uri        | TBD14    | tstr               | [[this document]] |
-|               |          |                    |                   |
-+---------------+----------+--------------------+-------------------+
++-----------------+----------+----------------------+-------------------+
+| Name            | CBOR Key | CBOR Type            | Reference         |
++-----------------+----------+----------------------+-------------------+
+|                 |          |                      |                   |
+| hkdf            | TBD      | tstr / int           | [[this document]] |
+|                 |          |                      |                   |
+| alg             | TBD      | tstr / int           | [[this document]] |
+|                 |          |                      |                   |
+| cs_alg          | TBD      | tstr / int           | [[this document]] |
+|                 |          |                      |                   |
+| cs_params       | TBD      | array                | [[this document]] |
+|                 |          |                      |                   |
+| cs_key_params   | TBD      | array                | [[this document]] |
+|                 |          |                      |                   |
+| cs_key_enc      | TBD      | int                  | [[this document]] |
+|                 |          |                      |                   |
+| pairwise_mode   | TBD      | simple value         | [[this document]] |
+|                 |          |                      |                   |
+| ecdh_alg        | TBD      | tstr / int /         | [[this document]] |
+|                 |          | simple value         |                   |
+|                 |          |                      |                   |
+| ecdh_params     | TBD      | array / simple value | [[this document]] |
+|                 |          |                      |                   |
+| ecdh_key_params | TBD      | array / simple value | [[this document]] |
+|                 |          |                      |                   |
+| active          | TBD      | simple valu          | [[this document]] |
+|                 |          |                      |                   |
+| group_name      | TBD      | tstr                 | [[this document]] |
+|                 |          |                      |                   |
+| group_title     | TBD      | tstr / simple value  | [[this document]] |
+|                 |          |                      |                   |
+| app_groups      | TBD      | array                | [[this document]] |
+|                 |          |                      |                   |
+| joining_uri     | TBD      | tstr                 | [[this document]] |
+|                 |          |                      |                   |
+| as_uri          | TBD      | tstr                 | [[this document]] |
+|                 |          |                      |                   |
++-----------------+----------+----------------------+-------------------+
 ~~~~~~~~~~~
 
 ## Resource Types # {#iana-rt}
@@ -797,6 +835,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -00 to -01 ## {#sec-00-01}
 
 * Names of application groups as status parameter.
+
+* Parameters related to the pairwise mode of Group OSCORE.
 
 * Policies on registration of links to the Resource Directory.
 
