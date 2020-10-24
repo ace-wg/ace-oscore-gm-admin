@@ -212,13 +212,15 @@ Collection  \___/
 
 The Group Manager exports a single group-collection resource, with resource type "ace.osc.gm" defined in {{iana-rt}} of this specification. The full interface for the group-collection resource allows the Administrator to:
 
-* Retrieve the list of existing OSCORE groups, possibly by filters.
+* Retrieve the list of existing OSCORE groups, possibly by applying filters.
 
 * Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.
 
-The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "ace.osc.gconf" defined in {{iana-rt}} of this specification, and is identified by the group name specified upon creating the OSCORE . The full interface for a group-configuration resource allows the Administrator to:
+The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "ace.osc.gconf" defined in {{iana-rt}} of this specification, and is identified by the group name specified upon creating the OSCORE group. The full interface for a group-configuration resource allows the Administrator to:
 
 * Retrieve the current configuration of the OSCORE group.
+
+* Retrieve part of the current configuration of the OSCORE group, by applying filters.
 
 * Update the current configuration of the OSCORE group.
 
@@ -362,13 +364,13 @@ Example in CoRAL:
    item <gp3>
 ~~~~~~~~~~~
 
-### Fetch Group Configurations By Filters ### {#collection-resource-fetch}
+### Fetch Group Configurations by Filters ### {#collection-resource-fetch}
 
-The Administrator can send a FETCH request to the group-collection resource, in order to retrieve the list of the existing OSCORE groups at the Group Manager that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
+The Administrator can send a FETCH request to the group-collection resource, in order to retrieve the list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-The set of filter criteria is specified in the request payload as a CBOR map, where possible entry labels are all the ones used for configuration properties (see {{config-repr-config-properties}}), as well as "group_name" and "active" for the corresponding status property (see {{config-repr-status-properties}}).
+When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
-Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
+When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
 
 Example in custom CBOR and Link Format:
 
@@ -416,7 +418,7 @@ The Administrator can send a POST request to the group-collection resource, in o
 
 When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
 
-When CoRAL is used, the request payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter (see below).
+When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter (see below).
 
 In particular:
 
@@ -619,6 +621,77 @@ Example in CoRAL:
    as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
+### Retrieve part of a Group Configuration by Filters ### {#configuration-resource-fetch}
+
+The Administrator can send a FETCH request to the group-configuration resource manage/GROUPNAME associated to an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
+
+When custom CBOR is used, the request payload is a CBOR map, which contains the following field:
+
+* 'conf_filter', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR array. Each element of the array specifies one requested configuration or status parameter of the group configuration (see {{config-repr}}), using the corresponding abbreviation defined in {{iana-ace-groupcomm-parameters}}.
+
+When CoRAL is used, the request payload includes one element for each requested configuration parameter or status parameter of the group configuration (see {{config-repr}}). All the specified elements have no value.
+
+After a successful processing of the request above, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration properties and status properties requested by the Administrator in the FETCH request.
+
+The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request (see {{configuration-resource-get}}).
+
+Example in custom CBOR:
+
+~~~~~~~~~~~
+=> 0.05 FETCH
+   Uri-Path: manage
+   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   
+   {
+       "conf_filter" : ["alg",
+                        "hkdf",
+                        "pairwise_mode",
+                        "active",
+                        "group_title",
+                        "app_groups"
+                       ]
+   }
+
+<= 2.05 Content
+   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+
+   {
+     "alg" : 10,
+     "hkdf" : 5,
+     "pairwise_mode" : True,
+     "active" : True,
+     "group_title" : "rooms 1 and 2",
+     "app_groups": : ["room1", "room2"]
+   }
+~~~~~~~~~~~
+
+Example in CoRAL:
+
+~~~~~~~~~~~
+=> 0.05 FETCH
+   Uri-Path: manage
+   Content-Format: TBD1 (application/coral+cbor)
+   
+   alg
+   hkdf
+   pairwise_mode
+   active
+   group_title
+   app_groups
+
+<= 2.05 Content
+   Content-Format: TBD1 (application/coral+cbor)
+
+   #using <http://coreapps.org/ace.osc.gm#>
+   alg 10
+   hkdf 5
+   pairwise_mode True
+   active True
+   group_title "rooms 1 and 2"
+   app_group "room1"
+   app_group "room2"
+~~~~~~~~~~~
+
 ### Update a Group Configuration ### {#configuration-resource-put}
 
 The Administrator can send a PUT request to the group-configuration resource associated to an OSCORE group, in order to update the current configuration of that group. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception of the status parameter 'group_name' that MUST NOT be included.
@@ -805,6 +878,8 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 |                 |          |                      |                   |
 | as_uri          | TBD      | tstr                 | [[this document]] |
 |                 |          |                      |                   |
+| conf_filter     | TBD      | array                | [[this document]] |
+|                 |          |                      |                   |
 +-----------------+----------+----------------------+-------------------+
 ~~~~~~~~~~~
 
@@ -837,6 +912,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Names of application groups as status parameter.
 
 * Parameters related to the pairwise mode of Group OSCORE.
+
+* Defined FETCH for group-configuration resources.
 
 * Policies on registration of links to the Resource Directory.
 
