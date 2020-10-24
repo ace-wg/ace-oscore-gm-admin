@@ -648,8 +648,7 @@ Example in custom CBOR:
                         "pairwise_mode",
                         "active",
                         "group_title",
-                        "app_groups"
-                       ]
+                        "app_groups"]
    }
 
 <= 2.05 Content
@@ -663,6 +662,7 @@ Example in custom CBOR:
      "group_title" : "rooms 1 and 2",
      "app_groups": : ["room1", "room2"]
    }
+
 ~~~~~~~~~~~
 
 Example in CoRAL:
