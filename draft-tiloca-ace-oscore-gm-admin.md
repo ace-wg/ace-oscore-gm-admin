@@ -210,31 +210,47 @@ Collection  \___/
 ~~~~~~~~~~~
 {: #fig-api title="Resources of a Group Manager" artwork-align="center"}
 
-The Group Manager exports a single group-collection resource, with resource type "ace.osc.gm" defined in {{iana-rt}} of this specification. The full interface for the group-collection resource allows the Administrator to:
+The Group Manager exports a single group-collection resource, with resource type "ace.osc.gm" defined in {{iana-rt}} of this specification. The interface for the group-collection resource defined in {{interactions}} allows the Administrator to:
 
 * Retrieve the list of existing OSCORE groups, possibly by applying filters.
 
 * Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.
 
-The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "ace.osc.gconf" defined in {{iana-rt}} of this specification, and is identified by the group name specified upon creating the OSCORE group. The full interface for a group-configuration resource allows the Administrator to:
+The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "ace.osc.gconf" defined in {{iana-rt}} of this specification, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in {{interactions}} allows the Administrator to:
 
 * Retrieve the current configuration of the OSCORE group.
 
 * Retrieve part of the current configuration of the OSCORE group, by applying filters.
 
-* Update the current configuration of the OSCORE group.
+* Overwrite the current configuration of the OSCORE group.
 
 * Delete the OSCORE group.
 
-## Group Configurations ## {#group-configurations}
+## Collection Representation
+
+A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
+
+The list can be represented as a Link Format document {{RFC6690}} or a CoRAL document {{I-D.ietf-core-coral}}.
+
+In the former case, the link to each group-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "ace.osc.gconf" defined in {{iana-rt}} of this specification.
+
+In the latter case, the CoRAL document contains the group-configuration resources in the list as top-level elements. In particular, the link to each group-configuration resource has http://coreapps.org/ace.osc.gm#item as relation type.
+
+## Discovery
+
+The Administrator can discover the group-collection resource from a resource directory, for instance {{I-D.ietf-core-resource-directory}} and {{I-D.hartke-t2trg-coral-reef}}, or from .well-known/core, by using the resource type "ace.osc.gm" defined in {{iana-rt}} of this specification.
+
+The Administrator can discover group-configuration resources for the group-collection resource as specified in {{collection-resource-get}} and {{collection-resource-fetch}}.
+
+# Group Configurations # {#group-configurations}
 
 A group configuration consists of a set of parameters.
 
-### Group Configuration Representation ### {#config-repr}
+## Group Configuration Representation ## {#config-repr}
 
 The group configuration representation is a CBOR map which MUST include configuration properties and status properties.
 
-#### Configuration Properties #### {#config-repr-config-properties}
+### Configuration Properties ### {#config-repr-config-properties}
 
 The CBOR map MUST include the following configuration parameters:
 
@@ -258,7 +274,7 @@ The CBOR map MUST include the following configuration parameters:
 
 * 'ecdh\_key\_params', defined in {{iana-ace-groupcomm-parameters}} of this document and formatted as follows. If the configuration parameter 'pairwise\_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the additional parameters for the key used with the ECDH algorithm in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_key_params' parameter of the "OSCORE Security Context Parameters" registry, defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
    
-#### Status Properties #### {#config-repr-status-properties}
+### Status Properties ### {#config-repr-status-properties}
 
 The CBOR map MUST include the following status parameters:
 
@@ -284,11 +300,11 @@ The CBOR map MAY include the following status parameters:
 
 * 'as_uri', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the URI of the Authorization Server associated to the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-### Default Values {#default-values}
+## Default Values {#default-values}
 
 This section defines the default values that the Group Manager assumes for configuration and status parameters.
 
-#### Configuration Parameters {#default-values-conf}
+### Configuration Parameters {#default-values-conf}
 
 For each configuration parameter, the Group Manager MUST use a pre-configured default value, if none is specified by the Administrator. In particular:
 
@@ -298,7 +314,7 @@ For each configuration parameter, the Group Manager MUST use a pre-configured de
 
 * For any other configuration parameter, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-#### Status Parameters
+### Status Parameters
 
 For the following status parameters, the Group Manager MUST assume a pre-configured default value, if none is specified by the Administrator.
 
@@ -308,29 +324,13 @@ For the following status parameters, the Group Manager MUST assume a pre-configu
 
 * For 'app\_groups', the empty CBOR array.
 
-## Discovery
-
-The Administrator can discover the group-collection resource from a resource directory, for instance {{I-D.ietf-core-resource-directory}} and {{I-D.hartke-t2trg-coral-reef}}, or from .well-known/core, by using the resource type "ace.osc.gm" defined in {{iana-rt}} of this specification.
-
-The Administrator can discover group-configuration resources for the group-collection resource as specified below in {{collection-resource-get}} and {{collection-resource-fetch}}.
-
-## Collection Representation
-
-A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
-
-The list can be represented as a Link Format document {{RFC6690}} or a CoRAL document {{I-D.ietf-core-coral}}.
-
-In the former case, the link to each group-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "ace.osc.gconf" defined in {{iana-rt}} of this specification.
-
-In the latter case, the CoRAL document contains the group-configuration resources in the list as top-level elements. In particular, the link to each group-configuration resource has http://coreapps.org/ace.osc.gm#item as relation type.
-
-## Interactions ## {#interactions}
+# Interactions with the Group Manager # {#interactions}
 
 This section describes the operations available on the group-collection resource and the group-configuration resources.
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in Section 8.2 of {{I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} MUST be used, when specifying the corresponding configuration and status parameters.
 
-### Get All Groups Configurations ### {#collection-resource-get}
+## Retrieve the Full List of Groups Configurations ## {#collection-resource-get}
 
 The Administrator can send a GET request to the group-collection resource, in order to retrieve the list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
 
@@ -364,7 +364,7 @@ Example in CoRAL:
    item <gp3>
 ~~~~~~~~~~~
 
-### Fetch Group Configurations by Filters ### {#collection-resource-fetch}
+## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve the list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
@@ -412,7 +412,7 @@ Example in CoRAL:
    item <gp3>
 ~~~~~~~~~~~
 
-### Create a New Group Configuration ### {#collection-resource-post}
+## Create a New Group Configuration ## {#collection-resource-post}
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MAY specify the intended group name GROUPNAME and group title, and MAY specify pieces of information concerning the group configuration.
 
@@ -539,7 +539,7 @@ Example in CoRAL:
    as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
-### Retrieve a Group Configuration ### {#configuration-resource-get}
+## Retrieve a Group Configuration ## {#configuration-resource-get}
 
 The Administrator can send a GET request to the group-configuration resource manage/GROUPNAME associated to an OSCORE group with group name GROUPNAME, in order to retrieve the current configuration of that group.
 
@@ -621,7 +621,7 @@ Example in CoRAL:
    as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
-### Retrieve part of a Group Configuration by Filters ### {#configuration-resource-fetch}
+## Retrieve Part of a Group Configuration by Filters ## {#configuration-resource-fetch}
 
 The Administrator can send a FETCH request to the group-configuration resource manage/GROUPNAME associated to an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
@@ -692,9 +692,9 @@ Example in CoRAL:
    app_group "room2"
 ~~~~~~~~~~~
 
-### Update a Group Configuration ### {#configuration-resource-put}
+## Overwrite a Group Configuration ## {#configuration-resource-put}
 
-The Administrator can send a PUT request to the group-configuration resource associated to an OSCORE group, in order to update the current configuration of that group. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception of the status parameter 'group_name' that MUST NOT be included.
+The Administrator can send a PUT request to the group-configuration resource associated to an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception of the status parameter 'group_name' that MUST NOT be included.
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}. If no error occurs, the Group Manager performs the following actions.
 
@@ -760,13 +760,13 @@ Example in CoRAL:
    as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
-#### Effects on Joining Nodes ####
+### Effects on Joining Nodes ###
 
 If the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, upon receiving a Joining Request (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}), the Group Manager MUST respond with a 5.03 (Service Unavailable) response to the joining node, and MAY include additional information to clarify what went wrong.
 
 If the value of the status parameter 'active' is changed from False to True, the Group Manager resumes admitting new members in the OSCORE group, by processing their Joining Requests (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-#### Effects on the Group Members ####
+### Effects on the Group Members ###
 
 After having updated a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -794,7 +794,7 @@ Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs
 
 * Use the new parameter values, and, if required, provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-### Delete a Group Configuration ### {#configuration-resource-delete}
+## Delete a Group Configuration ## {#configuration-resource-delete}
 
 The Administrator can send a DELETE request to the group-configuration resource, in order to delete that OSCORE group. The deletion would be successful only on an inactive OSCORE group.
 
@@ -818,7 +818,7 @@ Example:
 <= 2.02 Deleted
 ~~~~~~~~~~~
 
-#### Effects on the Group Members ####
+### Effects on the Group Members ###
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication channel established with that member during its joining process (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
