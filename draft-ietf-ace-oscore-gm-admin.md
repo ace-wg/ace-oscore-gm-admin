@@ -648,12 +648,12 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
    
    {
-       "conf_filter" : ["alg",
-                        "hkdf",
-                        "pairwise_mode",
-                        "active",
-                        "group_title",
-                        "app_groups"]
+     "conf_filter" : ["alg",
+                      "hkdf",
+                      "pairwise_mode",
+                      "active",
+                      "group_title",
+                      "app_groups"]
    }
 
 <= 2.05 Content
