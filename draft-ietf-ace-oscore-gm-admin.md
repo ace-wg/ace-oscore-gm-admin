@@ -848,46 +848,49 @@ This document has the following actions for IANA.
 IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
-+-----------------+----------+----------------------+-------------------+
-| Name            | CBOR Key | CBOR Type            | Reference         |
-+-----------------+----------+----------------------+-------------------+
-|                 |          |                      |                   |
-| hkdf            | TBD      | tstr / int           | [[this document]] |
-|                 |          |                      |                   |
-| alg             | TBD      | tstr / int           | [[this document]] |
-|                 |          |                      |                   |
-| cs_alg          | TBD      | tstr / int           | [[this document]] |
-|                 |          |                      |                   |
-| cs_params       | TBD      | array                | [[this document]] |
-|                 |          |                      |                   |
-| cs_key_params   | TBD      | array                | [[this document]] |
-|                 |          |                      |                   |
-| cs_key_enc      | TBD      | int                  | [[this document]] |
-|                 |          |                      |                   |
-| pairwise_mode   | TBD      | simple value         | [[this document]] |
-|                 |          |                      |                   |
-| ecdh_alg        | TBD      | tstr / int /         | [[this document]] |
-|                 |          | simple value         |                   |
-|                 |          |                      |                   |
-| ecdh_params     | TBD      | array / simple value | [[this document]] |
-|                 |          |                      |                   |
-| ecdh_key_params | TBD      | array / simple value | [[this document]] |
-|                 |          |                      |                   |
-| active          | TBD      | simple valu          | [[this document]] |
-|                 |          |                      |                   |
-| group_name      | TBD      | tstr                 | [[this document]] |
-|                 |          |                      |                   |
-| group_title     | TBD      | tstr / simple value  | [[this document]] |
-|                 |          |                      |                   |
-| app_groups      | TBD      | array                | [[this document]] |
-|                 |          |                      |                   |
-| joining_uri     | TBD      | tstr                 | [[this document]] |
-|                 |          |                      |                   |
-| as_uri          | TBD      | tstr                 | [[this document]] |
-|                 |          |                      |                   |
-| conf_filter     | TBD      | array                | [[this document]] |
-|                 |          |                      |                   |
-+-----------------+----------+----------------------+-------------------+
++-----------------+----------+--------------+-------------------+
+| Name            | CBOR Key | CBOR Type    | Reference         |
++-----------------+----------+--------------+-------------------+
+|                 |          |              |                   |
+| hkdf            | TBD      | tstr / int   | [[this document]] |
+|                 |          |              |                   |
+| alg             | TBD      | tstr / int   | [[this document]] |
+|                 |          |              |                   |
+| cs_alg          | TBD      | tstr / int   | [[this document]] |
+|                 |          |              |                   |
+| cs_params       | TBD      | array        | [[this document]] |
+|                 |          |              |                   |
+| cs_key_params   | TBD      | array        | [[this document]] |
+|                 |          |              |                   |
+| cs_key_enc      | TBD      | int          | [[this document]] |
+|                 |          |              |                   |
+| pairwise_mode   | TBD      | simple value | [[this document]] |
+|                 |          |              |                   |
+| ecdh_alg        | TBD      | tstr / int / | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
+| ecdh_params     | TBD      | array /      | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
+| ecdh_key_params | TBD      | array /      | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
+| active          | TBD      | simple value | [[this document]] |
+|                 |          |              |                   |
+| group_name      | TBD      | tstr         | [[this document]] |
+|                 |          |              |                   |
+| group_title     | TBD      | tstr /       | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
+| app_groups      | TBD      | array        | [[this document]] |
+|                 |          |              |                   |
+| joining_uri     | TBD      | tstr         | [[this document]] |
+|                 |          |              |                   |
+| as_uri          | TBD      | tstr         | [[this document]] |
+|                 |          |              |                   |
+| conf_filter     | TBD      | array        | [[this document]] |
+|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 ~~~~~~~~~~~
 
 ## Resource Types # {#iana-rt}
