@@ -769,7 +769,7 @@ Example in CoRAL:
 
 ### Effects on Joining Nodes ###
 
-If the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, upon receiving a Joining Request (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}), the Group Manager MUST respond with a 5.03 (Service Unavailable) response to the joining node, and MAY include additional information to clarify what went wrong.
+If the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Joining Request with a 5.03 (Service Unavailable) response, as defined in Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 If the value of the status parameter 'active' is changed from False to True, the Group Manager resumes admitting new members in the OSCORE group, by processing their Joining Requests (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -778,6 +778,12 @@ If the value of the status parameter 'active' is changed from False to True, the
 After having updated a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
 To this end, the Group Manager can individually target the 'control_path' URI of each group member (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see Section 6.2 of {{I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g. by using CoAP Observe {{RFC7641}}.
+
+If the value of the status parameter 'active' is changed from True to False:
+
+* The Group Manager MUST stop accepting requests for new keying material from current group members (see Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST repond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+* The Group Manager MUST stop accepting updated public keys uploaded by current group members (see Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Public Key Update Request with a 5.03 (Service Unavailable) response, as defined in Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 Every group member, upon learning that the OSCORE group has been deactivated (i.e. 'active' has value False), SHOULD stop communicating in the group.
   
@@ -807,7 +813,7 @@ The Administrator can send a DELETE request to the group-configuration resource,
 
 That is, the DELETE request actually yields a successful deletion of the OSCORE group, only if the corresponding status parameter 'active' has current value False. The Administrator can ensure that, by first performing an update of the group-configuration resource associated to the OSCORE group (see {{configuration-resource-put}}), and setting the corresponding status parameter 'active' to False.
 
-If, upon receiving the DELETE request, the current value of the status parameter 'active' is True, the Group Manager MUST respond with a 4.09 (Conflict) response, which MAY include additional information to clarify what went wrong.
+If, upon receiving the DELETE request, the current value of the status parameter 'active' is True, the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 6 ("The group is currently not active").
 
 After a successful processing of the request above, the Group Manager performs the following actions.
 
@@ -831,7 +837,7 @@ After having deleted an OSCORE group, the Group Manager can inform the group mem
 
 * The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see Section 18 of {{I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Joining Response message in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key', and 'ace-groupcomm-profile' are present, and the 'key' parameter is empty.
 
-* A group member may subscribe for updates to the group-membership resource associated to the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group.
+* A group member may subscribe for updates to the group-membership resource associated to the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("Group deleted").
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated to that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
@@ -916,6 +922,10 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -01 to -02 ## {#sec-01-02}
+
+* Additional error handling, using also error types.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
