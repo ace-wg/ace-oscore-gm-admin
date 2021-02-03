@@ -73,7 +73,6 @@ normative:
   I-D.ietf-core-coral:
   I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
-  I-D.ietf-cbor-7049bis:
   I-D.ietf-core-groupcomm-bis:
   RFC2119:
   RFC6690:
@@ -82,6 +81,7 @@ normative:
   RFC7641:
   RFC8174:
   RFC8613:
+  RFC8949:
   COSE.Algorithms:
     author: 
       org: IANA
@@ -130,7 +130,7 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to configure and update their configuration.
 
-Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{I-D.ietf-cbor-7049bis}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples use the CoRAL textual serialization format, the CBOR or JSON {{RFC8259}} binary serialization format is used when sending such messages on the wire.
+Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples use the CoRAL textual serialization format, the CBOR or JSON {{RFC8259}} binary serialization format is used when sending such messages on the wire.
 
 The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{I-D.ietf-ace-oscore-profile}}{{I-D.ietf-ace-dtls-authorize}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
@@ -140,7 +140,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with the terms and concepts from the following specifications:
 
-* CBOR {{I-D.ietf-cbor-7049bis}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
+* CBOR {{RFC8949}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
 
 * The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These include the concepts of:
 
@@ -330,7 +330,7 @@ For the following status parameters, the Group Manager MUST use a pre-configured
 
 This section describes the operations available on the group-collection resource and the group-configuration resources.
 
-When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in Section 8.2 of {{I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
+When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in Section 10.2 of {{I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Groups Configurations ## {#collection-resource-get}
 
@@ -777,7 +777,7 @@ If the value of the status parameter 'active' is changed from False to True, the
 
 After having updated a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_path' URI of each group member (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see Section 6.2 of {{I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g. by using CoAP Observe {{RFC7641}}.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see Section 6.2 of {{I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g. by using CoAP Observe {{RFC7641}}.
 
 If the value of the status parameter 'active' is changed from True to False:
 
@@ -851,7 +851,7 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Parameters Registry ## {#iana-ace-groupcomm-parameters}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
 +-----------------+----------+--------------+-------------------+
