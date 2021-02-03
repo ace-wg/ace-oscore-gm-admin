@@ -227,6 +227,8 @@ The Group Manager exports one group-configuration resource for each of its OSCOR
 
 * Overwrite the current configuration of the OSCORE group.
 
+* Selectively update only part of the current configuration of the OSCORE group.
+
 * Delete the OSCORE group.
 
 ## Collection Representation
@@ -826,11 +828,11 @@ TBD
 
 ### Effects on Joining Nodes ###
 
-After having selectively updated a group configuration, the effects on candidate joining nodes are the same as defined in {{sssec-effects-overwrite-joining-nodes}} for the case of group configuration overwriting.
+After having selectively updated part of a group configuration, the effects on candidate joining nodes are the same as defined in {{sssec-effects-overwrite-joining-nodes}} for the case of group configuration overwriting.
 
 ### Effects on the Group Members ###
 
-After having selectively updated a group configuration, the effects on the current group members are the same as defined in {{sssec-effects-overwrite-group-members}} for the case of group configuration overwriting.
+After having selectively updated part of a group configuration, the effects on the current group members are the same as defined in {{sssec-effects-overwrite-group-members}} for the case of group configuration overwriting.
 
 ## Delete a Group Configuration ## {#configuration-resource-delete}
 
@@ -920,6 +922,8 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 | as_uri          | TBD      | tstr         | [[this document]] |
 |                 |          |              |                   |
 | conf_filter     | TBD      | array        | [[this document]] |
+|                 |          |              |                   |
+| app_groups_diff | TBD      | array        | [[this document]] |
 |                 |          |              |                   |
 +-----------------+----------+--------------+-------------------+
 ~~~~~~~~~~~
