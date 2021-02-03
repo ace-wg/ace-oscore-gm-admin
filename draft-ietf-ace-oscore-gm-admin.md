@@ -79,6 +79,7 @@ normative:
   RFC6749:
   RFC7252:
   RFC7641:
+  RFC8132:
   RFC8174:
   RFC8613:
   RFC8949:
@@ -767,15 +768,15 @@ Example in CoRAL:
    as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
-### Effects on Joining Nodes ###
+### Effects on Joining Nodes ### {#sssec-effects-overwrite-joining-nodes}
 
-If the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Joining Request with a 5.03 (Service Unavailable) response, as defined in Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+After having overwritten a group configuration, if the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Joining Request with a 5.03 (Service Unavailable) response, as defined in Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 If the value of the status parameter 'active' is changed from False to True, the Group Manager resumes admitting new members in the OSCORE group, by processing their Joining Requests (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-### Effects on the Group Members ###
+### Effects on the Group Members ### {#sssec-effects-overwrite-group-members}
 
-After having updated a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
+After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
 To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see Section 6.2 of {{I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g. by using CoAP Observe {{RFC7641}}.
 
@@ -806,6 +807,30 @@ Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs
 * Leave the OSCORE group and rejoin it (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}), providing the Group Manager with a public key which is compatible with the indicated new algorithm, parameters and encoding; or
 
 * Use the new parameter values, and, if required, provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
+
+## Selective Update of a Group Configuration ## {#configuration-resource-patch}
+
+TBD {{RFC8132}}
+
+Example in custom CBOR:
+
+~~~~~~~~~~~
+TBD
+~~~~~~~~~~~
+
+Example in CoRAL:
+
+~~~~~~~~~~~
+TBD
+~~~~~~~~~~~
+
+### Effects on Joining Nodes ###
+
+After having selectively updated a group configuration, the effects on candidate joining nodes are the same as defined in {{sssec-effects-overwrite-joining-nodes}} for the case of group configuration overwriting.
+
+### Effects on the Group Members ###
+
+After having selectively updated a group configuration, the effects on the current group members are the same as defined in {{sssec-effects-overwrite-group-members}} for the case of group configuration overwriting.
 
 ## Delete a Group Configuration ## {#configuration-resource-delete}
 
