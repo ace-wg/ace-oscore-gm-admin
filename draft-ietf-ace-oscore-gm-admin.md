@@ -375,7 +375,7 @@ The Administrator can send a FETCH request to the group-collection resource, in 
 
 When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
-When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
+When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
 
 Example in custom CBOR and Link Format:
 
@@ -423,7 +423,7 @@ The Administrator can send a POST request to the group-collection resource, in o
 
 When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
 
-When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter (see below).
+When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter (see below).
 
 In particular:
 
@@ -435,7 +435,7 @@ In particular:
 
 * The payload MUST NOT include any of the status parameter 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
-If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response, which MAY include additional information to clarify what went wrong.
+If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
 * Any of the received parameters is specified multiple times, with the exception of the 'app_group' element when using CoRAL.
 
@@ -554,7 +554,7 @@ After a successful processing of the request above, the Group Manager replies to
 
 When custom CBOR is used, the response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
 
-When CoRAL is used, the response payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
+When CoRAL is used, the response payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
 Example in custom CBOR:
 
@@ -812,7 +812,47 @@ Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
-TBD {{RFC8132}}
+The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource associated to an OSCORE group, in order to update the value of only part of the group configuration.
+
+The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be added or removed from the 'app_groups' status parameter. The names of the application groups to delete or add are provided as follows.
+
+* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff', encoded as a CBOR array of two elements.
+
+   - The first element is a CBOR array where each elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter. If a same name is specified multiple times, the Group Manager considers it only once.
+   
+   - The second element is a CBOR array where each elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter. If same a name is specified multiple times, the Group Manager considers it only once.
+   
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case both the inner CBOR arrays in the 'app_groups_diff' field are empty, or in case the 'app_groups_diff' field occurs more than once.
+   
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map in the payload includes both the 'app_groups_diff' field and the 'app_groups' field.
+
+* When CoRAL is used, the request payload includes the following top-level elements.
+
+   - 'app_group_del', with value the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
+   
+   - 'app_group_add', with value the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
+
+The error handling for the PATCH/iPATCH request is the same as for the PUT request defined in {{configuration-resource-put}}, with the following additions.
+
+* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map (when custom CBOR is used) or no elements (when CoRAL is used).
+
+* If the Request-URI does not point to an existing group-configuration resource, the Group Manager MUST NOT create a new resource, and MUST respond with a 4.04 (Not Found) response.
+
+* When applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST respond with a 4.09 (Conflict) response.
+   
+   The response, MAY include the current representation of the group configuration resource, as when responding to a GET request as defined in {{collection-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information or the Administrator to recognize the source of the conflict.
+
+* When the request uses the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
+
+   - When custom CBOR is used, the CBOR map includes the parameter 'app_groups'diffs'; or
+
+   - When CoRAL is used, any element 'app_group_del' and/or 'app_group_add' is included.
+   
+If no error occurs, the Group Manager performs the following actions.
+
+TBD
+
+Note that, unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not apply possible default values to the configuration parameters and status parameters for which updated values are not specified in the request payload.
 
 Example in custom CBOR:
 
