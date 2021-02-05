@@ -712,7 +712,7 @@ First, the Group Manager updates the configuration of the OSCORE group, consiste
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the link to the group-membership resource was registered in the Resource Directory (see {{I-D.ietf-core-resource-directory}}), the GM is responsible to refresh the registration, as defined in Section 3 of {{I-D.tiloca-core-oscore-discovery}}.
+If the link to the group-membership resource was registered in the Resource Directory {{I-D.ietf-core-resource-directory}}, the GM is responsible to refresh the registration, as defined in Section 3 of {{I-D.tiloca-core-oscore-discovery}}.
 
 Alternatively, the Administrator can update the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
 
@@ -814,24 +814,26 @@ Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource associated to an OSCORE group, in order to update the value of only part of the group configuration.
 
-The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be added or removed from the 'app_groups' status parameter. The names of the application groups to delete or add are provided as follows.
+The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be added or removed from the 'app_groups' status parameter. The names of the application groups to delete or add are provided as defined below.
 
-* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff', encoded as a CBOR array of two elements.
+* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff'. This field MUST NOT be present multiple times, and it is encoded as a CBOR array including the following two elements.
 
-   - The first element is a CBOR array where each elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter. If a same name is specified multiple times, the Group Manager considers it only once.
+   - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
    
-   - The second element is a CBOR array where each elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter. If same a name is specified multiple times, the Group Manager considers it only once.
+   - The second element is a CBOR array, namely 'app_groups_add'. Each of its elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter.
    
-   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case both the inner CBOR arrays in the 'app_groups_diff' field are empty, or in case the 'app_groups_diff' field occurs more than once.
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case both the inner CBOR arrays 'app_groups_del' and namely 'app_groups_add' are empty, or in case the 'app_groups_diff' field occurs more than once.
    
-   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map in the payload includes both the 'app_groups_diff' field and the 'app_groups' field.
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
 * When CoRAL is used, the request payload includes the following top-level elements.
 
-   - 'app_group_del', with value the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
+   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
    
-   - 'app_group_add', with value the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
+   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
 
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the request payload includes both any 'app_group' element as well as any 'app_group_del' and/or 'app_group_add' element.
+   
 The error handling for the PATCH/iPATCH request is the same as for the PUT request defined in {{configuration-resource-put}}, with the following additions.
 
 * The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map (when custom CBOR is used) or no elements (when CoRAL is used).
@@ -840,7 +842,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
 * When applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST respond with a 4.09 (Conflict) response.
    
-   The response, MAY include the current representation of the group configuration resource, as when responding to a GET request as defined in {{collection-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information or the Administrator to recognize the source of the conflict.
+   The response, MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{collection-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
 
 * When the request uses the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
 
@@ -850,9 +852,33 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
    
 If no error occurs, the Group Manager performs the following actions.
 
-TBD
+First, the Group Manager updates the configuration of the OSCORE group, consistently with the values indicated in the PATCH/iPATCH request from the Administrator.
 
-Note that, unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not apply possible default values to the configuration parameters and status parameters for which updated values are not specified in the request payload.
+Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not apply possible default values to those parameters.
+
+Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names in any particular order.
+
+* If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.
+
+* If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+
+* If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+
+* When custom CBOR is used, the Group Manager:
+
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
+   
+   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
+
+* When CoRAL is used, the Group Manager:
+
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
+
+   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_del' elements.
+
+Once updated the group configuration resource, the Group Manager relies on the new group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+
+Same considerations as for the PUT request defined in {{configuration-resource-put}} hold also in this case, with respect to refreshing a possible registration in the Resource Directory {{I-D.ietf-core-resource-directory}}.
 
 Example in custom CBOR:
 
