@@ -81,6 +81,7 @@ normative:
   RFC7641:
   RFC8132:
   RFC8174:
+  RFC8610:
   RFC8613:
   RFC8949:
   COSE.Algorithms:
@@ -708,7 +709,7 @@ The Administrator can send a PUT request to the group-configuration resource ass
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}. If no error occurs, the Group Manager performs the following actions.
 
-First, the Group Manager updates the configuration of the OSCORE group, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}. From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}. From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
@@ -729,13 +730,13 @@ As discussed in {{collection-resource-post}}, it is RECOMMENDED that registratio
 Example in custom CBOR:
 
 ~~~~~~~~~~~
-=> PUT
+=> 0.03 PUT
    Uri-Path: manage
    Uri-Path: gp4
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 11 ,
+     "alg" : 11,
      "hkdf" : 5
    }
 
@@ -752,7 +753,7 @@ Example in custom CBOR:
 Example in CoRAL:
 
 ~~~~~~~~~~~
-=> PUT
+=> 0.03 PUT
    Uri-Path: manage
    Uri-Path: gp4
    Content-Format: TBD1 (application/coral+cbor)
@@ -814,7 +815,7 @@ Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource associated to an OSCORE group, in order to update the value of only part of the group configuration.
 
-The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be added or removed from the 'app_groups' status parameter. The names of the application groups to delete or add are provided as defined below.
+The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
 * When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff'. This field MUST NOT be present multiple times, and it is encoded as a CBOR array including the following two elements.
 
@@ -822,15 +823,25 @@ The request payload has the same format of the PUT request defined in {{configur
    
    - The second element is a CBOR array, namely 'app_groups_add'. Each of its elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter.
    
-   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case both the inner CBOR arrays 'app_groups_del' and namely 'app_groups_add' are empty, or in case the 'app_groups_diff' field occurs more than once.
+   The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the response from the Group Manager is provided below.
+
+~~~~~~~~~~~ CDDL
+   app-group-name = tstr
+   name-patch = [* app-group-name]
+   app_groups_diff = [app_groups_del: name-patch,
+                      app_groups_add: name-patch]
+~~~~~~~~~~~
+{: #cddl-diff title="CDDL definition of the 'app_groups_diff' field" artwork-align="left"}
+   
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty, or in case the 'app_groups_diff' field occurs more than once.
    
    The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
 * When CoRAL is used, the request payload includes the following top-level elements.
 
-   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
+   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times.
    
-   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times. If a same name is specified multiple times, the Group Manager considers it only once.
+   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times.
 
    The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the request payload includes both any 'app_group' element as well as any 'app_group_del' and/or 'app_group_add' element.
    
@@ -842,9 +853,9 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
 * When applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST respond with a 4.09 (Conflict) response.
    
-   The response, MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{collection-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
+   The response, MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{configuration-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
 
-* When the request uses the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
+* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
 
    - When custom CBOR is used, the CBOR map includes the parameter 'app_groups'diffs'; or
 
@@ -852,44 +863,81 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
    
 If no error occurs, the Group Manager performs the following actions.
 
-First, the Group Manager updates the configuration of the OSCORE group, consistently with the values indicated in the PATCH/iPATCH request from the Administrator.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator.
 
-Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not apply possible default values to those parameters.
+Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
 
-Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names in any particular order.
+Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.
 
 * If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.
 
-* If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
-
 * If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+
+* If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
 
 * When custom CBOR is used, the Group Manager:
 
-   - Adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
-   
    - Deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
+
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
 
 * When CoRAL is used, the Group Manager:
 
-   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
-
    - Deletes from the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_del' elements.
 
-Once updated the group configuration resource, the Group Manager relies on the new group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
+   
+After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
 
-Same considerations as for the PUT request defined in {{configuration-resource-put}} hold also in this case, with respect to refreshing a possible registration in the Resource Directory {{I-D.ietf-core-resource-directory}}.
+Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
+
+The same considerations as for the PUT request defined in {{configuration-resource-put}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{I-D.ietf-core-resource-directory}}.
 
 Example in custom CBOR:
 
 ~~~~~~~~~~~
-TBD
+=> 0.06 PATCH
+   Uri-Path: manage
+   Uri-Path: gp4
+   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+
+   {
+     "alg" : 10,
+     "app_groups_diff" : [["room1"],
+                          ["room3", "room4"]]
+   }
+
+<= 2.04 Changed
+   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   
+   {
+     "group_name" : "gp4",
+     "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
+     "as_uri" : "coap://as.example.com/token"
+   }
 ~~~~~~~~~~~
 
 Example in CoRAL:
 
 ~~~~~~~~~~~
-TBD
+=> 0.06 PATCH
+   Uri-Path: manage
+   Uri-Path: gp4
+   Content-Format: TBD1 (application/coral+cbor)
+
+   #using <http://coreapps.org/core.osc.gconf#>
+   alg 10
+   app_group_del "room1"
+   app_group_add "room3"
+   app_group_add "room4"
+
+<= 2.04 Changed
+   Content-Format: TBD1 (application/coral+cbor)
+   
+   #using <http://coreapps.org/core.osc.gconf#>
+   group_name "gp4"
+   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
+   as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
 ### Effects on Joining Nodes ###
@@ -917,7 +965,7 @@ Then, the Group Manager replies to the Administrator with a 2.02 (Deleted) respo
 Example:
 
 ~~~~~~~~~~~
-=> DELETE
+=> 0.04 DELETE
    Uri-Path: manage
    Uri-Path: gp4
 
@@ -950,7 +998,6 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 +-----------------+----------+--------------+-------------------+
 | Name            | CBOR Key | CBOR Type    | Reference         |
 +-----------------+----------+--------------+-------------------+
-|                 |          |              |                   |
 | hkdf            | TBD      | tstr / int   | [[this document]] |
 |                 |          |              |                   |
 | alg             | TBD      | tstr / int   | [[this document]] |
@@ -990,7 +1037,6 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 | conf_filter     | TBD      | array        | [[this document]] |
 |                 |          |              |                   |
 | app_groups_diff | TBD      | array        | [[this document]] |
-|                 |          |              |                   |
 +-----------------+----------+--------------+-------------------+
 ~~~~~~~~~~~
 
@@ -1002,13 +1048,11 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 +----------------+------------------------------+-------------------+
 | Value          | Description                  | Reference         |
 +----------------+------------------------------+-------------------+
-|                |                              |                   |
 | core.osc.gcoll | Group-collection resource    | [[this document]] |
 |                | of an OSCORE Group Manager   |                   |
 |                |                              |                   |
 | core.osc.gconf | Group-configuration resource | [[this document]] |
 |                | of an OSCORE Group Manager   |                   |
-|                |                              |                   |
 +----------------+------------------------------+-------------------+
 ~~~~~~~~~~~
 
@@ -1021,6 +1065,10 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -01 to -02 ## {#sec-01-02}
 
 * Additional error handling, using also error types.
+
+* Selective update of group-configuration resources with PATCH/iPATCH.
+
+* Editorial improvements.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
