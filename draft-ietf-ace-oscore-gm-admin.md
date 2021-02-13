@@ -178,7 +178,17 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 * The Administrator acts as Client (C), and requests to access the group-collection resource and group-configuration resources, by accessing the respective admin endpoint at the Group Manager.
 
-* The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated to the same AS. The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
+* The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated to the same AS.
+
+    The authorized access for an Administrator can be limited to performing only a subset of operations. The AS can authorize multiple Administrators to access the collection resource and the (same) group-configuration resources at the Group Manager.
+   
+   \[
+   
+   NOTE: This will be enabled by defining the format to use for the 'scope' claim in the Access Token, as encoding permitted actions on groups whose name matches with a name pattern.
+   
+   \]
+
+   The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
 
 ## Getting Access to the Group Manager ## {#getting-access}
 
@@ -1063,6 +1073,8 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -01 to -02 ## {#sec-01-02}
+
+* Admit multiple Administrators and limited access to admin resources.
 
 * Additional error handling, using also error types.
 
