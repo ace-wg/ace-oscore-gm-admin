@@ -210,6 +210,26 @@ This section defines the exact format and encoding of scope to use, in order to 
 
 TODO
 
+\[
+
+DESIGN CONSIDERATIONS
+
+* Define a new AIF specific data model, as loosely aligned with the data model AIF-OSCORE-GROUPCOMM defined in Section 3 {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+   - The overall scope is an array of scope entries, each as a pair (Toid, Tperm).
+
+   - Toid is a text string, i.e. a wildcard pattern against which group names can be matched.
+   
+   - Tperm is a set of specific permissions encoded as a bitmap, applied to groups whose name mathes with the wildcard pattern.
+   
+* A valid Access Token should always allow to at least retrieve the list of existing group configurations.
+   
+* An Administrator authorized to create a group, should later be able to perform any possible operation on it.
+   
+* An Administrator can be authorized to perform selected operations on a group earlier created by a different Administrator, still barring the group name matching with the wildcard pattern.
+
+\]
+
 ## Managing OSCORE Groups ## {#managing-groups}
 
 {{fig-api}} shows the resources of a Group Manager available to an Administrator.
@@ -1079,6 +1099,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -01 to -02 ## {#sec-01-02}
 
 * Admit multiple Administrators and limited access to admin resources.
+
+* Early design considerations for defining the format of scope.
 
 * Additional error handling, using also error types.
 
