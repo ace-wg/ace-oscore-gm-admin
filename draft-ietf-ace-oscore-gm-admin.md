@@ -182,11 +182,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
     The authorized access for an Administrator can be limited to performing only a subset of operations. The AS can authorize multiple Administrators to access the collection resource and the (same) group-configuration resources at the Group Manager.
    
-   \[
-   
-   NOTE: This will be enabled by defining the format to use for the 'scope' claim in the Access Token, as encoding permitted actions on groups whose name matches with a name pattern.
-   
-   \]
+   \[ NOTE: This will be enabled by defining the format to use for the 'scope' claim in the Access Token, as encoding permitted actions on groups whose name matches with a name pattern. \]
 
    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
 
@@ -200,11 +196,19 @@ With reference to the AS, communications between the Administrator and the AS (/
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
+The format and encoding of scope defined in {{scope-format}} of this specification MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see Sections 5.8.1 and Section 5.8.2 {{I-D.ietf-ace-oauth-authz}}).
+
 1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. The Administrator will start or continue using secure communications with the Group Manager, according to the response from the AS.
 
 2. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have secure communication established with the Group Manager, before performing any admin operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
-3. The Administrator performs admin operations at the Group Manager, as described in the following sections. These include the retrieval of the existing OSCORE groups, the creation of new OSCORE groups, the update and retrieval of OSCORE group configurations, and the removal of OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
+3. Consistently with what allowed by the authorization information in the Access Token, the Administrator performs admin operations at the Group Manager, as described in the following sections. These include the retrieval of the existing OSCORE groups, the creation of new OSCORE groups, the update and retrieval of OSCORE group configurations, and the removal of OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
+
+### Format of Scope ## {#scope-format}
+
+This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
+
+TODO
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
