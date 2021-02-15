@@ -110,7 +110,6 @@ informative:
   I-D.tiloca-core-oscore-discovery:
   I-D.hartke-t2trg-coral-reef:
   RFC6347:
-  RFC8259:
 
 --- abstract
 
@@ -132,7 +131,7 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to configure and update their configuration.
 
-Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples use the CoRAL textual serialization format, the CBOR or JSON {{RFC8259}} binary serialization format is used when sending such messages on the wire.
+Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples show the CoRAL textual serialization format, its binary serialization format is used on the wire.
 
 The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{I-D.ietf-ace-oscore-profile}}{{I-D.ietf-ace-dtls-authorize}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
