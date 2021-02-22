@@ -219,7 +219,7 @@ DESIGN CONSIDERATIONS
 
    - Toid is a text string, i.e. a wildcard pattern against which group names can be matched.
    
-   - Tperm is a set of specific permissions encoded as a bitmap, applied to groups whose name mathes with the wildcard pattern.
+   - Tperm is a set of specific permissions encoded as a bitmap, applied to groups whose name matches with the wildcard pattern.
    
 * A valid Access Token should always allow to at least retrieve the list of existing group configurations.
    
@@ -818,7 +818,7 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
 If the value of the status parameter 'active' is changed from True to False:
 
-* The Group Manager MUST stop accepting requests for new keying material from current group members (see Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST repond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+* The Group Manager MUST stop accepting requests for new keying material from current group members (see Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * The Group Manager MUST stop accepting updated public keys uploaded by current group members (see Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Public Key Update Request with a 5.03 (Service Unavailable) response, as defined in Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -1121,7 +1121,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Fixes, clarifications and editorial improvements.
 
-# Acknowledgments # {#acknowldegment}
+# Acknowledgments # {#acknowledgment}
 {: numbered="no"}
 
 The authors sincerely thank Christian Amsuess, Carsten Bormann and Jim Schaad for their comments and feedback.
