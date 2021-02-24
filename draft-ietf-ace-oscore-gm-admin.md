@@ -73,15 +73,17 @@ normative:
   I-D.ietf-core-coral:
   I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
-  I-D.ietf-cbor-7049bis:
   I-D.ietf-core-groupcomm-bis:
   RFC2119:
   RFC6690:
   RFC6749:
   RFC7252:
   RFC7641:
+  RFC8132:
   RFC8174:
+  RFC8610:
   RFC8613:
+  RFC8949:
   COSE.Algorithms:
     author: 
       org: IANA
@@ -108,7 +110,6 @@ informative:
   I-D.tiloca-core-oscore-discovery:
   I-D.hartke-t2trg-coral-reef:
   RFC6347:
-  RFC8259:
 
 --- abstract
 
@@ -130,7 +131,7 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to configure and update their configuration.
 
-Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{I-D.ietf-cbor-7049bis}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples use the CoRAL textual serialization format, the CBOR or JSON {{RFC8259}} binary serialization format is used when sending such messages on the wire.
+Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples show the CoRAL textual serialization format, its binary serialization format is used on the wire.
 
 The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{I-D.ietf-ace-oscore-profile}}{{I-D.ietf-ace-dtls-authorize}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
@@ -140,7 +141,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with the terms and concepts from the following specifications:
 
-* CBOR {{I-D.ietf-cbor-7049bis}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
+* CBOR {{RFC8949}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
 
 * The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These include the concepts of:
 
@@ -176,7 +177,13 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 * The Administrator acts as Client (C), and requests to access the group-collection resource and group-configuration resources, by accessing the respective admin endpoint at the Group Manager.
 
-* The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated to the same AS. The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
+* The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated to the same AS.
+
+    The authorized access for an Administrator can be limited to performing only a subset of operations. The AS can authorize multiple Administrators to access the collection resource and the (same) group-configuration resources at the Group Manager.
+   
+   \[ NOTE: This will be enabled by defining the format to use for the 'scope' claim in the Access Token, as encoding permitted actions on groups whose name matches with a name pattern. \]
+
+   The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
 
 ## Getting Access to the Group Manager ## {#getting-access}
 
@@ -188,11 +195,39 @@ With reference to the AS, communications between the Administrator and the AS (/
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
+The format and encoding of scope defined in {{scope-format}} of this specification MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see Sections 5.8.1 and Section 5.8.2 {{I-D.ietf-ace-oauth-authz}}).
+
 1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. The Administrator will start or continue using secure communications with the Group Manager, according to the response from the AS.
 
 2. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have secure communication established with the Group Manager, before performing any admin operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
-3. The Administrator performs admin operations at the Group Manager, as described in the following sections. These include the retrieval of the existing OSCORE groups, the creation of new OSCORE groups, the update and retrieval of OSCORE group configurations, and the removal of OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
+3. Consistently with what allowed by the authorization information in the Access Token, the Administrator performs admin operations at the Group Manager, as described in the following sections. These include the retrieval of the existing OSCORE groups, the creation of new OSCORE groups, the update and retrieval of OSCORE group configurations, and the removal of OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
+
+### Format of Scope ## {#scope-format}
+
+This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
+
+TODO
+
+\[
+
+DESIGN CONSIDERATIONS
+
+* Define a new AIF specific data model, as loosely aligned with the data model AIF-OSCORE-GROUPCOMM defined in Section 3 {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+   - The overall scope is an array of scope entries, each as a pair (Toid, Tperm).
+
+   - Toid is a text string, i.e. a wildcard pattern against which group names can be matched.
+   
+   - Tperm is a set of specific permissions encoded as a bitmap, applied to groups whose name matches with the wildcard pattern.
+   
+* A valid Access Token should always allow to at least retrieve the list of existing group configurations.
+   
+* An Administrator authorized to create a group, should later be able to perform any possible operation on it.
+   
+* An Administrator can be authorized to perform selected operations on a group earlier created by a different Administrator, still barring the group name matching with the wildcard pattern.
+
+\]
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
@@ -225,6 +260,8 @@ The Group Manager exports one group-configuration resource for each of its OSCOR
 * Retrieve part of the current configuration of the OSCORE group, by applying filter criteria.
 
 * Overwrite the current configuration of the OSCORE group.
+
+* Selectively update only part of the current configuration of the OSCORE group.
 
 * Delete the OSCORE group.
 
@@ -330,7 +367,7 @@ For the following status parameters, the Group Manager MUST use a pre-configured
 
 This section describes the operations available on the group-collection resource and the group-configuration resources.
 
-When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in Section 8.2 of {{I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
+When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in Section 10.2 of {{I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Groups Configurations ## {#collection-resource-get}
 
@@ -372,7 +409,7 @@ The Administrator can send a FETCH request to the group-collection resource, in 
 
 When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
-When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
+When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
 
 Example in custom CBOR and Link Format:
 
@@ -420,7 +457,7 @@ The Administrator can send a POST request to the group-collection resource, in o
 
 When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
 
-When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter (see below).
+When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter (see below).
 
 In particular:
 
@@ -432,7 +469,7 @@ In particular:
 
 * The payload MUST NOT include any of the status parameter 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
-If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response, which MAY include additional information to clarify what went wrong.
+If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
 * Any of the received parameters is specified multiple times, with the exception of the 'app_group' element when using CoRAL.
 
@@ -551,7 +588,7 @@ After a successful processing of the request above, the Group Manager replies to
 
 When custom CBOR is used, the response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
 
-When CoRAL is used, the response payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_names' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
+When CoRAL is used, the response payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
 Example in custom CBOR:
 
@@ -705,11 +742,11 @@ The Administrator can send a PUT request to the group-configuration resource ass
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}. If no error occurs, the Group Manager performs the following actions.
 
-First, the Group Manager updates the configuration of the OSCORE group, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}. From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}. From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the link to the group-membership resource was registered in the Resource Directory (see {{I-D.ietf-core-resource-directory}}), the GM is responsible to refresh the registration, as defined in Section 3 of {{I-D.tiloca-core-oscore-discovery}}.
+If the link to the group-membership resource was registered in the Resource Directory {{I-D.ietf-core-resource-directory}}, the GM is responsible to refresh the registration, as defined in Section 3 of {{I-D.tiloca-core-oscore-discovery}}.
 
 Alternatively, the Administrator can update the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
 
@@ -726,13 +763,13 @@ As discussed in {{collection-resource-post}}, it is RECOMMENDED that registratio
 Example in custom CBOR:
 
 ~~~~~~~~~~~
-=> PUT
+=> 0.03 PUT
    Uri-Path: manage
    Uri-Path: gp4
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 11 ,
+     "alg" : 11,
      "hkdf" : 5
    }
 
@@ -749,7 +786,7 @@ Example in custom CBOR:
 Example in CoRAL:
 
 ~~~~~~~~~~~
-=> PUT
+=> 0.03 PUT
    Uri-Path: manage
    Uri-Path: gp4
    Content-Format: TBD1 (application/coral+cbor)
@@ -767,17 +804,23 @@ Example in CoRAL:
    as_uri <coap://as.example.com/token>
 ~~~~~~~~~~~
 
-### Effects on Joining Nodes ###
+### Effects on Joining Nodes ### {#sssec-effects-overwrite-joining-nodes}
 
-If the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, upon receiving a Joining Request (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}), the Group Manager MUST respond with a 5.03 (Service Unavailable) response to the joining node, and MAY include additional information to clarify what went wrong.
+After having overwritten a group configuration, if the value of the status parameter 'active' is changed from True to False, the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Joining Request with a 5.03 (Service Unavailable) response, as defined in Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 If the value of the status parameter 'active' is changed from False to True, the Group Manager resumes admitting new members in the OSCORE group, by processing their Joining Requests (see Section 6.3 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-### Effects on the Group Members ###
+### Effects on the Group Members ### {#sssec-effects-overwrite-group-members}
 
-After having updated a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
+After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see Section 6 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_path' URI of each group member (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see Section 6.2 of {{I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g. by using CoAP Observe {{RFC7641}}.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see Section 6.2 of {{I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g. by using CoAP Observe {{RFC7641}}.
+
+If the value of the status parameter 'active' is changed from True to False:
+
+* The Group Manager MUST stop accepting requests for new keying material from current group members (see Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in Section 9 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+* The Group Manager MUST stop accepting updated public keys uploaded by current group members (see Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Public Key Update Request with a 5.03 (Service Unavailable) response, as defined in Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 Every group member, upon learning that the OSCORE group has been deactivated (i.e. 'active' has value False), SHOULD stop communicating in the group.
   
@@ -801,13 +844,150 @@ Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs
 
 * Use the new parameter values, and, if required, provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see Section 11 of {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
+## Selective Update of a Group Configuration ## {#configuration-resource-patch}
+
+The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource associated to an OSCORE group, in order to update the value of only part of the group configuration.
+
+The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
+
+* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff'. This field MUST NOT be present multiple times, and it is encoded as a CBOR array including the following two elements.
+
+   - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
+   
+   - The second element is a CBOR array, namely 'app_groups_add'. Each of its elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter.
+   
+   The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the response from the Group Manager is provided below.
+
+~~~~~~~~~~~ CDDL
+   app-group-name = tstr
+   name-patch = [* app-group-name]
+   app_groups_diff = [app_groups_del: name-patch,
+                      app_groups_add: name-patch]
+~~~~~~~~~~~
+{: #cddl-diff title="CDDL definition of the 'app_groups_diff' field" artwork-align="left"}
+   
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty, or in case the 'app_groups_diff' field occurs more than once.
+   
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
+
+* When CoRAL is used, the request payload includes the following top-level elements.
+
+   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times.
+   
+   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times.
+
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the request payload includes both any 'app_group' element as well as any 'app_group_del' and/or 'app_group_add' element.
+   
+The error handling for the PATCH/iPATCH request is the same as for the PUT request defined in {{configuration-resource-put}}, with the following additions.
+
+* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map (when custom CBOR is used) or no elements (when CoRAL is used).
+
+* If the Request-URI does not point to an existing group-configuration resource, the Group Manager MUST NOT create a new resource, and MUST respond with a 4.04 (Not Found) response.
+
+* When applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST respond with a 4.09 (Conflict) response.
+   
+   The response, MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{configuration-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
+
+* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
+
+   - When custom CBOR is used, the CBOR map includes the parameter 'app_groups'diffs'; or
+
+   - When CoRAL is used, any element 'app_group_del' and/or 'app_group_add' is included.
+   
+If no error occurs, the Group Manager performs the following actions.
+
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator.
+
+Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
+
+Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.
+
+* If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.
+
+* If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+
+* If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+
+* When custom CBOR is used, the Group Manager:
+
+   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
+
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
+
+* When CoRAL is used, the Group Manager:
+
+   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_del' elements.
+
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
+   
+After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Joining Response message defined in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+
+Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
+
+The same considerations as for the PUT request defined in {{configuration-resource-put}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{I-D.ietf-core-resource-directory}}.
+
+Example in custom CBOR:
+
+~~~~~~~~~~~
+=> 0.06 PATCH
+   Uri-Path: manage
+   Uri-Path: gp4
+   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+
+   {
+     "alg" : 10,
+     "app_groups_diff" : [["room1"],
+                          ["room3", "room4"]]
+   }
+
+<= 2.04 Changed
+   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   
+   {
+     "group_name" : "gp4",
+     "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
+     "as_uri" : "coap://as.example.com/token"
+   }
+~~~~~~~~~~~
+
+Example in CoRAL:
+
+~~~~~~~~~~~
+=> 0.06 PATCH
+   Uri-Path: manage
+   Uri-Path: gp4
+   Content-Format: TBD1 (application/coral+cbor)
+
+   #using <http://coreapps.org/core.osc.gconf#>
+   alg 10
+   app_group_del "room1"
+   app_group_add "room3"
+   app_group_add "room4"
+
+<= 2.04 Changed
+   Content-Format: TBD1 (application/coral+cbor)
+   
+   #using <http://coreapps.org/core.osc.gconf#>
+   group_name "gp4"
+   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
+   as_uri <coap://as.example.com/token>
+~~~~~~~~~~~
+
+### Effects on Joining Nodes ###
+
+After having selectively updated part of a group configuration, the effects on candidate joining nodes are the same as defined in {{sssec-effects-overwrite-joining-nodes}} for the case of group configuration overwriting.
+
+### Effects on the Group Members ###
+
+After having selectively updated part of a group configuration, the effects on the current group members are the same as defined in {{sssec-effects-overwrite-group-members}} for the case of group configuration overwriting.
+
 ## Delete a Group Configuration ## {#configuration-resource-delete}
 
 The Administrator can send a DELETE request to the group-configuration resource, in order to delete that OSCORE group. The deletion would be successful only on an inactive OSCORE group.
 
 That is, the DELETE request actually yields a successful deletion of the OSCORE group, only if the corresponding status parameter 'active' has current value False. The Administrator can ensure that, by first performing an update of the group-configuration resource associated to the OSCORE group (see {{configuration-resource-put}}), and setting the corresponding status parameter 'active' to False.
 
-If, upon receiving the DELETE request, the current value of the status parameter 'active' is True, the Group Manager MUST respond with a 4.09 (Conflict) response, which MAY include additional information to clarify what went wrong.
+If, upon receiving the DELETE request, the current value of the status parameter 'active' is True, the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 6 ("The group is currently not active").
 
 After a successful processing of the request above, the Group Manager performs the following actions.
 
@@ -818,7 +998,7 @@ Then, the Group Manager replies to the Administrator with a 2.02 (Deleted) respo
 Example:
 
 ~~~~~~~~~~~
-=> DELETE
+=> 0.04 DELETE
    Uri-Path: manage
    Uri-Path: gp4
 
@@ -831,7 +1011,7 @@ After having deleted an OSCORE group, the Group Manager can inform the group mem
 
 * The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see Section 18 of {{I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Joining Response message in Section 6.4 of {{I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key', and 'ace-groupcomm-profile' are present, and the 'key' parameter is empty.
 
-* A group member may subscribe for updates to the group-membership resource associated to the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group.
+* A group member may subscribe for updates to the group-membership resource associated to the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("Group deleted").
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated to that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
@@ -845,13 +1025,12 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Parameters Registry ## {#iana-ace-groupcomm-parameters}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
 +-----------------+----------+--------------+-------------------+
 | Name            | CBOR Key | CBOR Type    | Reference         |
 +-----------------+----------+--------------+-------------------+
-|                 |          |              |                   |
 | hkdf            | TBD      | tstr / int   | [[this document]] |
 |                 |          |              |                   |
 | alg             | TBD      | tstr / int   | [[this document]] |
@@ -890,6 +1069,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 |                 |          |              |                   |
 | conf_filter     | TBD      | array        | [[this document]] |
 |                 |          |              |                   |
+| app_groups_diff | TBD      | array        | [[this document]] |
 +-----------------+----------+--------------+-------------------+
 ~~~~~~~~~~~
 
@@ -901,13 +1081,11 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 +----------------+------------------------------+-------------------+
 | Value          | Description                  | Reference         |
 +----------------+------------------------------+-------------------+
-|                |                              |                   |
 | core.osc.gcoll | Group-collection resource    | [[this document]] |
 |                | of an OSCORE Group Manager   |                   |
 |                |                              |                   |
 | core.osc.gconf | Group-configuration resource | [[this document]] |
 |                | of an OSCORE Group Manager   |                   |
-|                |                              |                   |
 +----------------+------------------------------+-------------------+
 ~~~~~~~~~~~
 
@@ -916,6 +1094,18 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -01 to -02 ## {#sec-01-02}
+
+* Admit multiple Administrators and limited access to admin resources.
+
+* Early design considerations for defining the format of scope.
+
+* Additional error handling, using also error types.
+
+* Selective update of group-configuration resources with PATCH/iPATCH.
+
+* Editorial improvements.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
@@ -931,7 +1121,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Fixes, clarifications and editorial improvements.
 
-# Acknowledgments # {#acknowldegment}
+# Acknowledgments # {#acknowledgment}
 {: numbered="no"}
 
 The authors sincerely thank Christian Amsuess, Carsten Bormann and Jim Schaad for their comments and feedback.
