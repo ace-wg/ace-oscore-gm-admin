@@ -987,7 +987,7 @@ The Administrator can send a DELETE request to the group-configuration resource,
 
 That is, the DELETE request actually yields a successful deletion of the OSCORE group, only if the corresponding status parameter 'active' has current value False. The Administrator can ensure that, by first performing an update of the group-configuration resource associated to the OSCORE group (see {{configuration-resource-put}}), and setting the corresponding status parameter 'active' to False.
 
-If, upon receiving the DELETE request, the current value of the status parameter 'active' is True, the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 6 ("The group is currently not active").
+If, upon receiving the DELETE request, the current value of the status parameter 'active' is True, the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 8 ("Group currently active").
 
 After a successful processing of the request above, the Group Manager performs the following actions.
 
@@ -1073,6 +1073,16 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 +-----------------+----------+--------------+-------------------+
 ~~~~~~~~~~~
 
+## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
+
+IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in Section 10.13 of {{I-D.ietf-ace-key-groupcomm}}.
+
+* Value: 8
+
+* Description: Group currently active.
+
+* Reference: \[\[This specification\]\]
+
 ## Resource Types # {#iana-rt}
 
 IANA is asked to enter the following values into the Resource Type (rt=) Link Target Attribute Values subregistry within the Constrained Restful Environments (CoRE) Parameters registry defined in {{RFC6690}}.
@@ -1094,6 +1104,10 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -02 to -03 ## {#sec-02-03}
+
+* New error type "Group currently active".
 
 ## Version -01 to -02 ## {#sec-01-02}
 
