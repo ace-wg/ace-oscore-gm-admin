@@ -327,7 +327,7 @@ For each configuration parameter, the Group Manager MUST use a pre-configured de
 
 * For 'pairwise\_mode', the Group Manager SHOULD use the CBOR simple value False.
 
-* If 'pairwise\_mode' has value True, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'ecdh_alg', 'ecdh_params' and 'ecdh_key_params'.
+* If 'pairwise\_mode' has value True, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'ecdh_alg' and 'ecdh_params'.
 
 * For any other configuration parameter, the Group Manager SHOULD use the same default values defined in Section 19 of {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
