@@ -84,24 +84,6 @@ normative:
   RFC8610:
   RFC8613:
   RFC8949:
-  COSE.Algorithms:
-    author: 
-      org: IANA
-    date: false
-    title: COSE Algorithms
-    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
-  COSE.Key.Types:
-    author: 
-      org: IANA
-    date: false
-    title: COSE Key Types
-    target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
-  COSE.Elliptic.Curves:
-    author: 
-      org: IANA
-    date: false
-    title: COSE Elliptic Curves
-    target: https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
 
 informative:
   I-D.ietf-ace-dtls-authorize:
