@@ -144,7 +144,7 @@ Table of Contents
 
    In some deployments, the application running on the Group Manager may
    know when a new OSCORE group has to be created, as well as how it
-   should be configured and later on updated or deleted, e.g. based on
+   should be configured and later on updated or deleted, e.g., based on
    the current application state or on pre-installed policies.  In this
    case, the Group Manager application can create and configure OSCORE
    groups when needed, by using a local application interface.  However,
@@ -314,13 +314,13 @@ Table of Contents
    [RFC8613].  Further details on how the AS secures communications
    (with the Administrator and the Group Manager) depend on the
    specifically used transport profile of ACE, and are out of the scope
-   of this specification.
+   of this document.
 
    In order to get access to the Group Manager for managing OSCORE
    groups, an Administrator performs the following steps.
 
    The format and encoding of scope defined in Section 2.1.1 of this
-   specification MUST be used, for both the 'scope' claim in the Access
+   document MUST be used, for both the 'scope' claim in the Access
    Token, as well as for the 'scope' parameter in the Authorization
    Request and Authorization Response exchanged with the AS (see
    Sections 5.8.1 and 5.8.2 of [I-D.ietf-ace-oauth-authz]).
@@ -370,7 +370,7 @@ Table of Contents
       -  The overall scope is an array of scope entries, each as a pair
          (Toid, Tperm).
 
-      -  Toid is a text string, i.e. a wildcard pattern against which
+      -  Toid is a text string, i.e., a wildcard pattern against which
          group names can be matched.
 
       -  Tperm is a set of specific permissions encoded as a bitmap,
@@ -406,8 +406,8 @@ Table of Contents
 
    The Group Manager exports a single group-collection resource, with
    resource type "core.osc.gcoll" defined in Section 6.3 of this
-   specification.  The interface for the group-collection resource
-   defined in Section 4 allows the Administrator to:
+   document.  The interface for the group-collection resource defined in
+   Section 4 allows the Administrator to:
 
    *  Retrieve the complete list of existing OSCORE groups.
 
@@ -419,10 +419,10 @@ Table of Contents
 
    The Group Manager exports one group-configuration resource for each
    of its OSCORE groups.  Each group-configuration resource has resource
-   type "core.osc.gconf" defined in Section 6.3 of this specification,
-   and is identified by the group name specified upon creating the
-   OSCORE group.  The interface for a group-configuration resource
-   defined in Section 4 allows the Administrator to:
+   type "core.osc.gconf" defined in Section 6.3 of this document, and is
+   identified by the group name specified upon creating the OSCORE
+   group.  The interface for a group-configuration resource defined in
+   Section 4 allows the Administrator to:
 
    *  Retrieve the complete current configuration of the OSCORE group.
 
@@ -448,7 +448,7 @@ Table of Contents
 
    In the former case, the link to each group-configuration resource
    specifies the link target attribute 'rt' (Resource Type), with value
-   "core.osc.gconf" defined in Section 6.3 of this specification.
+   "core.osc.gconf" defined in Section 6.3 of this document.
 
    In the latter case, the CoRAL document specifies the group-
    configuration resources in the list as top-level elements.  In
@@ -461,7 +461,7 @@ Table of Contents
    Resource Directory, for instance [I-D.ietf-core-resource-directory]
    and [I-D.hartke-t2trg-coral-reef], or from .well-known/core, by using
    the resource type "core.osc.gcoll" defined in Section 6.3 of this
-   specification.
+   document.
 
    The Administrator can discover group-configuration resources for the
    group-collection resource as specified in Section 4.1 and
@@ -549,16 +549,16 @@ Table of Contents
 
    *  'active', encoding the CBOR simple value True if the OSCORE group
       is currently active, or the CBOR simple value False otherwise.
-      This parameter is defined in Section 6.1 of this specification.
+      This parameter is defined in Section 6.1 of this document.
 
    *  'group_name', with value the group name of the OSCORE group
       encoded as a CBOR text string.  This parameter is defined in
-      Section 6.1 of this specification.
+      Section 6.1 of this document.
 
    *  'group_title', with value either a human-readable description of
       the OSCORE group encoded as a CBOR text string, or the CBOR simple
       value Null if no description is specified.  This parameter is
-      defined in Section 6.1 of this specification.
+      defined in Section 6.1 of this document.
 
    *  'ace-groupcomm-profile', defined in Section 4.1.2.1 of
       [I-D.ietf-ace-key-groupcomm], with value "coap_group_oscore_app"
@@ -577,7 +577,7 @@ Table of Contents
       for joining the newly created OSCORE group as per Section 6.2 of
       [I-D.ietf-ace-key-groupcomm-oscore], encoded as a CBOR text
       string.  This parameter is defined in Section 6.1 of this
-      specification.
+      document.
 
    The CBOR map MAY include the following status parameters:
 
@@ -1261,7 +1261,7 @@ Table of Contents
    upon joining the OSCORE group (see Section 6.2 of
    [I-D.ietf-ace-key-groupcomm-oscore]).  Alternatively, group members
    can subscribe for updates to the group-membership resource of the
-   OSCORE group, e.g. by using CoAP Observe [RFC7641].
+   OSCORE group, e.g., by using CoAP Observe [RFC7641].
 
    If the value of the status parameter 'active' is changed from True to
    False:
@@ -1283,20 +1283,20 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore].
 
    Every group member, upon learning that the OSCORE group has been
-   deactivated (i.e. 'active' has value False), SHOULD stop
+   deactivated (i.e., 'active' has value False), SHOULD stop
    communicating in the group.
 
    Every group member, upon learning that the OSCORE group has been
-   reactivated (i.e. 'active' has value True again), can resume
+   reactivated (i.e., 'active' has value True again), can resume
    communicating in the group.
 
    Every group member, upon learning that the OSCORE group has stopped
-   supporting the pairwise mode of Group OSCORE (i.e. 'pairwise_mode'
+   supporting the pairwise mode of Group OSCORE (i.e., 'pairwise_mode'
    has value False), SHOULD stop using the pairwise mode to process
    messages in the group.
 
    Every group member, upon learning that the OSCORE group has resumed
-   supporting the pairwise mode of Group OSCORE (i.e. 'pairwise_mode'
+   supporting the pairwise mode of Group OSCORE (i.e., 'pairwise_mode'
    has value True again), can resume using the pairwise mode to process
    messages in the group.
 
@@ -1304,7 +1304,7 @@ Table of Contents
    'hkdf', MUST either:
 
    *  Leave the OSCORE group (see Section 18 of
-      [I-D.ietf-ace-key-groupcomm-oscore]), e.g. if not supporting the
+      [I-D.ietf-ace-key-groupcomm-oscore]), e.g., if not supporting the
       indicated new algorithms; or
 
    *  Use the new parameter values, and accordingly re-derive the OSCORE
@@ -1314,7 +1314,7 @@ Table of Contents
    Every group member, upon receiving updated values for 'cs_alg',
    'cs_params', 'cs_key_enc', 'ecdh_alg' and 'ecdh_params' MUST either:
 
-   *  Leave the OSCORE group, e.g. if not supporting the indicated new
+   *  Leave the OSCORE group, e.g., if not supporting the indicated new
       algorithm, parameters and encoding; or
 
    *  Leave the OSCORE group and rejoin it (see Section 6 of
@@ -1623,6 +1623,9 @@ Table of Contents
 
 6.  IANA Considerations
 
+   RFC Editor: Please replace "[[this document]]" with the RFC number of
+   this document and delete this paragraph.
+
    This document has the following actions for IANA.
 
 6.1.  ACE Groupcomm Parameters Registry
@@ -1680,7 +1683,7 @@ Table of Contents
 
    *  Description: Group currently active.
 
-   *  Reference: [[This specification]]
+   *  Reference: [[This document]]
 
 6.3.  Resource Types
 
