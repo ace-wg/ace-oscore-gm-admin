@@ -279,9 +279,9 @@ The CBOR map MUST include the following configuration parameters:
 
 * 'alg', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the AEAD algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}.
 
-* 'cs_alg', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the countersignature algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'cs_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'sign_alg', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the countersignature algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'sign_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'cs_params', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the additional parameters for the countersignature algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'cs_params' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'sign_params', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the additional parameters for the countersignature algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'sign_params' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'cs\_key\_enc', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the encoding of the public keys of group members, encoded as a CBOR integer. Possible values are the same ones admitted for the 'cs\_key\_enc' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -581,9 +581,9 @@ Example in custom CBOR:
    {
      "alg" : 10,
      "hkdf" : 5,
-     "cs_alg" : -8,
-     "cs_params" : [[1], [1, 6]],
-     "cs_key_enc" : 1,
+     "sign_alg" : -8,
+     "sign_params" : [[1], [1, 6]],
+     "pub_key_enc" : 1,
      "pairwise_mode" : True,
      "ecdh_alg" : -27,
      "ecdh_params" : [[1], [1, 6]],
@@ -612,11 +612,11 @@ Example in CoRAL:
    #using <http://coreapps.org/core.osc.gconf#>
    alg 10
    hkdf 5
-   cs_alg -8
-   cs_params.alg_capab.key_type 1
-   cs_params.key_type_capab.key_type 1
-   cs_params.key_type_capab.curve 6
-   cs_key_enc 1
+   sign_alg -8
+   sign_params.alg_capab.key_type 1
+   sign_params.key_type_capab.key_type 1
+   sign_params.key_type_capab.curve 6
+   pub_key_enc 1
    pairwise_mode True
    ecdh_alg -27
    ecdh_params.alg_capab.key_type 1
@@ -808,7 +808,7 @@ Every group member, upon receiving updated values for 'alg' and 'hkdf', MUST eit
 
 * Use the new parameter values, and accordingly re-derive the OSCORE Security Context for the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
 
-Every group member, upon receiving updated values for 'cs_alg', 'cs_params', 'cs_key_enc', 'ecdh_alg' and 'ecdh_params' MUST either:
+Every group member, upon receiving updated values for 'sign_alg', 'sign_params', 'pub_key_enc', 'ecdh_alg' and 'ecdh_params' MUST either:
 
 * Leave the OSCORE group, e.g., if not supporting the indicated new algorithm, parameters and encoding; or
 
@@ -1009,11 +1009,11 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 |                 |          |              |                   |
 | alg             | TBD      | tstr / int   | [[this document]] |
 |                 |          |              |                   |
-| cs_alg          | TBD      | tstr / int   | [[this document]] |
+| sign_alg        | TBD      | tstr / int   | [[this document]] |
 |                 |          |              |                   |
-| cs_params       | TBD      | array        | [[this document]] |
+| sign_params     | TBD      | array        | [[this document]] |
 |                 |          |              |                   |
-| cs_key_enc      | TBD      | int          | [[this document]] |
+| pub_key_enc     | TBD      | int          | [[this document]] |
 |                 |          |              |                   |
 | pairwise_mode   | TBD      | simple value | [[this document]] |
 |                 |          |              |                   |
