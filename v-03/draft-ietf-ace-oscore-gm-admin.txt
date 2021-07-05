@@ -323,7 +323,7 @@ Table of Contents
    specification MUST be used, for both the 'scope' claim in the Access
    Token, as well as for the 'scope' parameter in the Authorization
    Request and Authorization Response exchanged with the AS (see
-   Sections 5.8.1 and Section 5.8.2 [I-D.ietf-ace-oauth-authz]).
+   Sections 5.8.1 and 5.8.2 of [I-D.ietf-ace-oauth-authz]).
 
    1.  The Administrator requests an Access Token from the AS, in order
        to access the group-collection and group-configuration resources
@@ -364,7 +364,7 @@ Table of Contents
    DESIGN CONSIDERATIONS
 
    *  Define a new AIF specific data model, as loosely aligned with the
-      data model AIF-OSCORE-GROUPCOMM defined in Section 3
+      data model AIF-OSCORE-GROUPCOMM defined in Section 3 of
       [I-D.ietf-ace-key-groupcomm-oscore].
 
       -  The overall scope is an array of scope entries, each as a pair
@@ -562,7 +562,7 @@ Table of Contents
 
    *  'ace-groupcomm-profile', defined in Section 4.1.2.1 of
       [I-D.ietf-ace-key-groupcomm], with value "coap_group_oscore_app"
-      defined in Section 21.3 of [I-D.ietf-ace-key-groupcomm-oscore]
+      defined in Section 23.4 of [I-D.ietf-ace-key-groupcomm-oscore]
       encoded as a CBOR integer.
 
    *  'exp', defined in Section 4.1.2.1 of [I-D.ietf-ace-key-groupcomm].
@@ -591,8 +591,8 @@ Table of Contents
       for the OSCORE group, encoded as a CBOR text string.  Candidate
       group members will have to obtain an Access Token from that
       Authorization Server, before starting the joining process with the
-      Group Manager to join the OSCORE group (see Section 4 and
-      Section 6 of [I-D.ietf-ace-key-groupcomm-oscore]).
+      Group Manager to join the OSCORE group (see Sections 4 and 6 of
+      [I-D.ietf-ace-key-groupcomm-oscore]).
 
 3.2.  Default Values
 
@@ -609,12 +609,12 @@ Table of Contents
       value False.
 
    *  If 'pairwise_mode' has value True, the Group Manager SHOULD use
-      the same default values defined in Section 19 of
+      the same default values defined in Section 21 of
       [I-D.ietf-ace-key-groupcomm-oscore] for the parameters 'ecdh_alg'
       and 'ecdh_params'.
 
    *  For any other configuration parameter, the Group Manager SHOULD
-      use the same default values defined in Section 19 of
+      use the same default values defined in Section 21 of
       [I-D.ietf-ace-key-groupcomm-oscore].
 
 3.2.2.  Status Parameters
@@ -1303,7 +1303,7 @@ Table of Contents
    Every group member, upon receiving updated values for 'alg' and
    'hkdf', MUST either:
 
-   *  Leave the OSCORE group (see Section 16 of
+   *  Leave the OSCORE group (see Section 18 of
       [I-D.ietf-ace-key-groupcomm-oscore]), e.g. if not supporting the
       indicated new algorithms; or
 
@@ -1589,11 +1589,11 @@ Table of Contents
 
    *  The Group Manager sends an individual request message to each
       group member, targeting the respective resource used to perform
-      the group rekeying process (see Section 18 of
+      the group rekeying process (see Section 20.1 of
       [I-D.ietf-ace-key-groupcomm-oscore]).  The Group Manager uses the
       same format of the Joining Response message in Section 6.4 of
       [I-D.ietf-ace-key-groupcomm-oscore], where only the parameters
-      'gkty', 'key', and 'ace-groupcomm-profile' are present, and the
+      'gkty', 'key' and 'ace-groupcomm-profile' are present, and the
       'key' parameter is empty.
 
    *  A group member may subscribe for updates to the group-membership
