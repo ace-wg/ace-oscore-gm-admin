@@ -1044,7 +1044,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in {{Section 10.13 of I-D.ietf-ace-key-groupcomm}}.
 
-* Value: 8
+* Value: 10
 
 * Description: Group currently active.
 
