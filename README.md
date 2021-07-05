@@ -21,4 +21,4 @@ This requires that you have the necessary software installed.  See
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/ace-wg/ace-oscore-gm-admin/blob/master/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/ace-wg/ace-oscore-gm-admin/blob/main/CONTRIBUTING.md).
