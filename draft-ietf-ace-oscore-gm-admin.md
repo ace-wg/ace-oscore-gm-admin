@@ -594,7 +594,7 @@ Example in custom CBOR:
 
    {
      "hkdf" : 5,
-     "pub_key_enc" : 1,
+     "pub_key_enc" : 33,
      "group_mode" : True,
      "sign_enc_alg" : 10,
      "sign_alg" : -8,
@@ -628,7 +628,7 @@ Example in CoRAL:
 
    #using <http://coreapps.org/core.osc.gconf#>
    hkdf 5
-   pub_key_enc 1
+   pub_key_enc 33
    group_mode True
    sign_enc_alg 10
    sign_alg -8
