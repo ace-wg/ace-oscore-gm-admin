@@ -273,23 +273,27 @@ The group configuration representation is a CBOR map which MUST include configur
 
 ### Configuration Properties ### {#config-repr-config-properties}
 
-The CBOR map MUST include the following configuration parameters:
+The CBOR map MUST include the following configuration parameters, which are defined in {{iana-ace-groupcomm-parameters}} of this document.
 
-* 'hkdf', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the HKDF algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'hkdf' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}.
+* 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'hkdf' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}.
 
-* 'alg', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the AEAD algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}.
+* 'pub_key_enc', which specifies the encoding of public keys used in the OSCORE group, encoded as a CBOR integer. Possible values are the same ones admitted for the 'pub\_key\_enc' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'sign_alg', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the countersignature algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'sign_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'group_mode', encoded as a CBOR simple value. Its value is True if the OSCORE group uses the group mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or False otherwise.
 
-* 'sign_params', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the additional parameters for the countersignature algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'sign_params' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'sign_enc_alg', which is formatted as follows. If the configuration parameter 'group_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'sign_enc_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'cs\_key\_enc', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the encoding of the public keys of group members, encoded as a CBOR integer. Possible values are the same ones admitted for the 'cs\_key\_enc' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'sign_alg', which is formatted as follows. If the configuration parameter 'group_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the Signature Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'sign_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'pairwise\_mode', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR simple value. Its value is True if the OSCORE group supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or False otherwise.
+* 'sign_params', which is formatted as follows. If the configuration parameter 'group_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the additional parameters for the Signature Algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'sign_params' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'ecdh\_alg', defined in {{iana-ace-groupcomm-parameters}} of this document and formatted as follows. If the configuration parameter 'pairwise\_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the ECDH algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'ecdh_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'pairwise_mode', encoded as a CBOR simple value. Its value is True if the OSCORE group uses the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or False otherwise.
 
-* 'ecdh\_params', defined in {{iana-ace-groupcomm-parameters}} of this document and formatted as follows. If the configuration parameter 'pairwise\_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the parameters for the ECDH algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_params' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'alg', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the AEAD Algorithm used in the OSCORE group to encrypt messages protected with the pairwise mode, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}.
+
+* 'ecdh_alg', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'ecdh_alg' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+
+* 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value False, this parameter has as value the CBOR simple value Null. Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_params' parameter of the "OSCORE Security Context Parameters" registry, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 ### Status Properties ### {#config-repr-status-properties}
 
@@ -325,11 +329,15 @@ This section defines the default values that the Group Manager assumes for confi
 
 For each configuration parameter, the Group Manager MUST use a pre-configured default value, if none is specified by the Administrator. In particular:
 
-* For 'pairwise\_mode', the Group Manager SHOULD use the CBOR simple value False.
+* For 'group_mode', the Group Manager SHOULD use the CBOR simple value True.
 
-* If 'pairwise\_mode' has value True, the Group Manager SHOULD use the same default values defined in {{Section 21 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'ecdh_alg' and 'ecdh_params'.
+* For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value False.
 
-* For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 21 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* If 'group_mode' has value True, the Group Manager SHOULD use the same default values defined in {{Section 21.2 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'sign_enc_alg', 'sign_alg' and 'sign_params'.
+
+* If 'pairwise_mode' has value True, the Group Manager SHOULD use the same default values defined in {{Section 21.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg' and 'ecdh_params'.
+
+* For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 21.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 ### Status Parameters
 
@@ -337,9 +345,11 @@ For the following status parameters, the Group Manager MUST use a pre-configured
 
 * For 'active', the Group Manager SHOULD use the CBOR simple value False.
 
-* For 'group\_title', the Group Manager SHOULD use the CBOR simple value Null.
+* For 'group_title', the Group Manager SHOULD use the CBOR simple value Null.
 
-* For 'app\_groups', the Group Manager SHOULD use the empty CBOR array.
+* For 'app_groups', the Group Manager SHOULD use the empty CBOR array.
+
+* For 'group_policies', the Group Manager SHOUL use the default values defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 # Interactions with the Group Manager # {#interactions}
 
@@ -397,7 +407,8 @@ Example in custom CBOR and Link Format:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-       "alg" : 10,
+       "group_mode" : True,
+       "sign_enc_alg" : 10,
        "hkdf" : 5
    }
 
@@ -416,7 +427,8 @@ Example in CoRAL:
    Uri-Path: manage
    Content-Format: TBD1 (application/coral+cbor)
 
-   alg 10
+   group_mode True
+   sign_enc_alg 10
    hkdf 5
 
 <= 2.05 Content
@@ -509,7 +521,7 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 10,
+     "sign_enc_alg" : 10,
      "hkdf" : 5,
      "pairwise_mode" : True,
      "active" : True,
@@ -538,7 +550,7 @@ Example in CoRAL:
    Content-Format: TBD1 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
-   alg 10
+   sign_enc_alg 10
    hkdf 5
    pairwise_mode True
    active True
@@ -579,12 +591,14 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 10,
      "hkdf" : 5,
+     "pub_key_enc" : 1,
+     "group_mode" : True,
+     "sign_enc_alg" : 10,
      "sign_alg" : -8,
      "sign_params" : [[1], [1, 6]],
-     "pub_key_enc" : 1,
      "pairwise_mode" : True,
+      "alg" : 10,
      "ecdh_alg" : -27,
      "ecdh_params" : [[1], [1, 6]],
      "rt" : "core.osc.gconf",
@@ -610,14 +624,16 @@ Example in CoRAL:
    Content-Format: TBD1 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
-   alg 10
    hkdf 5
+   pub_key_enc 1
+   group_mode True
+   sign_enc_alg 10
    sign_alg -8
    sign_params.alg_capab.key_type 1
    sign_params.key_type_capab.key_type 1
    sign_params.key_type_capab.curve 6
-   pub_key_enc 1
    pairwise_mode True
+   alg 10
    ecdh_alg -27
    ecdh_params.alg_capab.key_type 1
    ecdh_params.key_type_capab.key_type 1
@@ -657,7 +673,7 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "conf_filter" : ["alg",
+     "conf_filter" : ["sign_enc_alg",
                       "hkdf",
                       "pairwise_mode",
                       "active",
@@ -669,7 +685,7 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 10,
+     "sign_enc_alg" : 10,
      "hkdf" : 5,
      "pairwise_mode" : True,
      "active" : True,
@@ -688,7 +704,7 @@ Example in CoRAL:
    Content-Format: TBD1 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
-   alg
+   sign_enc_alg
    hkdf
    pairwise_mode
    active
@@ -699,7 +715,7 @@ Example in CoRAL:
    Content-Format: TBD1 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
-   alg 10
+   sign_enc_alg 10
    hkdf 5
    pairwise_mode True
    active True
@@ -714,7 +730,9 @@ The Administrator can send a PUT request to the group-configuration resource ass
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}. If no error occurs, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}. From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}.
+
+From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 16 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
@@ -741,7 +759,7 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 11,
+     "sign_enc_alg" : 11,
      "hkdf" : 5
    }
 
@@ -764,7 +782,7 @@ Example in CoRAL:
    Content-Format: TBD1 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
-   alg 11
+   sign_enc_alg 11
    hkdf 5
 
 <= 2.04 Changed
@@ -798,23 +816,27 @@ Every group member, upon learning that the OSCORE group has been deactivated (i.
 
 Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value True again), can resume communicating in the group.
 
-Every group member, upon learning that the OSCORE group has stopped supporting the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has value False), SHOULD stop using the pairwise mode to process messages in the group.
+Every group member, upon learning that the OSCORE group has stopped using the group mode of Group OSCORE (i.e., 'group_mode' has value False), SHOULD stop using the group mode to process messages in the group.
 
-Every group member, upon learning that the OSCORE group has resumed supporting the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has value True again), can resume using the pairwise mode to process messages in the group.
+Every group member, upon learning that the OSCORE group has resumed using the group mode of Group OSCORE (i.e., 'group_mode' has value True again), can resume using the group mode to process messages in the group.
 
-Every group member, upon receiving updated values for 'alg' and 'hkdf', MUST either:
+Every group member, upon learning that the OSCORE group has stopped using the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has value False), SHOULD stop using the pairwise mode to process messages in the group.
+
+Every group member, upon learning that the OSCORE group has resumed using the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has value True again), can resume using the pairwise mode to process messages in the group.
+
+Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg' and 'alg', MUST either:
 
 * Leave the OSCORE group (see {{Section 18 of I-D.ietf-ace-key-groupcomm-oscore}}), e.g., if not supporting the indicated new algorithms; or
 
 * Use the new parameter values, and accordingly re-derive the OSCORE Security Context for the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
 
-Every group member, upon receiving updated values for 'sign_alg', 'sign_params', 'pub_key_enc', 'ecdh_alg' and 'ecdh_params' MUST either:
+Every group member, upon receiving updated values for 'pub_key_enc', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' MUST either:
 
 * Leave the OSCORE group, e.g., if not supporting the indicated new algorithm, parameters and encoding; or
 
 * Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}), providing the Group Manager with a public key which is compatible with the indicated new algorithm, parameters and encoding; or
 
-* Use the new parameter values, and, if required, provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}).
+* Use the new parameter values, and, if required, performs the following actions: i) provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}); retrieve the new Group Manager's public key from the Group Manager (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
@@ -892,7 +914,7 @@ Special processing occurs when updating the 'app_groups' status parameter by dif
 
    - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
 
-After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Joining Response message defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member.
+After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Joining Response message defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 16 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
@@ -907,7 +929,7 @@ Example in custom CBOR:
    Content-Format: TBD2 (application/ace-groupcomm+cbor)
 
    {
-     "alg" : 10,
+     "sign_enc_alg" : 10,
      "app_groups_diff" : [["room1"],
                           ["room3", "room4"]]
    }
@@ -931,7 +953,7 @@ Example in CoRAL:
    Content-Format: TBD1 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
-   alg 10
+   sign_enc_alg 10
    app_group_del "room1"
    app_group_add "room3"
    app_group_add "room4"
@@ -981,7 +1003,7 @@ Example:
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication association established with that member during its joining process (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 20.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Joining Response message in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace-groupcomm-profile' are present, and the 'key' parameter is empty.
+* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 20.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Joining Response message in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace-groupcomm-profile' are present, and the 'key' parameter is the empty CBOR map.
 
 * A group member may subscribe for updates to the group-membership resource associated to the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 4.4 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("Group deleted").
 
@@ -1007,15 +1029,23 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 +-----------------+----------+--------------+-------------------+
 | hkdf            | TBD      | tstr / int   | [[this document]] |
 |                 |          |              |                   |
-| alg             | TBD      | tstr / int   | [[this document]] |
-|                 |          |              |                   |
-| sign_alg        | TBD      | tstr / int   | [[this document]] |
-|                 |          |              |                   |
-| sign_params     | TBD      | array        | [[this document]] |
-|                 |          |              |                   |
 | pub_key_enc     | TBD      | int          | [[this document]] |
 |                 |          |              |                   |
+| group_mode      | TBD      | simple value | [[this document]] |
+|                 |          |              |                   |
+| sign_enc_alg    | TBD      | tstr / int / | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
+| sign_alg        | TBD      | tstr / int / | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
+| sign_params     | TBD      | array /      | [[this document]] |
+|                 |          | simple value |                   |
+|                 |          |              |                   |
 | pairwise_mode   | TBD      | simple value | [[this document]] |
+|                 |          |              |                   |
+| alg             | TBD      | tstr / int / | [[this document]] |
+|                 |          | simple value |                   |
 |                 |          |              |                   |
 | ecdh_alg        | TBD      | tstr / int / | [[this document]] |
 |                 |          | simple value |                   |
@@ -1075,6 +1105,8 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -02 to -03 ## {#sec-02-03}
+
+* Aligned parameters with core-groupcomm-oscore and ace-key-groupcomm-oscore.
 
 * Removed 'cs_key_params' and 'ecdh_key_params' to avoid redundant COSE capabilities of key types, consistently with draft-ietf-ace-key-groupcomm-oscore.
 
