@@ -319,6 +319,8 @@ The CBOR map MAY include the following status parameters:
 
 * 'group_policies', defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, and consistent with the format and content defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
+* 'max_stale_sets', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR unsigned integer, with value different than zero. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated to the group.
+
 * 'as_uri', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the URI of the Authorization Server associated to the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 4 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ## Default Values {#default-values}
@@ -453,7 +455,7 @@ In particular:
 
 * The payload MAY include any of the configuration parameter defined in {{config-repr-config-properties}}.
 
-* The payload MAY include any of the status parameter 'group_name', 'group_title', 'exp', 'app_groups, 'group_policies', 'as_uri' and 'active' defined in {{config-repr-status-properties}}.
+* The payload MAY include any of the status parameter 'group_name', 'group_title', 'max_stale_sets', 'exp', 'app_groups, 'group_policies', 'as_uri' and 'active' defined in {{config-repr-status-properties}}.
 
    - When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
@@ -606,7 +608,8 @@ Example in custom CBOR:
      "group_name" : "gp4",
      "group_title" : "rooms 1 and 2",
      "ace-groupcomm-profile" : "coap_group_oscore_app",
-     "exp" : "1360289224",
+     "max_stale_sets" : 3,
+     "exp" : 1360289224,
      "app_groups": : ["room1", "room2"],
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
      "as_uri" : "coap://as.example.com/token"
@@ -643,7 +646,8 @@ Example in CoRAL:
    group_name "gp4"
    group_title "rooms 1 and 2"
    ace-groupcomm-profile "coap_group_oscore_app"
-   exp "1360289224"
+   max_stale_sets 3
+   exp 1360289224
    app_group "room1"
    app_group "room2"
    joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
@@ -1063,6 +1067,8 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 | app_groups      | TBD      | array        | [[this document]] |
 |                 |          |              |                   |
 | joining_uri     | TBD      | tstr         | [[this document]] |
+|                 |          |              |                   |
+| max_stale_sets  | TBD      | uint         | [[this document]] |
 |                 |          |              |                   |
 | as_uri          | TBD      | tstr         | [[this document]] |
 |                 |          |              |                   |
