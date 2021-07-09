@@ -667,7 +667,7 @@ Table of Contents
    *  For 'app_groups', the Group Manager SHOULD use the empty CBOR
       array.
 
-   *  For 'group_policies', the Group Manager SHOUL use the default
+   *  For 'group_policies', the Group Manager SHOULD use the default
       values defined in Section 6.4 of
       [I-D.ietf-ace-key-groupcomm-oscore].
 
@@ -1040,7 +1040,7 @@ Table of Contents
         "sign_alg" : -8,
         "sign_params" : [[1], [1, 6]],
         "pairwise_mode" : True,
-         "alg" : 10,
+        "alg" : 10,
         "ecdh_alg" : -27,
         "ecdh_params" : [[1], [1, 6]],
         "rt" : "core.osc.gconf",
@@ -1391,7 +1391,7 @@ Table of Contents
       following actions: i) provide the Group Manager with a new public
       key to use in the OSCORE group, as compatible with the indicated
       parameters (see Section 11 of
-      [I-D.ietf-ace-key-groupcomm-oscore]); retrieve the new Group
+      [I-D.ietf-ace-key-groupcomm-oscore]); ii) retrieve the new Group
       Manager's public key from the Group Manager (see Section 12 of
       [I-D.ietf-ace-key-groupcomm-oscore]).
 
