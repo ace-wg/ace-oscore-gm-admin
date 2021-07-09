@@ -54,15 +54,6 @@ author:
         code: SE-16440 Stockholm
         country: Sweden
         email: francesca.palombini@ericsson.com
-      -
-        ins: K. Hartke
-        name: Klaus Hartke
-        org: Ericsson AB
-        street: Torshamnsgatan 23
-        city: Kista
-        code: SE-16440 Stockholm
-        country: Sweden
-        email: klaus.hartke@ericsson.com
 
 normative:
   I-D.ietf-core-oscore-groupcomm:
@@ -1146,6 +1137,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 # Acknowledgments # {#acknowledgment}
 {: numbered="no"}
+
+Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations, as well as the interactions with the Group Manager using CoRAL.
 
 The authors sincerely thank Christian Amsuess, Carsten Bormann and Jim Schaad for their comments and feedback.
 
