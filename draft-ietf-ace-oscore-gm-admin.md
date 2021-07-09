@@ -342,7 +342,7 @@ For the following status parameters, the Group Manager MUST use a pre-configured
 
 * For 'app_groups', the Group Manager SHOULD use the empty CBOR array.
 
-* For 'group_policies', the Group Manager SHOUL use the default values defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* For 'group_policies', the Group Manager SHOULD use the default values defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 # Interactions with the Group Manager # {#interactions}
 
@@ -591,7 +591,7 @@ Example in custom CBOR:
      "sign_alg" : -8,
      "sign_params" : [[1], [1, 6]],
      "pairwise_mode" : True,
-      "alg" : 10,
+     "alg" : 10,
      "ecdh_alg" : -27,
      "ecdh_params" : [[1], [1, 6]],
      "rt" : "core.osc.gconf",
@@ -831,7 +831,7 @@ Every group member, upon receiving updated values for 'pub_key_enc', 'sign_alg',
 
 * Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}), providing the Group Manager with a public key which is compatible with the indicated new algorithm, parameters and encoding; or
 
-* Use the new parameter values, and, if required, performs the following actions: i) provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}); retrieve the new Group Manager's public key from the Group Manager (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}).
+* Use the new parameter values, and, if required, performs the following actions: i) provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}); ii) retrieve the new Group Manager's public key from the Group Manager (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
