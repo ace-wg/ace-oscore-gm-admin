@@ -5,12 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                               R. Hoeglund
 Intended status: Standards Track                                 RISE AB
-Expires: 7 January 2022                                  P. van der Stok
+Expires: 10 January 2022                                 P. van der Stok
                                                               Consultant
                                                             F. Palombini
-                                                               K. Hartke
                                                              Ericsson AB
-                                                             6 July 2021
+                                                             9 July 2021
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2022.
+   This Internet-Draft will expire on 10 January 2022.
 
 Copyright Notice
 
@@ -1995,6 +1994,10 @@ A.3.  Version -00 to -01
 
 Acknowledgments
 
+   Klaus Hartke provided substantial contribution in defining the
+   resource model based on group collection and group configurations, as
+   well as the interactions with the Group Manager using CoRAL.
+
    The authors sincerely thank Christian Amsuess, Carsten Bormann and
    Jim Schaad for their comments and feedback.
 
@@ -2037,12 +2040,3 @@ Authors' Addresses
    Sweden
 
    Email: francesca.palombini@ericsson.com
-
-
-   Klaus Hartke
-   Ericsson AB
-   Torshamnsgatan 23
-   SE-16440 Stockholm Kista
-   Sweden
-
-   Email: klaus.hartke@ericsson.com
