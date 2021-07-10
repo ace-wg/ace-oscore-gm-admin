@@ -819,11 +819,11 @@ Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg' and
 
 Every group member, upon receiving updated values for 'pub_key_enc', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' MUST either:
 
-* Leave the OSCORE group, e.g., if not supporting the indicated new algorithm, parameters and encoding; or
+* Leave the OSCORE group, e.g., if not supporting the indicated new algorithms, parameters and encoding; or
 
-* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}), providing the Group Manager with a public key which is compatible with the indicated new algorithm, parameters and encoding; or
+* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}), providing the Group Manager with a public key which is compatible with the indicated new algorithms, parameters and encoding; or
 
-* Use the new parameter values, and, if required, performs the following actions: i) provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}); ii) retrieve the new Group Manager's public key from the Group Manager (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}).
+* Use the new parameter values, and, if required, performs the following actions: i) provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}); ii) retrieve from the Group Manager the new Group Manager's public key (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}), as also compatible with the indicated new algorithms, parameters and encoding.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
