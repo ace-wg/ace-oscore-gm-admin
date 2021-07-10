@@ -721,7 +721,7 @@ Example in CoRAL:
 
 ## Overwrite a Group Configuration ## {#configuration-resource-put}
 
-The Administrator can send a PUT request to the group-configuration resource associated to an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception of the status parameter 'group_name' that MUST NOT be included.
+The Administrator can send a PUT request to the group-configuration resource associated to an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameter 'group_name' MUST NOT be included.
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}. If no error occurs, the Group Manager performs the following actions.
 
@@ -810,14 +810,6 @@ If the value of the status parameter 'active' is changed from True to False:
 Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value False), SHOULD stop communicating in the group.
 
 Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value True again), can resume communicating in the group.
-
-Every group member, upon learning that the OSCORE group has stopped using the group mode of Group OSCORE (i.e., 'group_mode' has value False), SHOULD stop using the group mode to process messages in the group.
-
-Every group member, upon learning that the OSCORE group has resumed using the group mode of Group OSCORE (i.e., 'group_mode' has value True again), can resume using the group mode to process messages in the group.
-
-Every group member, upon learning that the OSCORE group has stopped using the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has value False), SHOULD stop using the pairwise mode to process messages in the group.
-
-Every group member, upon learning that the OSCORE group has resumed using the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has value True again), can resume using the pairwise mode to process messages in the group.
 
 Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg' and 'alg', MUST either:
 
