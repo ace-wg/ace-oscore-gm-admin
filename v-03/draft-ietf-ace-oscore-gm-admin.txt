@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                               R. Hoeglund
 Intended status: Standards Track                                 RISE AB
-Expires: 10 January 2022                                 P. van der Stok
+Expires: 11 January 2022                                 P. van der Stok
                                                               Consultant
                                                             F. Palombini
                                                              Ericsson AB
-                                                             9 July 2021
+                                                            10 July 2021
 
 
               Admin Interface for the OSCORE Group Manager
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 January 2022.
+   This Internet-Draft will expire on 11 January 2022.
 
 Copyright Notice
 
@@ -1185,8 +1185,9 @@ Table of Contents
    resource associated to an OSCORE group, in order to overwrite the
    current configuration of that group with a new one.  The payload of
    the request has the same format of the POST request defined in
-   Section 4.3, with the exception of the status parameter 'group_name'
-   that MUST NOT be included.
+   Section 4.3, with the exception that the configuration parameters
+   'group_mode' and 'pairwise_mode' as well as the status parameter
+   'group_name' MUST NOT be included.
 
    The error handling for the PUT request is the same as for the POST
    request defined in Section 4.3.  If no error occurs, the Group
@@ -1344,26 +1345,6 @@ Table of Contents
    Every group member, upon learning that the OSCORE group has been
    reactivated (i.e., 'active' has value True again), can resume
    communicating in the group.
-
-   Every group member, upon learning that the OSCORE group has stopped
-   using the group mode of Group OSCORE (i.e., 'group_mode' has value
-   False), SHOULD stop using the group mode to process messages in the
-   group.
-
-   Every group member, upon learning that the OSCORE group has resumed
-   using the group mode of Group OSCORE (i.e., 'group_mode' has value
-   True again), can resume using the group mode to process messages in
-   the group.
-
-   Every group member, upon learning that the OSCORE group has stopped
-   using the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has
-   value False), SHOULD stop using the pairwise mode to process messages
-   in the group.
-
-   Every group member, upon learning that the OSCORE group has resumed
-   using the pairwise mode of Group OSCORE (i.e., 'pairwise_mode' has
-   value True again), can resume using the pairwise mode to process
-   messages in the group.
 
    Every group member, upon receiving updated values for 'hkdf',
    'sign_enc_alg' and 'alg', MUST either:
