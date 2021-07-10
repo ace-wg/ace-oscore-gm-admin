@@ -1097,9 +1097,11 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -02 to -03 ## {#sec-02-03}
 
-* Aligned parameters with core-groupcomm-oscore and ace-key-groupcomm-oscore.
+* Aligned new and old parameters to core-groupcomm-oscore and ace-key-groupcomm-oscore.
 
 * Removed 'cs_key_params' and 'ecdh_key_params' to avoid redundant COSE capabilities of key types, consistently with draft-ietf-ace-key-groupcomm-oscore.
+
+* Revised examples and side effects due to parameter changes.
 
 * New error type "Group currently active".
 
