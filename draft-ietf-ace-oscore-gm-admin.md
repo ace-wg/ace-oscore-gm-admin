@@ -727,6 +727,8 @@ The error handling for the PUT request is the same as for the POST request defin
 
 First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use the default value as specified in {{default-values}}.
 
+If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets in the collection of sets of stale OSCORE Sender IDs associated to the group, and deletes any possible older set from the collection (see {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
+
 From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 16 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
