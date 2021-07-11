@@ -3,13 +3,13 @@
 
 
 ACE Working Group                                              M. Tiloca
-Internet-Draft                                               R. Hoeglund
+Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 11 January 2022                                 P. van der Stok
+Expires: 12 January 2022                                 P. van der Stok
                                                               Consultant
                                                             F. Palombini
                                                              Ericsson AB
-                                                            10 July 2021
+                                                            11 July 2021
 
 
               Admin Interface for the OSCORE Group Manager
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 January 2022.
+   This Internet-Draft will expire on 12 January 2022.
 
 Copyright Notice
 
@@ -1473,7 +1473,7 @@ Table of Contents
       Manager MUST respond with a 4.00 (Bad Request) response, in case:
 
       -  When custom CBOR is used, the CBOR map includes the parameter
-         'app_groups'diffs'; or
+         'app_groups_diff'; or
 
       -  When CoRAL is used, any element 'app_group_del' and/or
          'app_group_add' is included.
@@ -2007,7 +2007,7 @@ Authors' Addresses
    Email: marco.tiloca@ri.se
 
 
-   Rikard Hoeglund
+   Rikard Höglund
    RISE AB
    Isafjordsgatan 22
    SE-16440 Stockholm Kista
