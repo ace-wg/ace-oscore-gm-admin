@@ -30,8 +30,8 @@ author:
         country: Sweden
         email: marco.tiloca@ri.se
       -
-        ins: R. Hoeglund
-        name: Rikard Hoeglund
+        ins: R. Höglund
+        name: Rikard Höglund
         org: RISE AB
         street: Isafjordsgatan 22
         city: Kista
@@ -873,7 +873,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
 * When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
 
-   - When custom CBOR is used, the CBOR map includes the parameter 'app_groups'diffs'; or
+   - When custom CBOR is used, the CBOR map includes the parameter 'app_groups_diff'; or
 
    - When CoRAL is used, any element 'app_group_del' and/or 'app_group_add' is included.
 
@@ -1136,6 +1136,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations, as well as the interactions with the Group Manager using CoRAL.
 
-The authors sincerely thank Christian Amsuess, Carsten Bormann and Jim Schaad for their comments and feedback.
+The authors sincerely thank Christian Amsüss, Carsten Bormann and Jim Schaad for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
