@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 12 January 2022                                 P. van der Stok
+Expires: 13 January 2022                                 P. van der Stok
                                                               Consultant
                                                             F. Palombini
                                                              Ericsson AB
-                                                            11 July 2021
+                                                            12 July 2021
 
 
               Admin Interface for the OSCORE Group Manager
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 January 2022.
+   This Internet-Draft will expire on 13 January 2022.
 
 Copyright Notice
 
@@ -606,8 +606,8 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  'max_stale_sets', defined in Section 6.1 of this document and
-      encoded as a CBOR unsigned integer, with value different than
-      zero.  With reference to Section 2.2.1 of
+      encoded as a CBOR unsigned integer, with value strictly greater
+      than 1.  With reference to Section 2.2.1 of
       [I-D.ietf-ace-key-groupcomm-oscore], this parameter specifies N,
       i.e., the maximum number of sets of stale OSCORE Sender IDs that
       the Group Manager stores in the collection associated to the
