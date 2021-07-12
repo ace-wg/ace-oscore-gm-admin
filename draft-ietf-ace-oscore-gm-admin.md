@@ -310,7 +310,7 @@ The CBOR map MAY include the following status parameters:
 
 * 'group_policies', defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, and consistent with the format and content defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'max_stale_sets', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR unsigned integer, with value different than zero. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated to the group.
+* 'max_stale_sets', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR unsigned integer, with value strictly greater than 1. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated to the group.
 
 * 'as_uri', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the URI of the Authorization Server associated to the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 4 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
