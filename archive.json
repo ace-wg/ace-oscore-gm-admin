@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-08-25T00:26:32.777144+00:00",
+  "timestamp": "2021-07-15T00:43:31.299487+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -50,5 +50,90 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTEzNDc4NzY0",
+      "title": "V 01",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/1",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-31T18:29:36Z",
+      "updatedAt": "2021-02-01T17:14:29Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "54ca47bdbaeba878fba6e3b29c8850b7d9aa3744",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "v-01",
+      "headRefOid": "e9767fa599a980dba0aed85491cfb169172ecf95",
+      "closedAt": "2021-02-01T17:14:08Z",
+      "mergedAt": "2021-02-01T17:14:08Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "aac1a35216769819ac1de1f99cdeedd4d0eba0a8"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTc5MDg2ODkz",
+      "title": "V 02",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/2",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-02-24T07:54:32Z",
+      "updatedAt": "2021-02-24T07:55:33Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "aac1a35216769819ac1de1f99cdeedd4d0eba0a8",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "v-02",
+      "headRefOid": "867f6f8d97b3d5a1a89a30f18abe3fd73c432a68",
+      "closedAt": "2021-02-24T07:54:38Z",
+      "mergedAt": "2021-02-24T07:54:38Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "30ef478a34d7d2a7252c444ce7402bb4c8fdbbca"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg5ODg2Nzg5",
+      "title": "V 03",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/3",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-07-14T12:51:39Z",
+      "updatedAt": "2021-07-14T12:56:26Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "30ef478a34d7d2a7252c444ce7402bb4c8fdbbca",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "v-03",
+      "headRefOid": "3136bdccd801bc75671cd909d8fa7fde6dfea726",
+      "closedAt": "2021-07-14T12:54:43Z",
+      "mergedAt": "2021-07-14T12:54:43Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "ea310bc6f0c13b2a334bc127ed666ced00ab48cc"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
