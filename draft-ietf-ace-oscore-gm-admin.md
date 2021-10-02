@@ -1034,51 +1034,52 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 | Name            | CBOR Key | CBOR Type    | Reference         |
 +-----------------+----------+--------------+-------------------+
 | hkdf            | TBD      | tstr / int   | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | pub_key_enc     | TBD      | int          | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | group_mode      | TBD      | simple value | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | sign_enc_alg    | TBD      | tstr / int / | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | sign_alg        | TBD      | tstr / int / | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | sign_params     | TBD      | array /      | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | pairwise_mode   | TBD      | simple value | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | alg             | TBD      | tstr / int / | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | ecdh_alg        | TBD      | tstr / int / | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | ecdh_params     | TBD      | array /      | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | active          | TBD      | simple value | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | group_name      | TBD      | tstr         | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | group_title     | TBD      | tstr /       | [[this document]] |
 |                 |          | simple value |                   |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | app_groups      | TBD      | array        | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | joining_uri     | TBD      | tstr         | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | max_stale_sets  | TBD      | uint         | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | as_uri          | TBD      | tstr         | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | conf_filter     | TBD      | array        | [[this document]] |
-|                 |          |              |                   |
++-----------------+----------+--------------+-------------------+
 | app_groups_diff | TBD      | array        | [[this document]] |
 +-----------------+----------+--------------+-------------------+
 ~~~~~~~~~~~
+{: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
