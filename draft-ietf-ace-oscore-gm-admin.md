@@ -998,6 +998,23 @@ After having deleted an OSCORE group, the Group Manager can inform the group mem
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated to that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
+# ACE Groupcomm Error Identifiers {#error-types}
+
+In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
+
+~~~~~~~~~~~
++-------+------------------------+
+| Value |      Description       |
++-------+------------------------+
+|  10   | Group currently active |
++-------+------------------------+
+~~~~~~~~~~~
+{: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
+
+A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.ietf-ace-key-groupcomm}}) and able to understand the specified error may use that information to determine what actions to take next. If it is included in the error response and supported by the Client, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
+
+* In case of error 10, the Client should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before proceeding with the group deletion.
+
 # Security Considerations # {#sec-security-considerations}
 
 Security considerations are inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
@@ -1096,6 +1113,8 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -03 to -04 ## {#sec-03-04}
+
+* Clarifications on what to do in case of enhanced error responses.
 
 * IANA considerations - Use RFC8126 terminology.
 
