@@ -1075,7 +1075,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Errors" regi
 
 ## Resource Types # {#iana-rt}
 
-IANA is asked to enter the following values into the Resource Type (rt=) Link Target Attribute Values subregistry within the Constrained Restful Environments (CoRE) Parameters registry defined in {{RFC6690}}.
+IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
 ~~~~~~~~~~~
 +----------------+------------------------------+-------------------+
@@ -1094,6 +1094,12 @@ IANA is asked to enter the following values into the Resource Type (rt=) Link Ta
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -03 to -04 ## {#sec-03-04}
+
+* IANA considerations - Use RFC8126 terminology.
+
+* Editorial improvements.
 
 ## Version -02 to -03 ## {#sec-02-03}
 
