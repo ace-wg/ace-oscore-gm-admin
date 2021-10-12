@@ -342,7 +342,7 @@ For each configuration parameter, the Group Manager MUST use a pre-configured de
 
 * If 'group_mode' has value True, the Group Manager SHOULD use the CBOR simple value False for the parameter 'det_req'.
 
-* If 'det_req' has value True, the Group Manager SHOULD use SHA-256 (COSE algorithm encoding: -16) as default value for parameter 'det_hash_alg'.
+* If 'det_req' has value True, the Group Manager SHOULD use SHA-256 (COSE algorithm encoding: -16) as default value for the parameter 'det_hash_alg'.
 
 * For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value False.
 
