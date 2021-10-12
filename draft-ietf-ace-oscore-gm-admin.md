@@ -1118,6 +1118,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * IANA considerations - Use RFC8126 terminology.
 
+* Author's change of address.
+
 * Editorial improvements.
 
 ## Version -02 to -03 ## {#sec-02-03}
