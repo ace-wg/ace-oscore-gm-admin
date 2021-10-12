@@ -338,9 +338,13 @@ For each configuration parameter, the Group Manager MUST use a pre-configured de
 
 * For 'group_mode', the Group Manager SHOULD use the CBOR simple value True.
 
-* For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value False.
-
 * If 'group_mode' has value True, the Group Manager SHOULD use the same default values defined in {{Section 21.2 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'sign_enc_alg', 'sign_alg' and 'sign_params'.
+
+* If 'group_mode' has value True, the Group Manager SHOULD use the CBOR simple value False for the parameter 'det_req'.
+
+* If 'det_req' has value True, the Group Manager SHOULD use SHA-256 (COSE algorithm encoding: -16) as default value for the Hash Algorithm used in the OSCORE group for producing derministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}.
+
+* For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value False.
 
 * If 'pairwise_mode' has value True, the Group Manager SHOULD use the same default values defined in {{Section 21.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg' and 'ecdh_params'.
 
