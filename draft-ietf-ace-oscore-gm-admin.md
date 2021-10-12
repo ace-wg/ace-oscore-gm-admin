@@ -43,8 +43,7 @@ author:
         name: Peter van der Stok
         org: Consultant
         phone: +31-492474673 (Netherlands), +33-966015248 (France)
-        email: consultancy@vanderstok.org
-        uri: www.vanderstok.org
+        email: stokcons@bbhmail.nl
       -
         ins: F. Palombini
         name: Francesca Palombini
