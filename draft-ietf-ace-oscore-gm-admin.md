@@ -274,7 +274,7 @@ The CBOR map MUST include the following configuration parameters, whose CBOR abb
 
 * 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'pub_key_enc', which specifies the encoding of public keys used in the OSCORE group, encoded as a CBOR integer. Possible values are the same ones admitted for the 'pub\_key\_enc' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'cred_fmt', which specifies the encoding of public keys used in the OSCORE group, encoded as a CBOR integer. Possible values are the same ones admitted for the 'pub\_key\_enc' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'group_mode', encoded as a CBOR simple value. Its value is True if the OSCORE group uses the group mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or False otherwise.
 
@@ -605,7 +605,7 @@ Example in custom CBOR:
 
    {
      "hkdf" : 5,
-     "pub_key_enc" : 33,
+     "cred_fmt" : 33,
      "group_mode" : True,
      "sign_enc_alg" : 10,
      "sign_alg" : -8,
@@ -639,7 +639,7 @@ Example in CoRAL:
 
    #using <http://coreapps.org/core.osc.gconf#>
    hkdf 5
-   pub_key_enc 33
+   cred_fmt 33
    group_mode True
    sign_enc_alg 10
    sign_alg -8
@@ -841,7 +841,7 @@ Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg' and
 
 * Use the new parameter values, and accordingly re-derive the OSCORE Security Context for the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
 
-Every group member, upon receiving updated values for 'pub_key_enc', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' MUST either:
+Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' MUST either:
 
 * Leave the OSCORE group, e.g., if not supporting the indicated new algorithms, parameters and encoding; or
 
@@ -1057,7 +1057,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 +-----------------+----------+--------------+-------------------+
 | hkdf            | TBD      | tstr / int   | [[this document]] |
 +-----------------+----------+--------------+-------------------+
-| pub_key_enc     | TBD      | int          | [[this document]] |
+| cred_fmt        | TBD      | int          | [[this document]] |
 +-----------------+----------+--------------+-------------------+
 | group_mode      | TBD      | simple value | [[this document]] |
 +-----------------+----------+--------------+-------------------+
@@ -1138,6 +1138,12 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -04 to -05 ## {#sec-04-05}
+
+* Renamed 'pub_key_enc' to 'cred_fmt'.
+
+* Editorial improvements.
 
 ## Version -03 to -04 ## {#sec-03-04}
 
