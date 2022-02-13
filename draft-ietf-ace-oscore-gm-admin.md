@@ -88,7 +88,10 @@ informative:
   I-D.tiloca-core-oscore-discovery:
   I-D.hartke-t2trg-coral-reef:
   I-D.amsuess-core-cachable-oscore:
+  I-D.ietf-cose-cbor-encoded-cert:
   RFC6347:
+  RFC7925:
+  RFC8392:
 
 --- abstract
 
@@ -134,7 +137,11 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
    - "security group", as a set of CoAP nodes that share the same security material, and use it to protect and verify exchanged messages.
 
-* The OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} security protocols. These include the concept of Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as security group for one or many application groups.
+* The OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} security protocols. These especially include the concepts of:
+
+   - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as security group for one or many application groups.
+
+   - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
 
 * The ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
@@ -280,7 +287,7 @@ The CBOR map MUST include the following configuration parameters, whose CBOR abb
 
 * 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'cred_fmt', which specifies the encoding of public keys used in the OSCORE group, encoded as a CBOR integer. Possible values are the same ones admitted for the 'pub\_key\_enc' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'cred_fmt', which specifies the format of authentication credentials used in the OSCORE group, encoded as a CBOR integer. Possible values are the same ones admitted for the 'cred\_fmt' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'group_mode', encoded as a CBOR simple value. Its value is True if the OSCORE group uses the group mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or False otherwise.
 
@@ -841,7 +848,7 @@ If the value of the status parameter 'active' is changed from True to False:
 
 * The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* The Group Manager MUST stop accepting updated public keys uploaded by current group members (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Public Key Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to True, the Group Manager MUST respond to a Public Key Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value False), SHOULD stop communicating in the group.
 
@@ -855,11 +862,15 @@ Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg' and
 
 Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' MUST either:
 
-* Leave the OSCORE group, e.g., if not supporting the indicated new algorithms, parameters and encoding; or
+* Leave the OSCORE group, e.g., if not supporting the indicated new format, algorithms, parameters and encoding; or
 
-* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}), providing the Group Manager with a public key which is compatible with the indicated new algorithms, parameters and encoding; or
+* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}). When rejoining the group, a new authentication credential with the indicated format used in the OSCORE group MUST be provided to the Group Manager. The authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
-* Use the new parameter values, and, if required, performs the following actions: i) provide the Group Manager with a new public key to use in the OSCORE group, as compatible with the indicated parameters (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}); ii) retrieve from the Group Manager the new Group Manager's public key (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}), as also compatible with the indicated new algorithms, parameters and encoding.
+* Use the new parameter values, and, if required, perform the following actions.
+
+   - Provide the Group Manager with a new authentication credential to use in the OSCORE group (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). The new authentication credential MUST have the indicated format used in the OSCORE group. The new authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
+
+   - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential also has the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
@@ -1156,6 +1167,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Renamed 'pub_key_enc' to 'cred_fmt'.
 
 * Replaced CBOR simple value "null" with "nil".
+
+* Distinction between authentication credentials and public keys.
 
 * More details on informing group members about changes in the group configuration.
 
