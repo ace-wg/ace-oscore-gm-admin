@@ -823,7 +823,13 @@ If the value of the status parameter 'active' is changed from False to True, the
 
 After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}). Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g., by using CoAP Observe {{RFC7641}}.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}). To this end, messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Joining Response defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
+
+* Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace-groupcomm-profile' are present.
+
+* The 'key' parameter includes only the parameters 'hkdf', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params', 'alg', 'ecdh_alg' and 'ecdh_params', with values reflecting the new configuration of the OSCORE group.
+
+Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g., by using CoAP Observe {{RFC7641}}.
 
 If the value of the status parameter 'active' is changed from True to False:
 
@@ -1144,6 +1150,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Renamed 'pub_key_enc' to 'cred_fmt'.
 
 * Replaced CBOR simple value "null" with "nil".
+
+* More details on informing group members about changes in the group configuration.
 
 * Editorial improvements.
 
