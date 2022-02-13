@@ -864,13 +864,13 @@ Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 's
 
 * Leave the OSCORE group, e.g., if not supporting the indicated new format, algorithms, parameters and encoding; or
 
-* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}). When rejoining the group, a new authentication credential with the indicated format used in the OSCORE group MUST be provided to the Group Manager. The authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
+* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}). When rejoining the group, a new authentication credential in the indicated format used in the OSCORE group MUST be provided to the Group Manager. The authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
 * Use the new parameter values, and, if required, perform the following actions.
 
-   - Provide the Group Manager with a new authentication credential to use in the OSCORE group (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). The new authentication credential MUST have the indicated format used in the OSCORE group. The new authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
+   - Provide the Group Manager with a new authentication credential to use in the OSCORE group (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). The new authentication credential MUST be in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
-   - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential also has the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
+   - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
