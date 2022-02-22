@@ -64,11 +64,13 @@ normative:
   I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-core-groupcomm-bis:
+  I-D.ietf-ace-aif:
   RFC2119:
   RFC6690:
   RFC6749:
   RFC7252:
   RFC7641:
+  RFC8126:
   RFC8132:
   RFC8174:
   RFC8610:
@@ -171,11 +173,86 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 * The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated with the same AS.
 
-    The authorized access for an Administrator can be limited to performing only a subset of operations. The AS can authorize multiple Administrators to access the collection resource and the (same) group-configuration resources at the Group Manager.
+    The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
 
-   \[ NOTE: This will be enabled by defining the format to use for the 'scope' claim in the Access Token, as encoding permitted actions on groups whose name matches with a name pattern. \]
+    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
 
-   The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
+## Format of Scope ## {#scope-format}
+
+This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
+
+To this end, this document uses the Authorization Information Format (AIF) {{I-D.ietf-ace-aif}}, and defines the following AIF specific data model AIF-OSCORE-GROUPCOMM-ADMIN.
+
+With reference to the generic AIF model
+
+~~~~~~~~~~~
+   AIF-Generic<Toid, Tperm> = [* [Toid, Tperm]]
+~~~~~~~~~~~
+
+the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toid, Tperm\]\], where each \[Toid, Tperm\] element corresponds to one scope entry.
+
+Then, for each scope entry, the following applies.
+
+* The object identifier ("Toid") is specialized as a CBOR text string, specifying a wildcard pattern P for the scope entry. The pattern P is intended as a template for group names.
+
+* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the operation(s) that the Administrator wishes to perform on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the wildcard pattern P. The value Q is computed as follows.
+
+   - Each operation in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Actions" registry, for which this document defines the entries in {{fig-operation-values}}.
+
+   - The set of N numbers is converted into the single value Q, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
+
+~~~~~~~~~~~
++--------+-------+-------------------------------------------+
+| Name   | Value | Description                               |
++========+=======+===========================================+
+| List   | 0     | Retrieve a list of group configurations   |
++--------+-------+-------------------------------------------+
+| Create | 1     | Create a new group configuration          |
++--------+-------+-------------------------------------------+
+| Read   | 2     | Retrieve a group configuration            |
++--------+-------+-------------------------------------------+
+| Write  | 3     | Overwrite or update a group configuration |
++--------+-------+-------------------------------------------+
+| Delete | 4     | Delete a group configuration              |
++--------+-------+-------------------------------------------+
+~~~~~~~~~~~
+{: #fig-operation-values title="Numeric identifier of operations on the admin endpoints at a Group Manager" artwork-align="center"}
+
+The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and the format of scope using such a data model is as follows:
+
+~~~~~~~~~~~~~~~~~~~~ CDDL
+   AIF-OSCORE-GROUPCOMM-ADMIN = AIF-Generic<pattern, permissions>
+
+   pattern = tstr  ; wilcard pattern of group names
+   permissions = uint . bits operations
+   operations = &(
+      List: 0,
+      Create: 1,
+      Read: 2,
+      Write: 3,
+      Delete: 4
+   )
+
+   scope_entry = AIF-OSCORE-GROUPCOMM-ADMIN
+
+   scope = << [ + scope_entry ] >>
+~~~~~~~~~~~~~~~~~~~~
+
+By relying on the scope format defined above and given an OSCORE group G1 created by a "main" Administrator, then a second "assistant" Administrator can be effectively authorized to perform some operations on G1, in spite of not being the group creator.
+
+Furthermore, having the object identifier ("Toid") specialized as a wildcard pattern displays a number of advantages.
+
+* The encoded scope can be compact in size, while allowing the Administrator to operate on large pools of group names.
+
+* The Administrator and the AS do not need to know exact group names when requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take a final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
+
+* The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the expiration of T1 and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
+
+When using the scope format defined in this section, the permission set ("Tperm") MUST always include the "List" operation in order for the scope to not be considered malformed. That is, for each scope entry, the unsigned integer Q MUST be odd.
+
+In general, a single operation can be associated with multiple different actions that are possible to take when interacting with the Group Manager. For example, performing the "List" operation can practically consist of either retrieving the largest possible list of group configurations (see {{collection-resource-get}}) or rather retrieving only a subset of those according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
+
+Future specifications that define new operations on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Operations" registry defined in {{ssec-iana-group-oscore-admin-operations-registry}} of this document.
 
 ## Getting Access to the Group Manager ## {#getting-access}
 
@@ -194,32 +271,6 @@ The format and encoding of scope defined in {{scope-format}} of this document MU
 2. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have secure communication established with the Group Manager, before performing any admin operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
 3. Consistently with what allowed by the authorization information in the Access Token, the Administrator performs admin operations at the Group Manager, as described in the following sections. These include the retrieval of the existing OSCORE groups, the creation of new OSCORE groups, the update and retrieval of OSCORE group configurations, and the removal of OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
-
-### Format of Scope ## {#scope-format}
-
-This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
-
-TODO
-
-\[
-
-DESIGN CONSIDERATIONS
-
-* Define a new AIF specific data model, as loosely aligned with the data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
-
-   - The overall scope is an array of scope entries, each as a pair (Toid, Tperm).
-
-   - Toid is a text string, i.e., a wildcard pattern against which group names can be matched.
-
-   - Tperm is a set of specific permissions encoded as a bitmap, applied to groups whose name matches with the wildcard pattern.
-
-* A valid Access Token should always allow to at least retrieve the list of existing group configurations.
-
-* An Administrator authorized to create a group, should later be able to perform any possible operation on it.
-
-* An Administrator can be authorized to perform selected operations on a group earlier created by a different Administrator, still barring the group name matching with the wildcard pattern.
-
-\]
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
@@ -381,7 +432,7 @@ This section describes the operations available on the group-collection resource
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
-## Retrieve the Full List of Groups Configurations ## {#collection-resource-get}
+## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
 The Administrator can send a GET request to the group-collection resource, in order to retrieve the complete list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
 
@@ -1159,6 +1210,78 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 |                | of an OSCORE Group Manager   |                   |
 +----------------+------------------------------+-------------------+
 ~~~~~~~~~~~
+
+## Group OSCORE Admin Operations {#ssec-iana-group-oscore-admin-operations-registry}
+
+This document establishes the IANA "Group OSCORE Admin Operations" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+
+This registry includes the possible operations that Administrators can perform when interacting with an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of \[\[this document\]\].
+
+The columns of this registry are:
+
+* Name: A value that can be used in documents for easier comprehension, to identify a possible operation that Administrators can perform when interacting with an OSCORE Group Manager.
+
+* Value: The numeric identifier for this operation. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" {{RFC8126}}.
+
+* Description: This field contains a brief description of the operation.
+
+* Reference: This contains a pointer to the public specification for the operation.
+
+This registry will be initially populated by the values in {{fig-operation-values}}.
+
+The Reference column for all of these entries will be \[\[this document\]\].
+
+## AIF {#ssec-iana-AIF-registry}
+
+For both media-types application/aif+cbor and application/aif+json defined in {{Section 5.1 of I-D.ietf-ace-aif}}, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in {{Section 5.2 of I-D.ietf-ace-aif}} within the "MIME Media Type Sub-Parameter" registry group.
+
+* Name: oscore-group-name-pattern
+* Description/Specification: wildcard pattern of OSCORE group names
+* Reference: \[\[This document\]\]
+
+&nbsp;
+
+* Name: oscore-group-admin-operations
+* Description/Specification: admin operation(s) at the OSCORE Group Manager
+* Reference: \[\[This document\]\]
+
+## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
+
+IANA is asked to register the following entries to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+
+* Media Type: application/aif+cbor;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-operations"
+
+* Encoding: -
+
+* ID: TBD
+
+* Reference: \[\[This document\]\]
+
+&nbsp;
+
+* Media Type: application/aif+json;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-operations"
+
+* Encoding: -
+
+* ID: TBD
+
+* Reference: \[\[This document\]\]
+
+## Expert Review Instructions {#ssec-iana-expert-review}
+
+The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
+
+Expert reviewers should take into consideration the following points:
+
+* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts should inspect the entry for the considered operation, to verify the correctness of its description against the operation as intended in the specification that defined it. Expert should consider requesting an opinion on the correctness of registered parameters from the Authentication and Authorization for Constrained Environments (ACE) Working Group and the Constrained RESTful Environments (CoRE) Working Group.
+
+     Entries that do not meet these objective of clarity and completeness should not be registered.
+
+* Duplicated registration and point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments.
+
+* Experts should take into account the expected usage of operations when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.
+
+* Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.
 
 --- back
 
