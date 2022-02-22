@@ -1267,6 +1267,16 @@ IANA is asked to register the following entries to the "CoAP Content-Formats" re
 
 * Reference: \[\[This document\]\]
 
+## ACE Scope Semantics # {#iana-scope-semantics}
+
+IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in {{Section 11.12 of I-D.ietf-ace-key-groupcomm}}.
+
+* Value: SEM_ID_TBD
+
+* Description: Administrative operations at the ACE Group Manager for Group OSCORE.
+
+* Reference: \[\[This document\]\]
+
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
 The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
