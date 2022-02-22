@@ -1291,6 +1291,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -04 to -05 ## {#sec-04-05}
 
+* Defined format of scope based on a new AIF data model.
+
 * Renamed 'pub_key_enc' to 'cred_fmt'.
 
 * Mandatory to include 'group_name' in the group creation request.
