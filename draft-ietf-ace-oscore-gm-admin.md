@@ -467,7 +467,7 @@ Example in CoRAL:
 
 ## Create a New Group Configuration ## {#collection-resource-post}
 
-The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MAY specify the intended group name GROUPNAME and group title, and MAY specify pieces of information concerning the group configuration.
+The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME, and MAY specify the intended group title together with pieces of information concerning the group configuration.
 
 When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
 
@@ -477,9 +477,11 @@ In particular:
 
 * The payload MAY include any of the configuration parameter defined in {{config-repr-config-properties}}.
 
-* The payload MAY include any of the status parameter 'group_name', 'group_title', 'max_stale_sets', 'exp', 'app_groups, 'group_policies', 'as_uri' and 'active' defined in {{config-repr-status-properties}}.
+* The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
 
-   - When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
+* The payload MAY include any of the status parameter 'group_title', 'max_stale_sets', 'exp', 'app_groups, 'group_policies', 'as_uri' and 'active' defined in {{config-repr-status-properties}}.
+
+   When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
 * The payload MUST NOT include any of the status parameter 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
@@ -551,6 +553,7 @@ Example in custom CBOR:
      "hkdf" : 5,
      "pairwise_mode" : True,
      "active" : True,
+     "group_name" : "gp4",
      "group_title" : "rooms 1 and 2",
      "app_groups": : ["room1", "room2"],
      "as_uri" : "coap://as.example.com/token"
@@ -580,6 +583,7 @@ Example in CoRAL:
    hkdf 5
    pairwise_mode True
    active True
+   group_name "gp4"
    group_title "rooms 1 and 2"
    app_group "room1"
    app_group "room2"
@@ -1165,6 +1169,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -04 to -05 ## {#sec-04-05}
 
 * Renamed 'pub_key_enc' to 'cred_fmt'.
+
+* Mandatory to include 'group_name' in the group creation request.
 
 * Replaced CBOR simple value "null" with "nil".
 
