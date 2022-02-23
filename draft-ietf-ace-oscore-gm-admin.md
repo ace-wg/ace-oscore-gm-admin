@@ -158,9 +158,13 @@ This document also refers to the following terminology.
 
 * Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment.
 
-* Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to create a new OSCORE group, or to retrieve the list of existing OSCORE groups, under that Group Manager. As an example, this document uses /manage as the url-path of the group-collection resource; implementations are not required to use this name, and can define their own instead.
+* Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups, or to create a new OSCORE group, under that Group Manager.
 
-* Group-configuration resource: a resource hosted by the Group Manager, associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or update the configuration of the respective OSCORE group, or to delete that group. The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.
+   As an example, this document uses /manage as the url-path of the group-collection resource; implementations are not required to use this name, and can define their own instead.
+
+* Group-configuration resource: a resource hosted by the Group Manager, associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.
+
+   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.
 
 * Admin endpoint: an endpoint at the Group Manager associated with the group-collection resource or to a group-configuration resource hosted by that Group Manager.
 
@@ -174,138 +178,9 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 * The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated with the same AS.
 
-    The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
+    The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}} and {{getting-access}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
 
     The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
-
-## Format of Scope ## {#scope-format}
-
-This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
-
-To this end, this document uses the Authorization Information Format (AIF) {{I-D.ietf-ace-aif}}, and defines the following AIF specific data model AIF-OSCORE-GROUPCOMM-ADMIN.
-
-With reference to the generic AIF model
-
-~~~~~~~~~~~
-   AIF-Generic<Toid, Tperm> = [* [Toid, Tperm]]
-~~~~~~~~~~~
-
-the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toid, Tperm\]\], where each \[Toid, Tperm\] element corresponds to one scope entry.
-
-Then, for each scope entry, the following applies.
-
-* The object identifier ("Toid") is specialized as a CBOR text string, specifying a wildcard pattern P for the scope entry. The pattern P is intended as a template for group names.
-
-* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the wildcard pattern P. The value Q is computed as follows.
-
-   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Actions" registry, for which this document defines the entries in {{fig-permission-values}}.
-
-   - The set of N numbers is converted into the single value Q, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
-
-   In general, a single permission can be associated with multiple different operations that are possible to take when interacting with the Group Manager. For example, the "List" permission allows the Administrator to retrieve a list of group configurations (see {{collection-resource-get}}) or only a subset of that according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
-
-~~~~~~~~~~~
-+--------+-------+-------------------------------------------+
-| Name   | Value | Description                               |
-+========+=======+===========================================+
-| List   | 0     | Retrieve a list of group configurations   |
-+--------+-------+-------------------------------------------+
-| Create | 1     | Create a new group configuration          |
-+--------+-------+-------------------------------------------+
-| Read   | 2     | Retrieve a group configuration            |
-+--------+-------+-------------------------------------------+
-| Write  | 3     | Overwrite or update a group configuration |
-+--------+-------+-------------------------------------------+
-| Delete | 4     | Delete a group configuration              |
-+--------+-------+-------------------------------------------+
-~~~~~~~~~~~
-{: #fig-permission-values title="Numeric identifier of operations on the admin endpoints at a Group Manager" artwork-align="center"}
-
-The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and the format of scope using such a data model is as follows:
-
-~~~~~~~~~~~~~~~~~~~~ CDDL
-   AIF-OSCORE-GROUPCOMM-ADMIN = AIF-Generic<pattern, permissions>
-
-   pattern = tstr  ; wilcard pattern of group names
-   permissions = uint . bits operations
-   operations = &(
-      List: 0,
-      Create: 1,
-      Read: 2,
-      Write: 3,
-      Delete: 4
-   )
-
-   scope_entry = AIF-OSCORE-GROUPCOMM-ADMIN
-
-   scope = << [ + scope_entry ] >>
-~~~~~~~~~~~~~~~~~~~~
-
-By relying on the scope format defined above and given an OSCORE group G1 created by a "main" Administrator, then a second "assistant" Administrator can be effectively authorized to perform some operations on G1, in spite of not being the group creator.
-
-Furthermore, having the object identifier ("Toid") specialized as a wildcard pattern displays a number of advantages.
-
-* The encoded scope can be compact in size, while allowing the Administrator to operate on large pools of group names.
-
-* The Administrator and the AS do not need to know exact group names when requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take a final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
-
-* The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the expiration of T1 and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
-
-When using the scope format defined in this section, the permission set ("Tperm") MUST always include the "List" operation in order for the scope to not be considered malformed. That is, for each scope entry, the unsigned integer Q MUST be odd.
-
-Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
-
-## Getting Access to the Group Manager ## {#getting-access}
-
-All communications between the involved entities rely on the CoAP protocol and MUST be secured.
-
-In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
-
-With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
-
-The format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
-
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this document. This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined in {{scope-format}} of this document.
-
-In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
-
-1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, it sends to the AS an Authorization Request as defined in {{Section 5.8.1 of I-D.ietf-ace-oauth-authz}}. The Administrator will start or continue using secure communications with the Group Manager, according to the response from the AS.
-
-2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, especially verifying that the Administrator is authorized to perform the requested operations at the Group Manager, or possibly a subset of those.
-
-   With reference to the scope format specified in {{scope-format}}, the AS builds the value of the 'scope' claim to include in the Access Token as follows.
-
-   * The AS initializes an empty set S of scope entries.
-
-   * For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
-
-      - In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines all the group name superpatterns P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
-
-      - If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns P\* from the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the superpatterns P\* and encoding the corresponding permission sets as per {{scope-format}}.
-
-      - The AS adds to the set S a scope entry, such that its Tperm is the same as in the scope entry E, while Tperm is equal to Tperm\*.
-
-   * If the set S is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the set S as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
-
-   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Response. In such a case, the second element of each scope entry specifies the set of permissions that the Administrator is actually authorized to perform at the Group Manager for that scope entry, encoded as specified in {{scope-format}}.
-
-3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any admin operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
-
-4. Consistently with what is allowed by the authorization information in the Access Token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, updating and retrieving OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
-
-   Upon receiving a request from the Administrator targeting the group-configuration resource or a group-collection resource, the Group Manager MUST check that it is storing a valid Access Token for that Administrator. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
-
-   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the scope specified in the Access Token includes a scope entry where:
-
-   * The group name GROUPNAME matches with the wildcard pattern specified in the scope entry; and
-
-   * The permission set specified in the scope entry allows the Administrator to perform the requested operation on the targeted group-configuration resource.
-
-   Further details are defined separately for each operation specified in {{interactions}}.
-
-   In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of I-D.ietf-ace-oauth-authz}}, in which case the Content-Format MUST be set to application/ace+cbor.
-
-   If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
@@ -325,9 +200,9 @@ Collection  \___/
 
 The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" defined in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator to:
 
-* Retrieve the complete list of existing OSCORE groups.
+* Retrieve the list of existing OSCORE groups.
 
-* Retrieve a partial list of existing OSCORE groups, by applying filter criteria.
+* Retrieve the list of existing OSCORE groups matching with specified filter criteria.
 
 * Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.
 
@@ -358,6 +233,135 @@ In the latter case, the CoRAL document specifies the group-configuration resourc
 The Administrator can discover the group-collection resource from a Resource Directory, for instance {{I-D.ietf-core-resource-directory}} and {{I-D.hartke-t2trg-coral-reef}}, or from .well-known/core, by using the resource type "core.osc.gcoll" defined in {{iana-rt}} of this document.
 
 The Administrator can discover group-configuration resources for the group-collection resource as specified in {{collection-resource-get}} and {{collection-resource-fetch}}.
+
+# Format of Scope # {#scope-format}
+
+This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
+
+To this end, this document uses the Authorization Information Format (AIF) {{I-D.ietf-ace-aif}}, and defines the following AIF specific data model AIF-OSCORE-GROUPCOMM-ADMIN.
+
+With reference to the generic AIF model
+
+~~~~~~~~~~~
+   AIF-Generic<Toid, Tperm> = [* [Toid, Tperm]]
+~~~~~~~~~~~
+
+the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toid, Tperm\]\], where each \[Toid, Tperm\] element corresponds to one scope entry.
+
+Then, for each scope entry, the following applies.
+
+* The object identifier ("Toid") is specialized as a CBOR text string, specifying a wildcard pattern P for the scope entry. The pattern P is intended as a template for group names.
+
+* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the wildcard pattern P. The value Q is computed as follows.
+
+   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry, for which this document defines the entries in {{fig-permission-values}}.
+
+   - The set of N numbers is converted into the single value Q, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
+
+   In general, a single permission can be associated with multiple different operations that are possible to take when interacting with the Group Manager. For example, the "List" permission allows the Administrator to retrieve a list of group configurations (see {{collection-resource-get}}) or only a subset of that according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
+
+~~~~~~~~~~~
++--------+-------+----------------------------------------+
+| Name   | Value | Description                            |
++========+=======+========================================+
+| List   | 0     | Retrieve list of group configurations  |
++--------+-------+----------------------------------------+
+| Create | 1     | Create new group configurations        |
++--------+-------+----------------------------------------+
+| Read   | 2     | Retrieve group configurations          |
++--------+-------+----------------------------------------+
+| Write  | 3     | Change group configurations            |
++--------+-------+----------------------------------------+
+| Delete | 4     | Delete group configurations            |
++--------+-------+----------------------------------------+
+~~~~~~~~~~~
+{: #fig-permission-values title="Numeric identifier of permissions on the admin endpoints at a Group Manager" artwork-align="center"}
+
+The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and the format of scope using such a data model is as follows:
+
+~~~~~~~~~~~~~~~~~~~~ CDDL
+   AIF-OSCORE-GROUPCOMM-ADMIN = AIF-Generic<pattern, permissions>
+
+   pattern = tstr  ; wilcard pattern of group names
+   permissions = uint . bits operations
+   operations = &(
+      List: 0,
+      Create: 1,
+      Read: 2,
+      Write: 3,
+      Delete: 4
+   )
+
+   scope_entry = AIF-OSCORE-GROUPCOMM-ADMIN
+
+   scope = << [ + scope_entry ] >>
+~~~~~~~~~~~~~~~~~~~~
+
+By relying on the scope format defined above and given an OSCORE group G1 created by a "main" Administrator, then a second "assistant" Administrator can be effectively authorized to perform some operations on G1, in spite of not being the group creator.
+
+Furthermore, having the object identifier ("Toid") specialized as a wildcard pattern displays a number of advantages.
+
+* The encoded scope can be compact in size, while allowing the Administrator to operate on large pools of group names.
+
+* The Administrator and the AS do not need to know exact group names when requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
+
+* The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the expiration of T1 and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
+
+When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to not be considered malformed. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token as well as on possible filter criteria specified in the Administrator's request.
+
+Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
+
+# Getting Access to the Group Manager # {#getting-access}
+
+All communications between the involved entities rely on the CoAP protocol and MUST be secured.
+
+In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
+
+With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
+
+The format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
+
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this document. This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined in {{scope-format}} of this document.
+
+In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
+
+1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, it sends to the AS an Authorization Request as defined in {{Section 5.8.1 of I-D.ietf-ace-oauth-authz}}. The Administrator will start or continue using secure communications with the Group Manager, according to the response from the AS.
+
+2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, especially verifying that the Administrator is authorized to perform the requested operations at the Group Manager, or possibly a subset of those.
+
+   With reference to the scope format specified in {{scope-format}}, the AS builds the value of the 'scope' claim to include in the Access Token as follows.
+
+   * The AS initializes an empty set S of scope entries.
+
+   * For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+      - In its access policies related to administrative operations at the Group Manager for the requesting Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
+
+      - If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns P\* found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the superpatterns P\* and encoding the corresponding permission sets as per {{scope-format}}.
+
+      - The AS adds to the set S a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is equal to Tperm\*.
+
+   * If the set S is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the set S as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+
+   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Response. In such a case, the second element of each scope entry specifies a set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
+
+3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
+
+4. Consistently with what is allowed by the authorization information in the Access Token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, retrieving and changing OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
+
+   Upon receiving a request from the Administrator targeting the group-configuration resource or a group-collection resource, the Group Manager MUST check that it is storing a valid Access Token for that Administrator. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
+
+   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the scope specified in the Access Token includes a scope entry where:
+
+   * The group name GROUPNAME matches with the wildcard pattern specified in the scope entry; and
+
+   * The permission set specified in the scope entry allows the Administrator to perform the requested operation on the targeted group-configuration resource.
+
+   Further details are defined separately for each operation specified in {{interactions}}.
+
+   In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of I-D.ietf-ace-oauth-authz}}, in which case the Content-Format MUST be set to application/ace+cbor.
+
+   If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
 
 # Group Configurations # {#group-configurations}
 
@@ -1277,7 +1281,7 @@ For both media-types application/aif+cbor and application/aif+json defined in {{
 &nbsp;
 
 * Name: oscore-group-admin-operations
-* Description/Specification: admin operation(s) at the OSCORE Group Manager
+* Description/Specification: administrative operation(s) at the OSCORE Group Manager
 * Reference: \[\[This document\]\]
 
 ## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
@@ -1350,7 +1354,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * More details on informing group members about changes in the group configuration.
 
-* Editorial improvements.
+* Revised order of sections; editorial improvements.
 
 ## Version -03 to -04 ## {#sec-03-04}
 
