@@ -196,11 +196,13 @@ Then, for each scope entry, the following applies.
 
 * The object identifier ("Toid") is specialized as a CBOR text string, specifying a wildcard pattern P for the scope entry. The pattern P is intended as a template for group names.
 
-* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the operation(s) that the Administrator wishes to perform on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the wildcard pattern P. The value Q is computed as follows.
+* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the wildcard pattern P. The value Q is computed as follows.
 
-   - Each operation in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Actions" registry, for which this document defines the entries in {{fig-operation-values}}.
+   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Actions" registry, for which this document defines the entries in {{fig-permission-values}}.
 
    - The set of N numbers is converted into the single value Q, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
+
+   In general, a single permission can be associated with multiple different operations that are possible to take when interacting with the Group Manager. For example, the "List" permission allows the Administrator to retrieve a list of group configurations (see {{collection-resource-get}}) or only a subset of that according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
 
 ~~~~~~~~~~~
 +--------+-------+-------------------------------------------+
@@ -217,7 +219,7 @@ Then, for each scope entry, the following applies.
 | Delete | 4     | Delete a group configuration              |
 +--------+-------+-------------------------------------------+
 ~~~~~~~~~~~
-{: #fig-operation-values title="Numeric identifier of operations on the admin endpoints at a Group Manager" artwork-align="center"}
+{: #fig-permission-values title="Numeric identifier of operations on the admin endpoints at a Group Manager" artwork-align="center"}
 
 The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and the format of scope using such a data model is as follows:
 
@@ -251,9 +253,7 @@ Furthermore, having the object identifier ("Toid") specialized as a wildcard pat
 
 When using the scope format defined in this section, the permission set ("Tperm") MUST always include the "List" operation in order for the scope to not be considered malformed. That is, for each scope entry, the unsigned integer Q MUST be odd.
 
-In general, a single operation can be associated with multiple different actions that are possible to take when interacting with the Group Manager. For example, performing the "List" operation can practically consist of either retrieving the largest possible list of group configurations (see {{collection-resource-get}}) or rather retrieving only a subset of those according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
-
-Future specifications that define new operations on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Operations" registry defined in {{ssec-iana-group-oscore-admin-operations-registry}} of this document.
+Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 ## Getting Access to the Group Manager ## {#getting-access}
 
@@ -1246,23 +1246,23 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 +----------------+------------------------------+-------------------+
 ~~~~~~~~~~~
 
-## Group OSCORE Admin Operations {#ssec-iana-group-oscore-admin-operations-registry}
+## Group OSCORE Admin Permissions {#ssec-iana-group-oscore-admin-permissions-registry}
 
-This document establishes the IANA "Group OSCORE Admin Operations" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+This document establishes the IANA "Group OSCORE Admin Permissions" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
 This registry includes the possible operations that Administrators can perform when interacting with an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of \[\[this document\]\].
 
 The columns of this registry are:
 
-* Name: A value that can be used in documents for easier comprehension, to identify a possible operation that Administrators can perform when interacting with an OSCORE Group Manager.
+* Name: A value that can be used in documents for easier comprehension, to identify a possible permission that Administrators can perform when interacting with an OSCORE Group Manager.
 
-* Value: The numeric identifier for this operation. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" {{RFC8126}}.
+* Value: The numeric identifier for this permission. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" {{RFC8126}}.
 
-* Description: This field contains a brief description of the operation.
+* Description: This field contains a brief description of the permission.
 
-* Reference: This contains a pointer to the public specification for the operation.
+* Reference: This contains a pointer to the public specification for the permission.
 
-This registry will be initially populated by the values in {{fig-operation-values}}.
+This registry will be initially populated by the values in {{fig-permission-values}}.
 
 The Reference column for all of these entries will be \[\[this document\]\].
 
