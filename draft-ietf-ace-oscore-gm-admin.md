@@ -307,7 +307,7 @@ Furthermore, having the object identifier ("Toid") specialized as a wildcard pat
 
 * The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the expiration of T1 and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
 
-When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to not be considered malformed. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token as well as on possible filter criteria specified in the Administrator's request.
+When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to be considered valid. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token as well as on possible filter criteria specified in the Administrator's request.
 
 Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
@@ -473,7 +473,15 @@ When custom CBOR is used, the Content-Format in messages containing a payload is
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
-The Administrator can send a GET request to the group-collection resource, in order to retrieve the complete list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
+The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
+
+The Group Manager MUST prepare the list L to include in the response as follows. For each group-configuration resource R:
+
+1. The Group Manager considers the group name GROUPNAME of the OSCORE group associated to R.
+
+2. The Group Manager retrieves the stored Access Token for the requesting Administrator. Then, it checks whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the Access Token.
+
+3. The link to the group-configuration resource R is added to the list L only in case of a positive match.
 
 Example in Link Format:
 
@@ -507,7 +515,13 @@ Example in CoRAL:
 
 ## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
 
-The Administrator can send a FETCH request to the group-collection resource, in order to retrieve the list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
+The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
+
+The Group Manager MUST prepare the list L to include in the response as follows.
+
+1. The Group Manager prepares a preliminary verion of the list L, as specified in {{collection-resource-get}} for the processing of a GET request to the group-collection resource.
+
+2. The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.
 
 When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
