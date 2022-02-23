@@ -335,7 +335,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    * For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-      - In its access policies related to administrative operations at the Group Manager for the requesting Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
+      - In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
 
       - If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns P\* found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the superpatterns P\* and encoding the corresponding permission sets as per {{scope-format}}.
 
@@ -479,7 +479,7 @@ The Group Manager MUST prepare the list L to include in the response as follows.
 
 1. The Group Manager considers the group name GROUPNAME of the OSCORE group associated to R.
 
-2. The Group Manager retrieves the stored Access Token for the requesting Administrator. Then, it checks whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the Access Token.
+2. The Group Manager retrieves the stored Access Token for the Administrator. Then, it checks whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the Access Token.
 
 3. The link to the group-configuration resource R is added to the list L only in case of a positive match.
 
@@ -589,7 +589,11 @@ In particular:
 
 * The payload MUST NOT include any of the status parameter 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
-If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
+Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether the group name specified in the 'group_name' parameter matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Create".
+
+If the verification above fails (i.e., there are no matching scope entries specifying the "Create" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
+
+Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
 * Any of the received parameters is specified multiple times, with the exception of the 'app_group' element when using CoRAL.
 
@@ -602,6 +606,12 @@ If any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
 First, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. Note that the final decision about the name assigned to the OSCORE group is of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
+
+If the Group Manager selects a name GROUPNAME different from the name NAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
+
+* The chosen name GROUPNAME is available to assign; and
+
+* If NAME\* matches with the group name pattern of N scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those name patterns.
 
 The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each parameter not specified in the request, the Group Manager MUST use default values as specified in {{default-values}}.
 
@@ -627,7 +637,7 @@ When custom CBOR is used, the response payload is a CBOR map, where entries use 
 
 * 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included if specified in the status properties of the group. This value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'as_uri' status property for the OSCORE group.
 
-If the POST request did not specify certain parameters and the Group Manager used default values different than the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{I-D.ietf-core-resource-directory}}{{I-D.hartke-t2trg-coral-reef}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
@@ -708,7 +718,7 @@ Example in CoRAL:
 
 The Administrator can send a GET request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve the complete current configuration of that group.
 
-Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the requesting Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Read".
+Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Read".
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Read" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -800,7 +810,7 @@ When custom CBOR is used, the request payload is a CBOR map, which contains the 
 
 When CoRAL is used, the request payload includes one element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified elements have no value.
 
-The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the requesting Administrator has a "Read" permission applicable to the targeted group-configuration resource.
+The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
 After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration properties and status properties requested by the Administrator in the FETCH request.
 
@@ -872,7 +882,7 @@ The Administrator can send a PUT request to the group-configuration resource ass
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}.
 
-Furthermore, consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the requesting Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Write".
+Furthermore, consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Write".
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Write" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -886,7 +896,7 @@ From then on, the Group Manager relies on the latest updated configuration to bu
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the PUT request did not specify certain parameters and the Group Manager used default values different than the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the PUT request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 If the link to the group-membership resource was registered in the Resource Directory {{I-D.ietf-core-resource-directory}}, the GM is responsible to refresh the registration, as defined in {{Section 3 of I-D.tiloca-core-oscore-discovery}}.
 
@@ -1042,7 +1052,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
    - When CoRAL is used, any element 'app_group_del' and/or 'app_group_add' is included.
 
-Furthermore, the Group Manager MUST perform the same authorization checks defined for the processing of a PUT request to a group-configuration resource in {{configuration-resource-put}}. That is, the Group Manager MUST verify that the requesting Administrator has a "Write" permission applicable to the targeted group-configuration resource.
+Furthermore, the Group Manager MUST perform the same authorization checks defined for the processing of a PUT request to a group-configuration resource in {{configuration-resource-put}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Write" permission applicable to the targeted group-configuration resource.
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
@@ -1135,7 +1145,7 @@ After having selectively updated part of a group configuration, the effects on t
 
 The Administrator can send a DELETE request to the group-configuration resource, in order to delete that OSCORE group.
 
-Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the requesting Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Delete".
+Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Delete".
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Delete" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
 
