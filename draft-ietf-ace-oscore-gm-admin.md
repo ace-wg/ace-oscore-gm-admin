@@ -309,6 +309,22 @@ Furthermore, having the object identifier ("Toid") specialized as a wildcard pat
 
 When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to be considered valid. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token as well as on possible filter criteria specified in the Administrator's request.
 
+\[ NOTE:
+
+There is a potential follow-up building on this.
+
+An ACE Client might want to interact with the same Group Manager to be both Administrator for some groups and member for some other groups.
+
+In order to keep a single Access Token per Client, we need a scope generally including some "admin" scope entries as per the AIF data model defined in this document, together with some "user" scope entries as per the AIF data model defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+In the former case, the least significant bit of the Tperm integer and denoting the "List" admin permission is always set to 1 (see above). In the latter case, the least significant bit of the Tperm integer is reserved and always 0 (see {{I-D.ietf-ace-key-groupcomm-oscore}}).
+
+Therefore, "admin" and "user" scope entries can coexist in the same 'scope' claim and Authorization Request/Response parameter, and can be easily distinguished by checking the least significant bit of the Tperm integer.
+
+In turn, this would mean rephrasing the AIF data model, Toid/Tperm media-type parameters and ACE scope semantics integer defined in this document, in order to denote the certain presence of "admin" scope entries and the optional additional presence of "user" scope entries, within a same scope claim/parameter.
+
+\]
+
 Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 # Getting Access to the Group Manager # {#getting-access}
