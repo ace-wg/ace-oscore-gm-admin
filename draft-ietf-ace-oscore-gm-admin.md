@@ -347,17 +347,31 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    With reference to the scope format specified in {{scope-format}}, the AS builds the value of the 'scope' claim to include in the Access Token as follows.
 
-   * The AS initializes an empty set S of scope entries.
+   1. The AS initializes two empty sets of scope entries, namely S1, S2 and S3.
 
-   * For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+   2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-      - In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
+      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
 
-      - If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
+      * If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
 
-      - The AS adds to the set S a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is equal to Tperm\*.
+      * The AS adds to the set S1 a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is the AND of Tperm\* with the Tperm in the scope entry E.
 
-   * If the set S is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the set S as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+   3. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name subpattern P\*, such that: i) the wildcard pattern P of the scope entry E is different from P\*; and ii) every group name matching with P\* also matches with P.
+
+      * If no subpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, for each found subpattern P\*, the AS adds to the set S2 a scope entry, such that its Toid is the same as in the subpattern P\*, while its Tperm is the AND of the Tperm from the subpattern P\* with the Tperm in the scope entry E.
+
+   4. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+      * For each group name pattern P\* in its access policies related to administrative operations at the Group Manager for the Administrator, the AS performs the following actions.
+
+         - The AS attempts to determine a crosspattern P\*\* such that: i) in the previous step, P\*\* was not identified as a superpattern or subpattern for the pattern P of the scope entry E; ii) every group name matching with P\*\* also matches with both P and P\*.
+
+         - If no crosspattern is built, the AS proceeds with the next pattern in its access policies related to administrative operations at the Group Manager for the Administrator, if any. Otherwise, the AS adds to the set S3 a scope entry, such that its Toid is the same as in the crosspattern P\*\*, while its Tperm is the AND of the Tperm from the pattern P\* and the Tperm in the scope entry E.
+
+   4. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
    The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Response. In such a case, the second element of each scope entry specifies a set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
 
