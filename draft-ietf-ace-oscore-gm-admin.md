@@ -258,7 +258,7 @@ Then, for each scope entry, the following applies.
 
    - The set of N numbers is converted into the single value Q, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
 
-   In general, a single permission can be associated with multiple different operations that are possible to take when interacting with the Group Manager. For example, the "List" permission allows the Administrator to retrieve a list of group configurations (see {{collection-resource-get}}) or only a subset of that according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
+   In general, a single permission can be associated with multiple different operations that are possible to be performed when interacting with the Group Manager. For example, the "List" permission allows the Administrator to retrieve a list of group configurations (see {{collection-resource-get}}) or only a subset of that according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
 
 ~~~~~~~~~~~
 +--------+-------+----------------------------------------+
@@ -307,7 +307,7 @@ Furthermore, having the object identifier ("Toid") specialized as a wildcard pat
 
 * The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the expiration of T1 and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
 
-When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to be considered valid. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token as well as on possible filter criteria specified in the Administrator's request.
+When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to be considered valid. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator.
 
 \[ NOTE:
 
@@ -315,13 +315,13 @@ There is a potential follow-up building on this.
 
 An ACE Client might want to interact with the same Group Manager to be both Administrator for some groups and member for some other groups.
 
-In order to keep a single Access Token per Client, we need a scope generally including some "admin" scope entries as per the AIF data model defined in this document, together with some "user" scope entries as per the AIF data model defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
+In order to keep a single Access Token per Client, the scope would have to generally include some "admin" scope entries as per the AIF data model defined in this document, together with some "user" scope entries as per the AIF data model defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-In the former case, the least significant bit of the Tperm integer and denoting the "List" admin permission is always set to 1 (see above). In the latter case, the least significant bit of the Tperm integer is reserved and always 0 (see {{I-D.ietf-ace-key-groupcomm-oscore}}).
+In the scope entries of the former type, the least significant bit of the Tperm integer and denoting the "List" admin permission is always set to 1 (see above). In the scope entries of the latter type, the least significant bit of the Tperm integer is reserved and always 0 (see {{I-D.ietf-ace-key-groupcomm-oscore}}).
 
-Therefore, "admin" and "user" scope entries can coexist in the same 'scope' claim and Authorization Request/Response parameter, and can be easily distinguished by checking the least significant bit of the Tperm integer.
+Therefore, "admin" and "user" scope entries can unambiguously coexist in the same 'scope' claim and Authorization Request/Response parameter, and can be easily distinguished by checking the least significant bit of the Tperm integer.
 
-In turn, this would mean rephrasing the AIF data model, Toid/Tperm media-type parameters and ACE scope semantics integer defined in this document, in order to denote the certain presence of "admin" scope entries and the optional additional presence of "user" scope entries, within a same scope claim/parameter.
+In turn, this would mean rephrasing the AIF data model, the Toid/Tperm media-type parameters and the ACE scope semantics integer defined in this document, in order to denote the certain presence of "admin" scope entries and the optional additional presence of "user" scope entries, within a same scope claim/parameter.
 
 \]
 
@@ -343,7 +343,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
 1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, it sends to the AS an Authorization Request as defined in {{Section 5.8.1 of I-D.ietf-ace-oauth-authz}}. The Administrator will start or continue using secure communications with the Group Manager, according to the response from the AS.
 
-2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, especially verifying that the Administrator is authorized to perform the requested operations at the Group Manager, or possibly a subset of those.
+2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, especially verifying that the Administrator is authorized to obtain the requested permissions, or possibly a subset of those.
 
    With reference to the scope format specified in {{scope-format}}, the AS builds the value of the 'scope' claim to include in the Access Token as follows.
 
@@ -353,7 +353,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
       - In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
 
-      - If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns P\* found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the superpatterns P\* and encoding the corresponding permission sets as per {{scope-format}}.
+      - If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
 
       - The AS adds to the set S a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is equal to Tperm\*.
 
@@ -367,7 +367,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    Upon receiving a request from the Administrator targeting the group-configuration resource or a group-collection resource, the Group Manager MUST check that it is storing a valid Access Token for that Administrator. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
 
-   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the scope specified in the Access Token includes a scope entry where:
+   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token includes a scope entry where:
 
    * The group name GROUPNAME matches with the wildcard pattern specified in the scope entry; and
 
@@ -627,7 +627,7 @@ If the Group Manager selects a name GROUPNAME different from the name NAME\* ind
 
 * The chosen name GROUPNAME is available to assign; and
 
-* If NAME\* matches with the group name pattern of N scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those name patterns.
+* If NAME\* matches with the group name pattern of N scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
 
 The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each parameter not specified in the request, the Group Manager MUST use default values as specified in {{default-values}}.
 
@@ -896,9 +896,9 @@ Example in CoRAL:
 
 The Administrator can send a PUT request to the group-configuration resource associated with an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameter 'group_name' MUST NOT be included.
 
-The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}.
+The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
-Furthermore, consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Write".
+Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Write".
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Write" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -1312,13 +1312,15 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 
 This document establishes the IANA "Group OSCORE Admin Permissions" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
-This registry includes the possible operations that Administrators can perform when interacting with an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of \[\[this document\]\].
+This registry includes the possible permissions that Administrators can have to perform operations on an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of \[\[this document\]\].
 
 The columns of this registry are:
 
 * Name: A value that can be used in documents for easier comprehension, to identify a possible permission that Administrators can perform when interacting with an OSCORE Group Manager.
 
 * Value: The numeric identifier for this permission. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" {{RFC8126}}.
+
+   Note that, in general, a single permission can be associated with multiple different operations that are possible to be performed when interacting with the Group Manager.
 
 * Description: This field contains a brief description of the permission.
 
@@ -1338,15 +1340,15 @@ For both media-types application/aif+cbor and application/aif+json defined in {{
 
 &nbsp;
 
-* Name: oscore-group-admin-operations
-* Description/Specification: administrative operation(s) at the OSCORE Group Manager
+* Name: oscore-group-admin-permissions
+* Description/Specification: permission(s) to perform administrative operations at the OSCORE Group Manager
 * Reference: \[\[This document\]\]
 
 ## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
 
 IANA is asked to register the following entries to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-* Media Type: application/aif+cbor;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-operations"
+* Media Type: application/aif+cbor;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-permissions"
 
 * Encoding: -
 
@@ -1356,7 +1358,7 @@ IANA is asked to register the following entries to the "CoAP Content-Formats" re
 
 &nbsp;
 
-* Media Type: application/aif+json;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-operations"
+* Media Type: application/aif+json;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-permissions"
 
 * Encoding: -
 
@@ -1370,7 +1372,7 @@ IANA is asked to register the following entry in the "ACE Scope Semantics" regis
 
 * Value: SEM_ID_TBD
 
-* Description: Administrative operations at the ACE Group Manager for Group OSCORE.
+* Description: Permissions to perform administrative operations at the ACE Group Manager for Group OSCORE.
 
 * Reference: \[\[This document\]\]
 
@@ -1380,13 +1382,13 @@ The IANA registry established in this document is defined as "Expert Review".  T
 
 Expert reviewers should take into consideration the following points:
 
-* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts should inspect the entry for the considered operation, to verify the correctness of its description against the operation as intended in the specification that defined it. Expert should consider requesting an opinion on the correctness of registered parameters from the Authentication and Authorization for Constrained Environments (ACE) Working Group and the Constrained RESTful Environments (CoRE) Working Group.
+* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts should inspect the entry for the considered permission, to verify the correctness of its description against the permission as intended in the specification that defined it. Expert should consider requesting an opinion on the correctness of registered parameters from the Authentication and Authorization for Constrained Environments (ACE) Working Group and the Constrained RESTful Environments (CoRE) Working Group.
 
      Entries that do not meet these objective of clarity and completeness should not be registered.
 
 * Duplicated registration and point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments.
 
-* Experts should take into account the expected usage of operations when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.
+* Experts should take into account the expected usage of permissions when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.
 
 * Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.
 
