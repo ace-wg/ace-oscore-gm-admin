@@ -283,8 +283,8 @@ The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and
    AIF-OSCORE-GROUPCOMM-ADMIN = AIF-Generic<pattern, permissions>
 
    pattern = tstr  ; wilcard pattern of group names
-   permissions = uint . bits operations
-   operations = &(
+   permission_set = uint . bits permissions
+   permissions = &(
       List: 0,
       Create: 1,
       Read: 2,
@@ -305,7 +305,7 @@ Furthermore, having the object identifier ("Toid") specialized as a wildcard pat
 
 * The Administrator and the AS do not need to know exact group names when requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
 
-* The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the expiration of T1 and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
+* The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the invalidation of T1 (e.g., due to expiration) and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
 
 When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to be considered valid. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator.
 
@@ -321,7 +321,7 @@ In the scope entries of the former type, the least significant bit of the Tperm 
 
 Therefore, "admin" and "user" scope entries can unambiguously coexist in the same 'scope' claim and Authorization Request/Response parameter, and can be easily distinguished by checking the least significant bit of the Tperm integer.
 
-In turn, this would mean rephrasing the AIF data model, the Toid/Tperm media-type parameters and the ACE scope semantics integer defined in this document, in order to denote the certain presence of "admin" scope entries and the optional additional presence of "user" scope entries, within a same scope claim/parameter.
+In turn, this would require to accordingly revise the scope format and the ACE scope semantics integer defined in this document, in order to denote the certain presence of "admin" scope entries and the optional additional presence of "user" scope entries, within a same scope claim/parameter.
 
 \]
 
@@ -347,7 +347,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    With reference to the scope format specified in {{scope-format}}, the AS builds the value of the 'scope' claim to include in the Access Token as follows.
 
-   1. The AS initializes two empty sets of scope entries, namely S1, S2 and S3.
+   1. The AS initializes three empty sets of scope entries, namely S1, S2 and S3.
 
    2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
@@ -381,7 +381,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    Upon receiving a request from the Administrator targeting the group-configuration resource or a group-collection resource, the Group Manager MUST check that it is storing a valid Access Token for that Administrator. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
 
-   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token includes a scope entry where:
+   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token has the format defined in {{scope-format}} and includes a scope entry where:
 
    * The group name GROUPNAME matches with the wildcard pattern specified in the scope entry; and
 
@@ -553,7 +553,7 @@ When CoRAL is used, the filter criteria are specified in the request payload wit
 
 The Group Manager MUST prepare the list L to include in the response as follows.
 
-1. The Group Manager prepares a preliminary verion of the list L, as specified in {{collection-resource-get}} for the processing of a GET request to the group-collection resource.
+1. The Group Manager prepares a preliminary version of the list L, as specified in {{collection-resource-get}} for the processing of a GET request to the group-collection resource.
 
 2. The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.
 
@@ -637,11 +637,11 @@ After a successful processing of the POST request, the Group Manager performs th
 
 First, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. Note that the final decision about the name assigned to the OSCORE group is of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
 
-If the Group Manager selects a name GROUPNAME different from the name NAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
+If the Group Manager selects a name GROUPNAME different from the name GROUPNAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
 
 * The chosen name GROUPNAME is available to assign; and
 
-* If NAME\* matches with the group name pattern of N scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
+* If GROUPNAME\* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
 
 The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each parameter not specified in the request, the Group Manager MUST use default values as specified in {{default-values}}.
 
