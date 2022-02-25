@@ -629,19 +629,19 @@ Otherwise, if any of the following occurs, the Group Manager MUST respond with a
 
 * Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters.
 
-* The 'group_name' parameter specifies the group name of an already existing OSCORE group.
-
 * The Group Manager does not trust the Authorization Server with URI specified in the 'as_uri' parameter, and has no alternative Authorization Server to consider for the OSCORE group to create.
 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
-First, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. Note that the final decision about the name assigned to the OSCORE group is of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
+If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST find an alternative name for the new OSCORE group to create. Note that the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
 
-If the Group Manager selects a name GROUPNAME different from the name GROUPNAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
+If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
 
 * The chosen name GROUPNAME is available to assign; and
 
 * If GROUPNAME\* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
+
+Then, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager.
 
 The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each parameter not specified in the request, the Group Manager MUST use default values as specified in {{default-values}}.
 
@@ -1423,6 +1423,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Renamed 'pub_key_enc' to 'cred_fmt'.
 
 * Mandatory to include 'group_name' in the group creation request.
+
+* Suggesting a used 'group_name' results in a new name, not in an error.
 
 * Replaced CBOR simple value "null" with "nil".
 
