@@ -1348,7 +1348,7 @@ The Reference column for all of these entries will be \[\[this document\]\].
 
 ## AIF {#ssec-iana-AIF-registry}
 
-For both media-types application/aif+cbor and application/aif+json defined in {{Section 5.1 of I-D.ietf-ace-aif}}, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in {{Section 5.2 of I-D.ietf-ace-aif}} within the "MIME Media Type Sub-Parameter" registry group.
+For the media-types application/aif+cbor and application/aif+json defined in {{Section 5.1 of I-D.ietf-ace-aif}}, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in {{Section 5.2 of I-D.ietf-ace-aif}} within the "MIME Media Type Sub-Parameter" registry group.
 
 * Name: oscore-group-name-pattern
 * Description/Specification: wildcard pattern of OSCORE group names
