@@ -93,6 +93,7 @@ informative:
   I-D.hartke-t2trg-coral-reef:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
+  RFC6347:
   RFC7925:
   RFC8392:
   RFC9147:
@@ -261,11 +262,17 @@ Then, the following applies for each admin scope entry intended to express autho
 
 * The object identifier ("Toid") is specialized as either of the following, and specifies a group name pattern P for the admin scope entry.
 
-   - The CBOR simple value "true" (0xf5), specifying the wildcard pattern. That is, any group name matches with this group name pattern.
+   - Wildcard pattern: "Toid" is specialized as the CBOR simple value "true" (0xf5), specifying the wildcard pattern. That is, any group name expressed as a literal text string matches with this group name pattern.
 
-   - A CBOR text string, whose value specifies an exact group name as a literal string. That is, only one specific group name matches with this group name pattern.
+   - Literal pattern: "Toid" is specialized as a CBOR text string, whose value specifies an exact group name as a literal string. That is, only one specific group name expressed as a literal text string matches with this group name pattern.
 
-   - A tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{Section 3.4.5.3 of RFC8949}}). In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be conveyed, for example, in a nested JSON object.
+   - Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.
+
+      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{Section 3.4.5.3 of RFC8949}}).
+
+      In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
+
+      The AS and the Group Manager are expected to have agreed on commonly supported semantics for group name patterns. This can happen, for instance, as part of the registration process of the Group Manager at the AS.
 
 * The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
 
@@ -320,7 +327,7 @@ Building on the above, the same single scope can include user scope entries as w
 
 The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.
 
-Throughout the rest of this document, the term "scope entry" is exclusively used as referred to "admin scope entry".
+Throughout the rest of this document, the term "scope entry" is used as referred to "admin scope entry", unless otherwise indicated.
 
 ## On Enforcing Different Classes of Administrators
 
@@ -340,61 +347,53 @@ All communications between the involved entities rely on the CoAP protocol and M
 
 In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
 
-With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
+With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}}{{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
 
-The format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
+In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
 
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{Section 16.2 of I-D.ietf-ace-key-groupcomm-oscore}}. This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined in {{scope-format}} of this document.
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{Section 16.2 of I-D.ietf-ace-key-groupcomm-oscore}}. This indicates that the second element of the CBOR sequence, as conveying the actual authorization information, follows the scope semantics of the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
-1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, it sends to the AS an Authorization Request as defined in {{Section 5.8.1 of I-D.ietf-ace-oauth-authz}}. The Administrator will start or continue using secure communications with the Group Manager, according to the response from the AS.
+1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, the Administrator sends to the AS an Authorization Request as defined in {{Section 5.8.1 of I-D.ietf-ace-oauth-authz}}.
+
+   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern (see {{scope-format}}), then all such scope entries MUST adhere to the same pattern semantics.
+
+   The Administrator will start or continue using a secure communication association with the Group Manager, according to the response from the AS and the specifically used transport profile of ACE.
 
 2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, especially verifying that the Administrator is authorized to obtain the requested permissions, or possibly a subset of those.
 
-   With reference to the scope format specified in {{scope-format}}, the AS builds the value of the 'scope' claim to include in the Access Token as follows.
+   The AS specifies the information on the authorization granted to the Administrator as the value of the 'scope' claim to include in the Access Token, in accordance with the scope format specified in {{scope-format}}. It is implementation specific which particular approach the AS takes to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question. {{sec-as-scope-processing}} provides an example of such an approach that the AS can use.
 
-   1. The AS initializes three empty sets of scope entries, namely S1, S2 and S3.
+   If the 'scope' claim in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern, then all such scope entries MUST adhere to the same pattern semantics.
 
-   2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern adhering to a certain pattern semantics, then that sementics MUST be used for the scope entries specified in the 'scope' claim.
 
-      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the pattern P of the scope entry E matches also with P\*.
+   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
 
-      * If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
+   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern and any of the following conditions holds, then the AS MUST reply with a 4.00 (Bad Request) error response (see {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}). The 'error_description' parameter carried out in the response payload MUST specify the CBOR value 1 (invalid_scope).
 
-      * The AS adds to the set S1 a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is the AND of Tperm\* with the Tperm in the scope entry E.
+   * The "Toid" of the different scope entries do not all adhere to the same pattern semantics.
 
-   3. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+   * The "Toid" of the different scope entries adhere to the same pattern semantics, but this is not supported by the AS or by the Group Manager.
 
-      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name subpattern P\*, such that: i) the pattern P of the scope entry E is different from P\*; and ii) every group name matching with P\* also matches with P.
+   Finally, as discussed in {{scope-format}}, the authorization information included in the Authorization Request or specified by the AS might also include permissions for the same Client as a user of the OSCORE group, i.e., as an actual group member or an external signature verifier. As per {{scope-format}}, such authorization information is expressed by "user scope entries", whose format and processing is specified in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-      * If no subpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, for each found subpattern P\*, the AS adds to the set S2 a scope entry, such that its Toid is the same as in the subpattern P\*, while its Tperm is the AND of the Tperm from the subpattern P\* with the Tperm in the scope entry E.
-
-   4. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
-
-      * For each group name pattern P\* in its access policies related to administrative operations at the Group Manager for the Administrator, the AS performs the following actions.
-
-         - The AS attempts to determine a crosspattern P\*\* such that: i) in the previous steps, P\*\* was not identified as a superpattern or subpattern for the pattern P of the scope entry E; ii) every group name matching with P\*\* also matches with both P and P\*.
-
-         - If no crosspattern is built, the AS proceeds with the next pattern in its access policies related to administrative operations at the Group Manager for the Administrator, if any. Otherwise, the AS adds to the set S3 a scope entry, such that its Toid is the same as in the crosspattern P\*\*, while its Tperm is the AND of the Tperm from the pattern P\* and the Tperm in the scope entry E.
-
-   4. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
-
-   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, the second element of each scope entry specifies a set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
-
-3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
+3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
 4. Consistently with what is allowed by the authorization information in the Access Token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, retrieving and changing OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
 
    Upon receiving a request from the Administrator targeting the group-configuration resource or a group-collection resource, the Group Manager MUST check that it is storing a valid Access Token for that Administrator. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
 
-   If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token has the format defined in {{scope-format}} and includes a scope entry where:
+   If the request targets the group-configuration resource associated with a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token: i) expresses authorization information through scope entries as defined in {{scope-format}}; and ii) specifically includes a scope entry where:
 
-   * The group name GROUPNAME matches with the pattern specified in the scope entry; and
+   * The group name GROUPNAME matches with the pattern specified by the "Toid" of the scope entry; and
 
-   * The permission set specified in the scope entry allows the Administrator to perform the requested operation on the targeted group-configuration resource.
+   * The permission set specified by the "Tperm" of the scope entry allows the Administrator to perform the requested administrative operation on the targeted group-configuration resource.
 
-   Further details are defined separately for each operation at the Group Manager, when specified in {{interactions}}.
+   Note that the checks defined above only consider scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}, while the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered.
+
+   Further detailed checks to perform are defined separately for each operation at the Group Manager, when specified in {{interactions}}.
 
    In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of I-D.ietf-ace-oauth-authz}}, in which case the Content-Format MUST be set to application/ace+cbor.
 
@@ -508,13 +507,15 @@ This section describes the operations available on the group-collection resource
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
+When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following sections, the Group Manager ignors possible "user scope entries" specified in the scope of a stored access token.
+
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
 The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
 
 The Group Manager MUST prepare the list L to include in the response as follows. For each group-configuration resource R:
 
-1. The Group Manager considers the group name GROUPNAME of the OSCORE group associated to R.
+1. The Group Manager considers the group name GROUPNAME of the OSCORE group associated with R.
 
 2. The Group Manager retrieves the stored Access Token for the Administrator. Then, it checks whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the Access Token.
 
@@ -1372,6 +1373,40 @@ Expert reviewers should take into consideration the following points:
 
 --- back
 
+# Processing of Group Name Patterns at the AS # {#sec-as-scope-processing}
+
+When processing an Authorization Request from an Administrator (see {{getting-access}}), the AS builds the authorization information expressing granted permissions as scope entries, according to the AIF specific data model AIF-OSCORE-GROUPCOMM and to its extension specified in {{scope-format}}. These scope entries are in turn specified as value of the 'scope' claim to include in the Access Token.
+
+In order to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question, the AS can perform the following steps.
+
+The following specifically refers only to "admin scope entries", i.e., scope entries that express authorization information for Administrators of OSCORE groups.
+
+1. The AS initializes three empty sets of scope entries, namely S1, S2 and S3.
+
+2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+   * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the pattern P of the scope entry E matches also with P\*.
+
+   * If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
+
+   * The AS adds to the set S1 a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is the AND of Tperm\* with the Tperm in the scope entry E.
+
+3. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+   * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name subpattern P\*, such that: i) the pattern P of the scope entry E is different from P\*; and ii) every group name matching with P\* also matches with P.
+
+   * If no subpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, for each found subpattern P\*, the AS adds to the set S2 a scope entry, such that its Toid is the same as in the subpattern P\*, while its Tperm is the AND of the Tperm from the subpattern P\* with the Tperm in the scope entry E.
+
+4. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+   * For each group name pattern P\* in its access policies related to administrative operations at the Group Manager for the Administrator, the AS performs the following actions.
+
+      - The AS attempts to determine a crosspattern P\*\* such that: i) in the previous steps, P\*\* was not identified as a superpattern or subpattern for the pattern P of the scope entry E; ii) every group name matching with P\*\* also matches with both P and P\*.
+
+      - If no crosspattern is built, the AS proceeds with the next pattern in its access policies related to administrative operations at the Group Manager for the Administrator, if any. Otherwise, the AS adds to the set S3 a scope entry, such that its Toid is the same as in the crosspattern P\*\*, while its Tperm is the AND of the Tperm from the pattern P\* and the Tperm in the scope entry E.
+
+5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
@@ -1379,6 +1414,10 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -04 to -05 ## {#sec-05-06}
 
 * Use and extend the same AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
+
+* Revised Client-AS interaction, based on the used AIF specific data model.
+
+* Moved the detailed processing of group name patterns at the AS to an Appendix, as an example.
 
 * Editorial improvements.
 
