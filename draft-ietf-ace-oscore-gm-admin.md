@@ -244,9 +244,13 @@ The Administrator can discover group-configuration resources for the group-colle
 
 This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
 
-To this end, this document uses the Authorization Information Format (AIF) {{I-D.ietf-ace-aif}}, and defines the following AIF specific data model AIF-OSCORE-GROUPCOMM-ADMIN.
+To this end, this document uses the Authorization Information Format (AIF) {{I-D.ietf-ace-aif}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-With reference to the generic AIF model
+The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured in scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. In the rest of this section, these are referred to as "user scope entries".
+
+This document extends the same AIF specific data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. In the rest of this section, these are referred to as "admin scope entries".
+
+Like in the original definition of the data model AIF-OSCORE-GROUPCOMM, and with reference to the generic AIF model
 
 ~~~~~~~~~~~
    AIF-Generic<Toid, Tperm> = [* [Toid, Tperm]]
@@ -254,11 +258,17 @@ With reference to the generic AIF model
 
 the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toid, Tperm\]\], where each \[Toid, Tperm\] element corresponds to one scope entry.
 
-Then, for each scope entry, the following applies.
+Then, the following applies for each admin scope entry intended to express authorization information for an Administrator, as defined in this document.
 
-* The object identifier ("Toid") is specialized as a CBOR text string, specifying a wildcard pattern P for the scope entry. The pattern P is intended as a template for group names.
+* The object identifier ("Toid") is specialized as either of the following, and specifies a group name pattern P for the admin scope entry.
 
-* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the wildcard pattern P. The value Q is computed as follows.
+   - The CBOR simple value "true" (0xf5), indicating the wildcard pattern. That is, any group name matches with this group name pattern.
+
+   - A CBOR text string, indicating an exact group name as a literal string. That is, only one specific group name matches with this group name pattern.
+
+   - A tagged CBOR data item, indicating a more complex group name pattern with the semantics specified by the CBOR tag. For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35, thus indicating that the group name pattern is a regular expression (see {{Section 3.4.5.3 of RFC8949}}). In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be conveyed, for example, in a nested JSON object.
+
+* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
 
    - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry, for which this document defines the entries in {{fig-permission-values}}.
 
@@ -283,12 +293,13 @@ Then, for each scope entry, the following applies.
 ~~~~~~~~~~~
 {: #fig-permission-values title="Numeric identifier of permissions on the admin endpoints at a Group Manager" artwork-align="center"}
 
-The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and the format of scope using such a data model is as follows:
+The CDDL {{RFC8610}} grammar below defines the use of the AIF-OSCORE-GROUPCOMM data model and the format of scope using such a data model, when specifying authorization information for Administrators through admin scope entries.
 
 ~~~~~~~~~~~~~~~~~~~~ CDDL
-   AIF-OSCORE-GROUPCOMM-ADMIN = AIF-Generic<pattern, permissions>
+   AIF-OSCORE-GROUPCOMM = AIF-Generic<pattern, permissions>
 
-   pattern = tstr  ; wilcard pattern of group names
+   nnn = uint
+   pattern = true / tstr / #6.nnn(any) ; pattern of group names
    permission_set = uint . bits permissions
    permissions = &(
       List: 0,
@@ -298,40 +309,34 @@ The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM-ADMIN data model and
       Delete: 4
    )
 
-   scope_entry = AIF-OSCORE-GROUPCOMM-ADMIN
+   scope_entry = AIF-OSCORE-GROUPCOMM
 
    scope = << [ + scope_entry ] >>
 ~~~~~~~~~~~~~~~~~~~~
 
-By relying on the scope format defined above and given an OSCORE group G1 created by a "main" Administrator, then a second "assistant" Administrator can be effectively authorized to perform some operations on G1, in spite of not being the group creator.
+Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
-Furthermore, having the object identifier ("Toid") specialized as a wildcard pattern displays a number of advantages.
+When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry MUST include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.
+
+Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator.
+
+Building on the above, the same single scope can include user scope entries as well as admin scope entries, whose specific format is defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and earlier in this section, respectively. The two types of scope entries can be unambiguously distinguished by means of the least significant bit of their permission set "Tperm", which has value 0 for the user scope entries and 1 for the admin scope entries.
+
+The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.
+
+Throughout the rest of this document "scope entry" is exclusively used as referred to "admin scope entry".
+
+## On Enforcing Different Classes of Administrators
+
+By relying on the scope format defined in this document and given an OSCORE group G1 created by a "main" Administrator, then a second "assistant" Administrator can be effectively authorized to perform some operations on G1, in spite of not being the group creator.
+
+Furthermore, having the object identifier ("Toid") specialized as a pattern displays a number of advantages.
 
 * The encoded scope can be compact in size, while allowing the Administrator to operate on large pools of group names.
 
 * The Administrator and the AS do not need to know exact group names when requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
 
 * The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the invalidation of T1 (e.g., due to expiration) and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
-
-When using the scope format defined in this section, the permission set ("Tperm") of each scope entry MUST include the "List" permission in order for the scope to be considered valid. That is, for each scope entry, the unsigned integer Q MUST be odd. Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator.
-
-\[ NOTE:
-
-There is a potential follow-up building on this.
-
-An ACE Client might want to interact with the same Group Manager to be both Administrator for some groups and member for some other groups.
-
-In order to keep a single Access Token per Client, the scope would have to generally include some "admin" scope entries as per the AIF data model defined in this document, together with some "user" scope entries as per the AIF data model defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
-
-In the scope entries of the former type, the least significant bit of the Tperm integer and denoting the "List" admin permission is always set to 1 (see above). In the scope entries of the latter type, the least significant bit of the Tperm integer is reserved and always 0 (see {{I-D.ietf-ace-key-groupcomm-oscore}}).
-
-Therefore, "admin" and "user" scope entries can unambiguously coexist in the same 'scope' claim and Authorization Request/Response parameter, and can be easily distinguished by checking the least significant bit of the Tperm integer.
-
-In turn, this would require to accordingly revise the scope format and the ACE scope semantics integer defined in this document, in order to denote the certain presence of "admin" scope entries and the optional additional presence of "user" scope entries, within a same scope claim/parameter.
-
-\]
-
-Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 # Getting Access to the Group Manager # {#getting-access}
 
@@ -343,7 +348,7 @@ With reference to the AS, communications between the Administrator and the AS (/
 
 The format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
 
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this document. This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined in {{scope-format}} of this document.
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{Section 16.2 of I-D.ietf-ace-key-groupcomm-oscore}}. This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined in {{scope-format}} of this document.
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
@@ -357,7 +362,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the wildcard pattern P of the scope entry E matches also with P\*.
+      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the pattern P of the scope entry E matches also with P\*.
 
       * If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
 
@@ -365,7 +370,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    3. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name subpattern P\*, such that: i) the wildcard pattern P of the scope entry E is different from P\*; and ii) every group name matching with P\* also matches with P.
+      * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name subpattern P\*, such that: i) the pattern P of the scope entry E is different from P\*; and ii) every group name matching with P\* also matches with P.
 
       * If no subpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, for each found subpattern P\*, the AS adds to the set S2 a scope entry, such that its Toid is the same as in the subpattern P\*, while its Tperm is the AND of the Tperm from the subpattern P\* with the Tperm in the scope entry E.
 
@@ -389,7 +394,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    If the request targets the group-configuration resource associated to a group with name GROUPNAME, the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token has the format defined in {{scope-format}} and includes a scope entry where:
 
-   * The group name GROUPNAME matches with the wildcard pattern specified in the scope entry; and
+   * The group name GROUPNAME matches with the pattern specified in the scope entry; and
 
    * The permission set specified in the scope entry allows the Administrator to perform the requested operation on the targeted group-configuration resource.
 
@@ -1353,52 +1358,6 @@ This registry will be initially populated by the values in {{fig-permission-valu
 
 The Reference column for all of these entries will be {{&SELF}}.
 
-## AIF {#ssec-iana-AIF-registry}
-
-For the media-types application/aif+cbor and application/aif+json defined in {{Section 5.1 of I-D.ietf-ace-aif}}, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in {{Section 5.2 of I-D.ietf-ace-aif}} within the "MIME Media Type Sub-Parameter" registry group.
-
-* Name: oscore-group-name-pattern
-* Description/Specification: wildcard pattern of OSCORE group names
-* Reference: {{&SELF}}
-
-&nbsp;
-
-* Name: oscore-group-admin-permissions
-* Description/Specification: permission(s) to perform administrative operations at the OSCORE Group Manager
-* Reference: {{&SELF}}
-
-## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
-
-IANA is asked to register the following entries to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
-
-* Media Type: application/aif+cbor;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-permissions"
-
-* Encoding: -
-
-* ID: TBD
-
-* Reference: {{&SELF}}
-
-&nbsp;
-
-* Media Type: application/aif+json;Toid="oscore-group-name-pattern",Tperm="oscore-group-admin-permissions"
-
-* Encoding: -
-
-* ID: TBD
-
-* Reference: {{&SELF}}
-
-## ACE Scope Semantics # {#iana-scope-semantics}
-
-IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in {{Section 11.12 of I-D.ietf-ace-key-groupcomm}}.
-
-* Value: SEM_ID_TBD
-
-* Description: Permissions to perform administrative operations at the ACE Group Manager for Group OSCORE.
-
-* Reference: {{&SELF}}
-
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
 The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
@@ -1422,6 +1381,8 @@ Expert reviewers should take into consideration the following points:
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -04 to -05 ## {#sec-05-06}
+
+* Use and extend the same AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * Editorial improvements.
 
