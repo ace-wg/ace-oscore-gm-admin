@@ -1,4 +1,6 @@
 ---
+v: 3
+
 title: Admin Interface for the OSCORE Group Manager
 abbrev: Admin Interface for the OSCORE GM
 docname: draft-ietf-ace-oscore-gm-admin-latest
@@ -11,6 +13,7 @@ area: Internet
 wg: ACE Working Group
 kw: Internet-Draft
 cat: std
+submissiontype: IETF
 
 coding: utf-8
 pi:    # can use array (if all yes) or hash here
@@ -95,6 +98,9 @@ informative:
   RFC6347:
   RFC7925:
   RFC8392:
+
+entity:
+  SELF: "[RFC-XXXX]"
 
 --- abstract
 
@@ -1234,67 +1240,68 @@ Security considerations are inherited from the ACE framework for Authentication 
 
 # IANA Considerations # {#iana}
 
-RFC Editor: Please replace "\[\[this document\]\]" with the RFC number of this document and delete this paragraph.
-
 This document has the following actions for IANA.
+
+Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with
+the RFC number of this specification and delete this paragraph.
 
 ## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
 
 IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry defined in {{Section 11.7 of I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
-+-----------------+----------+--------------+-------------------+
-| Name            | CBOR Key | CBOR Type    | Reference         |
-+-----------------+----------+--------------+-------------------+
-| hkdf            | TBD      | tstr / int   | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| cred_fmt        | TBD      | int          | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| group_mode      | TBD      | simple value | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| sign_enc_alg    | TBD      | tstr / int / | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| sign_alg        | TBD      | tstr / int / | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| sign_params     | TBD      | array /      | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| pairwise_mode   | TBD      | simple value | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| alg             | TBD      | tstr / int / | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| ecdh_alg        | TBD      | tstr / int / | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| ecdh_params     | TBD      | array /      | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| det_req         | TBD      | simple value | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| det_hash_alg    | TBD      | tstr / int   | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| active          | TBD      | simple value | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| group_name      | TBD      | tstr         | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| group_title     | TBD      | tstr /       | [[this document]] |
-|                 |          | simple value |                   |
-+-----------------+----------+--------------+-------------------+
-| app_groups      | TBD      | array        | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| joining_uri     | TBD      | tstr         | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| max_stale_sets  | TBD      | uint         | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| as_uri          | TBD      | tstr         | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| conf_filter     | TBD      | array        | [[this document]] |
-+-----------------+----------+--------------+-------------------+
-| app_groups_diff | TBD      | array        | [[this document]] |
-+-----------------+----------+--------------+-------------------+
++-----------------+----------+--------------+------------+
+| Name            | CBOR Key | CBOR Type    | Reference  |
++-----------------+----------+--------------+------------+
+| hkdf            | TBD      | tstr / int   | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| cred_fmt        | TBD      | int          | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| group_mode      | TBD      | simple value | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| sign_enc_alg    | TBD      | tstr / int / | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| sign_alg        | TBD      | tstr / int / | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| sign_params     | TBD      | array /      | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| pairwise_mode   | TBD      | simple value | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| alg             | TBD      | tstr / int / | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| ecdh_alg        | TBD      | tstr / int / | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| ecdh_params     | TBD      | array /      | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| det_req         | TBD      | simple value | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| det_hash_alg    | TBD      | tstr / int   | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| active          | TBD      | simple value | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| group_name      | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| group_title     | TBD      | tstr /       | [RFC-XXXX] |
+|                 |          | simple value |            |
++-----------------+----------+--------------+------------+
+| app_groups      | TBD      | array        | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| joining_uri     | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| max_stale_sets  | TBD      | uint         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| as_uri          | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| conf_filter     | TBD      | array        | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| app_groups_diff | TBD      | array        | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
 
@@ -1306,29 +1313,29 @@ IANA is asked to register the following entry in the "ACE Groupcomm Errors" regi
 
 * Description: Group currently active.
 
-* Reference: \[\[This document\]\]
+* Reference: {{&SELF}}
 
 ## Resource Types # {#iana-rt}
 
 IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
 ~~~~~~~~~~~
-+----------------+------------------------------+-------------------+
-| Value          | Description                  | Reference         |
-+----------------+------------------------------+-------------------+
-| core.osc.gcoll | Group-collection resource    | [[this document]] |
-|                | of an OSCORE Group Manager   |                   |
-|                |                              |                   |
-| core.osc.gconf | Group-configuration resource | [[this document]] |
-|                | of an OSCORE Group Manager   |                   |
-+----------------+------------------------------+-------------------+
++----------------+------------------------------+------------+
+| Value          | Description                  | Reference  |
++----------------+------------------------------+------------+
+| core.osc.gcoll | Group-collection resource    | [RFC-XXXX] |
+|                | of an OSCORE Group Manager   |            |
++----------------+------------------------------+------------+
+| core.osc.gconf | Group-configuration resource | [RFC-XXXX] |
+|                | of an OSCORE Group Manager   |            |
++----------------+------------------------------+------------+
 ~~~~~~~~~~~
 
 ## Group OSCORE Admin Permissions {#ssec-iana-group-oscore-admin-permissions-registry}
 
 This document establishes the IANA "Group OSCORE Admin Permissions" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
-This registry includes the possible permissions that Administrators can have to perform operations on an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of \[\[this document\]\].
+This registry includes the possible permissions that Administrators can have to perform operations on an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of {{&SELF}}.
 
 The columns of this registry are:
 
@@ -1344,7 +1351,7 @@ The columns of this registry are:
 
 This registry will be initially populated by the values in {{fig-permission-values}}.
 
-The Reference column for all of these entries will be \[\[this document\]\].
+The Reference column for all of these entries will be {{&SELF}}.
 
 ## AIF {#ssec-iana-AIF-registry}
 
@@ -1352,13 +1359,13 @@ For the media-types application/aif+cbor and application/aif+json defined in {{S
 
 * Name: oscore-group-name-pattern
 * Description/Specification: wildcard pattern of OSCORE group names
-* Reference: \[\[This document\]\]
+* Reference: {{&SELF}}
 
 &nbsp;
 
 * Name: oscore-group-admin-permissions
 * Description/Specification: permission(s) to perform administrative operations at the OSCORE Group Manager
-* Reference: \[\[This document\]\]
+* Reference: {{&SELF}}
 
 ## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
 
@@ -1370,7 +1377,7 @@ IANA is asked to register the following entries to the "CoAP Content-Formats" re
 
 * ID: TBD
 
-* Reference: \[\[This document\]\]
+* Reference: {{&SELF}}
 
 &nbsp;
 
@@ -1380,7 +1387,7 @@ IANA is asked to register the following entries to the "CoAP Content-Formats" re
 
 * ID: TBD
 
-* Reference: \[\[This document\]\]
+* Reference: {{&SELF}}
 
 ## ACE Scope Semantics # {#iana-scope-semantics}
 
@@ -1390,7 +1397,7 @@ IANA is asked to register the following entry in the "ACE Scope Semantics" regis
 
 * Description: Permissions to perform administrative operations at the ACE Group Manager for Group OSCORE.
 
-* Reference: \[\[This document\]\]
+* Reference: {{&SELF}}
 
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
@@ -1413,6 +1420,10 @@ Expert reviewers should take into consideration the following points:
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -04 to -05 ## {#sec-05-06}
+
+* Editorial improvements.
 
 ## Version -04 to -05 ## {#sec-04-05}
 
@@ -1489,6 +1500,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations, as well as the interactions with the Group Manager using CoRAL.
 
-The authors sincerely thank Christian Amsüss, Carsten Bormann and Jim Schaad for their comments and feedback.
+The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}} and {{{Jim Schaad}}} for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
