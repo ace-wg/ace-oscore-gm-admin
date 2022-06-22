@@ -262,11 +262,11 @@ Then, the following applies for each admin scope entry intended to express autho
 
 * The object identifier ("Toid") is specialized as either of the following, and specifies a group name pattern P for the admin scope entry.
 
-   - The CBOR simple value "true" (0xf5), indicating the wildcard pattern. That is, any group name matches with this group name pattern.
+   - The CBOR simple value "true" (0xf5), specifying the wildcard pattern. That is, any group name matches with this group name pattern.
 
-   - A CBOR text string, indicating an exact group name as a literal string. That is, only one specific group name matches with this group name pattern.
+   - A CBOR text string, whose value specifies an exact group name as a literal string. That is, only one specific group name matches with this group name pattern.
 
-   - A tagged CBOR data item, indicating a more complex group name pattern with the semantics specified by the CBOR tag. For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35, thus indicating that the group name pattern is a regular expression (see {{Section 3.4.5.3 of RFC8949}}). In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be conveyed, for example, in a nested JSON object.
+   - A tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{Section 3.4.5.3 of RFC8949}}). In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be conveyed, for example, in a nested JSON object.
 
 * The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
 
@@ -293,15 +293,14 @@ Then, the following applies for each admin scope entry intended to express autho
 ~~~~~~~~~~~
 {: #fig-permission-values title="Numeric identifier of permissions on the admin endpoints at a Group Manager" artwork-align="center"}
 
-The CDDL {{RFC8610}} grammar below defines the use of the AIF-OSCORE-GROUPCOMM data model and the format of scope using such a data model, when specifying authorization information for Administrators through admin scope entries.
+The following CDDL {{RFC8610}} notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in {{fig-permission-values}}.
 
 ~~~~~~~~~~~~~~~~~~~~ CDDL
-   AIF-OSCORE-GROUPCOMM = AIF-Generic<pattern, permissions>
+   AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
 
-   nnn = uint
-   pattern = true / tstr / #6.nnn(any) ; pattern of group names
-   permission_set = uint . bits permissions
-   permissions = &(
+   oscore-gname = true / tstr / #6.nnn(any) ; Group name pattern
+   oscore-gperm = uint . bits admin-permissions
+   admin-permissions = &(
       List: 0,
       Create: 1,
       Read: 2,
@@ -309,22 +308,20 @@ The CDDL {{RFC8610}} grammar below defines the use of the AIF-OSCORE-GROUPCOMM d
       Delete: 4
    )
 
-   scope_entry = AIF-OSCORE-GROUPCOMM
-
-   scope = << [ + scope_entry ] >>
+   scope_entry = [oscore-gname, oscore-gperm]
 ~~~~~~~~~~~~~~~~~~~~
 
 Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry MUST include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.
 
-Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator.
+Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator (see {{collection-resource-get}} and {{collection-resource-fetch}}).
 
 Building on the above, the same single scope can include user scope entries as well as admin scope entries, whose specific format is defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and earlier in this section, respectively. The two types of scope entries can be unambiguously distinguished by means of the least significant bit of their permission set "Tperm", which has value 0 for the user scope entries and 1 for the admin scope entries.
 
 The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.
 
-Throughout the rest of this document "scope entry" is exclusively used as referred to "admin scope entry".
+Throughout the rest of this document, the term "scope entry" is exclusively used as referred to "admin scope entry".
 
 ## On Enforcing Different Classes of Administrators
 
