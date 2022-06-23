@@ -647,7 +647,9 @@ Otherwise, if any of the following occurs, the Group Manager MUST respond with a
 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
-If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST find an alternative name for the new OSCORE group to create. Note that the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names.
+If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST find an alternative name for the new OSCORE group to create.
+
+In addition to that, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.
 
 If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
 
@@ -1440,6 +1442,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Revised Client-AS interaction, based on the used AIF specific data model.
 
 * Added status parameter 'gid_reuse', on reassigning OSCORE Group IDs upon group rekeying.
+
+* Clarifications on the group name ultimately chosen by the Group Manager.
 
 * Moved the detailed processing of group name patterns at the AS to an Appendix, as an example.
 
