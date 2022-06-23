@@ -509,13 +509,17 @@ For each of the status parameters listed below, the Group Manager refers to the 
 
 # Interactions with the Group Manager # {#interactions}
 
-This section describes the operations available on the group-collection resource and the group-configuration resources.
+This section describes the operations that are possible to perform on the group-collection resource and the group-configuration resources at the Group Manager.
+
+For each operation, it is defined whether that operation is required or optional to support for the Group Manager and an Administrator. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support, then the Group Manager MUST respond with a 5.01 (Not Implemented) response.
+
+When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignors possible "user scope entries" specified in the scope of a stored access token.
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
-When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following sections, the Group Manager ignors possible "user scope entries" specified in the scope of a stored access token.
-
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
+
+This operation MUST be supported by the Group Manager and an Administrator.
 
 The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
 
@@ -558,6 +562,8 @@ Example in CoRAL:
 ~~~~~~~~~~~
 
 ## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
+
+This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
@@ -614,6 +620,8 @@ Example in CoRAL:
 ~~~~~~~~~~~
 
 ## Create a New Group Configuration ## {#collection-resource-post}
+
+This operation MUST be supported by the Group Manager and an Administrator.
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME, and MAY specify the intended group title together with pieces of information concerning the group configuration.
 
@@ -774,6 +782,8 @@ Example in CoRAL:
 
 ## Retrieve a Group Configuration ## {#configuration-resource-get}
 
+This operation MUST be supported by the Group Manager and an Administrator.
+
 The Administrator can send a GET request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve the complete current configuration of that group.
 
 Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Read".
@@ -860,6 +870,8 @@ Example in CoRAL:
 
 ## Retrieve Part of a Group Configuration by Filters ## {#configuration-resource-fetch}
 
+This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
+
 The Administrator can send a FETCH request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
 When custom CBOR is used, the request payload is a CBOR map, which contains the following fields:
@@ -935,6 +947,8 @@ Example in CoRAL:
 ~~~~~~~~~~~
 
 ## Overwrite a Group Configuration ## {#configuration-resource-put}
+
+This operation MAY be supported by the Group Manager and an Administrator.
 
 The Administrator can send a PUT request to the group-configuration resource associated with an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
@@ -1065,6 +1079,8 @@ Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 's
    - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 12 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
+
+This operation MAY be supported by the Group Manager and an Administrator.
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource associated with an OSCORE group, in order to update the value of only part of the group configuration.
 
@@ -1204,6 +1220,8 @@ After having selectively updated part of a group configuration, the effects on c
 After having selectively updated part of a group configuration, the effects on the current group members are the same as defined in {{sssec-effects-overwrite-group-members}} for the case of group configuration overwriting.
 
 ## Delete a Group Configuration ## {#configuration-resource-delete}
+
+This operation MUST be supported by the Group Manager and an Administrator.
 
 The Administrator can send a DELETE request to the group-configuration resource, in order to delete that OSCORE group.
 
@@ -1440,6 +1458,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Use and extend the same AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * Revised Client-AS interaction, based on the used AIF specific data model.
+
+* Categorized operations at the Group Manager as required and optional to support.
 
 * Added status parameter 'gid_reuse', on reassigning OSCORE Group IDs upon group rekeying.
 
