@@ -623,15 +623,15 @@ When CoRAL is used, each element of the request payload corresponds to an entry 
 
 In particular:
 
-* The payload MAY include any of the configuration parameter defined in {{config-repr-config-properties}}.
+* The payload MAY include any of the configuration parameters defined in {{config-repr-config-properties}}.
 
 * The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
 
-* The payload MAY include any of the status parameter 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups, 'group_policies' and 'as_uri' defined in {{config-repr-status-properties}}.
+* The payload MAY include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups, 'group_policies' and 'as_uri' defined in {{config-repr-status-properties}}.
 
    When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
-* The payload MUST NOT include any of the status parameter 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
+* The payload MUST NOT include any of the status parameters 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
 Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether the group name specified in the 'group_name' parameter matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Create".
 
