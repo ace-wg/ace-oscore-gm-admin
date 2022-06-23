@@ -453,7 +453,11 @@ The CBOR map MUST include the following status parameters:
 
 * 'ace-groupcomm-profile', defined in Section 4.3.1 of {{I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 25.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
+* 'max_stale_sets', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR unsigned integer, with value strictly greater than 1. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group.
+
 * 'exp', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}.
+
+* 'gid_reuse', encoding the CBOR simple value "true" (0xf5) if, upon rekeying the OSCORE group, the Group Manager can reassign the values of the OSCORE Group ID used as OSCORE ID Context, as per {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}. Otherwise, this parameter encodes the CBOR simple value "false" (0xf4). This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
 
 * 'app_groups', with value a list of names of application groups, encoded as a CBOR array. Each element of the array is a CBOR text string, specifying the name of an application group using the OSCORE group as security group (see {{Section 2.1 of I-D.ietf-core-groupcomm-bis}}).
 
@@ -463,17 +467,15 @@ The CBOR map MAY include the following status parameters:
 
 * 'group_policies', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, and consistent with the format and content defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'max_stale_sets', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR unsigned integer, with value strictly greater than 1. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group.
-
 * 'as_uri', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 4 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ## Default Values {#default-values}
 
-This section defines the default values that the Group Manager assumes for configuration and status parameters.
+This section defines the default values that the Group Manager refers to for configuration and status parameters.
 
 ### Configuration Parameters {#default-values-conf}
 
-For each configuration parameter, the Group Manager MUST use a pre-configured default value, if none is specified by the Administrator. In particular:
+For each of the configuration parameters listed below, the Group Manager refers to the following pre-configured default value, if none is specified by the Administrator.
 
 * For 'group_mode', the Group Manager SHOULD use the CBOR simple value "true" (0xf5).
 
@@ -491,11 +493,15 @@ For each configuration parameter, the Group Manager MUST use a pre-configured de
 
 ### Status Parameters
 
-For the following status parameters, the Group Manager MUST use a pre-configured default value, if none is specified by the Administrator. In particular:
+For each of the status parameters listed below, the Group Manager refers to the following pre-configured default value, if none is specified by the Administrator.
 
 * For 'active', the Group Manager SHOULD use the CBOR simple value "false" (0xf4).
 
 * For 'group_title', the Group Manager SHOULD use the CBOR simple value "null" (0xf6).
+
+* For 'max_stale_sets', the Group Manager SHOULD use the CBOR unsigned integer value 3.
+
+* For 'gid_reuse', the Group Manager SHOULD use the CBOR simple value "false" (0xf4).
 
 * For 'app_groups', the Group Manager SHOULD use the empty CBOR array.
 
@@ -621,7 +627,7 @@ In particular:
 
 * The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
 
-* The payload MAY include any of the status parameter 'group_title', 'max_stale_sets', 'exp', 'app_groups, 'group_policies', 'as_uri' and 'active' defined in {{config-repr-status-properties}}.
+* The payload MAY include any of the status parameter 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups, 'group_policies' and 'as_uri' defined in {{config-repr-status-properties}}.
 
    When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
@@ -653,7 +659,11 @@ If the Group Manager does not find any group name for which both the above condi
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager.
 
-The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group. For each parameter not specified in the request, the Group Manager MUST use default values as specified in {{default-values}}.
+The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
+
+If the request specifies the parameter 'gid_reuse' encoding the CBOR simple value "true" (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value "false" (0xf4).
+
+For each parameter not specified in the request, the Group Manager refers to the default values specified in {{default-values}}.
 
 After that, the Group Manager creates a new group-membership resource accessible at ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} and {{Section 5 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -677,6 +687,8 @@ When custom CBOR is used, the response payload is a CBOR map, where entries use 
 
 * 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included if specified in the status properties of the group. This value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'as_uri' status property for the OSCORE group.
 
+If the POST request specified the parameter 'gid_reuse' encoding the CBOR simple value "true" (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value "false" (0xf4), then the response payload MUST include also the parameter 'gid_reuse' encoding the CBOR simple value "false" (0xf4).
+
 If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}{{I-D.hartke-t2trg-coral-reef}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
@@ -689,7 +701,11 @@ Alternatively, the Administrator can perform the registration in the Resource Di
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.01 (Created) response, if the 'as_uri' parameter was included in the response.
 
-* Every other information element describing the current group configuration MUST take the value that the Administrator specified in the POST request. If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+* As to every other information element describing the current group configuration, the following applies.
+
+   - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
+
+   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
 
 Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.
 
@@ -918,7 +934,7 @@ Example in CoRAL:
 
 ## Overwrite a Group Configuration ## {#configuration-resource-put}
 
-The Administrator can send a PUT request to the group-configuration resource associated with an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameter 'group_name' MUST NOT be included.
+The Administrator can send a PUT request to the group-configuration resource associated with an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
@@ -948,7 +964,11 @@ Alternatively, the Administrator can update the registration in the Resource Dir
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.04 (Changed) response, if the 'as_uri' parameter was included in the response.
 
-* Every other information element describing the current group configuration MUST take the value that the Administrator specified in the PUT request. If a certain parameter was not specified in the PUT request, the Administrator MUST use either the value specified in the the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+* As to every other information element describing the current group configuration, the following applies.
+
+   - If a certain parameter was specified in the PUT request, the Administrator MUST use either the value specified in the the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the PUT request otherwise.
+
+   - If a certain parameter was not specified in the PUT request, the Administrator MUST use either the value specified in the the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
 
 As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
@@ -1292,6 +1312,8 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 | group_title     | TBD      | tstr /       | [RFC-XXXX] |
 |                 |          | simple value |            |
 +-----------------+----------+--------------+------------+
+| gid_reuse       | TBD      | simple value | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
 | app_groups      | TBD      | array        | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | joining_uri     | TBD      | tstr         | [RFC-XXXX] |
@@ -1416,6 +1438,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Use and extend the same AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * Revised Client-AS interaction, based on the used AIF specific data model.
+
+* Added cofnfiguration parameter 'gid_reuse', on reassining OSCORE Group IDs upon group rekeying.
 
 * Moved the detailed processing of group name patterns at the AS to an Appendix, as an example.
 
