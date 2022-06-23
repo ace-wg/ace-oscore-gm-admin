@@ -453,7 +453,7 @@ The CBOR map MUST include the following status parameters:
 
 * 'ace-groupcomm-profile', defined in Section 4.3.1 of {{I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 25.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
-* 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document and
+* 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
 
 * 'exp', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}.
 
