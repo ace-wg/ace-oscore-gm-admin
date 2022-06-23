@@ -1439,7 +1439,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Revised Client-AS interaction, based on the used AIF specific data model.
 
-* Added cofnfiguration parameter 'gid_reuse', on reassining OSCORE Group IDs upon group rekeying.
+* Added status parameter 'gid_reuse', on reassigning OSCORE Group IDs upon group rekeying.
 
 * Moved the detailed processing of group name patterns at the AS to an Appendix, as an example.
 
