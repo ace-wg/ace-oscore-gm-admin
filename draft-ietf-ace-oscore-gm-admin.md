@@ -367,7 +367,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    If the 'scope' claim in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern, then all such scope entries MUST adhere to the same pattern semantics.
 
-   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern adhering to a certain pattern semantics, then that sementics MUST be used for the scope entries specified in the 'scope' claim.
+   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern adhering to a certain pattern semantics, then that semantics MUST be used for the scope entries specified in the 'scope' claim.
 
    The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
 
@@ -451,7 +451,7 @@ The CBOR map MUST include the following status parameters:
 
 * 'group_title', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
 
-* 'ace-groupcomm-profile', defined in Section 4.3.1 of {{I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 25.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
+* 'ace-groupcomm-profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 25.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
 * 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
 
@@ -513,7 +513,7 @@ This section describes the operations that are possible to perform on the group-
 
 For each operation, it is defined whether that operation is required or optional to support for the Group Manager and an Administrator. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support, then the Group Manager MUST respond with a 5.01 (Not Implemented) response.
 
-When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignors possible "user scope entries" specified in the scope of a stored access token.
+When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
@@ -713,9 +713,9 @@ Alternatively, the Administrator can perform the registration in the Resource Di
 
 * As to every other information element describing the current group configuration, the following applies.
 
-   - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
+   - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
 
-   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
 
 Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.
 
@@ -982,9 +982,9 @@ Alternatively, the Administrator can update the registration in the Resource Dir
 
 * As to every other information element describing the current group configuration, the following applies.
 
-   - If a certain parameter was specified in the PUT request, the Administrator MUST use either the value specified in the the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the PUT request otherwise.
+   - If a certain parameter was specified in the PUT request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the PUT request otherwise.
 
-   - If a certain parameter was not specified in the PUT request, the Administrator MUST use either the value specified in the the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+   - If a certain parameter was not specified in the PUT request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
 
 As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
