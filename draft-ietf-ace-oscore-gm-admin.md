@@ -1453,7 +1453,7 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-## Version -04 to -05 ## {#sec-05-06}
+## Version -05 to -06 ## {#sec-05-06}
 
 * Use and extend the same AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
