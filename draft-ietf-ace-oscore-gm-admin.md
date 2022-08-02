@@ -1054,7 +1054,7 @@ If the value of the status parameter 'active' is changed from "true" (0xf5) to "
 
 * The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to a Public Key Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value "false" (0xf4)), SHOULD stop communicating in the group.
 
@@ -1454,6 +1454,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -06 to -07 ## {#sec-06-07}
+
+* Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
 * Editorial improvements.
 
