@@ -1034,9 +1034,9 @@ Example in CoRAL:
 
 ### Effects on Joining Nodes ### {#sssec-effects-overwrite-joining-nodes}
 
-After having overwritten a group configuration, if the value of the status parameter 'active' is changed from "true" (0xf5) to "false" (0xf4), the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to a Joining Request with a 5.03 (Service Unavailable) response, as defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+After having overwritten a group configuration, if the value of the status parameter 'active' is changed from "true" (0xf5) to "false" (0xf4), the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to a Join Request with a 5.03 (Service Unavailable) response, as defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-If the value of the status parameter 'active' is changed from "false" (0xf4) to "true" (0xf5), the Group Manager resumes admitting new members in the OSCORE group, by processing their Joining Requests (see {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}).
+If the value of the status parameter 'active' is changed from "false" (0xf4) to "true" (0xf5), the Group Manager resumes admitting new members in the OSCORE group, by processing their Join Requests (see {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ### Effects on the Group Members ### {#sssec-effects-overwrite-group-members}
 
@@ -1452,6 +1452,10 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -06 to -07 ## {#sec-06-07}
+
+* Editorial improvements.
 
 ## Version -05 to -06 ## {#sec-05-06}
 
