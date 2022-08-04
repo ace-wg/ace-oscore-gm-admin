@@ -58,6 +58,7 @@ author:
         email: francesca.palombini@ericsson.com
 
 normative:
+  I-D.ietf-cbor-file-magic:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-key-groupcomm:
@@ -351,7 +352,11 @@ With reference to the AS, communications between the Administrator and the AS (/
 
 In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
 
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{Section 16.2 of I-D.ietf-ace-key-groupcomm-oscore}}. This indicates that the second element of the CBOR sequence, as conveying the actual authorization information, follows the scope semantics of the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type application/aif+cbor registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
+
+Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of I-D.ietf-cbor-file-magic}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
+
+This indicates that the binary encoded scope, as conveying the actual access control information, follows the scope semantics of the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
@@ -1289,7 +1294,7 @@ the RFC number of this specification and delete this paragraph.
 
 ## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry defined in {{Section 11.7 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry defined in {{Section 11.6 of I-D.ietf-ace-key-groupcomm}}.
 
 ~~~~~~~~~~~
 +-----------------+----------+--------------+------------+
@@ -1351,7 +1356,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in {{Section 11.13 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in {{Section 11.11 of I-D.ietf-ace-key-groupcomm}}.
 
 * Value: 10
 
@@ -1456,6 +1461,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -06 to -07 ## {#sec-06-07}
 
 * Alignment with renaming in draft-ietf-ace-key-groupcomm.
+
+* Updated signaling of semantics for binary encoded scopes.
 
 * Editorial improvements.
 
