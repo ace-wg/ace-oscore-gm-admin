@@ -58,15 +58,12 @@ author:
         email: francesca.palombini@ericsson.com
 
 normative:
-  I-D.ietf-cbor-file-magic:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-ace-oscore-profile:
   I-D.ietf-core-coral:
-  I-D.ietf-cose-rfc8152bis-struct:
-  I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-core-groupcomm-bis:
   I-D.ietf-ace-aif:
   RFC2119:
@@ -81,6 +78,9 @@ normative:
   RFC8613:
   RFC8742:
   RFC8949:
+  RFC9052:
+  RFC9053:
+  RFC9277:
   COSE.Algorithms:
     author:
       org: IANA
@@ -139,7 +139,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with the terms and concepts from the following specifications:
 
-* CBOR {{RFC8949}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
+* CBOR {{RFC8949}} and COSE {{RFC9052}}{{RFC9053}}.
 
 * The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These include the concepts of:
 
@@ -354,7 +354,7 @@ In order to specify authorization information for Administrators, the format and
 
 Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type application/aif+cbor registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of I-D.ietf-cbor-file-magic}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
+Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of RFC9277}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
 
 This indicates that the binary encoded scope, as conveying the actual access control information, follows the scope semantics of the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
 
