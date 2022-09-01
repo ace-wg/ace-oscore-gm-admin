@@ -59,13 +59,10 @@ author:
 
 normative:
   I-D.ietf-core-oscore-groupcomm:
-  I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
-  I-D.ietf-ace-oscore-profile:
   I-D.ietf-core-coral:
   I-D.ietf-core-groupcomm-bis:
-  I-D.ietf-ace-aif:
   RFC2119:
   RFC6690:
   RFC6749:
@@ -80,6 +77,9 @@ normative:
   RFC8949:
   RFC9052:
   RFC9053:
+  RFC9200:
+  RFC9203:
+  RFC9237:
   RFC9277:
   COSE.Algorithms:
     author:
@@ -89,7 +89,6 @@ normative:
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
 informative:
-  I-D.ietf-ace-dtls-authorize:
   I-D.tiloca-core-oscore-discovery:
   I-D.hartke-t2trg-coral-reef:
   I-D.amsuess-core-cachable-oscore:
@@ -99,6 +98,7 @@ informative:
   RFC8392:
   RFC9147:
   RFC9176:
+  RFC9202:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -115,7 +115,7 @@ The Constrained Application Protocol (CoAP) {{RFC7252}} can be used in group com
 
 When group communication for CoAP is protected with Group OSCORE, nodes are required to explicitly join the correct OSCORE group. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.
 
-The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. Such a method builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, so ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
+The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. Such a method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, so ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
 
 In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or on pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error prone deployments and is poorly flexible.
 
@@ -131,7 +131,7 @@ The reported CoRAL examples are based on the textual representation used until  
 
 \]
 
-The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{I-D.ietf-ace-oscore-profile}}{{I-D.ietf-ace-dtls-authorize}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
+The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{RFC9200}}.
 
 ## Terminology ## {#terminology}
 
@@ -153,7 +153,7 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
    - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
 
-* The ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
+* The ACE framework for authentication and authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
 * The management of keying material for groups in ACE {{I-D.ietf-ace-key-groupcomm}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager, that new members access to join the OSCORE group, while current members can access to retrieve updated keying material.
 
@@ -245,7 +245,7 @@ The Administrator can discover group-configuration resources for the group-colle
 
 This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
 
-To this end, this document uses the Authorization Information Format (AIF) {{I-D.ietf-ace-aif}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+To this end, this document uses the Authorization Information Format (AIF) {{RFC9237}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured in scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. In the rest of this section, these are referred to as "user scope entries".
 
@@ -346,11 +346,11 @@ Furthermore, having the object identifier ("Toid") specialized as a pattern disp
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
+In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
 
 With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}}{{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
 
-In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of I-D.ietf-ace-oauth-authz}}).
+In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of RFC9200}}).
 
 Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type application/aif+cbor registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -360,13 +360,13 @@ This indicates that the binary encoded scope, as conveying the actual access con
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
-1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, the Administrator sends to the AS an Authorization Request as defined in {{Section 5.8.1 of I-D.ietf-ace-oauth-authz}}.
+1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, the Administrator sends to the AS an Authorization Request as defined in {{Section 5.8.1 of RFC9200}}.
 
    If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern (see {{scope-format}}), then all such scope entries MUST adhere to the same pattern semantics.
 
    The Administrator will start or continue using a secure communication association with the Group Manager, according to the response from the AS and the specifically used transport profile of ACE.
 
-2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, especially verifying that the Administrator is authorized to obtain the requested permissions, or possibly a subset of those.
+2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of RFC9200}}, especially verifying that the Administrator is authorized to obtain the requested permissions, or possibly a subset of those.
 
    The AS specifies the information on the authorization granted to the Administrator as the value of the 'scope' claim to include in the Access Token, in accordance with the scope format specified in {{scope-format}}. It is implementation specific which particular approach the AS takes to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question. {{sec-as-scope-processing}} provides an example of such an approach that the AS can use.
 
@@ -374,9 +374,9 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern adhering to a certain pattern semantics, then that semantics MUST be used for the scope entries specified in the 'scope' claim.
 
-   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of I-D.ietf-ace-oauth-authz}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
+   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of RFC9200}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
 
-   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern and any of the following conditions holds, then the AS MUST reply with a 4.00 (Bad Request) error response (see {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}). The 'error_description' parameter carried out in the response payload MUST specify the CBOR value 1 (invalid_scope).
+   If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern and any of the following conditions holds, then the AS MUST reply with a 4.00 (Bad Request) error response (see {{Section 5.8.3 of RFC9200}}). The 'error_description' parameter carried out in the response payload MUST specify the CBOR value 1 (invalid_scope).
 
    * The "Toid" of the different scope entries do not all adhere to the same pattern semantics.
 
@@ -384,7 +384,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    Finally, as discussed in {{scope-format}}, the authorization information included in the Authorization Request or specified by the AS might also include permissions for the same Client as a user of the OSCORE group, i.e., as an actual group member or an external signature verifier. As per {{scope-format}}, such authorization information is expressed by "user scope entries", whose format and processing is specified in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
+3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{RFC9202}} and {{RFC9203}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
 4. Consistently with what is allowed by the authorization information in the Access Token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, retrieving and changing OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
 
@@ -400,7 +400,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    Further detailed checks to perform are defined separately for each operation at the Group Manager, when specified in {{interactions}}.
 
-   In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of I-D.ietf-ace-oauth-authz}}, in which case the Content-Format MUST be set to application/ace+cbor.
+   In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of RFC9200}}, in which case the Content-Format MUST be set to application/ace+cbor.
 
    If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
 
@@ -1283,7 +1283,7 @@ A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.iet
 
 # Security Considerations # {#sec-security-considerations}
 
-Security considerations are inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
+Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
 
 # IANA Considerations # {#iana}
 
@@ -1452,7 +1452,7 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
       - If no crosspattern is built, the AS proceeds with the next pattern in its access policies related to administrative operations at the Group Manager for the Administrator, if any. Otherwise, the AS adds to the set S3 a scope entry, such that its Toid is the same as in the crosspattern P\*\*, while its Tperm is the AND of the Tperm from the pattern P\* and the Tperm in the scope entry E.
 
-5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of I-D.ietf-ace-oauth-authz}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
 # Document Updates # {#sec-document-updates}
 
