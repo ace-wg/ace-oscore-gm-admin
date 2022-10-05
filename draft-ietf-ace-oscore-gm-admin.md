@@ -881,7 +881,7 @@ The Administrator can send a FETCH request to the group-configuration resource m
 
 When custom CBOR is used, the request payload is a CBOR map, which contains the following fields:
 
-* 'conf_filter', defined in {{iana-ace-groupcomm-parameters}} of this document and encoded as a CBOR array. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}), using the corresponding abbreviation defined in {{iana-ace-groupcomm-parameters}}.
+* 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{iana-ace-groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
 
 When CoRAL is used, the request payload includes one element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified elements have no value.
 
@@ -1091,7 +1091,7 @@ The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-confi
 
 The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
-* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff'. This field MUST NOT be present multiple times, and it is encoded as a CBOR array including the following two elements.
+* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff', whose CBOR abbreviation is defined in {{iana-ace-groupcomm-parameters}}. This field is encoded as a CBOR array including the following two elements.
 
    - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
 
@@ -1330,6 +1330,8 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 +-----------------+----------+--------------+------------+
 | det_hash_alg    | TBD      | tstr / int   | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
+| rt              | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
 | active          | TBD      | simple value | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | group_name      | TBD      | tstr         | [RFC-XXXX] |
@@ -1337,13 +1339,13 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 | group_title     | TBD      | tstr /       | [RFC-XXXX] |
 |                 |          | simple value |            |
 +-----------------+----------+--------------+------------+
+| max_stale_sets  | TBD      | uint         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
 | gid_reuse       | TBD      | simple value | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | app_groups      | TBD      | array        | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | joining_uri     | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| max_stale_sets  | TBD      | uint         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | as_uri          | TBD      | tstr         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
