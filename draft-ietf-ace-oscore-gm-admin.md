@@ -414,7 +414,7 @@ The group configuration representation is a CBOR map which MUST include configur
 
 ### Configuration Properties ### {#config-repr-config-properties}
 
-The CBOR map MUST include the following configuration parameters, whose CBOR abbreviations are defined in {{iana-ace-groupcomm-parameters}} of this document.
+The CBOR map MUST include the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
 
 * 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -436,7 +436,7 @@ The CBOR map MUST include the following configuration parameters, whose CBOR abb
 
 * 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value "false" (0xf4), this parameter has as value the CBOR simple value "null" (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-The CBOR map MAY include the following configuration parameters, whose CBOR abbreviations are defined in {{iana-ace-groupcomm-parameters}} of this document.
+The CBOR map MAY include the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
 
 * 'det_req', encoded as a CBOR simple value. Its value is "true" (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or "false" (0xf4) otherwise. This parameter MUST NOT be present if the configuration parameter 'group_mode' has value "false" (0xf4).
 
@@ -446,7 +446,7 @@ The CBOR map MAY include the following configuration parameters, whose CBOR abbr
 
 ### Status Properties ### {#config-repr-status-properties}
 
-The CBOR map MUST include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{iana-ace-groupcomm-parameters}}.
+The CBOR map MUST include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
 
 * 'rt', with value the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
@@ -468,7 +468,7 @@ The CBOR map MUST include the following status parameters. Unless specified othe
 
 * 'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group as per {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR text string.
 
-The CBOR map MAY include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{iana-ace-groupcomm-parameters}}.
+The CBOR map MAY include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
 
 * 'group_policies', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, and consistent with the format and content defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -520,7 +520,7 @@ For each operation, it is defined whether that operation is required or optional
 
 When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
-When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{iana-ace-groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
+When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
@@ -572,7 +572,7 @@ This operation MUST be supported by the Group Manager and MAY be supported by an
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
+When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
 When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
 
@@ -630,7 +630,7 @@ This operation MUST be supported by the Group Manager and an Administrator.
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME, and MAY specify the intended group title together with pieces of information concerning the group configuration.
 
-When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
+When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
 
 When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter (see below).
 
@@ -694,7 +694,7 @@ Finally, the Group Manager replies to the Administrator with a 2.01 (Created) re
 
 The response payload specifies the parameters 'group_name', 'joining_uri' and 'as_uri', from the status properties of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
-When custom CBOR is used, the response payload is a CBOR map, where entries use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}. When CoRAL is used, the response payload includes one element for each specified parameter.
+When custom CBOR is used, the response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}. When CoRAL is used, the response payload includes one element for each specified parameter.
 
 * 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'group_name' status property for the OSCORE group. This parameter MUST be included.
 
@@ -797,7 +797,7 @@ If the verification above fails (i.e., there are no matching scope entries speci
 
 Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration properties and status properties.
 
-When custom CBOR is used, the response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{iana-ace-groupcomm-parameters}}.
+When custom CBOR is used, the response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
 
 When CoRAL is used, the response payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
@@ -881,7 +881,7 @@ The Administrator can send a FETCH request to the group-configuration resource m
 
 When custom CBOR is used, the request payload is a CBOR map, which contains the following fields:
 
-* 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{iana-ace-groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
+* 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
 
 When CoRAL is used, the request payload includes one element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified elements have no value.
 
@@ -1091,7 +1091,7 @@ The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-confi
 
 The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
-* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff', whose CBOR abbreviation is defined in {{iana-ace-groupcomm-parameters}}. This field is encoded as a CBOR array including the following two elements.
+* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff', whose CBOR abbreviation is defined in {{groupcomm-parameters}}. This field is encoded as a CBOR array including the following two elements.
 
    - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
 
@@ -1264,37 +1264,11 @@ After having deleted an OSCORE group, the Group Manager can inform the group mem
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated with that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
-# ACE Groupcomm Error Identifiers {#error-types}
+# ACE Groupcomm Parameters {#groupcomm-parameters}
 
-In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
+In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, this document defines additional parameters used in the messages exchanged between the Administrator and the Group Manager (see {{interactions}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
-~~~~~~~~~~~
-+-------+------------------------+
-| Value |      Description       |
-+-------+------------------------+
-|  10   | Group currently active |
-+-------+------------------------+
-~~~~~~~~~~~
-{: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
-
-A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.ietf-ace-key-groupcomm}}) and able to understand the specified error may use that information to determine what actions to take next. If it is included in the error response and supported by the Client, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
-
-* In case of error 10, the Client should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
-
-# Security Considerations # {#sec-security-considerations}
-
-Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
-
-# IANA Considerations # {#iana}
-
-This document has the following actions for IANA.
-
-Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with
-the RFC number of this specification and delete this paragraph.
-
-## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
-
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry defined in {{Section 11.6 of I-D.ietf-ace-key-groupcomm}}.
+Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~~~~~~~~
 +-----------------+----------+--------------+------------+
@@ -1355,6 +1329,155 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 +-----------------+----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
+
+# ACE Groupcomm Error Identifiers {#error-types}
+
+In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
+
+~~~~~~~~~~~
++-------+------------------------+
+| Value |      Description       |
++-------+------------------------+
+|  10   | Group currently active |
++-------+------------------------+
+~~~~~~~~~~~
+{: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
+
+A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.ietf-ace-key-groupcomm}}) and able to understand the specified error may use that information to determine what actions to take next. If it is included in the error response and supported by the Client, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
+
+* In case of error 10, the Client should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
+
+# Security Considerations # {#sec-security-considerations}
+
+Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
+
+# IANA Considerations # {#iana}
+
+This document has the following actions for IANA.
+
+Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with
+the RFC number of this specification and delete this paragraph.
+
+## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
+
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry defined in {{Section 11.6 of I-D.ietf-ace-key-groupcomm}}.
+
+~~~~~~~~~~~
+Name: hkdf
+CBOR Key: TBD
+CBOR Type: tstr / int
+Reference: [RFC-XXXX]
+
+Name: cred_fmt
+CBOR Key: TBD
+CBOR Type: int
+Reference: [RFC-XXXX]
+
+Name: group_mode
+CBOR Key: TBD
+CBOR Type: simple value
+Reference: [RFC-XXXX]
+
+Name: sign_enc_alg
+CBOR Key: TBD
+CBOR Type: tstr / int / simple value
+Reference: [RFC-XXXX]
+
+Name: sign_alg
+CBOR Key: TBD
+CBOR Type: tstr / int / simple value
+Reference: [RFC-XXXX]
+
+Name: sign_params
+CBOR Key: TBD
+CBOR Type: array / simple value
+Reference: [RFC-XXXX]
+
+Name: pairwise_mode
+CBOR Key: TBD
+CBOR Type: simple value
+Reference: [RFC-XXXX]
+
+Name: alg
+CBOR Key: TBD
+CBOR Type: tstr / int / simple value
+Reference: [RFC-XXXX]
+
+Name: ecdh_alg
+CBOR Key: TBD
+CBOR Type: tstr / int / simple value
+Reference: [RFC-XXXX]
+
+Name: ecdh_params
+CBOR Key: TBD
+CBOR Type: array / simple value
+Reference: [RFC-XXXX]
+
+Name: det_req
+CBOR Key: TBD
+CBOR Type: simple value
+Reference: [RFC-XXXX]
+
+Name: det_hash_alg
+CBOR Key: TBD
+CBOR Type: tstr / int
+Reference: [RFC-XXXX]
+
+Name: rt
+CBOR Key: TBD
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+
+Name: active
+CBOR Key: TBD
+CBOR Type: simple value
+Reference: [RFC-XXXX]
+
+Name: group_name
+CBOR Key: TBD
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+
+Name: group_title
+CBOR Key: TBD
+CBOR Type: tstr / simple value
+Reference: [RFC-XXXX]
+
+Name: max_stale_sets
+CBOR Key: TBD
+CBOR Type: uint
+Reference: [RFC-XXXX]
+
+Name: gid_reuse
+CBOR Key: TBD
+CBOR Type: simple value
+Reference: [RFC-XXXX]
+
+Name: app_groups
+CBOR Key: TBD
+CBOR Type: array
+Reference: [RFC-XXXX]
+
+Name: joining_uri
+CBOR Key: TBD
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+
+Name: as_uri
+CBOR Key: TBD
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+
+Name: conf_filter
+CBOR Key: TBD
+CBOR Type: array
+Reference: [RFC-XXXX]
+
+Name: app_groups_diff
+CBOR Key: TBD
+CBOR Type: array
+Reference: [RFC-XXXX]
+~~~~~~~~~~~
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
@@ -1463,6 +1586,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
 * Updated signaling of semantics for binary encoded scopes.
+
+* Split between parameter registration and their CBOR abbreviations.
 
 * Editorial improvements.
 
