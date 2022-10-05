@@ -1332,6 +1332,28 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
 
+The following holds for the Group Manager.
+
+* It MUST support and understand the parameters 'error', 'error_description', 'ace-groupcomm-profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+
+   This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
+
+* It MUST support and understand all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported and understood only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
+
+The following holds for an Administrator.
+
+* It MUST support and understand the parameters 'ace-groupcomm-profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+
+* It SHOULD support and understand the parameter 'error' defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+
+* If it supports and understands the parameter 'error', it MAY support and understand the parameter 'error_description' defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+
+* It MUST support and understand all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the following exceptions.
+
+   - 'conf_filter', which MUST be supported and understood only if the Administrator suppoorts the partial retrieval of a group configuration by filters (see {{configuration-resource-fetch}}).
+
+   - 'app_groups_diff' parameter, which MUST be supported and understood only if the Administrator suppoorts the selective update of a group configuration (see {{configuration-resource-patch}}).
+
 # ACE Groupcomm Error Identifiers {#error-types}
 
 In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
@@ -1590,6 +1612,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Updated signaling of semantics for binary encoded scopes.
 
 * Split between parameter registration and their CBOR abbreviations.
+
+* Classify parameters as must/should/may be supported.
 
 * Fixes in the examples.
 
