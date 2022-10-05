@@ -1279,7 +1279,7 @@ In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, t
 
 A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.ietf-ace-key-groupcomm}}) and able to understand the specified error may use that information to determine what actions to take next. If it is included in the error response and supported by the Client, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
 
-* In case of error 10, the Client should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before proceeding with the group deletion.
+* In case of error 10, the Client should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
 
 # Security Considerations # {#sec-security-considerations}
 
@@ -1360,26 +1360,24 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in {{Section 11.11 of I-D.ietf-ace-key-groupcomm}}.
 
-* Value: 10
-
-* Description: Group currently active.
-
-* Reference: {{&SELF}}
+~~~~~~~~~~~
+Value: 10
+Description: Group currently active.
+Reference: [RFC-XXXX]
+~~~~~~~~~~~
 
 ## Resource Types # {#iana-rt}
 
 IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
 ~~~~~~~~~~~
-+----------------+------------------------------+------------+
-| Value          | Description                  | Reference  |
-+----------------+------------------------------+------------+
-| core.osc.gcoll | Group-collection resource    | [RFC-XXXX] |
-|                | of an OSCORE Group Manager   |            |
-+----------------+------------------------------+------------+
-| core.osc.gconf | Group-configuration resource | [RFC-XXXX] |
-|                | of an OSCORE Group Manager   |            |
-+----------------+------------------------------+------------+
+Value: core.osc.gcoll
+Description: Group-collection resource of an OSCORE Group Manager
+Reference: [RFC-XXXX]
+
+Value: core.osc.gconf
+Description: Group-configuration resource of an OSCORE Group Manager
+Reference: [RFC-XXXX]
 ~~~~~~~~~~~
 
 ## Group OSCORE Admin Permissions {#ssec-iana-group-oscore-admin-permissions-registry}
