@@ -1613,7 +1613,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Split between parameter registration and their CBOR abbreviations.
 
-* Classify parameters as must/should/may be supported.
+* Classified parameters as must/should/may be supported.
 
 * Fixes in the examples.
 
