@@ -410,11 +410,11 @@ A group configuration consists of a set of parameters.
 
 ## Group Configuration Representation ## {#config-repr}
 
-The group configuration representation is a CBOR map which MUST include configuration properties and status properties.
+The group configuration representation is a CBOR map, which includes configuration properties and status properties.
 
 ### Configuration Properties ### {#config-repr-config-properties}
 
-The CBOR map MUST include the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
+The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
 
 * 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or a CBOR integer. Possible values are the same ones admitted for the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -436,8 +436,6 @@ The CBOR map MUST include the following configuration parameters, whose CBOR abb
 
 * 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value "false" (0xf4), this parameter has as value the CBOR simple value "null" (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. Possible formats and values are the same ones admitted for the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-The CBOR map MAY include the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
-
 * 'det_req', encoded as a CBOR simple value. Its value is "true" (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or "false" (0xf4) otherwise. This parameter MUST NOT be present if the configuration parameter 'group_mode' has value "false" (0xf4).
 
 * 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.amsuess-core-cachable-oscore}}. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
@@ -446,7 +444,7 @@ The CBOR map MAY include the following configuration parameters, whose CBOR abbr
 
 ### Status Properties ### {#config-repr-status-properties}
 
-The CBOR map MUST include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
+The CBOR map includes the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
 
 * 'rt', with value the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
