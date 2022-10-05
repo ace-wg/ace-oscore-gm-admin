@@ -682,7 +682,7 @@ For each parameter not specified in the request, the Group Manager refers to the
 
 After that, the Group Manager creates a new group-membership resource accessible at ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-From then on, the Group Manager will rely on the current group configuration to build the Joining Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group.
+From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group.
 
 * The OSCORE Master Secret.
 
@@ -969,7 +969,7 @@ First, the Group Manager updates the group-configuration resource, consistently 
 
 If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets in the collection of sets of stale OSCORE Sender IDs associated with the group, and deletes any possible older set from the collection (see {{Section 2.2.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-From then on, the Group Manager relies on the latest updated configuration to build the Joining Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
+From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
@@ -1047,7 +1047,7 @@ If the value of the status parameter 'active' is changed from "false" (0xf4) to 
 
 After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). To this end, messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Joining Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). To this end, messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
 
 * Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace-groupcomm-profile' are present.
 
@@ -1163,7 +1163,7 @@ Special processing occurs when updating the 'app_groups' status parameter by dif
 
    - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
 
-After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Joining Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
+After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
@@ -1258,7 +1258,7 @@ Example:
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication association established with that member during its joining process (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Joining Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace-groupcomm-profile' are present, and the 'key' parameter is the empty CBOR map.
+* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace-groupcomm-profile' are present, and the 'key' parameter is the empty CBOR map.
 
 * A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("Group deleted").
 
