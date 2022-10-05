@@ -822,12 +822,14 @@ Example in custom CBOR:
      "alg" : 10,
      "ecdh_alg" : -27,
      "ecdh_params" : [[1], [1, 6]],
+     "det_req" : false,
      "rt" : "core.osc.gconf",
      "active" : true,
      "group_name" : "gp4",
      "group_title" : "rooms 1 and 2",
      "ace-groupcomm-profile" : "coap_group_oscore_app",
      "max_stale_sets" : 3,
+     "gid_reuse" : false,
      "exp" : 1360289224,
      "app_groups": : ["room1", "room2"],
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
@@ -860,12 +862,14 @@ Example in CoRAL:
    ecdh_params.alg_capab.key_type 1
    ecdh_params.key_type_capab.key_type 1
    ecdh_params.key_type_capab.curve 6
-   rt "core.osc.gconf",
+   det_req false
+   rt "core.osc.gconf"
    active true
    group_name "gp4"
    group_title "rooms 1 and 2"
    ace-groupcomm-profile "coap_group_oscore_app"
    max_stale_sets 3
+   gid_reuse false
    exp 1360289224
    app_group "room1"
    app_group "room2"
@@ -1588,6 +1592,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Updated signaling of semantics for binary encoded scopes.
 
 * Split between parameter registration and their CBOR abbreviations.
+
+* Fixes in the examples.
 
 * Editorial improvements.
 
