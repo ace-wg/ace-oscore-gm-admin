@@ -446,33 +446,33 @@ The CBOR map MAY include the following configuration parameters, whose CBOR abbr
 
 ### Status Properties ### {#config-repr-status-properties}
 
-The CBOR map MUST include the following status parameters:
+The CBOR map MUST include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{iana-ace-groupcomm-parameters}}.
 
 * 'rt', with value the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
-* 'active', encoding the CBOR simple value "true" (0xf5) if the OSCORE group is currently active, or the CBOR simple value "false" (0xf4) otherwise. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
+* 'active', encoding the CBOR simple value "true" (0xf5) if the OSCORE group is currently active, or the CBOR simple value "false" (0xf4) otherwise.
 
-* 'group_name', with value the group name of the OSCORE group encoded as a CBOR text string. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
+* 'group_name', with value the group name of the OSCORE group encoded as a CBOR text string.
 
-* 'group_title', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
+* 'group_title', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified.
 
 * 'ace-groupcomm-profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
-* 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
+* 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group.
 
 * 'exp', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}.
 
-* 'gid_reuse', encoding the CBOR simple value "true" (0xf5) if, upon rekeying the OSCORE group, the Group Manager can reassign the values of the OSCORE Group ID used as OSCORE ID Context, as per {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}. Otherwise, this parameter encodes the CBOR simple value "false" (0xf4). This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
+* 'gid_reuse', encoding the CBOR simple value "true" (0xf5) if, upon rekeying the OSCORE group, the Group Manager can reassign the values of the OSCORE Group ID used as OSCORE ID Context, as per {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}. Otherwise, this parameter encodes the CBOR simple value "false" (0xf4).
 
 * 'app_groups', with value a list of names of application groups, encoded as a CBOR array. Each element of the array is a CBOR text string, specifying the name of an application group using the OSCORE group as security group (see {{Section 2.1 of I-D.ietf-core-groupcomm-bis}}).
 
-* 'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group as per {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR text string. This parameter is defined in {{iana-ace-groupcomm-parameters}} of this document.
+* 'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group as per {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR text string.
 
-The CBOR map MAY include the following status parameters:
+The CBOR map MAY include the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{iana-ace-groupcomm-parameters}}.
 
 * 'group_policies', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, and consistent with the format and content defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'as_uri', defined in {{iana-ace-groupcomm-parameters}} of this document, specifies the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 5 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
+* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 5 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ## Default Values {#default-values}
 
