@@ -668,7 +668,7 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 * If GROUPNAME\* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
 
-If the Group Manager does not find any group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response.
+If the Group Manager does not find any group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("No available group names").
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager.
 
@@ -1355,17 +1355,31 @@ The following holds for an Administrator.
 In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
 
 ~~~~~~~~~~~
-+-------+------------------------+
-| Value |      Description       |
-+-------+------------------------+
-|  10   | Group currently active |
-+-------+------------------------+
++-------+--------------------------+
+| Value | Description              |
++-------+--------------------------+
+| 10    | Group currently active   |
++-------+--------------------------+
+| 11    | No available group names |
++-------+--------------------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
 
 When receiving an error response from the Group Manager, an Administrator may use the information conveyed in the 'error' parameter to determine what actions to take next. If it is included in the error response, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
 
-* In case of error 10, the Administrator should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
+* In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
+
+* In case of error 11, the Administrator has the following options.
+
+   - The Administrator simply tries again later on. The new POST request to the group-collection resource specifies the group name originally suggested in the previous request that triggered the error response (see {{collection-resource-post}}). This option fundamentally relies on the Group Manager freeing up group names, hence it is not viable if considerably or indefinitely postponing the creation of the group is not acceptable.
+
+   - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response. The new group name suggested by the Administrator must be such that the following holds.
+
+      Let us define: i) S as the set of all the scope entries in the Administrator's Access Token, such that the old group name matched with each of those scope entries; ii) S' as the set of all the scope entries in the Administrator's Access Token, such that the new group name matches with each of those scope entries. Then, S' is neither equal to S nor a subset of S.
+
+   - The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.
+
+      After uploading the new Access Token to the Group Manager, the Administrator can send a new POST request to the group-collection resource. When doing so, the Administrator suggests a new group name to the Group Manager according to the same criteria discussed in the previous option.
 
 # Security Considerations # {#sec-security-considerations}
 
@@ -1507,6 +1521,10 @@ IANA is asked to register the following entry in the "ACE Groupcomm Errors" regi
 Value: 10
 Description: Group currently active.
 Reference: [RFC-XXXX]
+
+Value: 11
+Description: No available group names.
+Reference: [RFC-XXXX]
 ~~~~~~~~~~~
 
 ## Resource Types # {#iana-rt}
@@ -1610,6 +1628,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Split between parameter registration and their CBOR abbreviations.
 
 * Classified parameters as must/should/may be supported.
+
+* New error code "No available group names" and related guidelines.
 
 * Fixes in the examples.
 
