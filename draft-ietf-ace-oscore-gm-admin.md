@@ -73,7 +73,6 @@ normative:
   RFC8174:
   RFC8610:
   RFC8613:
-  RFC8742:
   RFC8949:
   RFC9052:
   RFC9053:
@@ -93,7 +92,6 @@ informative:
   I-D.hartke-t2trg-coral-reef:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
-  RFC6347:
   RFC7925:
   RFC8392:
   RFC9147:
@@ -348,7 +346,7 @@ All communications between the involved entities rely on the CoAP protocol and M
 
 In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
 
-With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}}{{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
+With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
 
 In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of RFC9200}}).
 
@@ -384,7 +382,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    Finally, as discussed in {{scope-format}}, the authorization information included in the Authorization Request or specified by the AS might also include permissions for the same Client as a user of the OSCORE group, i.e., as an actual group member or an external signature verifier. As per {{scope-format}}, such authorization information is expressed by "user scope entries", whose format and processing is specified in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{RFC9202}} and {{RFC9203}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC6347}}{{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
+3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{RFC9202}} and {{RFC9203}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
 4. Consistently with what is allowed by the authorization information in the Access Token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, retrieving and changing OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
 
