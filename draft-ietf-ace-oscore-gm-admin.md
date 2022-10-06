@@ -1342,11 +1342,7 @@ The following holds for the Group Manager.
 
 The following holds for an Administrator.
 
-* It MUST support and understand the parameters 'ace-groupcomm-profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
-
-* It SHOULD support and understand the parameter 'error' defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
-
-* If it supports and understands the parameter 'error', it MAY support and understand the parameter 'error_description' defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support and understand the parameters 'error', 'error_description', 'ace-groupcomm-profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
 * It MUST support and understand all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
@@ -1367,9 +1363,9 @@ In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, t
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
 
-A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.ietf-ace-key-groupcomm}}) and able to understand the specified error may use that information to determine what actions to take next. If it is included in the error response and supported by the Client, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
+When receiving an error response from the Group Manager, an Administrator may use the information conveyed in the 'error' parameter to determine what actions to take next. If it is included in the error response, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
 
-* In case of error 10, the Client should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
+* In case of error 10, the Administrator should stop sending the request in question to the Group Manager, until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
 
 # Security Considerations # {#sec-security-considerations}
 
