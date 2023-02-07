@@ -1328,11 +1328,11 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 
 The following holds for the Group Manager.
 
-* It MUST support and understand the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
    This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
-* It MUST support and understand all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported and understood only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
+* It MUST support all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported and understood only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
 
 The following holds for an Administrator.
 
