@@ -516,6 +516,8 @@ When checking the scope claim of a stored access token to verify that any of the
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
+When CoRAL is used, the Content-Format in messages containing a payload is set to application/coral+cbor, defined in {{Section 7.2 of I-D.ietf-core-coral}}.
+
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
 This operation MUST be supported by the Group Manager and an Administrator.
@@ -551,7 +553,7 @@ Example in CoRAL:
    Uri-Path: manage
 
 <= 2.05 Content
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gcoll#>
    #base </manage/>
@@ -602,14 +604,14 @@ Example in CoRAL:
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: manage
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    group_mode true
    sign_enc_alg 10
    hkdf 5
 
 <= 2.05 Content
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gcoll#>
    #base </manage/>
@@ -755,7 +757,7 @@ Example in CoRAL:
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: manage
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    sign_enc_alg 10
@@ -771,7 +773,7 @@ Example in CoRAL:
 <= 2.01 Created
    Location-Path: manage
    Location-Path: gp4
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    group_name "gp4"
@@ -839,7 +841,7 @@ Example in CoRAL:
    Uri-Path: gp4
 
 <= 2.05 Content
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    hkdf 5
@@ -926,7 +928,7 @@ Example in CoRAL:
 => 0.05 FETCH
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    sign_enc_alg
@@ -937,7 +939,7 @@ Example in CoRAL:
    app_groups
 
 <= 2.05 Content
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    sign_enc_alg 10
@@ -1020,14 +1022,14 @@ Example in CoRAL:
 => 0.03 PUT
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    sign_enc_alg 11
    hkdf 5
 
 <= 2.04 Changed
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    group_name "gp4"
@@ -1195,7 +1197,7 @@ Example in CoRAL:
 => 0.06 PATCH
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    sign_enc_alg 10
@@ -1204,7 +1206,7 @@ Example in CoRAL:
    app_group_add "room4"
 
 <= 2.04 Changed
-   Content-Format: TBD1 (application/coral+cbor)
+   Content-Format: 65087 (application/coral+cbor)
 
    #using <http://coreapps.org/core.osc.gconf#>
    group_name "gp4"
