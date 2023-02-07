@@ -400,9 +400,21 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
 
-## On Enforcing Different Classes of Administrators
+## Multiple Administrators for the Same OSCORE Group
 
-Given an OSCORE group created by a "main" primary Administrator, then "assistant" secondary Administrators can be effectively authorized to perform some operations on that group.
+In addition to a "main" primary Administrator responsible for an OSCORE group at the Group Manager, it is also possible to have "assistant" secondary Administrators that are effectively authorized to perform some operations on the same OSCORE group.
+
+With respect to the main Administrator, such assistant Administrators are expected to have less permissions to perform administrative operations related to the OSCORE group at the Group Manager. For example, they may not be authorized to create the OSCORE group if not existing already, or to delete the OSCORE group and its configuration.
+
+In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new Access Token and to upload it to the Group Manager. If allowed by the used transport profile of ACE, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
+
+If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator ensures to have a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-put}})), updating (see {{configuration-resource-patch}}) or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
+
+* The Administrator performs a regular polling of the group configuration, by sending a GET request to the corresponding group-configuration resource (see {{configuration-resource-get}}).
+
+* If the group-configuration resource associated with the OSCORE group is Observable, then the Administrator subscribes to that resource by using CoAP Observe {{RFC7641}}. The Observation request is a GET request sent to the group-configuration resource (see {{configuration-resource-get}}). In such a case, the Group Manager will also send a 4.04 (Not Found) response in case another Administrator deletes the group-configuration resource, as a result of deleting the associated OSCORE group and its configuration.
+
+If the Administrator gains knowledge that the group configuration has changed compared to the latest known representation, then the Administrator might hold the execution of writing or deletion operation on the group-configuration resource, and first attempt checking with other Administrators responsible for the same OSCORE group about the changes they have made.
 
 # Group Configurations # {#group-configurations}
 
