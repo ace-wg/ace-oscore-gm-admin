@@ -581,7 +581,7 @@ Example in custom CBOR and Link Format:
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: manage
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
        "group_mode" : true,
@@ -725,7 +725,7 @@ Example in custom CBOR:
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: manage
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "sign_enc_alg" : 10,
@@ -741,7 +741,7 @@ Example in custom CBOR:
 <= 2.01 Created
    Location-Path: manage
    Location-Path: gp4
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "group_name" : "gp4",
@@ -803,7 +803,7 @@ Example in custom CBOR:
    Uri-Path: gp4
 
 <= 2.05 Content
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "hkdf" : 5,
@@ -895,7 +895,7 @@ Example in custom CBOR:
 => 0.05 FETCH
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "conf_filter" : ["sign_enc_alg",
@@ -907,7 +907,7 @@ Example in custom CBOR:
    }
 
 <= 2.05 Content
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "sign_enc_alg" : 10,
@@ -997,7 +997,7 @@ Example in custom CBOR:
 => 0.03 PUT
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "sign_enc_alg" : 11,
@@ -1005,7 +1005,7 @@ Example in custom CBOR:
    }
 
 <= 2.04 Changed
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "group_name" : "gp4",
@@ -1171,7 +1171,7 @@ Example in custom CBOR:
 => 0.06 PATCH
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "sign_enc_alg" : 10,
@@ -1180,7 +1180,7 @@ Example in custom CBOR:
    }
 
 <= 2.04 Changed
-   Content-Format: TBD2 (application/ace-groupcomm+cbor)
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
      "group_name" : "gp4",
