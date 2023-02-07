@@ -452,7 +452,7 @@ The CBOR map includes the following status parameters. Unless specified otherwis
 
 * 'group_title', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified.
 
-* 'ace-groupcomm-profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
+* 'ace_groupcomm_profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
 * 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores in the collection associated with the group.
 
@@ -638,7 +638,7 @@ In particular:
 
    When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
-* The payload MUST NOT include any of the status parameters 'rt', 'ace-groupcomm-profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
+* The payload MUST NOT include any of the status parameters 'rt', 'ace_groupcomm_profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
 
 Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether the group name specified in the 'group_name' parameter matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Create".
 
@@ -821,7 +821,7 @@ Example in custom CBOR:
      "active" : true,
      "group_name" : "gp4",
      "group_title" : "rooms 1 and 2",
-     "ace-groupcomm-profile" : "coap_group_oscore_app",
+     "ace_groupcomm_profile" : "coap_group_oscore_app",
      "max_stale_sets" : 3,
      "gid_reuse" : false,
      "exp" : 1360289224,
@@ -861,7 +861,7 @@ Example in CoRAL:
    active true
    group_name "gp4"
    group_title "rooms 1 and 2"
-   ace-groupcomm-profile "coap_group_oscore_app"
+   ace_groupcomm_profile "coap_group_oscore_app"
    max_stale_sets 3
    gid_reuse false
    exp 1360289224
@@ -1047,7 +1047,7 @@ After having overwritten a group configuration, the Group Manager informs the me
 
 To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). To this end, messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
 
-* Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace-groupcomm-profile' are present.
+* Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace_groupcomm_profile' are present.
 
 * The 'key' parameter includes only the parameters 'hkdf', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params', 'alg', 'ecdh_alg' and 'ecdh_params', with values reflecting the new configuration of the OSCORE group.
 
@@ -1254,7 +1254,7 @@ Example:
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication association established with that member during its joining process (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace-groupcomm-profile' are present, and the 'key' parameter is the empty CBOR map.
+* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace_groupcomm_profile' are present, and the 'key' parameter is the empty CBOR map.
 
 * A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("Group deleted").
 
@@ -1328,7 +1328,7 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 
 The following holds for the Group Manager.
 
-* It MUST support and understand the parameters 'error', 'error_description', 'ace-groupcomm-profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support and understand the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
    This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
@@ -1336,7 +1336,7 @@ The following holds for the Group Manager.
 
 The following holds for an Administrator.
 
-* It MUST support and understand the parameters 'error', 'error_description', 'ace-groupcomm-profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support and understand the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
 * It MUST support and understand all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
@@ -1612,6 +1612,12 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -07 to -08 ## {#sec-07-08}
+
+* Consistency of parameter names.
+
+* Editorial improvements.
 
 ## Version -06 to -07 ## {#sec-06-07}
 
