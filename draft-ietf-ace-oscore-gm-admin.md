@@ -328,15 +328,13 @@ The coexistence of user scope entries and admin scope entries within the same sc
 
 Throughout the rest of this document, the term "scope entry" is used as referred to "admin scope entry", unless otherwise indicated.
 
-## On Enforcing Different Classes of Administrators
+## On Using Group Name Patterns
 
-By relying on the scope format defined in this document and given an OSCORE group G1 created by a "main" Administrator, then a second "assistant" Administrator can be effectively authorized to perform some operations on G1, in spite of not being the group creator.
+Having the object identifier ("Toid") specialized as a pattern displays a number of advantages.
 
-Furthermore, having the object identifier ("Toid") specialized as a pattern displays a number of advantages.
+* When relying on wildcard patterns and complex patterns, the encoded scope can be compact in size while allowing the Administrator to operate on large pools of group names.
 
-* The encoded scope can be compact in size, while allowing the Administrator to operate on large pools of group names.
-
-* The Administrator and the AS do not need to know exact group names when requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
+* When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know exact group names for requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
 
 * The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the invalidation of T1 (e.g., due to expiration) and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
 
@@ -401,6 +399,10 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
    In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of RFC9200}}, in which case the Content-Format MUST be set to application/ace+cbor.
 
    If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
+
+## On Enforcing Different Classes of Administrators
+
+Given an OSCORE group created by a "main" primary Administrator, then "assistant" secondary Administrators can be effectively authorized to perform some operations on that group.
 
 # Group Configurations # {#group-configurations}
 
@@ -1618,6 +1620,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -07 to -08 ## {#sec-07-08}
 
 * Consistency of parameter names.
+
+* New section on multiple, concurrent Administrators.
 
 * Clarifications and editorial improvements.
 
