@@ -231,7 +231,7 @@ The list can be represented as a Link Format document {{RFC6690}} or a CoRAL doc
 
 In the former case, the link to each group-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "core.osc.gconf" defined in {{iana-rt}} of this document.
 
-In the latter case, the CoRAL document specifies the group-configuration resources in the list as top-level elements. In particular, the link to each group-configuration resource has http://coreapps.org/core.osc.gcoll#item as relation type.
+In the latter case, the CoRAL document specifies the group-configuration resources in the list as top-level link elements. In particular, the link to each group-configuration resource has http://coreapps.org/core.osc.gcoll#item as relation type.
 
 ## Discovery
 
@@ -570,7 +570,7 @@ The Administrator can send a FETCH request to the group-collection resource, in 
 
 When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
-When CoRAL is used, the filter criteria are specified in the request payload with top-level elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
+When CoRAL is used, the filter criteria are specified in the request payload with top-level link elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate link element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
 
 The Group Manager MUST prepare the list L to include in the response as follows.
 
@@ -628,7 +628,7 @@ The Administrator can send a POST request to the group-collection resource, in o
 
 When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
 
-When CoRAL is used, each element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter (see below).
+When CoRAL is used, each link element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter (see below).
 
 In particular:
 
@@ -648,7 +648,7 @@ If the verification above fails (i.e., there are no matching scope entries speci
 
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
-* Any of the received parameters is specified multiple times, with the exception of the 'app_group' element when using CoRAL.
+* Any of the received parameters is specified multiple times, with the exception of the 'app_group' link element when using CoRAL.
 
 * Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters.
 
@@ -690,7 +690,7 @@ Finally, the Group Manager replies to the Administrator with a 2.01 (Created) re
 
 The response payload specifies the parameters 'group_name', 'joining_uri' and 'as_uri', from the status properties of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
-When custom CBOR is used, the response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}. When CoRAL is used, the response payload includes one element for each specified parameter.
+When custom CBOR is used, the response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}. When CoRAL is used, the response payload includes one link element for each specified parameter.
 
 * 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'group_name' status property for the OSCORE group. This parameter MUST be included.
 
@@ -708,7 +708,7 @@ Alternatively, the Administrator can perform the registration in the Resource Di
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.01 (Created) response.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter (when custom CBOR is used) or by the different 'app_group' elements (when CoRAL is used) in the POST request.
+* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter (when custom CBOR is used) or by the different 'app_group' link elements (when CoRAL is used) in the POST request.
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.01 (Created) response.
 
@@ -795,7 +795,7 @@ Otherwise, after a successful processing of the GET request, the Group Manager r
 
 When custom CBOR is used, the response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
 
-When CoRAL is used, the response payload includes one element for each entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
+When CoRAL is used, the response payload includes one link element for each entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate link element with name 'app_group'.
 
 Example in custom CBOR:
 
@@ -883,7 +883,7 @@ When custom CBOR is used, the request payload is a CBOR map, which contains the 
 
 * 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
 
-When CoRAL is used, the request payload includes one element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified elements have no value.
+When CoRAL is used, the request payload includes one link element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified link elements have no value.
 
 The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
@@ -981,7 +981,7 @@ Alternatively, the Administrator can update the registration in the Resource Dir
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.04 (Changed) response.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter (when custom CBOR is used) or by the different 'app_group' elements (when CoRAL is used) in the PUT request.
+* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter (when custom CBOR is used) or by the different 'app_group' link elements (when CoRAL is used) in the PUT request.
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.04 (Changed) response.
 
@@ -1109,17 +1109,17 @@ The request payload has the same format of the PUT request defined in {{configur
 
    The Group Manager MUST respond with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
-* When CoRAL is used, the request payload includes the following top-level elements.
+* When CoRAL is used, the request payload includes the following top-level link elements.
 
-   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This element can be included multiple times.
+   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This link element can be included multiple times.
 
-   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This element can be included multiple times.
+   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This link element can be included multiple times.
 
-   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the request payload includes both any 'app_group' element as well as any 'app_group_del' and/or 'app_group_add' element.
+   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the request payload includes both any 'app_group' link element as well as any 'app_group_del' and/or 'app_group_add' link element.
 
 The error handling for the PATCH/iPATCH request is the same as for the PUT request defined in {{configuration-resource-put}}, with the following additions.
 
-* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map (when custom CBOR is used) or no elements (when CoRAL is used).
+* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map (when custom CBOR is used) or no link elements (when CoRAL is used).
 
 * If the Request-URI does not point to an existing group-configuration resource, the Group Manager MUST NOT create a new resource, and MUST respond with a 4.04 (Not Found) response.
 
@@ -1131,7 +1131,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
    - When custom CBOR is used, the CBOR map includes the parameter 'app_groups_diff'; or
 
-   - When CoRAL is used, any element 'app_group_del' and/or 'app_group_add' is included.
+   - When CoRAL is used, any link element 'app_group_del' and/or 'app_group_add' is included.
 
 Furthermore, the Group Manager MUST perform the same authorization checks defined for the processing of a PUT request to a group-configuration resource in {{configuration-resource-put}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Write" permission applicable to the targeted group-configuration resource.
 
@@ -1157,9 +1157,9 @@ Special processing occurs when updating the 'app_groups' status parameter by dif
 
 * When CoRAL is used, the Group Manager:
 
-   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_del' elements.
+   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_del' link elements.
 
-   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' elements.
+   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' link elements.
 
 After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -1619,7 +1619,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Consistency of parameter names.
 
-* Editorial improvements.
+* Clarifications and editorial improvements.
 
 ## Version -06 to -07 ## {#sec-06-07}
 
