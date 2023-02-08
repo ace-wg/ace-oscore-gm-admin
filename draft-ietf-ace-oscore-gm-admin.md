@@ -1633,9 +1633,11 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Consistency of parameter names.
 
+* More details on payload consistency.
+
 * New section on multiple, concurrent Administrators.
 
-* Clarifications and editorial improvements.
+* Various clarifications and editorial improvements.
 
 ## Version -06 to -07 ## {#sec-06-07}
 
