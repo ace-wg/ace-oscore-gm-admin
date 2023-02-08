@@ -536,7 +536,7 @@ When CoRAL is used, the Content-Format in messages containing a payload is set t
 
 * If a message payload specifies a link element corresponding to a structured parameter, then the payload MUST NOT include any link element corresponding to an inner information element of that structured parameter.
 
-* If a message payload specifies a link element corresponding to a structured parameter, then that link element MUST have the link target with value "false" for indicating the structured parameter with no elements.
+* If a message payload specifies a link element corresponding to a structured parameter, then that link element MUST have the link target with value "false" (0xf4) for indicating the structured parameter with no elements.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
