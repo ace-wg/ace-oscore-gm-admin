@@ -897,7 +897,7 @@ When custom CBOR is used, the request payload is a CBOR map, which contains the 
 
 * 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
 
-When CoRAL is used, the request payload includes one link element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified link elements have no value.
+When CoRAL is used, the request payload includes one link element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified link elements have the link target with value "null".
 
 The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
