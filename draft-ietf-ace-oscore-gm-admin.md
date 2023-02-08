@@ -903,7 +903,7 @@ The Group Manager MUST perform the same authorization checks defined for the pro
 
 After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration properties and status properties requested by the Administrator in the FETCH request.
 
-The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}).
+The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}). If the request payload specifies a parameter that is not included in the group configuration, then the response payload MUST NOT include a corresponding parameter (when Custom CBOR is used) or link element (when CoRAL is used).
 
 Example in custom CBOR:
 
