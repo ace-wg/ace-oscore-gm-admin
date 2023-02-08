@@ -607,8 +607,8 @@ Example in custom CBOR and Link Format:
 
    {
        "group_mode" : true,
-       "sign_enc_alg" : 10,
-       "hkdf" : 5
+     "sign_enc_alg" : 10,
+             "hkdf" : 5
    }
 
 <= 2.05 Content
@@ -750,14 +750,14 @@ Example in custom CBOR:
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "sign_enc_alg" : 10,
-     "hkdf" : 5,
+      "sign_enc_alg" : 10,
+              "hkdf" : 5,
      "pairwise_mode" : true,
-     "active" : true,
-     "group_name" : "gp4",
-     "group_title" : "rooms 1 and 2",
-     "app_groups": : ["room1", "room2"],
-     "as_uri" : "coap://as.example.com/token"
+            "active" : true,
+        "group_name" : "gp4",
+       "group_title" : "rooms 1 and 2",
+        "app_groups" : ["room1", "room2"],
+            "as_uri" : "coap://as.example.com/token"
    }
 
 <= 2.01 Created
@@ -766,9 +766,9 @@ Example in custom CBOR:
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "group_name" : "gp4",
+      "group_name" : "gp4",
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-     "as_uri" : "coap://as.example.com/token"
+          "as_uri" : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -828,28 +828,28 @@ Example in custom CBOR:
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "hkdf" : 5,
-     "cred_fmt" : 33,
-     "group_mode" : true,
-     "sign_enc_alg" : 10,
-     "sign_alg" : -8,
-     "sign_params" : [[1], [1, 6]],
-     "pairwise_mode" : true,
-     "alg" : 10,
-     "ecdh_alg" : -27,
-     "ecdh_params" : [[1], [1, 6]],
-     "det_req" : false,
-     "rt" : "core.osc.gconf",
-     "active" : true,
-     "group_name" : "gp4",
-     "group_title" : "rooms 1 and 2",
+                      "hkdf" : 5,
+                  "cred_fmt" : 33,
+                "group_mode" : true,
+              "sign_enc_alg" : 10,
+                  "sign_alg" : -8,
+               "sign_params" : [[1], [1, 6]],
+             "pairwise_mode" : true,
+                       "alg" : 10,
+                  "ecdh_alg" : -27,
+               "ecdh_params" : [[1], [1, 6]],
+                   "det_req" : false,
+                        "rt" : "core.osc.gconf",
+                    "active" : true,
+                "group_name" : "gp4",
+               "group_title" : "rooms 1 and 2",
      "ace_groupcomm_profile" : "coap_group_oscore_app",
-     "max_stale_sets" : 3,
-     "gid_reuse" : false,
-     "exp" : 1360289224,
-     "app_groups": : ["room1", "room2"],
-     "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-     "as_uri" : "coap://as.example.com/token"
+            "max_stale_sets" : 3,
+                 "gid_reuse" : false,
+                       "exp" : 1360289224,
+                "app_groups" : ["room1", "room2"],
+               "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
+                    "as_uri" : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -932,12 +932,12 @@ Example in custom CBOR:
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "sign_enc_alg" : 10,
-     "hkdf" : 5,
+      "sign_enc_alg" : 10,
+              "hkdf" : 5,
      "pairwise_mode" : true,
-     "active" : true,
-     "group_title" : "rooms 1 and 2",
-     "app_groups": : ["room1", "room2"]
+            "active" : true,
+       "group_title" : "rooms 1 and 2",
+        "app_groups" : ["room1", "room2"]
    }
 
 ~~~~~~~~~~~
@@ -1023,16 +1023,16 @@ Example in custom CBOR:
 
    {
      "sign_enc_alg" : 11,
-     "hkdf" : 5
+             "hkdf" : 5
    }
 
 <= 2.04 Changed
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "group_name" : "gp4",
+      "group_name" : "gp4",
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-     "as_uri" : "coap://as.example.com/token"
+          "as_uri" : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -1196,7 +1196,7 @@ Example in custom CBOR:
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "sign_enc_alg" : 10,
+        "sign_enc_alg" : 10,
      "app_groups_diff" : [["room1"],
                           ["room3", "room4"]]
    }
@@ -1205,9 +1205,9 @@ Example in custom CBOR:
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
    {
-     "group_name" : "gp4",
+      "group_name" : "gp4",
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-     "as_uri" : "coap://as.example.com/token"
+          "as_uri" : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
