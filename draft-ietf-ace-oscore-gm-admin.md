@@ -121,7 +121,7 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to configure and update their configuration.
 
-Interaction examples are provided, in Link Format {{RFC6690}} and CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. While all the CoRAL examples show the CoRAL textual serialization format, its binary serialization format is used on the wire.
+Interaction examples are provided, in Link Format {{RFC6690}} and Custom CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. The examples in Custom CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations. While all the CoRAL examples show the CoRAL textual serialization format, its binary serialization format is used on the wire.
 
 \[ NOTE:
 
