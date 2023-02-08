@@ -530,7 +530,13 @@ When checking the scope claim of a stored access token to verify that any of the
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
-When CoRAL is used, the Content-Format in messages containing a payload is set to application/coral+cbor, defined in {{Section 7.2 of I-D.ietf-core-coral}}. In addition, the parameters 'sign_params', 'ecdh_params', 'app_groups' and 'group_policies' are referred to as "structured parameters".
+When CoRAL is used, the Content-Format in messages containing a payload is set to application/coral+cbor, defined in {{Section 7.2 of I-D.ietf-core-coral}}. In addition, the following applies.
+
+* The parameters 'sign_params', 'ecdh_params', 'app_groups' and 'group_policies' are referred to as "structured parameters".
+
+* If a message payload specifies a link element corresponding to a structured parameter, then the payload MUST NOT include any link element corresponding to an inner information element of that structured parameter.
+
+* If a message payload specifies a link element corresponding to a structured parameter, then that link element MUST have the link target with value "false" for indicating the structured parameter with no elements.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
@@ -897,7 +903,7 @@ When custom CBOR is used, the request payload is a CBOR map, which contains the 
 
 * 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
 
-When CoRAL is used, the request payload includes one link element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified link elements have the link target with value "null".
+When CoRAL is used, the request payload includes one link element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified link elements MUST have the link target with value "null". Also, the request payload MUST NOT include any link element corresponding to an inner information element of a structured parameter.
 
 The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
@@ -1633,7 +1639,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Consistency of parameter names.
 
-* More details on payload consistency.
+* More details on consistency of message payload.
 
 * New section on multiple, concurrent Administrators.
 
