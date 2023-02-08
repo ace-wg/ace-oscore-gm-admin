@@ -530,7 +530,7 @@ When checking the scope claim of a stored access token to verify that any of the
 
 When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
-When CoRAL is used, the Content-Format in messages containing a payload is set to application/coral+cbor, defined in {{Section 7.2 of I-D.ietf-core-coral}}.
+When CoRAL is used, the Content-Format in messages containing a payload is set to application/coral+cbor, defined in {{Section 7.2 of I-D.ietf-core-coral}}. In addition, the parameters 'sign_params', 'ecdh_params', 'app_groups' and 'group_policies' are referred to as "structured parameters".
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
