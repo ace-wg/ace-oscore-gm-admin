@@ -304,7 +304,7 @@ The following CDDL {{RFC8610}} notation defines an admin scope entry that uses t
    AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
 
    oscore-gname = true / tstr / #6.nnn(any) ; Group name pattern
-   oscore-gperm = uint . bits admin-permissions
+   oscore-gperm = uint .bits admin-permissions
    admin-permissions = &(
       List: 0,
       Create: 1,
