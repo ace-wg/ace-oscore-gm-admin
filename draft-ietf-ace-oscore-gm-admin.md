@@ -694,7 +694,9 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 If the Group Manager does not find any group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("No available group names").
 
-Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager.
+Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
+
+The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic.
 
 The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
 
@@ -993,7 +995,9 @@ If the updated group configuration would include parameter values that prevent t
 
 If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. The corresponding group-membership resource is also accordingly updated.
+
+The operation of overwriting the group-configuration resource and accordingly updating the group-membership resource MUST be atomic.
 
 If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -1167,7 +1171,9 @@ If the updated group configuration would include parameter values that prevent t
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also accordingly updated.
+
+The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic.
 
 Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
 
@@ -1268,7 +1274,9 @@ If, upon receiving the DELETE request, the current value of the status parameter
 
 After a successful processing of the DELETE request, the Group Manager performs the following actions.
 
-First, the Group Manager deletes the OSCORE group and deallocates both the group-configuration resource as well as the group-membership resource associated with that group.
+First, the Group Manager deletes the OSCORE group, deallocates both the group-configuration resource as well as the group-membership resource associated with that group, and accordingly updates the group-collection resource.
+
+The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic.
 
 Then, the Group Manager replies to the Administrator with a 2.02 (Deleted) response.
 
@@ -1668,6 +1676,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * More details on consistency of message payload.
 
 * New section on multiple, concurrent Administrators.
+
+* Specified atomicity of write operations.
 
 * New ACE Groupcomm Error on unsupported configuration.
 
