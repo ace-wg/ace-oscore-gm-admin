@@ -1113,6 +1113,8 @@ Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 's
 
    - Provide the Group Manager with a new authentication credential to use in the OSCORE group (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}). The new authentication credential MUST be in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
+      Consistently, the group member has to retrieve the new authentication credentials of other group members as they are uploaded to the Group Manager (see {{Section 9.3 of I-D.ietf-ace-key-groupcomm-oscore}}). In order to ensure the retrieval of latest authentication credentials that are consistent with the new group configuration, it is preferable that the group member retrieves such authentication credentials after a pre-configured time interval has elapsed since uploading its own authentication credential. Later on, the group member will need to retrieve other group members' authentication credentials that it is still missing and that it needs for processing messages exchanged in the OSCORE group.
+
    - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
@@ -1678,6 +1680,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * New section on multiple, concurrent Administrators.
 
 * Specified atomicity of write operations.
+
+* Clarified effects of configuration overwriting on group members.
 
 * New ACE Groupcomm Error on unsupported configuration.
 
