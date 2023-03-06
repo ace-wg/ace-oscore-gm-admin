@@ -670,6 +670,8 @@ Consistently with what is defined at step 4 of {{getting-access}}, the Group Man
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Create" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
 
+If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
+
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
 * Any of the received parameters is specified multiple times, with the exception of the 'app_group' link element when using CoRAL.
@@ -987,6 +989,8 @@ Consistently with what is defined at step 4 of {{getting-access}}, the Group Man
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Write" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}.
 
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
+
 If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
 
 First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. For each parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}.
@@ -1158,6 +1162,8 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
    - When CoRAL is used, any link element 'app_group_del' and/or 'app_group_add' is included.
 
 Furthermore, the Group Manager MUST perform the same authorization checks defined for the processing of a PUT request to a group-configuration resource in {{configuration-resource-put}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Write" permission applicable to the targeted group-configuration resource.
+
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
@@ -1375,13 +1381,15 @@ The following holds for an Administrator.
 In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
 
 ~~~~~~~~~~~
-+-------+--------------------------+
-| Value | Description              |
-+-------+--------------------------+
-| 10    | Group currently active   |
-+-------+--------------------------+
-| 11    | No available group names |
-+-------+--------------------------+
++-------+---------------------------------+
+| Value | Description                     |
++-------+---------------------------------+
+| 10    | Group currently active          |
++-------+---------------------------------+
+| 11    | No available group names        |
++-------+---------------------------------+
+| 12    | Unsupported group configuration |
++-------+---------------------------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
 
@@ -1400,6 +1408,16 @@ When receiving an error response from the Group Manager, an Administrator may us
    - The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.
 
       After uploading the new Access Token to the Group Manager, the Administrator can send a new POST request to the group-collection resource. When doing so, the Administrator suggests a new group name to the Group Manager, according to the same criteria discussed for the previous option.
+
+* In case of error 12, the Administrator has the following options.
+
+   - If the Administrator has attempted to create a new group configuration (see {{collection-resource-post}}), the Administrator can take into account what the Group Manager specifies in the 'error_description' parameter of the error response, and send a new request to the Group Manager for accordingly creating the group configuration.
+
+      This requires that the Administrator finds acceptable to create a group configuration different from the originally intended one.
+
+   - If the Administrator has attempted to overwrite (see {{configuration-resource-put}}) or selectively update (see {{configuration-resource-patch}}) an existing group configuration, the Administrator can take into account what the Group Manager specifies in the 'error_description' parameter of the error response, and send a new request to the Group Manager for accordingly overwriting or selectively updating the group configuration.
+
+      This requires that the Administrator finds acceptable to overwrite or update the current group configuration differently than how it was originally intended. If this is not attainable, the Administrator may decide to not take further actions and keep the current group configuration as is, or instead to delete the group configuration altogether (see {{configuration-resource-delete}}).
 
 # Security Considerations # {#sec-security-considerations}
 
@@ -1539,11 +1557,15 @@ IANA is asked to register the following entry in the "ACE Groupcomm Errors" regi
 
 ~~~~~~~~~~~
 Value: 10
-Description: Group currently active.
+Description: Group currently active
 Reference: [RFC-XXXX]
 
 Value: 11
-Description: No available group names.
+Description: No available group names
+Reference: [RFC-XXXX]
+
+Value: 12
+Description: Unsupported group configuration
 Reference: [RFC-XXXX]
 ~~~~~~~~~~~
 
@@ -1646,6 +1668,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * More details on consistency of message payload.
 
 * New section on multiple, concurrent Administrators.
+
+* New ACE Groupcomm Error on unsupported configuration.
 
 * Possible reason to deviate from default parameter values.
 
