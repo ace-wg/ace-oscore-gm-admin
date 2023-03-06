@@ -486,6 +486,10 @@ The CBOR map includes the following status parameters. Unless specified otherwis
 
 This section defines the default values that the Group Manager refers to for configuration and status parameters.
 
+A possible reason for the Group Manager to consider default values different from those recommended in this section is to ensure that each of those are consistent with what the Group Manager supports, e.g., in terms of signature algorithm and format of authentication credentials used in the OSCORE group.
+
+This ensures that the Group Manager is able to perform the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}}, as to its interactions with joining nodes and current group members for an OSCORE group (see {{Section 14 of I-D.ietf-ace-key-groupcomm-oscore}}).
+
 ### Configuration Parameters {#default-values-conf}
 
 For each of the configuration parameters listed below, the Group Manager refers to the following pre-configured default value, if none is specified by the Administrator.
@@ -1642,6 +1646,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * More details on consistency of message payload.
 
 * New section on multiple, concurrent Administrators.
+
+* Possible reason to deviate from default parameter values.
 
 * Various clarifications and editorial improvements.
 
