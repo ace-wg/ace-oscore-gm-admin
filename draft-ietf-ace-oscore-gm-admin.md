@@ -92,10 +92,13 @@ informative:
   I-D.hartke-t2trg-coral-reef:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
+  I-D.ietf-ace-revoked-token-notification:
   RFC7925:
+  RFC7959:
   RFC8392:
   RFC9147:
   RFC9176:
+  RFC9177:
   RFC9202:
 
 entity:
@@ -1433,6 +1436,46 @@ When receiving an error response from the Group Manager, an Administrator may us
 
 Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
 
+The same security considerations from {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with particular reference to the process of rekeying OSCORE groups.
+
+Further security considerations are compiled below.
+
+## Change of Group Configuration
+
+With respect to changing group configurations, the following security considerations hold.
+
+* A change of the current group configuration (see {{configuration-resource-put}} and {{configuration-resource-patch}}) might result in generating and distributing new group keying material, consistently with the newly enforced algorithms and related parameters. In such a case, the Group Manager can perform a group rekeying as per {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}, or provide the new group keying material together with the new group configuration as per {{configuration-resource-put}} and {{configuration-resource-patch}} of this document.
+
+   After gaining knowledge of the new group configuration, current group members may also leave the OSCORE group and rejoin it, hence obtaining the new group configuration parameters and the up-to-date group keying material. When this happens, the Group Manager SHOULD NOT repeatedly rekey the group upon the re-join of every current group member, each of which is identifiable by means of the secure association that it has with the Group Manager.
+
+   Shortly following an update of group configuration, the Group Manager SHOULD prioritize the re-join of such current group members before processing Join Requests from new group members.
+
+* Following the enforcement of a new group configuration, a group member might support it while not deeming it conducive to a sufficient security level (e.g., in terms of security algorithms and related parameters). In such a case, it is RECOMMENDED that the group member leaves the group.
+
+* A change of the current group configuration, possibly also requiring a group rekeying, might result in temporarily preventing communications among some group members altogether, until they have aligned themselves to the new group configuration. This is especially the case for a change of group configuration affecting the security algorithms and related parameters used in the group.
+
+   Furthermore, a change of group configuration might interfere with ongoing, extended exchanges between group members, especially Block-Wise transfers {{RFC7959}}{{RFC9177}} and the transmission of Observe notifications for ongoing Observations {{RFC7641}}.
+
+   A group configuration (possibly together with the group keying material) may have been updated while a Block-Wise transfer is ongoing between two group members. This will result in blocks being resent, if the block sender and recipient are not yet both aligned with the new group configuration (and group keying material), in which case the block recipient would reply with an error message.
+
+   After a change of group configuration, a group member MUST terminate an ongoing Observation if the new group configuration would not have allowed to compute exactly the Observe request associated with the ongoing Observation. This occurs, for example, when the new group configuration specifies a signature algorithm different than the one used in the group when the Observe request was protected.
+
+## Group Manager
+
+In addition to what is discussed in {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different than the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
+
+Although this is undesirable, it is not worse than the control that the adversary would gain on the group keying material through the compromised Group Manager (see {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}).
+
+Unlike what is defined in {{Section 10.2 of I-D.ietf-ace-key-groupcomm}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for, after having experienced a reboot.
+
+## Administrators
+
+If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group and how they achieve and maintain such an alignment with each other.
+
+A compromised Administrator may collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
+
+When an Administrator is found compromised, the pertaining Access Tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked Acess Tokens is defined in {{I-D.ietf-ace-revoked-token-notification}}.
+
 # IANA Considerations # {#iana}
 
 This document has the following actions for IANA.
@@ -1686,6 +1729,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * New ACE Groupcomm Error on unsupported configuration.
 
 * Possible reason to deviate from default parameter values.
+
+* Added security considerations.
 
 * Various clarifications and editorial improvements.
 
