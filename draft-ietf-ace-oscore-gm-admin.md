@@ -63,7 +63,11 @@ normative:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-core-coral:
   I-D.ietf-core-groupcomm-bis:
+  I-D.bormann-cbor-edn-literals:
+  I-D.ietf-cbor-packed:
+  I-D.ietf-core-href:
   RFC2119:
+  RFC3986:
   RFC6690:
   RFC6749:
   RFC7252:
@@ -86,6 +90,17 @@ normative:
     date: false
     title: COSE Algorithms
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+  CURIE-20101216:
+    author:
+      -
+        ins: M. Birbeck
+        name: Mark Birbeck
+      -
+        ins: S. McCarron
+        name: Shane McCarron
+    title: CURIE Syntax 1.0 - A syntax for expressing Compact URIs - W3C Working Group Note
+    date: 2010-12-16
+    target: http://www.w3.org/TR/2010/NOTE-curie-20101216
 
 informative:
   I-D.tiloca-core-oscore-discovery:
@@ -93,6 +108,7 @@ informative:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.ietf-ace-revoked-token-notification:
+  I-D.ietf-core-target-attr:
   RFC7925:
   RFC7959:
   RFC8392:
@@ -124,13 +140,9 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to configure and update their configuration.
 
-Interaction examples are provided, in Link Format {{RFC6690}} and Custom CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. The examples in Custom CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations. While all the CoRAL examples show the CoRAL textual serialization format, its binary serialization format is used on the wire.
+Interaction examples are provided, in Link Format {{RFC6690}} and Custom CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. The examples in Custom CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations.
 
-\[ NOTE:
-
-The reported CoRAL examples are based on the textual representation used until  version -03 of {{I-D.ietf-core-coral}}. These will be revised to use the CBOR diagnostic notation instead.
-
-\]
+The examples in CoRAL are expressed in CBOR diagnostic notation, and refer to values from external dictionaries using Packed CBOR {{I-D.ietf-cbor-packed}}. {{notation-coral-examples}} introduces the notation and assumptions used in the CoRAL examples.
 
 The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{RFC9200}}.
 
@@ -175,6 +187,34 @@ This document also refers to the following terminology.
    The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.
 
 * Admin endpoint: an endpoint at the Group Manager associated with the group-collection resource or to a group-configuration resource hosted by that Group Manager.
+
+## Notation and Assumptions in the CoRAL Examples ## {#notation-coral-examples}
+
+As per {{Section 2.4 of I-D.ietf-core-coral}}, CoRAL expresses Uniform Resource Identifiers (URIs) {{RFC3986}} as Constrained Resource Identifier (CRI) references {{I-D.ietf-core-href}}. Throughout this document, the CoRAL examples use the following notation.
+
+When using the CURIE syntax {{CURIE-20101216}}, the following applies.
+
+* 'core.osc.gcoll' stands for http://coreapps.org/core.osc.gcoll#
+
+* 'core.osc.gconf' stands for http://coreapps.org/core.osc.gconf#
+
+* 'linkformat' stands for http://www.iana.org/assignments/linkformat
+
+   This URI is to be defined with IANA, together with other URIs that build on it through further path segments, e.g., http://www.iana.org/assignments/linkformat/rt
+
+When using a URI http://www.iana.org/assignments/linkformat/SEG1/SEG2
+
+* The path segment SEG1 is the name of a web link target attribute.
+
+   Names of target attributes used in Link Format {{RFC6690}} are expected to be coordinated through the "Target Attributes" registry defined in {{I-D.ietf-core-target-attr}}.
+
+* The path segment SEG2 is the value of the target attribute.
+
+The notation cri'' introduced in {{I-D.bormann-cbor-edn-literals}} is used to represent CRIs {{I-D.ietf-core-href}}. This format is not expected to be sent over the network.
+
+Packed CBOR {{I-D.ietf-cbor-packed}} is also used, thus reducing representation size. The examples especially refer to the values from the two shared item tables in {{sec-packed-cbor-tables}}.
+
+Finally, the examples consider a Group Manager with address \[2001:db8::ab\], and use the CoAP Content-Format ID 65087 for the media-type application/coral+cbor.
 
 # Group Administration # {#overview}
 
@@ -568,6 +608,8 @@ Example in Link Format:
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
 
+   Payload:
+
    <coap://[2001:db8::ab]/manage/gp1>;rt="core.osc.gconf",
    <coap://[2001:db8::ab]/manage/gp2>;rt="core.osc.gconf",
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
@@ -582,11 +624,26 @@ Example in CoRAL:
 <= 2.05 Content
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gcoll#>
-   #base </manage/>
-   item <gp1>
-   item <gp2>
-   item <gp3>
+   Payload:
+
+   [
+     [1, cri'coap://[2001:db8::ab]/manage'],
+     [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp1', [
+       [2, simple(6) / item 6 for linkformat:rt /,
+        6(-200) / item 415 for cri'http://www.iana.org/assignments
+                                   /linkformat/rt/core.osc.gconf' /]
+     ]],
+     [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp2', [
+       [2, simple(6) / item 6 for linkformat:rt /,
+        6(-200) / item 415 for cri'http://www.iana.org/assignments
+                                   /linkformat/rt/core.osc.gconf' /]
+     ]],
+     [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp3', [
+       [2, simple(6) / item 6 for linkformat:rt /,
+        6(-200) / item 415 for cri'http://www.iana.org/assignments
+                                   /linkformat/rt/core.osc.gconf' /]
+     ]]
+   ]
 ~~~~~~~~~~~
 
 ## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
@@ -612,6 +669,8 @@ Example in custom CBOR and Link Format:
    Uri-Path: manage
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
        "group_mode" : true,
      "sign_enc_alg" : 10,
@@ -620,6 +679,8 @@ Example in custom CBOR and Link Format:
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
+
+   Payload:
 
    <coap://[2001:db8::ab]/manage/gp1>;rt="core.osc.gconf",
    <coap://[2001:db8::ab]/manage/gp2>;rt="core.osc.gconf",
@@ -633,18 +694,37 @@ Example in CoRAL:
    Uri-Path: manage
    Content-Format: 65087 (application/coral+cbor)
 
-   group_mode true
-   sign_enc_alg 10
-   hkdf 5
+   Payload:
+
+   [
+     [2, 6(27) / item 70 for core.osc.gconf:group_mode /, true],
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
+     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5]
+   ]
 
 <= 2.05 Content
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gcoll#>
-   #base </manage/>
-   item <gp1>
-   item <gp2>
-   item <gp3>
+   Payload:
+
+   [
+    [1, cri'coap://[2001:db8::ab]/manage'],
+    [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp1', [
+      [2, simple(6) / item 6 for linkformat:rt /,
+       6(-200) / item 415 for cri'http://www.iana.org/assignments
+                                  /linkformat/rt/core.osc.gconf' /]
+    ]],
+    [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp2', [
+      [2, simple(6) / item 6 for linkformat:rt /,
+       6(-200) / item 415 for cri'http://www.iana.org/assignments
+                                  /linkformat/rt/core.osc.gconf' /]
+    ]],
+    [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp3', [
+      [2, simple(6) / item 6 for linkformat:rt /,
+       6(-200) / item 415 for cri'http://www.iana.org/assignments
+                                  /linkformat/rt/core.osc.gconf' /]
+    ]]
+   ]
 ~~~~~~~~~~~
 
 ## Create a New Group Configuration ## {#collection-resource-post}
@@ -760,6 +840,8 @@ Example in custom CBOR:
    Uri-Path: manage
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
       "sign_enc_alg" : 10,
               "hkdf" : 5,
@@ -776,6 +858,8 @@ Example in custom CBOR:
    Location-Path: gp4
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
       "group_name" : "gp4",
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
@@ -790,26 +874,36 @@ Example in CoRAL:
    Uri-Path: manage
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   sign_enc_alg 10
-   hkdf 5
-   pairwise_mode true
-   active true
-   group_name "gp4"
-   group_title "rooms 1 and 2"
-   app_group "room1"
-   app_group "room2"
-   as_uri <coap://as.example.com/token>
+   Payload:
+
+   [
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
+     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5],
+     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, true],
+     [2, 6(-36) / item 87 for core.osc.gconf:active /, true],
+     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
+     [2, 6(-37) / item 89 for core.osc.gconf:group_title /,
+      "rooms 1 and 2"],
+     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 1"],
+     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 2"],
+     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
+      cri'coap://as.example.com/token']
+   ]
 
 <= 2.01 Created
    Location-Path: manage
    Location-Path: gp4
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   group_name "gp4"
-   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
-   as_uri <coap://as.example.com/token>
+   Payload:
+
+   [
+     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
+     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
+      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
+     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
+      cri'coap://as.example.com/token']
+   ]
 ~~~~~~~~~~~
 
 ## Retrieve a Group Configuration ## {#configuration-resource-get}
@@ -838,6 +932,8 @@ Example in custom CBOR:
 <= 2.05 Content
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
                       "hkdf" : 5,
                   "cred_fmt" : 33,
@@ -856,8 +952,8 @@ Example in custom CBOR:
                "group_title" : "rooms 1 and 2",
      "ace_groupcomm_profile" : "coap_group_oscore_app",
             "max_stale_sets" : 3,
-                 "gid_reuse" : false,
                        "exp" : 1360289224,
+                 "gid_reuse" : false,
                 "app_groups" : ["room1", "room2"],
                "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
                     "as_uri" : "coap://as.example.com/token"
@@ -874,34 +970,47 @@ Example in CoRAL:
 <= 2.05 Content
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   hkdf 5
-   cred_fmt 33
-   group_mode true
-   sign_enc_alg 10
-   sign_alg -8
-   sign_params.alg_capab.key_type 1
-   sign_params.key_type_capab.key_type 1
-   sign_params.key_type_capab.curve 6
-   pairwise_mode true
-   alg 10
-   ecdh_alg -27
-   ecdh_params.alg_capab.key_type 1
-   ecdh_params.key_type_capab.key_type 1
-   ecdh_params.key_type_capab.curve 6
-   det_req false
-   rt "core.osc.gconf"
-   active true
-   group_name "gp4"
-   group_title "rooms 1 and 2"
-   ace_groupcomm_profile "coap_group_oscore_app"
-   max_stale_sets 3
-   gid_reuse false
-   exp 1360289224
-   app_group "room1"
-   app_group "room2"
-   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
-   as_uri <coap://as.example.com/token>
+   Payload:
+
+   [
+     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5],
+     [2, 6(-27) / item 69 for core.osc.gconf:cred_fmt /, 33],
+     [2, 6(27) / item 70 for core.osc.gconf:group_mode /, true],
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
+     [2, 6(28) / item 72 for core.osc.gconf:sign_alg /, -8],
+     [2, 6(29) / item 74 for
+      core.osc.gconf:sign_params.alg_capab.key_type /, 1],
+     [2, 6(-30) / item 75 for
+      core.osc.gconf:sign_params.key_type_capab.key_type /, 1],
+     [2, 6(30) / item 76 for
+      core.osc.gconf:sign_params.key_type_capab.curve /, 6],
+     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, true],
+     [2, 6(31) / item 78 for core.osc.gconf:alg /, 10],
+     [2, 6(-32) / item 79 for core.osc.gconf:ecdh_alg /, -27],
+     [2, 6(-33) / item 81 for
+      core.osc.gconf:ecdh_params.alg_capab.key_type /, 1],
+     [2, 6(33) / item 82 for
+      core.osc.gconf:ecdh_params.key_type_capab.key_type /, 1],
+     [2, 6(-34) / item 83 for
+      core.osc.gconf:ecdh_params.key_type_capab.curve /, 6],
+     [2, 6(34) / item 84 for core.osc.gconf:det_req /, false],
+     [2, 6(35) / item 86 for core.osc.gconf:rt /, "core.osc.gconf"],
+     [2, 6(-36) / item 87 for core.osc.gconf:active /, true],
+     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
+     [2, 6(-37) / item 89 for core.osc.gconf:group_title /,
+      "rooms 1 and 2"],
+     [2, 6(37) / item 90 for core.osc.gconf:ace_groupcomm_profile /,
+      "coap_group_oscore_app"],
+     [2, 6(-38) / item 91 for core.osc.gconf:max_stale_sets /, 3],
+     [2, 6(38) / item 92 for core.osc.gconf:exp /, 1360289224],
+     [2, 6(-39) / item 93 for core.osc.gconf:gid_reuse /, false],
+     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 1"],
+     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 2"],
+     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
+      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
+     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
+      cri'coap://as.example.com/token']
+   ]
 ~~~~~~~~~~~
 
 ## Retrieve Part of a Group Configuration by Filters ## {#configuration-resource-fetch}
@@ -930,6 +1039,8 @@ Example in custom CBOR:
    Uri-Path: gp4
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
      "conf_filter" : ["sign_enc_alg",
                       "hkdf",
@@ -941,6 +1052,8 @@ Example in custom CBOR:
 
 <= 2.05 Content
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+
+   Payload:
 
    {
       "sign_enc_alg" : 10,
@@ -961,25 +1074,32 @@ Example in CoRAL:
    Uri-Path: gp4
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   sign_enc_alg
-   hkdf
-   pairwise_mode
-   active
-   group_title
-   app_groups
+   Payload:
+
+   [
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, null],
+     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, null],
+     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, null],
+     [2, 6(-36) / item 87 for core.osc.gconf:active /, null],
+     [2, 6(-37) / item 89 for core.osc.gconf:group_title /, null],
+     [2, 6(41) / item 98 for core.osc.gconf:app_groups /, null]
+   ]
 
 <= 2.05 Content
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   sign_enc_alg 10
-   hkdf 5
-   pairwise_mode true
-   active true
-   group_title "rooms 1 and 2"
-   app_group "room1"
-   app_group "room2"
+   Payload:
+
+   [
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
+     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5],
+     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, true],
+     [2, 6(-36) / item 87 for core.osc.gconf:active /, true],
+     [2, 6(-37) / item 89 for core.osc.gconf:group_title /,
+      "rooms 1 and 2"],
+     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 1"],
+     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 2"]
+   ]
 ~~~~~~~~~~~
 
 ## Overwrite a Group Configuration ## {#configuration-resource-put}
@@ -1036,6 +1156,8 @@ Example in custom CBOR:
    Uri-Path: gp4
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
      "sign_enc_alg" : 11,
              "hkdf" : 5
@@ -1043,6 +1165,8 @@ Example in custom CBOR:
 
 <= 2.04 Changed
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+
+   Payload:
 
    {
       "group_name" : "gp4",
@@ -1059,17 +1183,25 @@ Example in CoRAL:
    Uri-Path: gp4
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   sign_enc_alg 11
-   hkdf 5
+   Payload:
+
+   [
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 11],
+     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5]
+   ]
 
 <= 2.04 Changed
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   group_name "gp4"
-   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
-   as_uri <coap://as.example.com/token>
+   Payload:
+
+   [
+     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
+     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
+      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
+     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
+      cri'coap://as.example.com/token']
+   ]
 ~~~~~~~~~~~
 
 ### Effects on Joining Nodes ### {#sssec-effects-overwrite-joining-nodes}
@@ -1216,6 +1348,8 @@ Example in custom CBOR:
    Uri-Path: gp4
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
 
+   Payload:
+
    {
         "sign_enc_alg" : 10,
      "app_groups_diff" : [["room1"],
@@ -1224,6 +1358,8 @@ Example in custom CBOR:
 
 <= 2.04 Changed
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+
+   Payload:
 
    {
       "group_name" : "gp4",
@@ -1240,19 +1376,27 @@ Example in CoRAL:
    Uri-Path: gp4
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   sign_enc_alg 10
-   app_group_del "room1"
-   app_group_add "room3"
-   app_group_add "room4"
+   Payload:
+
+   [
+     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
+     [2, 6(-40) / item 95 for core.osc.gconf:app_group_del /, "room1"],
+     [2, 6(40) / item 96 for core.osc.gconf:app_group_add /, "room3"],
+     [2, 6(40) / item 96 for core.osc.gconf:app_group_add /, "room4"]
+   ]
 
 <= 2.04 Changed
    Content-Format: 65087 (application/coral+cbor)
 
-   #using <http://coreapps.org/core.osc.gconf#>
-   group_name "gp4"
-   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
-   as_uri <coap://as.example.com/token>
+   Payload:
+
+   [
+     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
+     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
+      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
+     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
+      cri'coap://as.example.com/token']
+   ]
 ~~~~~~~~~~~
 
 ### Effects on Joining Nodes ###
@@ -1710,6 +1854,120 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
+# Shared item tables for Packed CBOR # {#sec-packed-cbor-tables}
+
+This appendix defines the two shared item tables that the CoRAL examples refer to for using Packed CBOR {{I-D.ietf-cbor-packed}}.
+
+The notation cri'' introduced in {{I-D.bormann-cbor-edn-literals}} is used to represent CRIs {{I-D.ietf-core-href}}.
+
+## Compression of CoRAL predicates
+
+The following shared item table is used for compressing CoRAL predicates, as per {{Section 2.2 of I-D.ietf-cbor-packed}}.
+
+~~~~~~~~~~~
++-------+--------------------------------------------------------+
+| Index | Item                                                   |
++-------+--------------------------------------------------------+
+| 6     | cri'http://www.iana.org/assignments/linkformat/rt'     |
++-------+--------------------------------------------------------+
+| 50    | cri'http://coreapps.org/core.osc.gcoll#item'           |
++-------+--------------------------------------------------------+
+| 68    | cri'http://coreapps.org/core.osc.gconf#hkdf'           |
++-------+--------------------------------------------------------+
+| 69    | cri'http://coreapps.org/core.osc.gconf#cred_fmt'       |
++-------+--------------------------------------------------------+
+| 70    | cri'http://coreapps.org/core.osc.gconf#group_mode'     |
++-------+--------------------------------------------------------+
+| 71    | cri'http://coreapps.org/core.osc.gconf#sign_enc_alg'   |
++-------+--------------------------------------------------------+
+| 72    | cri'http://coreapps.org/core.osc.gconf#sign_alg'       |
++-------+--------------------------------------------------------+
+| 73    | cri'http://coreapps.org/core.osc.gconf#sign_params'    |
++-------+--------------------------------------------------------+
+| 74    | cri'http://coreapps.org/core.osc.gconf#sign_params     |
+|       |     .alg_capab.key_type'                               |
++-------+--------------------------------------------------------+
+| 75    | cri'http://coreapps.org/core.osc.gconf#sign_params     |
+|       |     .key_type_capab.key_type'                          |
++-------+--------------------------------------------------------+
+| 76    | cri'http://coreapps.org/core.osc.gconf#sign_params     |
+|       |     .key_type_capab.curve'                             |
++-------+--------------------------------------------------------+
+| 77    | cri'http://coreapps.org/core.osc.gconf#pairwise_mode'  |
++-------+--------------------------------------------------------+
+| 78    | cri'http://coreapps.org/core.osc.gconf#alg'            |
++-------+--------------------------------------------------------+
+| 79    | cri'http://coreapps.org/core.osc.gconf#ecdh_alg'       |
++-------+--------------------------------------------------------+
+| 80    | cri'http://coreapps.org/core.osc.gconf#ecdh_params'    |
++-------+--------------------------------------------------------+
+| 81    | cri'http://coreapps.org/core.osc.gconf#ecdh_params     |
+|       |     .alg_capab.key_type'                               |
++-------+--------------------------------------------------------+
+| 82    | cri'http://coreapps.org/core.osc.gconf#ecdh_params     |
+|       |     .key_type_capab.key_type'                          |
++-------+--------------------------------------------------------+
+| 83    | cri'http://coreapps.org/core.osc.gconf#ecdh_params     |
+|       |     .key_type_capab.curve'                             |
++-------+--------------------------------------------------------+
+| 84    | cri'http://coreapps.org/core.osc.gconf#det_req'        |
++-------+--------------------------------------------------------+
+| 85    | cri'http://coreapps.org/core.osc.gconf#det_hash_alg'   |
++-------+--------------------------------------------------------+
+| 86    | cri'http://coreapps.org/core.osc.gconf#rt'             |
++-------+--------------------------------------------------------+
+| 87    | cri'http://coreapps.org/core.osc.gconf#active'         |
++-------+--------------------------------------------------------+
+| 88    | cri'http://coreapps.org/core.osc.gconf#group_name'     |
++-------+--------------------------------------------------------+
+| 89    | cri'http://coreapps.org/core.osc.gconf#group_title'    |
++-------+--------------------------------------------------------+
+| 90    | cri'http://coreapps.org/core.osc.gconf                 |
+|       |     #ace_groupcomm_profile'                            |
++-------+--------------------------------------------------------+
+| 91    | cri'http://coreapps.org/core.osc.gconf#max_stale_sets' |
++-------+--------------------------------------------------------+
+| 92    | cri'http://coreapps.org/core.osc.gconf#exp'            |
++-------+--------------------------------------------------------+
+| 93    | cri'http://coreapps.org/core.osc.gconf#gid_reuse'      |
++-------+--------------------------------------------------------+
+| 94    | cri'http://coreapps.org/core.osc.gconf#app_group'      |
++-------+--------------------------------------------------------+
+| 95    | cri'http://coreapps.org/core.osc.gconf#app_group_del'  |
++-------+--------------------------------------------------------+
+| 96    | cri'http://coreapps.org/core.osc.gconf#app_group_add'  |
++-------+--------------------------------------------------------+
+| 97    | cri'http://coreapps.org/core.osc.gconf#joining_uri'    |
++-------+--------------------------------------------------------+
+| 98    | cri'http://coreapps.org/core.osc.gconf#app_groups'     |
++-------+--------------------------------------------------------+
+| 99    | cri'http://coreapps.org/core.osc.gconf#group_policies' |
++-------+--------------------------------------------------------+
+| 100   | cri'http://coreapps.org/core.osc.gconf#group_policies  |
+|       |     .key_update_check_interval'                        |
++-------+--------------------------------------------------------+
+| 101   | cri'http://coreapps.org/core.osc.gconf#group_policies  |
+|       |     .exp_delta'                                        |
++-------+--------------------------------------------------------+
+| 102   | cri'http://coreapps.org/core.osc.gconf#as_uri'         |
++-------+--------------------------------------------------------+
+~~~~~~~~~~~
+{: #fig-packed-cbor-table-1 title="Shared item table for compressing CoRAL predicates." artwork-align="center"}
+
+## Compression of Values of the rt= Target Attribute
+
+The following shared item table is used for compressing values of the rt= target attribute, as per {{Section 2.2 of I-D.ietf-cbor-packed}}.
+
+~~~~~~~~~~~
++-------+--------------------------------------------------------+
+| Index | Item                                                   |
++-------+--------------------------------------------------------+
+| 415   | cri'http://www.iana.org/assignments/linkformat/rt      |
+|       |     /core.osc.gconf'                                   |
++-------+--------------------------------------------------------+
+~~~~~~~~~~~
+{: #fig-packed-cbor-table-2 title="Shared item table for compressing values of the rt= target attribute." artwork-align="center"}
+
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
@@ -1731,6 +1989,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Possible reason to deviate from default parameter values.
 
 * Added security considerations.
+
+* CoRAL examples use CBOR diagnostic notation and Packed CBOR.
 
 * Various clarifications and editorial improvements.
 
