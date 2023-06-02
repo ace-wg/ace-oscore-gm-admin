@@ -358,8 +358,6 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    The AS specifies the information on the authorization granted to the Administrator as the value of the 'scope' claim to include in the Access Token, in accordance with the scope format specified in {{scope-format}}. It is implementation specific which particular approach the AS takes to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question. {{sec-as-scope-processing}} provides an example of such an approach that the AS can use.
 
-   If the 'scope' claim in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern, then all such scope entries MUST adhere to the same pattern semantics.
-
    If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern adhering to a certain pattern semantics, then that semantics MUST be used for all the scope entries in the 'scope' claim that specify a complex pattern.
 
    The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of RFC9200}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has to perform operations at the Group Manager, encoded as specified in {{scope-format}}.
