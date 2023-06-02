@@ -81,6 +81,7 @@ normative:
   RFC9052:
   RFC9053:
   RFC9200:
+  RFC9202:
   RFC9203:
   RFC9237:
   RFC9277:
@@ -109,13 +110,12 @@ informative:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.ietf-ace-revoked-token-notification:
   I-D.ietf-core-target-attr:
-  RFC7925:
+  RFC5280:
   RFC7959:
   RFC8392:
   RFC9147:
   RFC9176:
   RFC9177:
-  RFC9202:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -128,7 +128,7 @@ Group communication for CoAP can be secured using Group Object Security for Cons
 
 # Introduction # {#intro}
 
-The Constrained Application Protocol (CoAP) {{RFC7252}} can be used in group communication environments where messages are also exchanged over IP multicast {{I-D.ietf-core-groupcomm-bis}}. Applications relying on CoAP can achieve end-to-end security at the application layer by using Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}}, and especially Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} in group communication scenarios.
+The Constrained Application Protocol (CoAP) {{RFC7252}} can also be used for group communication {{I-D.ietf-core-groupcomm-bis}}, where messages are exchanged between members of a group, e.g., over IP multicast. Applications relying on CoAP can achieve end-to-end security at the application layer by using Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}}, and especially Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} in group communication scenarios.
 
 When group communication for CoAP is protected with Group OSCORE, nodes are required to explicitly join the correct OSCORE group. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.
 
@@ -144,7 +144,7 @@ Interaction examples are provided, in Link Format {{RFC6690}} and Custom CBOR {{
 
 The examples in CoRAL are expressed in CBOR diagnostic notation, and refer to values from external dictionaries using Packed CBOR {{I-D.ietf-cbor-packed}}. {{notation-coral-examples}} introduces the notation and assumptions used in the CoRAL examples.
 
-The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{RFC9200}}.
+The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
 
 ## Terminology ## {#terminology}
 
@@ -164,7 +164,7 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
    - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as security group for one or many application groups.
 
-   - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
+   - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
 
 * The ACE framework for authentication and authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
@@ -268,7 +268,7 @@ The Group Manager exports one group-configuration resource for each of its OSCOR
 
 ## Collection Representation
 
-A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
+A list of group configurations is represented as a document containing the list of corresponding group-configuration resources. Each group configuration is represented as a link, where the link target is the URI of the group-configuration resource.
 
 The list can be represented as a Link Format document {{RFC6690}} or a CoRAL document {{I-D.ietf-core-coral}}.
 
@@ -743,7 +743,7 @@ In particular:
 
 * The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
 
-* The payload MAY include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups, 'group_policies' and 'as_uri' defined in {{config-repr-status-properties}}.
+* The payload MAY include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies' and 'as_uri' defined in {{config-repr-status-properties}}.
 
    When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
 
@@ -1106,7 +1106,7 @@ Example in CoRAL:
 
 This operation MAY be supported by the Group Manager and an Administrator.
 
-The Administrator can send a PUT request to the group-configuration resource associated with an OSCORE group, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
+The Administrator can send a PUT request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
@@ -1256,7 +1256,7 @@ Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 's
 
 This operation MAY be supported by the Group Manager and an Administrator.
 
-The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource associated with an OSCORE group, in order to update the value of only part of the group configuration.
+The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
 The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
@@ -1411,7 +1411,7 @@ After having selectively updated part of a group configuration, the effects on t
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
-The Administrator can send a DELETE request to the group-configuration resource, in order to delete that OSCORE group.
+The Administrator can send a DELETE request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to delete that OSCORE group.
 
 Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Delete".
 
@@ -1521,17 +1521,17 @@ The following holds for the Group Manager.
 
    This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
-* It MUST support all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported and understood only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
+* It MUST support all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
 
 The following holds for an Administrator.
 
-* It MUST support and understand the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
-* It MUST support and understand all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the following exceptions.
+* It MUST support all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
-   - 'conf_filter', which MUST be supported and understood only if the Administrator supports the partial retrieval of a group configuration by filters (see {{configuration-resource-fetch}}).
+   - 'conf_filter', which MUST be supported only if the Administrator supports the partial retrieval of a group configuration by filters (see {{configuration-resource-fetch}}).
 
-   - 'app_groups_diff' parameter, which MUST be supported and understood only if the Administrator supports the selective update of a group configuration (see {{configuration-resource-patch}}).
+   - 'app_groups_diff' parameter, which MUST be supported only if the Administrator supports the selective update of a group configuration (see {{configuration-resource-patch}}).
 
 # ACE Groupcomm Error Identifiers {#error-types}
 
@@ -1971,6 +1971,10 @@ The following shared item table is used for compressing values of the rt= target
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -08 to -09 ## {#sec-08-09}
+
+* Fixes and editorial improvements.
 
 ## Version -07 to -08 ## {#sec-07-08}
 
