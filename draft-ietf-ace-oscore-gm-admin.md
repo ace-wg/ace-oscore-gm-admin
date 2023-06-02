@@ -9,7 +9,7 @@ docname: draft-ietf-ace-oscore-gm-admin-latest
 # stand_alone: true
 
 ipr: trust200902
-area: Internet
+area: Security
 wg: ACE Working Group
 kw: Internet-Draft
 cat: std
@@ -61,13 +61,8 @@ normative:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
-  I-D.ietf-core-coral:
   I-D.ietf-core-groupcomm-bis:
-  I-D.bormann-cbor-edn-literals:
-  I-D.ietf-cbor-packed:
-  I-D.ietf-core-href:
   RFC2119:
-  RFC3986:
   RFC6690:
   RFC6749:
   RFC7252:
@@ -91,25 +86,12 @@ normative:
     date: false
     title: COSE Algorithms
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
-  CURIE-20101216:
-    author:
-      -
-        ins: M. Birbeck
-        name: Mark Birbeck
-      -
-        ins: S. McCarron
-        name: Shane McCarron
-    title: CURIE Syntax 1.0 - A syntax for expressing Compact URIs - W3C Working Group Note
-    date: 2010-12-16
-    target: http://www.w3.org/TR/2010/NOTE-curie-20101216
 
 informative:
   I-D.tiloca-core-oscore-discovery:
-  I-D.hartke-t2trg-coral-reef:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.ietf-ace-revoked-token-notification:
-  I-D.ietf-core-target-attr:
   RFC5280:
   RFC7959:
   RFC8392:
@@ -854,7 +836,9 @@ An example of message exchange is shown below.
 
 This operation MAY be supported by the Group Manager and an Administrator.
 
-The Administrator can send a PUT request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one. The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
+The Administrator can send a PUT request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
+
+The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
@@ -884,7 +868,7 @@ Alternatively, the Administrator can update the registration in the Resource Dir
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.04 (Changed) response.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter (when custom CBOR is used) or by the different 'app_group' link elements (when CoRAL is used) in the PUT request.
+* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the PUT request.
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.04 (Changed) response.
 
@@ -896,7 +880,7 @@ Alternatively, the Administrator can update the registration in the Resource Dir
 
 As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
-Example in custom CBOR:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.03 PUT
@@ -921,35 +905,6 @@ Example in custom CBOR:
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
           "as_uri" : "coap://as.example.com/token"
    }
-~~~~~~~~~~~
-
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.03 PUT
-   Uri-Path: manage
-   Uri-Path: gp4
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 11],
-     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5]
-   ]
-
-<= 2.04 Changed
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
-     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
-      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
-     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
-      cri'coap://as.example.com/token']
-   ]
 ~~~~~~~~~~~
 
 ### Effects on Joining Nodes ### {#sssec-effects-overwrite-joining-nodes}
@@ -1016,13 +971,13 @@ The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-confi
 
 The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
-* When custom CBOR is used, the CBOR map in the request payload includes the field 'app_groups_diff', whose CBOR abbreviation is defined in {{groupcomm-parameters}}. This field is encoded as a CBOR array including the following two elements.
+The CBOR map in the request payload includes the field 'app_groups_diff', whose CBOR abbreviation is defined in {{groupcomm-parameters}}. This field is encoded as a CBOR array including the following two elements.
 
-   - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
+- The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
 
-   - The second element is a CBOR array, namely 'app_groups_add'. Each of its elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter.
+- The second element is a CBOR array, namely 'app_groups_add'. Each of its elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter.
 
-   The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the response from the Group Manager is provided below.
+The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the response from the Group Manager is provided below.
 
 ~~~~~~~~~~~ CDDL
    app-group-name = tstr
@@ -1032,19 +987,11 @@ The request payload has the same format of the PUT request defined in {{configur
 ~~~~~~~~~~~
 {: #cddl-diff title="CDDL definition of the 'app_groups_diff' field" artwork-align="left"}
 
-   The Group Manager MUST respond with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
-
-* When CoRAL is used, the request payload includes the following top-level link elements.
-
-   - 'app_group_del', with value a text string specifying the name of an application group to remove from the 'app_groups' status parameter. This link element can be included multiple times.
-
-   - 'app_group_add', with value a text string specifying the name of an application group to add to the 'app_groups' status parameter. This link element can be included multiple times.
-
-   The Group Manager MUST respond with a 4.00 (Bad Request) response, in case the request payload includes both any 'app_group' link element as well as any 'app_group_del' and/or 'app_group_add' link element.
+The Group Manager MUST respond with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
 The error handling for the PATCH/iPATCH request is the same as for the PUT request defined in {{configuration-resource-put}}, with the following additions.
 
-* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map (when custom CBOR is used) or no link elements (when CoRAL is used).
+* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map.
 
 * If the Request-URI does not point to an existing group-configuration resource, the Group Manager MUST NOT create a new resource, and MUST respond with a 4.04 (Not Found) response.
 
@@ -1052,11 +999,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
    The response, MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{configuration-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
 
-* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case:
-
-   - When custom CBOR is used, the CBOR map includes the parameter 'app_groups_diff'; or
-
-   - When CoRAL is used, any link element 'app_group_del' and/or 'app_group_add' is included.
+* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map includes the parameter 'app_groups_diff'.
 
 Furthermore, the Group Manager MUST perform the same authorization checks defined for the processing of a PUT request to a group-configuration resource in {{configuration-resource-put}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Write" permission applicable to the targeted group-configuration resource.
 
@@ -1078,17 +1021,9 @@ Special processing occurs when updating the 'app_groups' status parameter by dif
 
 * If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
 
-* When custom CBOR is used, the Group Manager:
+* The Group Manager deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
 
-   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
-
-   - Adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
-
-* When CoRAL is used, the Group Manager:
-
-   - Deletes from the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_del' link elements.
-
-   - Adds to the 'app_groups' status parameter the names of the application groups specified in the different 'app_group_add' link elements.
+* The Group Manager adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
 
 After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -1096,7 +1031,7 @@ Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) re
 
 The same considerations as for the PUT request defined in {{configuration-resource-put}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{RFC9176}}.
 
-Example in custom CBOR:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.06 PATCH
@@ -1122,37 +1057,6 @@ Example in custom CBOR:
      "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
           "as_uri" : "coap://as.example.com/token"
    }
-~~~~~~~~~~~
-
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.06 PATCH
-   Uri-Path: manage
-   Uri-Path: gp4
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
-     [2, 6(-40) / item 95 for core.osc.gconf:app_group_del /, "room1"],
-     [2, 6(40) / item 96 for core.osc.gconf:app_group_add /, "room3"],
-     [2, 6(40) / item 96 for core.osc.gconf:app_group_add /, "room4"]
-   ]
-
-<= 2.04 Changed
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
-     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
-      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
-     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
-      cri'coap://as.example.com/token']
-   ]
 ~~~~~~~~~~~
 
 ### Effects on Joining Nodes ###
@@ -1380,8 +1284,7 @@ When an Administrator is found compromised, the pertaining Access Tokens MUST be
 
 This document has the following actions for IANA.
 
-Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with
-the RFC number of this specification and delete this paragraph.
+Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
 ## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
 
@@ -1610,125 +1513,13 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
-# Shared item tables for Packed CBOR # {#sec-packed-cbor-tables}
-
-This appendix defines the two shared item tables that the CoRAL examples refer to for using Packed CBOR {{I-D.ietf-cbor-packed}}.
-
-The notation cri'' introduced in {{I-D.bormann-cbor-edn-literals}} is used to represent CRIs {{I-D.ietf-core-href}}.
-
-## Compression of CoRAL predicates
-
-The following shared item table is used for compressing CoRAL predicates, as per {{Section 2.2 of I-D.ietf-cbor-packed}}.
-
-~~~~~~~~~~~
-+-------+--------------------------------------------------------+
-| Index | Item                                                   |
-+-------+--------------------------------------------------------+
-| 6     | cri'http://www.iana.org/assignments/linkformat/rt'     |
-+-------+--------------------------------------------------------+
-| 50    | cri'http://coreapps.org/core.osc.gcoll#item'           |
-+-------+--------------------------------------------------------+
-| 68    | cri'http://coreapps.org/core.osc.gconf#hkdf'           |
-+-------+--------------------------------------------------------+
-| 69    | cri'http://coreapps.org/core.osc.gconf#cred_fmt'       |
-+-------+--------------------------------------------------------+
-| 70    | cri'http://coreapps.org/core.osc.gconf#group_mode'     |
-+-------+--------------------------------------------------------+
-| 71    | cri'http://coreapps.org/core.osc.gconf#sign_enc_alg'   |
-+-------+--------------------------------------------------------+
-| 72    | cri'http://coreapps.org/core.osc.gconf#sign_alg'       |
-+-------+--------------------------------------------------------+
-| 73    | cri'http://coreapps.org/core.osc.gconf#sign_params'    |
-+-------+--------------------------------------------------------+
-| 74    | cri'http://coreapps.org/core.osc.gconf#sign_params     |
-|       |     .alg_capab.key_type'                               |
-+-------+--------------------------------------------------------+
-| 75    | cri'http://coreapps.org/core.osc.gconf#sign_params     |
-|       |     .key_type_capab.key_type'                          |
-+-------+--------------------------------------------------------+
-| 76    | cri'http://coreapps.org/core.osc.gconf#sign_params     |
-|       |     .key_type_capab.curve'                             |
-+-------+--------------------------------------------------------+
-| 77    | cri'http://coreapps.org/core.osc.gconf#pairwise_mode'  |
-+-------+--------------------------------------------------------+
-| 78    | cri'http://coreapps.org/core.osc.gconf#alg'            |
-+-------+--------------------------------------------------------+
-| 79    | cri'http://coreapps.org/core.osc.gconf#ecdh_alg'       |
-+-------+--------------------------------------------------------+
-| 80    | cri'http://coreapps.org/core.osc.gconf#ecdh_params'    |
-+-------+--------------------------------------------------------+
-| 81    | cri'http://coreapps.org/core.osc.gconf#ecdh_params     |
-|       |     .alg_capab.key_type'                               |
-+-------+--------------------------------------------------------+
-| 82    | cri'http://coreapps.org/core.osc.gconf#ecdh_params     |
-|       |     .key_type_capab.key_type'                          |
-+-------+--------------------------------------------------------+
-| 83    | cri'http://coreapps.org/core.osc.gconf#ecdh_params     |
-|       |     .key_type_capab.curve'                             |
-+-------+--------------------------------------------------------+
-| 84    | cri'http://coreapps.org/core.osc.gconf#det_req'        |
-+-------+--------------------------------------------------------+
-| 85    | cri'http://coreapps.org/core.osc.gconf#det_hash_alg'   |
-+-------+--------------------------------------------------------+
-| 86    | cri'http://coreapps.org/core.osc.gconf#rt'             |
-+-------+--------------------------------------------------------+
-| 87    | cri'http://coreapps.org/core.osc.gconf#active'         |
-+-------+--------------------------------------------------------+
-| 88    | cri'http://coreapps.org/core.osc.gconf#group_name'     |
-+-------+--------------------------------------------------------+
-| 89    | cri'http://coreapps.org/core.osc.gconf#group_title'    |
-+-------+--------------------------------------------------------+
-| 90    | cri'http://coreapps.org/core.osc.gconf                 |
-|       |     #ace_groupcomm_profile'                            |
-+-------+--------------------------------------------------------+
-| 91    | cri'http://coreapps.org/core.osc.gconf#max_stale_sets' |
-+-------+--------------------------------------------------------+
-| 92    | cri'http://coreapps.org/core.osc.gconf#exp'            |
-+-------+--------------------------------------------------------+
-| 93    | cri'http://coreapps.org/core.osc.gconf#gid_reuse'      |
-+-------+--------------------------------------------------------+
-| 94    | cri'http://coreapps.org/core.osc.gconf#app_group'      |
-+-------+--------------------------------------------------------+
-| 95    | cri'http://coreapps.org/core.osc.gconf#app_group_del'  |
-+-------+--------------------------------------------------------+
-| 96    | cri'http://coreapps.org/core.osc.gconf#app_group_add'  |
-+-------+--------------------------------------------------------+
-| 97    | cri'http://coreapps.org/core.osc.gconf#joining_uri'    |
-+-------+--------------------------------------------------------+
-| 98    | cri'http://coreapps.org/core.osc.gconf#app_groups'     |
-+-------+--------------------------------------------------------+
-| 99    | cri'http://coreapps.org/core.osc.gconf#group_policies' |
-+-------+--------------------------------------------------------+
-| 100   | cri'http://coreapps.org/core.osc.gconf#group_policies  |
-|       |     .key_update_check_interval'                        |
-+-------+--------------------------------------------------------+
-| 101   | cri'http://coreapps.org/core.osc.gconf#group_policies  |
-|       |     .exp_delta'                                        |
-+-------+--------------------------------------------------------+
-| 102   | cri'http://coreapps.org/core.osc.gconf#as_uri'         |
-+-------+--------------------------------------------------------+
-~~~~~~~~~~~
-{: #fig-packed-cbor-table-1 title="Shared item table for compressing CoRAL predicates." artwork-align="center"}
-
-## Compression of Values of the rt= Target Attribute
-
-The following shared item table is used for compressing values of the rt= target attribute, as per {{Section 2.2 of I-D.ietf-cbor-packed}}.
-
-~~~~~~~~~~~
-+-------+--------------------------------------------------------+
-| Index | Item                                                   |
-+-------+--------------------------------------------------------+
-| 415   | cri'http://www.iana.org/assignments/linkformat/rt      |
-|       |     /core.osc.gconf'                                   |
-+-------+--------------------------------------------------------+
-~~~~~~~~~~~
-{: #fig-packed-cbor-table-2 title="Shared item table for compressing values of the rt= target attribute." artwork-align="center"}
-
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -08 to -09 ## {#sec-08-09}
+
+* Removed use of CoRAL.
 
 * Use of the pairwise mode changed to "true" by default.
 
@@ -1861,7 +1652,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 # Acknowledgments # {#acknowledgment}
 {: numbered="no"}
 
-Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations, as well as the interactions with the Group Manager using CoRAL.
+Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
 The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}} and {{{Jim Schaad}}} for their comments and feedback.
 
