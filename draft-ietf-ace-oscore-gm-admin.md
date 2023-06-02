@@ -1226,6 +1226,8 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
    - 'alg', 'ecdh_alg', and 'ecdh_params', only in case the configuration parameter 'pairwise_mode' in the group-configuration resource has value "true" (0xf5), i.e., the OSCORE group uses the pairwise mode of Group OSCORE.
 
+Each group member receiving the information above uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
+
 Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g., by using CoAP Observe {{RFC7641}}.
 
 If the value of the status parameter 'active' is changed from "true" (0xf5) to "false" (0xf4):
