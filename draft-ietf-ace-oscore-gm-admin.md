@@ -122,7 +122,7 @@ entity:
 
 --- abstract
 
-Group communication for CoAP can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible to handle the joining of new group members, as well as to manage and distribute the group keying material. This document defines a RESTful admin interface at the Group Manager, that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof-of-possession and server authentication.
+Group communication for CoAP can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible to handle the joining of new group members, as well as to manage and distribute the group keying material. This document defines a RESTful admin interface at the Group Manager, that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof-of-possession, and server authentication.
 
 --- middle
 
@@ -138,33 +138,31 @@ In some deployments, the application running on the Group Manager may know when 
 
 In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining them during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.
 
-This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to configure and update their configuration.
+This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to specify and update their configuration.
 
-Interaction examples are provided, in Link Format {{RFC6690}} and Custom CBOR {{RFC8949}}, as well as in CoRAL {{I-D.ietf-core-coral}}. The examples in Custom CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations.
+Interaction examples are provided in Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations.
 
-The examples in CoRAL are expressed in CBOR diagnostic notation, and refer to values from external dictionaries using Packed CBOR {{I-D.ietf-cbor-packed}}. {{notation-coral-examples}} introduces the notation and assumptions used in the CoRAL examples.
-
-The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
+The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession, and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
 
 ## Terminology ## {#terminology}
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all capitals, as shown here.
 
-Readers are expected to be familiar with the terms and concepts from the following specifications:
+Readers are expected to be familiar with the terms and concepts from the following specifications.
 
 * CBOR {{RFC8949}} and COSE {{RFC9052}}{{RFC9053}}.
 
-* The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These include the concepts of:
+* The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These especially include the following concepts.
 
-   - "application group", as a set of CoAP nodes that share a common set of resources; and of
+   - "application group", as a set of CoAP nodes that share a common set of resources.
 
    - "security group", as a set of CoAP nodes that share the same security material, and use it to protect and verify exchanged messages.
 
-* The OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} security protocols. These especially include the concepts of:
+* The OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} security protocols. These especially include the following concepts.
 
    - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as security group for one or many application groups.
 
-   - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
+   - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}}, and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
 
 * The ACE framework for authentication and authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
@@ -187,34 +185,6 @@ This document also refers to the following terminology.
    The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.
 
 * Admin endpoint: an endpoint at the Group Manager associated with the group-collection resource or to a group-configuration resource hosted by that Group Manager.
-
-## Notation and Assumptions in the CoRAL Examples ## {#notation-coral-examples}
-
-As per {{Section 2.4 of I-D.ietf-core-coral}}, CoRAL expresses Uniform Resource Identifiers (URIs) {{RFC3986}} as Constrained Resource Identifier (CRI) references {{I-D.ietf-core-href}}. Throughout this document, the CoRAL examples use the following notation.
-
-When using the CURIE syntax {{CURIE-20101216}}, the following applies.
-
-* 'core.osc.gcoll' stands for http://coreapps.org/core.osc.gcoll#
-
-* 'core.osc.gconf' stands for http://coreapps.org/core.osc.gconf#
-
-* 'linkformat' stands for http://www.iana.org/assignments/linkformat
-
-   This URI is to be defined with IANA, together with other URIs that build on it through further path segments, e.g., http://www.iana.org/assignments/linkformat/rt
-
-When using a URI http://www.iana.org/assignments/linkformat/SEG1/SEG2
-
-* The path segment SEG1 is the name of a web link target attribute.
-
-   Names of target attributes used in Link Format {{RFC6690}} are expected to be coordinated through the "Target Attributes" registry defined in {{I-D.ietf-core-target-attr}}.
-
-* The path segment SEG2 is the value of the target attribute.
-
-The notation cri'' introduced in {{I-D.bormann-cbor-edn-literals}} is used to represent CRIs {{I-D.ietf-core-href}}. This format is not expected to be sent over the network.
-
-Packed CBOR {{I-D.ietf-cbor-packed}} is also used, thus reducing representation size. The examples especially refer to the values from the two shared item tables in {{sec-packed-cbor-tables}}.
-
-Finally, the examples consider a Group Manager with address \[2001:db8::ab\], and use the CoAP Content-Format ID 65087 for the media-type application/coral+cbor.
 
 # Group Administration # {#overview}
 
@@ -268,17 +238,13 @@ The Group Manager exports one group-configuration resource for each of its OSCOR
 
 ## Collection Representation
 
-A list of group configurations is represented as a document containing the list of corresponding group-configuration resources. Each group configuration is represented as a link, where the link target is the URI of the group-configuration resource.
+A collection of group configurations is represented as a Link Format document {{RFC6690}} containing the list of corresponding group-configuration resources.
 
-The list can be represented as a Link Format document {{RFC6690}} or a CoRAL document {{I-D.ietf-core-coral}}.
-
-In the former case, the link to each group-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "core.osc.gconf" defined in {{iana-rt}} of this document.
-
-In the latter case, the CoRAL document specifies the group-configuration resources in the list as top-level link elements. In particular, the link to each group-configuration resource has http://coreapps.org/core.osc.gcoll#item as relation type.
+Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, and the link target attribute 'rt' (Resource Type) with value "core.osc.gconf" defined in {{iana-rt}} of this document.
 
 ## Discovery
 
-The Administrator can discover the group-collection resource from a Resource Directory, for instance {{RFC9176}} and {{I-D.hartke-t2trg-coral-reef}}, or from .well-known/core, by using the resource type "core.osc.gcoll" defined in {{iana-rt}} of this document.
+The Administrator can discover the group-collection resource from a Resource Directory {{RFC9176}} or from .well-known/core, by using the resource type "core.osc.gcoll" defined in {{iana-rt}} of this document.
 
 The Administrator can discover group-configuration resources for the group-collection resource as specified in {{collection-resource-get}} and {{collection-resource-fetch}}.
 
@@ -348,6 +314,7 @@ The following CDDL {{RFC8610}} notation defines an admin scope entry that uses t
 
    oscore-gname = true / tstr / #6.nnn(any) ; Group name pattern
    oscore-gperm = uint .bits admin-permissions
+
    admin-permissions = &(
       List: 0,
       Create: 1,
@@ -385,7 +352,7 @@ Having the object identifier ("Toid") specialized as a pattern displays a number
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
+In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession, and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
 
 With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
 
@@ -451,7 +418,7 @@ With respect to the main Administrator, such assistant Administrators are expect
 
 In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new Access Token and to upload it to the Group Manager. If allowed by the used transport profile of ACE, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
 
-If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator ensures to have a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-put}})), updating (see {{configuration-resource-patch}}) or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
+If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator ensures to have a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-put}}), updating (see {{configuration-resource-patch}}), or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
 
 * The Administrator performs a regular polling of the group configuration, by sending a GET request to the corresponding group-configuration resource (see {{configuration-resource-get}}).
 
@@ -539,7 +506,7 @@ For each of the configuration parameters listed below, the Group Manager refers 
 
 * For 'group_mode', the Group Manager SHOULD use the CBOR simple value "true" (0xf5).
 
-* If 'group_mode' has value "true" (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'sign_enc_alg', 'sign_alg' and 'sign_params'.
+* If 'group_mode' has value "true" (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'sign_enc_alg', 'sign_alg', and 'sign_params'.
 
 * If 'group_mode' has value "true" (0xf5), the Group Manager SHOULD use the CBOR simple value "false" (0xf4) for the parameter 'det_req'.
 
@@ -547,7 +514,7 @@ For each of the configuration parameters listed below, the Group Manager refers 
 
 * For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value "true" (0xf5).
 
-* If 'pairwise_mode' has value "true" (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg' and 'ecdh_params'.
+* If 'pairwise_mode' has value "true" (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.
 
 * For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -573,17 +540,9 @@ This section describes the operations that are possible to perform on the group-
 
 For each operation, it is defined whether that operation is required or optional to support for the Group Manager and an Administrator. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support, then the Group Manager MUST respond with a 5.01 (Not Implemented) response.
 
-When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
+When checking the scope claim of a stored Access Token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. Instead, the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
-When custom CBOR is used, the Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
-
-When CoRAL is used, the Content-Format in messages containing a payload is set to application/coral+cbor, defined in {{Section 7.2 of I-D.ietf-core-coral}}. In addition, the following applies.
-
-* The parameters 'sign_params', 'ecdh_params', 'app_groups' and 'group_policies' are referred to as "structured parameters".
-
-* If a message payload specifies a link element corresponding to a structured parameter, then the payload MUST NOT include any link element corresponding to an inner information element of that structured parameter.
-
-* If a message payload specifies a link element corresponding to a structured parameter, then that link element MUST have the link target with value "false" (0xf4) for indicating the structured parameter with no elements.
+The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used, when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
@@ -599,7 +558,7 @@ The Group Manager MUST prepare the list L to include in the response as follows.
 
 3. The link to the group-configuration resource R is added to the list L only in case of a positive match.
 
-Example in Link Format:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.01 GET
@@ -615,46 +574,13 @@ Example in Link Format:
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
 ~~~~~~~~~~~
 
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.01 GET
-   Uri-Path: manage
-
-<= 2.05 Content
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [1, cri'coap://[2001:db8::ab]/manage'],
-     [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp1', [
-       [2, simple(6) / item 6 for linkformat:rt /,
-        6(-200) / item 415 for cri'http://www.iana.org/assignments
-                                   /linkformat/rt/core.osc.gconf' /]
-     ]],
-     [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp2', [
-       [2, simple(6) / item 6 for linkformat:rt /,
-        6(-200) / item 415 for cri'http://www.iana.org/assignments
-                                   /linkformat/rt/core.osc.gconf' /]
-     ]],
-     [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp3', [
-       [2, simple(6) / item 6 for linkformat:rt /,
-        6(-200) / item 415 for cri'http://www.iana.org/assignments
-                                   /linkformat/rt/core.osc.gconf' /]
-     ]]
-   ]
-~~~~~~~~~~~
-
 ## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
 
 This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-When custom CBOR is used, the set of filter criteria is specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
-
-When CoRAL is used, the filter criteria are specified in the request payload with top-level link elements, each of which corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. If names of application groups are used as filter criteria, each element of the 'app_groups' array from the status properties is included as a separate link element with name 'app_group'. With the exception of the 'app_group' element, a valid request MUST NOT include the same element multiple times. Element values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
+The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
 
 The Group Manager MUST prepare the list L to include in the response as follows.
 
@@ -662,7 +588,7 @@ The Group Manager MUST prepare the list L to include in the response as follows.
 
 2. The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.
 
-Example in custom CBOR and Link Format:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.05 FETCH
@@ -687,67 +613,21 @@ Example in custom CBOR and Link Format:
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
 ~~~~~~~~~~~
 
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.05 FETCH
-   Uri-Path: manage
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(27) / item 70 for core.osc.gconf:group_mode /, true],
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
-     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5]
-   ]
-
-<= 2.05 Content
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-    [1, cri'coap://[2001:db8::ab]/manage'],
-    [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp1', [
-      [2, simple(6) / item 6 for linkformat:rt /,
-       6(-200) / item 415 for cri'http://www.iana.org/assignments
-                                  /linkformat/rt/core.osc.gconf' /]
-    ]],
-    [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp2', [
-      [2, simple(6) / item 6 for linkformat:rt /,
-       6(-200) / item 415 for cri'http://www.iana.org/assignments
-                                  /linkformat/rt/core.osc.gconf' /]
-    ]],
-    [2, 6(17) / item 50 for core.osc.gcoll:item /, cri'/gp3', [
-      [2, simple(6) / item 6 for linkformat:rt /,
-       6(-200) / item 415 for cri'http://www.iana.org/assignments
-                                  /linkformat/rt/core.osc.gconf' /]
-    ]]
-   ]
-~~~~~~~~~~~
-
 ## Create a New Group Configuration ## {#collection-resource-post}
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME, and MAY specify the intended group title together with pieces of information concerning the group configuration.
 
-When custom CBOR is used, the request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
-
-When CoRAL is used, each link element of the request payload corresponds to an entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter (see below).
-
-In particular:
+The request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. In particular:
 
 * The payload MAY include any of the configuration parameters defined in {{config-repr-config-properties}}.
 
 * The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
 
-* The payload MAY include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies' and 'as_uri' defined in {{config-repr-status-properties}}.
+* The payload MAY include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in {{config-repr-status-properties}}.
 
-   When CoRAL is used, each element of the 'app_groups' array from the status properties is included as a separate element with name 'app_group'.
-
-* The payload MUST NOT include any of the status parameters 'rt', 'ace_groupcomm_profile' and 'joining_uri' defined in {{config-repr-status-properties}}.
+* The payload MUST NOT include any of the status parameters 'rt', 'ace_groupcomm_profile', and 'joining_uri' defined in {{config-repr-status-properties}}.
 
 Consistently with what is defined at step 4 of {{getting-access}}, the Group Manager MUST check whether the group name specified in the 'group_name' parameter matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission "Create".
 
@@ -757,7 +637,7 @@ If the group configuration to be created would include parameter values that pre
 
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
-* Any of the received parameters is specified multiple times, with the exception of the 'app_group' link element when using CoRAL.
+* Any of the received parameters is specified multiple times.
 
 * Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters.
 
@@ -799,9 +679,9 @@ From then on, the Group Manager will rely on the current group configuration to 
 
 Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response. The Location-Path option MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
 
-The response payload specifies the parameters 'group_name', 'joining_uri' and 'as_uri', from the status properties of the newly created OSCORE group (see {{config-repr}}), as detailed below.
+The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri', from the status properties of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
-When custom CBOR is used, the response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}. When CoRAL is used, the response payload includes one link element for each specified parameter.
+The response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}.
 
 * 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'group_name' status property for the OSCORE group. This parameter MUST be included.
 
@@ -813,13 +693,13 @@ If the POST request specified the parameter 'gid_reuse' encoding the CBOR simple
 
 If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
-The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}{{I-D.hartke-t2trg-coral-reef}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
+The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
 Alternatively, the Administrator can perform the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.01 (Created) response.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter (when custom CBOR is used) or by the different 'app_group' link elements (when CoRAL is used) in the POST request.
+* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.01 (Created) response.
 
@@ -833,7 +713,7 @@ Note that, compared to the Group Manager, the Administrator is less likely to re
 
 Therefore, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
-Example in custom CBOR:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.02 POST
@@ -867,45 +747,6 @@ Example in custom CBOR:
    }
 ~~~~~~~~~~~
 
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.02 POST
-   Uri-Path: manage
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
-     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5],
-     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, true],
-     [2, 6(-36) / item 87 for core.osc.gconf:active /, true],
-     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
-     [2, 6(-37) / item 89 for core.osc.gconf:group_title /,
-      "rooms 1 and 2"],
-     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 1"],
-     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 2"],
-     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
-      cri'coap://as.example.com/token']
-   ]
-
-<= 2.01 Created
-   Location-Path: manage
-   Location-Path: gp4
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
-     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
-      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
-     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
-      cri'coap://as.example.com/token']
-   ]
-~~~~~~~~~~~
-
 ## Retrieve a Group Configuration ## {#configuration-resource-get}
 
 This operation MUST be supported by the Group Manager and an Administrator.
@@ -918,11 +759,9 @@ If the verification above fails (i.e., there are no matching scope entries speci
 
 Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration properties and status properties.
 
-When custom CBOR is used, the response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
+The response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
 
-When CoRAL is used, the response payload includes one link element for each entry specified in {{config-repr}}, with the exception of the 'app_groups' status parameter. That is, each element of the 'app_groups' array from the status properties is included as a separate link element with name 'app_group'.
-
-Example in custom CBOR:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.01 GET
@@ -960,78 +799,23 @@ Example in custom CBOR:
    }
 ~~~~~~~~~~~
 
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.01 GET
-   Uri-Path: manage
-   Uri-Path: gp4
-
-<= 2.05 Content
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5],
-     [2, 6(-27) / item 69 for core.osc.gconf:cred_fmt /, 33],
-     [2, 6(27) / item 70 for core.osc.gconf:group_mode /, true],
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
-     [2, 6(28) / item 72 for core.osc.gconf:sign_alg /, -8],
-     [2, 6(29) / item 74 for
-      core.osc.gconf:sign_params.alg_capab.key_type /, 1],
-     [2, 6(-30) / item 75 for
-      core.osc.gconf:sign_params.key_type_capab.key_type /, 1],
-     [2, 6(30) / item 76 for
-      core.osc.gconf:sign_params.key_type_capab.curve /, 6],
-     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, true],
-     [2, 6(31) / item 78 for core.osc.gconf:alg /, 10],
-     [2, 6(-32) / item 79 for core.osc.gconf:ecdh_alg /, -27],
-     [2, 6(-33) / item 81 for
-      core.osc.gconf:ecdh_params.alg_capab.key_type /, 1],
-     [2, 6(33) / item 82 for
-      core.osc.gconf:ecdh_params.key_type_capab.key_type /, 1],
-     [2, 6(-34) / item 83 for
-      core.osc.gconf:ecdh_params.key_type_capab.curve /, 6],
-     [2, 6(34) / item 84 for core.osc.gconf:det_req /, false],
-     [2, 6(35) / item 86 for core.osc.gconf:rt /, "core.osc.gconf"],
-     [2, 6(-36) / item 87 for core.osc.gconf:active /, true],
-     [2, 6(36) / item 88 for core.osc.gconf:group_name /, "gp4"],
-     [2, 6(-37) / item 89 for core.osc.gconf:group_title /,
-      "rooms 1 and 2"],
-     [2, 6(37) / item 90 for core.osc.gconf:ace_groupcomm_profile /,
-      "coap_group_oscore_app"],
-     [2, 6(-38) / item 91 for core.osc.gconf:max_stale_sets /, 3],
-     [2, 6(38) / item 92 for core.osc.gconf:exp /, 1360289224],
-     [2, 6(-39) / item 93 for core.osc.gconf:gid_reuse /, false],
-     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 1"],
-     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 2"],
-     [2, 6(-41) / item 97 for core.osc.gconf:joining_uri /,
-      cri'coap://[2001:db8::ab]/ace-group/gp4/'],
-     [2, 6(43) / item 102 for core.osc.gconf:as_uri /,
-      cri'coap://as.example.com/token']
-   ]
-~~~~~~~~~~~
-
 ## Retrieve Part of a Group Configuration by Filters ## {#configuration-resource-fetch}
 
 This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
 
 The Administrator can send a FETCH request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
-When custom CBOR is used, the request payload is a CBOR map, which contains the following fields:
+The request payload is a CBOR map, which contains the following field:
 
 * 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
-
-When CoRAL is used, the request payload includes one link element for each requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}). All the specified link elements MUST have the link target with value "null". Also, the request payload MUST NOT include any link element corresponding to an inner information element of a structured parameter.
 
 The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
 After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration properties and status properties requested by the Administrator in the FETCH request.
 
-The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}). If the request payload specifies a parameter that is not included in the group configuration, then the response payload MUST NOT include a corresponding parameter (when Custom CBOR is used) or link element (when CoRAL is used).
+The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}). If the request payload specifies a parameter that is not included in the group configuration, then the response payload MUST NOT include a corresponding parameter.
 
-Example in custom CBOR:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.05 FETCH
@@ -1064,42 +848,6 @@ Example in custom CBOR:
         "app_groups" : ["room1", "room2"]
    }
 
-~~~~~~~~~~~
-
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.05 FETCH
-   Uri-Path: manage
-   Uri-Path: gp4
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, null],
-     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, null],
-     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, null],
-     [2, 6(-36) / item 87 for core.osc.gconf:active /, null],
-     [2, 6(-37) / item 89 for core.osc.gconf:group_title /, null],
-     [2, 6(41) / item 98 for core.osc.gconf:app_groups /, null]
-   ]
-
-<= 2.05 Content
-   Content-Format: 65087 (application/coral+cbor)
-
-   Payload:
-
-   [
-     [2, 6(-28) / item 71 for core.osc.gconf:sign_enc_alg /, 10],
-     [2, 6(26) / item 68 for core.osc.gconf:hkdf /, 5],
-     [2, 6(-31) / item 77 for core.osc.gconf:pairwise_mode /, true],
-     [2, 6(-36) / item 87 for core.osc.gconf:active /, true],
-     [2, 6(-37) / item 89 for core.osc.gconf:group_title /,
-      "rooms 1 and 2"],
-     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 1"],
-     [2, 6(39) / item 94 for core.osc.gconf:app_group /, "room 2"]
-   ]
 ~~~~~~~~~~~
 
 ## Overwrite a Group Configuration ## {#configuration-resource-put}
