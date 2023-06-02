@@ -1089,7 +1089,7 @@ The operation of deleting the group-configuration resource and the corresponding
 
 Then, the Group Manager replies to the Administrator with a 2.02 (Deleted) response.
 
-Example:
+An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.04 DELETE
