@@ -545,7 +545,7 @@ For each of the configuration parameters listed below, the Group Manager refers 
 
 * If 'det_req' has value "true" (0xf5), the Group Manager SHOULD use SHA-256 (COSE algorithm encoding: -16) as default value for the parameter 'det_hash_alg'.
 
-* For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value "false" (0xf4).
+* For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value "true" (0xf5).
 
 * If 'pairwise_mode' has value "true" (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg' and 'ecdh_params'.
 
