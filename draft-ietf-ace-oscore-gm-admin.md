@@ -166,21 +166,21 @@ This document also refers to the following terminology.
 
    The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.
 
-* Admin endpoint: an endpoint at the Group Manager associated with the group-collection resource or to a group-configuration resource hosted by that Group Manager.
+* Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
 # Group Administration # {#overview}
 
 With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
 
-* The Group Manager acts as Resource Server (RS). It provides one single group-collection resource, and one group-configuration resource per existing OSCORE group. Each of those is exported by a distinct admin endpoint.
+* The Group Manager acts as Resource Server (RS). It provides one single group-collection resource, and one group-configuration resource per existing OSCORE group.
 
-* The Administrator acts as Client (C), and requests to access the group-collection resource and group-configuration resources, by accessing the respective admin endpoint at the Group Manager.
+* The Administrator acts as Client (C), and requests to access the group-collection resource and group-configuration resources at the Group Manager.
 
 * The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated with the same AS.
 
     The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}} and {{getting-access}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
 
-    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin endpoints of registered Group Managers.
+    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers.
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
@@ -196,7 +196,7 @@ Collection  \___/
                    /   \   /   \  ...  /   \        Group
                    \___/   \___/       \___/   Configurations
 ~~~~~~~~~~~
-{: #fig-api title="Resources of a Group Manager" artwork-align="center"}
+{: #fig-api title="Admin Resources of a Group Manager" artwork-align="center"}
 
 The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" defined in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator to:
 
@@ -264,7 +264,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
       The AS and the Group Manager are expected to have agreed on commonly supported semantics for group name patterns. This can happen, for instance, as part of the registration process of the Group Manager at the AS.
 
-* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin endpoints at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
+* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin resources at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
 
    - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry, for which this document defines the entries in {{fig-permission-values}}.
 
@@ -287,7 +287,7 @@ Then, the following applies for each admin scope entry intended to express autho
 | Delete | 4     | Delete group configurations            |
 +--------+-------+----------------------------------------+
 ~~~~~~~~~~~
-{: #fig-permission-values title="Numeric identifier of permissions on the admin endpoints at a Group Manager" artwork-align="center"}
+{: #fig-permission-values title="Numeric identifier of permissions on the admin resources at a Group Manager" artwork-align="center"}
 
 The following CDDL {{RFC8610}} notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in {{fig-permission-values}}.
 
@@ -308,7 +308,7 @@ The following CDDL {{RFC8610}} notation defines an admin scope entry that uses t
    scope_entry = [oscore-gname, oscore-gperm]
 ~~~~~~~~~~~~~~~~~~~~
 
-Future specifications that define new permissions on the admin endpoints at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
+Future specifications that define new permissions on the admin resources at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry MUST include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.
 
