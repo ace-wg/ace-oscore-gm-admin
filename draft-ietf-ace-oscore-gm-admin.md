@@ -1218,7 +1218,13 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
 * Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace_groupcomm_profile' are present.
 
-* The 'key' parameter includes only the parameters 'hkdf', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params', 'alg', 'ecdh_alg' and 'ecdh_params', with values reflecting the new configuration of the OSCORE group.
+* The 'key' parameter includes only the following parameters, with values reflecting the new configuration of the OSCORE group.
+
+   - 'hkdf' and 'cred_fmt'.
+
+   - 'sign_enc_alg', 'sign_alg', and 'sign_params', only in case the configuration parameter 'group_mode' in the group-configuration resource has value "true" (0xf5), i.e., the OSCORE group uses the group mode of Group OSCORE.
+
+   - 'alg', 'ecdh_alg', and 'ecdh_params', only in case the configuration parameter 'pairwise_mode' in the group-configuration resource has value "true" (0xf5), i.e., the OSCORE group uses the pairwise mode of Group OSCORE.
 
 Alternatively, group members can subscribe for updates to the group-membership resource of the OSCORE group, e.g., by using CoAP Observe {{RFC7641}}.
 
