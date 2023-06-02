@@ -1974,6 +1974,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -08 to -09 ## {#sec-08-09}
 
+* Use of the pairwise mode changed to "true" by default.
+
 * Fixes and editorial improvements.
 
 ## Version -07 to -08 ## {#sec-07-08}
