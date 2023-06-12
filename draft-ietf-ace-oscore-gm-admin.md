@@ -915,7 +915,7 @@ If the value of the status parameter 'active' is changed from "false" (0xf4) to 
 
 After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). To this end, messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). Such messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
 
 * Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace_groupcomm_profile' are present.
 
@@ -933,35 +933,37 @@ Alternatively, group members can obtain the information above by accessing the g
 
 When receiving such information, each group member uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If any of 'sign_enc_alg', 'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value "null" (0xf6), then the corresponding parameter in the Group OSCORE Security Context becomes unset if it is not already. According to the new parameter values, each group member derives new Sender/Recipient Keys, a new Common IV, and new Pairwise Keys. When doing so, a group member MUST NOT reset the Sender Sequence Number in its Sender Context or reset the Replay Window in its Recipient Contexts.
 
-If the value of the status parameter 'active' is changed from "true" (0xf5) to "false" (0xf4):
+The following applies when the value of specific parameters is updated.
 
-* The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* If the value of the status parameter 'active' is changed from "true" (0xf5) to "false" (0xf4):
 
-* The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}). In particular, until the status parameter 'active' is changed back to "true" (0xf5), the Group Manager MUST respond to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   - The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to "true" (0xf5). Until then, the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value "false" (0xf4)), SHOULD stop communicating in the group.
+   - The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to "true" (0xf5). Until then, the Group Manager MUST respond to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value "true" (0xf5) again), can resume communicating in the group.
+* Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value "false" (0xf4)), SHOULD stop communicating in the group.
 
-Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg' and 'alg', MUST either:
+   Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value "true" (0xf5) again), can resume communicating in the group.
 
-* Leave the OSCORE group (see {{Section 9.11 of I-D.ietf-ace-key-groupcomm-oscore}}), e.g., if not supporting the indicated new algorithms; or
+* Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg', and 'alg', MUST either:
 
-* Remain in the OSCORE group and use the Group OSCORE Security Context after having updated it as defined above.
+   - Leave the OSCORE group (see {{Section 9.11 of I-D.ietf-ace-key-groupcomm-oscore}}), e.g., if not supporting the indicated new algorithms; or
 
-Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' MUST either:
+   - Remain in the OSCORE group and use the Group OSCORE Security Context after having updated it as defined above.
 
-* Leave the OSCORE group, e.g., if not supporting the indicated new format, algorithms, parameters and encoding; or
+* Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 'sign_params', 'ecdh_alg', and 'ecdh_params' MUST either:
 
-* Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}). When rejoining the group, an authentication credential in the indicated format used in the OSCORE group MUST be provided to the Group Manager. The authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
+   - Leave the OSCORE group, e.g., if not supporting the indicated new format, algorithms, parameters and encoding; or
 
-* Remain in the OSCORE group and use the Group OSCORE Security Context after having updated it as defined above, and, if required, perform the following actions.
+   - Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}). When rejoining the group, an authentication credential in the indicated format used in the OSCORE group MUST be provided to the Group Manager. The authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
-   - Provide the Group Manager with a new authentication credential to use in the OSCORE group (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}). The new authentication credential MUST be in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
+   - Remain in the OSCORE group and use the Group OSCORE Security Context after having updated it as defined above, and, if required, perform the following actions.
 
-      Consistently, the group member has to retrieve the new authentication credentials of other group members as they are uploaded to the Group Manager (see {{Section 9.3 of I-D.ietf-ace-key-groupcomm-oscore}}). In order to ensure the retrieval of latest authentication credentials that are consistent with the new group configuration, it is preferable that the group member retrieves such authentication credentials after a pre-configured time interval has elapsed since uploading its own authentication credential. Later on, the group member will need to retrieve other group members' authentication credentials that it is still missing and that it needs for processing messages exchanged in the OSCORE group.
+      - Provide the Group Manager with a new authentication credential to use in the OSCORE group (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}). The new authentication credential MUST be in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
-   - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
+         Consistently, the group member has to retrieve the new authentication credentials of other group members as they are uploaded to the Group Manager (see {{Section 9.3 of I-D.ietf-ace-key-groupcomm-oscore}}). In order to ensure the retrieval of latest authentication credentials that are consistent with the new group configuration, it is preferable that the group member retrieves such authentication credentials after a pre-configured time interval has elapsed since uploading its own authentication credential. Later on, the group member will need to retrieve other group members' authentication credentials that it is still missing and that it needs for processing messages exchanged in the OSCORE group.
+
+      - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
