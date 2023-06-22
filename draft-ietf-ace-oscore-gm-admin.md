@@ -791,7 +791,7 @@ The Administrator can send a FETCH request to the group-configuration resource m
 
 The request payload is a CBOR map, which contains the following field:
 
-* 'conf_filter', encoded as a CBOR array and with CBOR abbreviation defined in {{groupcomm-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}).
+* 'conf_filter', encoded as a CBOR array. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}), encoded with the corresponding CBOR abbreviation defined in {{groupcomm-parameters}}.
 
 The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
