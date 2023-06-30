@@ -1296,7 +1296,7 @@ If multiple Administrators are responsible for the same OSCORE group, they are e
 
 A compromised Administrator may collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
 
-When an Administrator is found compromised, the pertaining Access Tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked Acess Tokens is defined in {{I-D.ietf-ace-revoked-token-notification}}.
+When an Administrator is found compromised, the pertaining Access Tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked Access Tokens is defined in {{I-D.ietf-ace-revoked-token-notification}}.
 
 # IANA Considerations # {#iana}
 
@@ -1678,6 +1678,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
-The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}} and {{{Jim Schaad}}} for their comments and feedback.
+The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, and {{{Jim Schaad}}} for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
