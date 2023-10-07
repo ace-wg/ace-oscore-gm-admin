@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 1 January 2024                                  P. van der Stok
+Expires: 9 April 2024                                    P. van der Stok
                                                               Consultant
                                                             F. Palombini
                                                              Ericsson AB
-                                                            30 June 2023
+                                                          7 October 2023
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2024.
+   This Internet-Draft will expire on 9 April 2024.
 
 Copyright Notice
 
@@ -124,14 +124,15 @@ Table of Contents
    Appendix A.  Processing of Group Name Patterns at the AS
    Appendix B.  Document Updates
      B.1.  Version -08 to -09
-     B.2.  Version -07 to -08
-     B.3.  Version -06 to -07
-     B.4.  Version -05 to -06
-     B.5.  Version -04 to -05
-     B.6.  Version -03 to -04
-     B.7.  Version -02 to -03
-     B.8.  Version -01 to -02
-     B.9.  Version -00 to -01
+     B.2.  Version -08 to -09
+     B.3.  Version -07 to -08
+     B.4.  Version -06 to -07
+     B.5.  Version -05 to -06
+     B.6.  Version -04 to -05
+     B.7.  Version -03 to -04
+     B.8.  Version -02 to -03
+     B.9.  Version -01 to -02
+     B.10. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -723,18 +724,19 @@ Table of Contents
        are specified in Section 6.
 
        Upon receiving a request from the Administrator targeting the
-       group-configuration resource or a group-collection resource, the
+       group-collection resource or a group-configuration resource, the
        Group Manager MUST check that it is storing a valid Access Token
        for that Administrator.  If this is not the case, the Group
        Manager MUST reply with a 4.01 (Unauthorized) error response.
 
-       If the request targets the group-configuration resource
-       associated with a group with name GROUPNAME, the Group Manager
-       MUST check that it is storing a valid Access Token from that
-       Administrator, such that the 'scope' claim specified in the
-       Access Token: i) expresses authorization information through
-       scope entries as defined in Section 3; and ii) specifically
-       includes a scope entry where:
+       If the request targets the group-collection resource for creating
+       a new group with name GROUPNAME or it targets the group-
+       configuration resource associated with an existing group with
+       name GROUPNAME, then the Group Manager MUST check that it is
+       storing a valid Access Token from that Administrator, such that
+       the 'scope' claim specified in the Access Token: i) expresses
+       authorization information through scope entries as defined in
+       Section 3; and ii) specifically includes a scope entry where:
 
        *  The group name GROUPNAME matches with the pattern specified by
           the "Toid" of the scope entry; and
@@ -1256,9 +1258,7 @@ Table of Contents
 
    If the verification above fails (i.e., there are no matching scope
    entries specifying the "Create" permission), the Group Manager MUST
-   reply with a 4.03 (Forbidden) error response.  The response MUST have
-   Content-Format set to application/ace-groupcomm+cbor and is formatted
-   as defined in Section 4.1.2 of [I-D.ietf-ace-key-groupcomm].
+   reply with a 4.03 (Forbidden) error response.
 
    If the group configuration to be created would include parameter
    values that prevent the Group Manager from performing the operations
@@ -1507,9 +1507,7 @@ Table of Contents
 
    If the verification above fails (i.e., there are no matching scope
    entries specifying the "Read" permission), the Group Manager MUST
-   reply with a 4.03 (Forbidden) error response.  The response MUST have
-   Content-Format set to application/ace-groupcomm+cbor and is formatted
-   as defined in Section 4.1.2 of [I-D.ietf-ace-key-groupcomm].
+   reply with a 4.03 (Forbidden) error response.
 
    Otherwise, after a successful processing of the GET request, the
    Group Manager replies to the Administrator with a 2.05 (Content)
@@ -1659,9 +1657,7 @@ Table of Contents
 
    If the verification above fails (i.e., there are no matching scope
    entries specifying the "Write" permission), the Group Manager MUST
-   reply with a 4.03 (Forbidden) error response.  The response MUST have
-   Content-Format set to application/ace-groupcomm+cbor and is formatted
-   as defined in Section 4.1.2 of [I-D.ietf-ace-key-groupcomm].
+   reply with a 4.03 (Forbidden) error response.
 
    If the updated group configuration would include parameter values
    that prevent the Group Manager from performing the operations defined
@@ -2203,9 +2199,7 @@ Table of Contents
 
    If the verification above fails (i.e., there are no matching scope
    entries specifying the "Delete" permission), the Group Manager MUST
-   reply with a 4.03 (Forbidden) error response.  The response MUST have
-   Content-Format set to application/ace-groupcomm+cbor and is formatted
-   as defined in Section 4.1.2 of [I-D.ietf-ace-key-groupcomm].
+   reply with a 4.03 (Forbidden) error response.
 
    Otherwise, the Group Manager continues processing the request, which
    would be successful only on an inactive OSCORE group.  That is, the
@@ -2855,9 +2849,9 @@ Table of Contents
    [I-D.ietf-ace-key-groupcomm]
               Palombini, F. and M. Tiloca, "Key Provisioning for Group
               Communication using ACE", Work in Progress, Internet-
-              Draft, draft-ietf-ace-key-groupcomm-16, 5 September 2022,
+              Draft, draft-ietf-ace-key-groupcomm-17, 6 October 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-
-              groupcomm-16>.
+              groupcomm-17>.
 
    [I-D.ietf-ace-key-groupcomm-oscore]
               Tiloca, M., Park, J., and F. Palombini, "Key Management
@@ -2870,17 +2864,16 @@ Table of Contents
               Dijk, E., Wang, C., and M. Tiloca, "Group Communication
               for the Constrained Application Protocol (CoAP)", Work in
               Progress, Internet-Draft, draft-ietf-core-groupcomm-bis-
-              08, 11 January 2023,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              groupcomm-bis-08>.
+              09, 10 July 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-core-groupcomm-bis-09>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and J. Park, "Group Object Security for Constrained
               RESTful Environments (Group OSCORE)", Work in Progress,
-              Internet-Draft, draft-ietf-core-oscore-groupcomm-18, 22
-              June 2023, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-core-oscore-groupcomm-18>.
+              Internet-Draft, draft-ietf-core-oscore-groupcomm-20, 2
+              September 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-core-oscore-groupcomm-20>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2979,9 +2972,9 @@ Table of Contents
    [I-D.amsuess-core-cachable-oscore]
               Amsüss, C. and M. Tiloca, "Cacheable OSCORE", Work in
               Progress, Internet-Draft, draft-amsuess-core-cachable-
-              oscore-06, 11 January 2023,
+              oscore-07, 10 July 2023,
               <https://datatracker.ietf.org/doc/html/draft-amsuess-core-
-              cachable-oscore-06>.
+              cachable-oscore-07>.
 
    [I-D.ietf-ace-revoked-token-notification]
               Tiloca, M., Palombini, F., Echeverria, S., and G. Lewis,
@@ -2996,17 +2989,17 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-05, 10 January 2023,
+              ietf-cose-cbor-encoded-cert-06, 7 July 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-05>.
+              cbor-encoded-cert-06>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
               OSCORE Groups with the CoRE Resource Directory", Work in
               Progress, Internet-Draft, draft-tiloca-core-oscore-
-              discovery-13, 8 March 2023,
+              discovery-14, 8 September 2023,
               <https://datatracker.ietf.org/doc/html/draft-tiloca-core-
-              oscore-discovery-13>.
+              oscore-discovery-14>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -3129,6 +3122,12 @@ Appendix B.  Document Updates
 
 B.1.  Version -08 to -09
 
+   *  Consistent use of 4.03 (Forbidden) error responses.
+
+   *  Editorial fixes and improvements.
+
+B.2.  Version -08 to -09
+
    *  Removed use of CoRAL.
 
    *  Use of the pairwise mode changed to "true" by default.
@@ -3143,7 +3142,7 @@ B.1.  Version -08 to -09
 
    *  Fixes and editorial improvements.
 
-B.2.  Version -07 to -08
+B.3.  Version -07 to -08
 
    *  Consistency of parameter names.
 
@@ -3165,7 +3164,7 @@ B.2.  Version -07 to -08
 
    *  Various clarifications and editorial improvements.
 
-B.3.  Version -06 to -07
+B.4.  Version -06 to -07
 
    *  Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
@@ -3181,7 +3180,7 @@ B.3.  Version -06 to -07
 
    *  Editorial improvements.
 
-B.4.  Version -05 to -06
+B.5.  Version -05 to -06
 
    *  Use and extend the same AIF specific data model AIF-OSCORE-
       GROUPCOMM defined in [I-D.ietf-ace-key-groupcomm-oscore].
@@ -3203,7 +3202,7 @@ B.4.  Version -05 to -06
 
    *  Editorial improvements.
 
-B.5.  Version -04 to -05
+B.6.  Version -04 to -05
 
    *  Defined format of scope based on a new AIF data model.
 
@@ -3225,7 +3224,7 @@ B.5.  Version -04 to -05
 
    *  Revised order of sections; editorial improvements.
 
-B.6.  Version -03 to -04
+B.7.  Version -03 to -04
 
    *  Clarifications on what to do in case of enhanced error responses.
 
@@ -3240,7 +3239,7 @@ B.6.  Version -03 to -04
 
    *  Editorial improvements.
 
-B.7.  Version -02 to -03
+B.8.  Version -02 to -03
 
    *  Aligned new and old parameters to core-groupcomm-oscore and ace-
       key-groupcomm-oscore.
@@ -3253,7 +3252,7 @@ B.7.  Version -02 to -03
 
    *  New error type "Group currently active".
 
-B.8.  Version -01 to -02
+B.9.  Version -01 to -02
 
    *  Admit multiple Administrators and limited access to admin
       resources.
@@ -3267,7 +3266,7 @@ B.8.  Version -01 to -02
 
    *  Editorial improvements.
 
-B.9.  Version -00 to -01
+B.10.  Version -00 to -01
 
    *  Names of application groups as status parameter.
 
