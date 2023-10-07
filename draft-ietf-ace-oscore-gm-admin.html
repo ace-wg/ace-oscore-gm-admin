@@ -2753,9 +2753,13 @@ This is consistent with what is defined in <span><a href="https://datatracker.ie
               <p id="section-8-4.2.2.1.1">The Administrator simply tries again later on. The new POST request to the group-collection resource specifies the same group name originally suggested in the previous request that triggered the error response (see <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>). This option fundamentally relies on the Group Manager freeing up group names, hence it is not viable if considerably or indefinitely postponing the creation of the group is not acceptable.<a href="#section-8-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-8-4.2.2.2">
-              <p id="section-8-4.2.2.2.1">The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response. The new group name suggested by the Administrator should be such that the following holds.<a href="#section-8-4.2.2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-8-4.2.2.2.1">The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.<a href="#section-8-4.2.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.2">
-Let us define: i) S, as the set of all the scope entries in the Administrator's Access Token, such that the old group name matched with each of those scope entries; ii) S', as the set of all the scope entries in the Administrator's Access Token, such that the new group name matches with each of those scope entries. Then, S' is neither equal to S nor a subset of S.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
+In order to not suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a>. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
+<p id="section-8-4.2.2.2.3">
+The new group name suggested by the Administrator should be such that the following holds.<a href="#section-8-4.2.2.2.3" class="pilcrow">¶</a></p>
+<p id="section-8-4.2.2.2.4">
+Let us define: i) S, as the set of all the scope entries in the Administrator's Access Token, such that the old group name matched with each of those scope entries; ii) S', as the set of all the scope entries in the Administrator's Access Token, such that the new group name matches with each of those scope entries. Then, S' is neither equal to S nor a subset of S.<a href="#section-8-4.2.2.2.4" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-8-4.2.2.3">
               <p id="section-8-4.2.2.3.1">The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.<a href="#section-8-4.2.2.3.1" class="pilcrow">¶</a></p>
@@ -3310,7 +3314,10 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.4.1">Made explicit what parameters cannot change when overwriting a group configuration.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.5">
-            <p id="appendix-B.1-1.5.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.5.1">Improved guidelines to Administrators receiving an error after trying to create a new group.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.6">
+            <p id="appendix-B.1-1.6.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
