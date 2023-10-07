@@ -1238,11 +1238,11 @@ When receiving an error response from the Group Manager, an Administrator may us
 
    - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.
 
-      In order to not inadvertently suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
+      In order to not inadvertently suggest a new group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
 
-      If possible (e.g., without renouncing permissions that were granted per the old group name), the new group name suggested by the Administrator should be such that the following holds, in order to increase the chances that the new group name is available at the Group Manager.
+      The Administrator should choose the new group name GROUPNAME to suggest, in such a way that it does not renounce permissions that were granted per the old group name GROUPNAME*. This is the case if the following holds.
 
-      Let us define: i) S, as the set of all the scope entries in the Administrator's Access Token, such that the old group name matched with each of those scope entries; ii) S', as the set of all the scope entries in the Administrator's Access Token, such that the new group name matches with each of those scope entries. Then, S' is neither equal to S nor a subset of S.
+      With reference to the Administrator's Access Token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no less permissions than PERM*.
 
    - The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.
 
