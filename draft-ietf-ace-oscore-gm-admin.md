@@ -850,7 +850,7 @@ If the updated group configuration would include parameter values that prevent t
 
 If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse MUST remain unchanged. For each other parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. The corresponding group-membership resource is also accordingly updated.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged. For each other parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. The corresponding group-membership resource is also accordingly updated.
 
 
 
