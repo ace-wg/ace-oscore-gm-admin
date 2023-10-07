@@ -1236,7 +1236,11 @@ When receiving an error response from the Group Manager, an Administrator may us
 
    - The Administrator simply tries again later on. The new POST request to the group-collection resource specifies the same group name originally suggested in the previous request that triggered the error response (see {{collection-resource-post}}). This option fundamentally relies on the Group Manager freeing up group names, hence it is not viable if considerably or indefinitely postponing the creation of the group is not acceptable.
 
-   - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response. The new group name suggested by the Administrator should be such that the following holds.
+   - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.
+
+      In order to not suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
+
+      The new group name suggested by the Administrator should be such that the following holds.
 
       Let us define: i) S, as the set of all the scope entries in the Administrator's Access Token, such that the old group name matched with each of those scope entries; ii) S', as the set of all the scope entries in the Administrator's Access Token, such that the new group name matches with each of those scope entries. Then, S' is neither equal to S nor a subset of S.
 
@@ -1544,6 +1548,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Clarified how the Group Manager may attempt to determine an alternative group name upon creating a new group.
 
 * Made explicit what parameters cannot change when overwriting a group configuration.
+
+* Improved guidelines to Administrators receiving an error after trying to create a new group.
 
 * Editorial fixes and improvements.
 
