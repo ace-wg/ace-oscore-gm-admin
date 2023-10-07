@@ -2755,7 +2755,7 @@ This is consistent with what is defined in <span><a href="https://datatracker.ie
             <li class="normal" id="section-8-4.2.2.2">
               <p id="section-8-4.2.2.2.1">The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.<a href="#section-8-4.2.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.2">
-In order to not suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a>. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
+In order to not inadvertently suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a>. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.3">
 The new group name suggested by the Administrator should be such that the following holds.<a href="#section-8-4.2.2.2.3" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.4">
