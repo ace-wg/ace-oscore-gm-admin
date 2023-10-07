@@ -1238,7 +1238,7 @@ When receiving an error response from the Group Manager, an Administrator may us
 
    - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.
 
-      In order to not suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
+      In order to not inadvertently suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
 
       The new group name suggested by the Administrator should be such that the following holds.
 
