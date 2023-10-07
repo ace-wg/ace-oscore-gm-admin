@@ -627,7 +627,7 @@ Otherwise, if any of the following occurs, the Group Manager MUST respond with a
 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
-If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST find an alternative name for the new OSCORE group to create.
+If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST try to determine an alternative name for the new OSCORE group to create.
 
 In addition to that, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.
 
@@ -637,7 +637,7 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 * If GROUPNAME\* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
 
-If the Group Manager does not find any group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("No available group names").
+If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("No available group names").
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
 
@@ -1538,6 +1538,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Consistent use of 4.03 (Forbidden) error responses.
 
 * Removed moot, remnant statements from when CoRAL was used.
+
+* Clarified how the Group Manager may attempt to determine an alternative group name upon creating a new group.
 
 * Editorial fixes and improvements.
 
