@@ -2757,7 +2757,7 @@ This is consistent with what is defined in <span><a href="https://datatracker.ie
 <p id="section-8-4.2.2.2.2">
 In order to not inadvertently suggest a group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a>. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.3">
-The new group name suggested by the Administrator should be such that the following holds.<a href="#section-8-4.2.2.2.3" class="pilcrow">¶</a></p>
+If possible (e.g., without renouncing permissions that were granted per the old group name), the new group name suggested by the Administrator should be such that the following holds, in order to increase the chances that the new group name is available at the Group Manager.<a href="#section-8-4.2.2.2.3" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.4">
 Let us define: i) S, as the set of all the scope entries in the Administrator's Access Token, such that the old group name matched with each of those scope entries; ii) S', as the set of all the scope entries in the Administrator's Access Token, such that the new group name matches with each of those scope entries. Then, S' is neither equal to S nor a subset of S.<a href="#section-8-4.2.2.2.4" class="pilcrow">¶</a></p>
 </li>
