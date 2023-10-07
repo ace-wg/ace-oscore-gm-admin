@@ -1301,10 +1301,13 @@ Table of Contents
 
    *  The chosen name GROUPNAME is available to assign; and
 
-   *  If GROUPNAME* matches with the group name pattern of certain scope
-      entries from the 'scope' claim in the stored Access Token for the
-      Administrator, then the chosen group name GROUPNAME also matches
-      with each of those group name patterns.
+   *  With reference to the 'scope' claim in the stored Access Token for
+      the Administrator, let us define PERM* as the union of the
+      permission sets associated with the scope entries such that
+      GROUPNAME* matches with the specified group name pattern.  Also,
+      let us define PERM as the union of the permission sets associated
+      with the scope entries such that GROUPNAME matches with the
+      specified group name pattern.  Then, PERM and PERM* MUST be equal.
 
    If the Group Manager does not manage to determine a group name for
    which both the above conditions hold, the Group Manager MUST respond
@@ -2445,13 +2448,14 @@ Table of Contents
          that were granted per the old group name GROUPNAME*. This is
          the case if the following holds.
 
-         With reference to the Administrator's Access Token, let us
-         define PERM* as the union of the permission sets associated
-         with the scope entries such that GROUPNAME* matches with the
-         specified group name pattern.  Also, let us define PERM as the
-         union of the permission sets associated with the scope entries
-         such that GROUPNAME matches with the specified group name
-         pattern.  Then, PERM specifies no less permissions than PERM*.
+         With reference to the 'scope' claim of the Administrator's
+         Access Token, let us define PERM* as the union of the
+         permission sets associated with the scope entries such that
+         GROUPNAME* matches with the specified group name pattern.
+         Also, let us define PERM as the union of the permission sets
+         associated with the scope entries such that GROUPNAME matches
+         with the specified group name pattern.  Then, PERM specifies no
+         less permissions than PERM*.
 
       -  The Administrator requests a new Access Token to the
          Authorization Server, in order to update its access rights, and
@@ -3144,6 +3148,9 @@ B.1.  Version -08 to -09
 
    *  Made explicit what parameters cannot change when overwriting a
       group configuration.
+
+   *  Improved guidelines to the Group Manager on selecting an
+      alternative group name.
 
    *  Improved guidelines to Administrators receiving an error after
       trying to create a new group.
