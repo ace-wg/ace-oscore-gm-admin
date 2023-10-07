@@ -637,7 +637,7 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 * If GROUPNAME\* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
 
-If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("No available group names").
+If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("Unable to determine a group name").
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
 
@@ -1216,15 +1216,15 @@ The following holds for an Administrator.
 In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
 
 ~~~~~~~~~~~
-+-------+---------------------------------+
-| Value | Description                     |
-+-------+---------------------------------+
-| 10    | Group currently active          |
-+-------+---------------------------------+
-| 11    | No available group names        |
-+-------+---------------------------------+
-| 12    | Unsupported group configuration |
-+-------+---------------------------------+
++-------+----------------------------------+
+| Value | Description                      |
++-------+----------------------------------+
+| 10    | Group currently active           |
++-------+----------------------------------+
+| 11    | Unable to determine a group name |
++-------+----------------------------------+
+| 12    | Unsupported group configuration  |
++-------+----------------------------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
 
@@ -1439,7 +1439,7 @@ Description: Group currently active
 Reference: [RFC-XXXX]
 
 Value: 11
-Description: No available group names
+Description: Unable to determine a group name
 Reference: [RFC-XXXX]
 
 Value: 12
@@ -1550,6 +1550,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Made explicit what parameters cannot change when overwriting a group configuration.
 
 * Improved guidelines to Administrators receiving an error after trying to create a new group.
+
+* Changed description of error 11 from "No available group names" to "Unable to determine a group name".
 
 * Editorial fixes and improvements.
 
