@@ -2047,7 +2047,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
 </li>
         </ul>
 <p id="section-6.3-10">After a successful processing of the POST request, the Group Manager performs the following actions.<a href="#section-6.3-10" class="pilcrow">¶</a></p>
-<p id="section-6.3-11">If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST find an alternative name for the new OSCORE group to create.<a href="#section-6.3-11" class="pilcrow">¶</a></p>
+<p id="section-6.3-11">If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST try to determine an alternative name for the new OSCORE group to create.<a href="#section-6.3-11" class="pilcrow">¶</a></p>
 <p id="section-6.3-12">In addition to that, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.<a href="#section-6.3-12" class="pilcrow">¶</a></p>
 <p id="section-6.3-13">If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.<a href="#section-6.3-13" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2058,7 +2058,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
             <p id="section-6.3-14.2.1">If GROUPNAME* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.<a href="#section-6.3-14.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.3-15">If the Group Manager does not find any group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-17#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>. The value of the 'error' field MUST be set to 11 ("No available group names").<a href="#section-6.3-15" class="pilcrow">¶</a></p>
+<p id="section-6.3-15">If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-17#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>. The value of the 'error' field MUST be set to 11 ("No available group names").<a href="#section-6.3-15" class="pilcrow">¶</a></p>
 <p id="section-6.3-16">Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.<a href="#section-6.3-16" class="pilcrow">¶</a></p>
 <p id="section-6.3-17">The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic.<a href="#section-6.3-17" class="pilcrow">¶</a></p>
 <p id="section-6.3-18">The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.<a href="#section-6.3-18" class="pilcrow">¶</a></p>
@@ -3304,7 +3304,10 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.2.1">Removed moot, remnant statements from when CoRAL was used.<a href="#appendix-B.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.3">
-            <p id="appendix-B.1-1.3.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.3.1">Clarified how the Group Manager may attempt to determine an alternative group name upon creating a new group.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.4">
+            <p id="appendix-B.1-1.4.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
