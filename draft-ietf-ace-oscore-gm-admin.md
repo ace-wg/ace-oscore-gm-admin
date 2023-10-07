@@ -564,7 +564,7 @@ This operation MUST be supported by the Group Manager and MAY be supported by an
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}). A valid request MUST NOT include the same entry multiple times.
+The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
 
 The Group Manager MUST prepare the list L to include in the response as follows.
 
@@ -620,8 +620,6 @@ If the verification above fails (i.e., there are no matching scope entries speci
 If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
 
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
-
-* Any of the received parameters is specified multiple times.
 
 * Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters.
 
@@ -1538,6 +1536,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -08 to -09 ## {#sec-09-10}
 
 * Consistent use of 4.03 (Forbidden) error responses.
+
+* Removed moot, remnant statements from when CoRAL was used.
 
 * Editorial fixes and improvements.
 
