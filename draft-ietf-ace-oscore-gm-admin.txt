@@ -1182,8 +1182,7 @@ Table of Contents
    map, whose possible entries are specified in Section 5.1 and use the
    same abbreviations defined in Section 7.  Entry values are the ones
    admitted for the corresponding labels in the POST request for
-   creating a group configuration (see Section 6.3).  A valid request
-   MUST NOT include the same entry multiple times.
+   creating a group configuration (see Section 6.3).
 
    The Group Manager MUST prepare the list L to include in the response
    as follows.
@@ -1274,8 +1273,6 @@ Table of Contents
 
    Otherwise, if any of the following occurs, the Group Manager MUST
    respond with a 4.00 (Bad Request) response.
-
-   *  Any of the received parameters is specified multiple times.
 
    *  Any of the received parameters is not recognized, or not valid, or
       not consistent with respect to other related parameters.
@@ -3123,6 +3120,8 @@ Appendix B.  Document Updates
 B.1.  Version -08 to -09
 
    *  Consistent use of 4.03 (Forbidden) error responses.
+
+   *  Removed moot, remnant statements from when CoRAL was used.
 
    *  Editorial fixes and improvements.
 
