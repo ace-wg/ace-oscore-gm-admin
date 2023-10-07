@@ -635,7 +635,7 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 * The chosen name GROUPNAME is available to assign; and
 
-* If GROUPNAME\* matches with the group name pattern of certain scope entries from the 'scope' claim in the stored Access Token for the Administrator, then the chosen group name GROUPNAME also matches with each of those group name patterns.
+* With reference to the 'scope' claim in the stored Access Token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
 
 If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("Unable to determine a group name").
 
@@ -1242,7 +1242,7 @@ When receiving an error response from the Group Manager, an Administrator may us
 
       The Administrator should choose the new group name GROUPNAME to suggest, in such a way that it does not renounce permissions that were granted per the old group name GROUPNAME*. This is the case if the following holds.
 
-      With reference to the Administrator's Access Token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no less permissions than PERM*.
+      With reference to the 'scope' claim of the Administrator's Access Token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no less permissions than PERM*.
 
    - The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.
 
@@ -1548,6 +1548,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Clarified how the Group Manager may attempt to determine an alternative group name upon creating a new group.
 
 * Made explicit what parameters cannot change when overwriting a group configuration.
+
+* Improved guidelines to the Group Manager on selecting an alternative group name.
 
 * Improved guidelines to Administrators receiving an error after trying to create a new group.
 
