@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 9 April 2024                                    P. van der Stok
+Expires: 25 April 2024                                   P. van der Stok
                                                               Consultant
                                                             F. Palombini
                                                              Ericsson AB
-                                                          7 October 2023
+                                                         23 October 2023
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 April 2024.
+   This Internet-Draft will expire on 25 April 2024.
 
 Copyright Notice
 
@@ -123,7 +123,7 @@ Table of Contents
      11.2.  Informative References
    Appendix A.  Processing of Group Name Patterns at the AS
    Appendix B.  Document Updates
-     B.1.  Version -08 to -09
+     B.1.  Version -09 to -10
      B.2.  Version -08 to -09
      B.3.  Version -07 to -08
      B.4.  Version -06 to -07
@@ -2881,8 +2881,9 @@ Table of Contents
               Dijk, E., Wang, C., and M. Tiloca, "Group Communication
               for the Constrained Application Protocol (CoAP)", Work in
               Progress, Internet-Draft, draft-ietf-core-groupcomm-bis-
-              09, 10 July 2023, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-core-groupcomm-bis-09>.
+              10, 23 October 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
+              groupcomm-bis-10>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
@@ -3006,9 +3007,9 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-06, 7 July 2023,
+              ietf-cose-cbor-encoded-cert-07, 20 October 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-06>.
+              cbor-encoded-cert-07>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
@@ -3137,7 +3138,7 @@ Appendix B.  Document Updates
 
    RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-B.1.  Version -08 to -09
+B.1.  Version -09 to -10
 
    *  Consistent use of 4.03 (Forbidden) error responses.
 

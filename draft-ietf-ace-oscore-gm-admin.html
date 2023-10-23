@@ -12,12 +12,12 @@
 <meta content="
        Group communication for CoAP can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible to handle the joining of new group members, as well as to manage and distribute the group keying material. This document defines a RESTful admin interface at the Group Manager, that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof-of-possession, and server authentication. 
     " name="description">
-<meta content="xml2rfc 3.18.1" name="generator">
+<meta content="xml2rfc 3.18.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-ace-oscore-gm-admin-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.1
-    Python 3.11.5
+  xml2rfc 3.18.2
+    Python 3.11.6
     ConfigArgParse 1.5.3
     google-i18n-address 3.1.0
     intervaltree 3.1.0
@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 9 April 2024</td>
+<td class="center">Expires 25 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ace-oscore-gm-admin-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-07" class="published">7 October 2023</time>
+<time datetime="2023-10-23" class="published">23 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-09">9 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-25">25 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,7 +1107,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 25 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1309,10 +1309,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-document-updates" class="internal xref">Document Updates</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
-                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-version-08-to-09" class="internal xref">Version -08 to -09</a></p>
+                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-version-09-to-10" class="internal xref">Version -09 to -10</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-version-08-to-09-2" class="internal xref">Version -08 to -09</a></p>
+                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-version-08-to-09" class="internal xref">Version -08 to -09</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
                 <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-version-07-to-08" class="internal xref">Version -07 to -08</a></p>
@@ -1833,7 +1833,7 @@ This parameter MUST NOT be present if the configuration parameter 'det_req' is n
               <p id="section-5.1.2-2.8.1">'gid_reuse', encoding the CBOR simple value "true" (0xf5) if, upon rekeying the OSCORE group, the Group Manager can reassign the values of the OSCORE Group ID used as OSCORE ID Context, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-3.2.1.1" class="relref">Section 3.2.1.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-11" class="relref">Section 11</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. Otherwise, this parameter encodes the CBOR simple value "false" (0xf4).<a href="#section-5.1.2-2.8.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.2-2.9">
-              <p id="section-5.1.2-2.9.1">'app_groups', with value a list of names of application groups, encoded as a CBOR array. Each element of the array is a CBOR text string, specifying the name of an application group using the OSCORE group as security group (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-09#section-2.1" class="relref">Section 2.1</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>).<a href="#section-5.1.2-2.9.1" class="pilcrow">¶</a></p>
+              <p id="section-5.1.2-2.9.1">'app_groups', with value a list of names of application groups, encoded as a CBOR array. Each element of the array is a CBOR text string, specifying the name of an application group using the OSCORE group as security group (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-10#section-2.1" class="relref">Section 2.1</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>).<a href="#section-5.1.2-2.9.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.2-2.10">
               <p id="section-5.1.2-2.10.1">'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.2" class="relref">Section 6.2</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, encoded as a CBOR text string.<a href="#section-5.1.2-2.10.1" class="pilcrow">¶</a></p>
@@ -3099,7 +3099,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-groupcomm-bis">[I-D.ietf-core-groupcomm-bis]</dt>
         <dd>
-<span class="refAuthor">Dijk, E.</span>, <span class="refAuthor">Wang, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Group Communication for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-groupcomm-bis-09</span>, <time datetime="2023-07-10" class="refDate">10 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-09">https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Dijk, E.</span>, <span class="refAuthor">Wang, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Group Communication for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-groupcomm-bis-10</span>, <time datetime="2023-10-23" class="refDate">23 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-10">https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-oscore-groupcomm">[I-D.ietf-core-oscore-groupcomm]</dt>
         <dd>
@@ -3196,7 +3196,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <dd class="break"></dd>
 <dt id="I-D.ietf-cose-cbor-encoded-cert">[I-D.ietf-cose-cbor-encoded-cert]</dt>
         <dd>
-<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-06</span>, <time datetime="2023-07-07" class="refDate">7 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-06">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-07</span>, <time datetime="2023-10-20" class="refDate">20 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-07">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tiloca-core-oscore-discovery">[I-D.tiloca-core-oscore-discovery]</dt>
         <dd>
@@ -3297,8 +3297,8 @@ Entries that do not meet these objective of clarity and completeness should not 
 <p id="appendix-B-1">RFC EDITOR: PLEASE REMOVE THIS SECTION.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <div id="sec-09-10">
 <section id="appendix-B.1">
-        <h3 id="name-version-08-to-09">
-<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-version-08-to-09" class="section-name selfRef">Version -08 to -09</a>
+        <h3 id="name-version-09-to-10">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-version-09-to-10" class="section-name selfRef">Version -09 to -10</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-B.1-1.1">
@@ -3330,8 +3330,8 @@ Entries that do not meet these objective of clarity and completeness should not 
 </div>
 <div id="sec-08-09">
 <section id="appendix-B.2">
-        <h3 id="name-version-08-to-09-2">
-<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-version-08-to-09-2" class="section-name selfRef">Version -08 to -09</a>
+        <h3 id="name-version-08-to-09">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-version-08-to-09" class="section-name selfRef">Version -08 to -09</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-B.2-1.1">
