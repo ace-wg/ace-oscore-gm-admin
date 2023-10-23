@@ -1539,7 +1539,7 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-## Version -08 to -09 ## {#sec-09-10}
+## Version -09 to -10 ## {#sec-09-10}
 
 * Consistent use of 4.03 (Forbidden) error responses.
 
