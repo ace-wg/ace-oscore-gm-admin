@@ -1700,6 +1700,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
-The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, and {{{Jim Schaad}}} for their comments and feedback.
+The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Jim Schaad}}}, {{{Göran Selander}}}, and {{{Cigdem Sengul}}} for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
