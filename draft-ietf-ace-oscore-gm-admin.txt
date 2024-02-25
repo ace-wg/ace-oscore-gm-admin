@@ -123,16 +123,17 @@ Table of Contents
      11.2.  Informative References
    Appendix A.  Processing of Group Name Patterns at the AS
    Appendix B.  Document Updates
-     B.1.  Version -09 to -10
-     B.2.  Version -08 to -09
-     B.3.  Version -07 to -08
-     B.4.  Version -06 to -07
-     B.5.  Version -05 to -06
-     B.6.  Version -04 to -05
-     B.7.  Version -03 to -04
-     B.8.  Version -02 to -03
-     B.9.  Version -01 to -02
-     B.10. Version -00 to -01
+     B.1.  Version -10 to -11
+     B.2.  Version -09 to -10
+     B.3.  Version -08 to -09
+     B.4.  Version -07 to -08
+     B.5.  Version -06 to -07
+     B.6.  Version -05 to -06
+     B.7.  Version -04 to -05
+     B.8.  Version -03 to -04
+     B.9.  Version -02 to -03
+     B.10. Version -01 to -02
+     B.11. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -405,14 +406,15 @@ Table of Contents
    The original definition of the data model AIF-OSCORE-GROUPCOMM
    specifies a scope as structured in scope entries, which express
    authorization information for users of an OSCORE group, i.e., actual
-   group members or external signature verifiers.  In the rest of this
-   section, these are referred to as "user scope entries".
+   group members or external signature verifiers.  Hereafter, these are
+   referred to as "user scope entries".
 
    This document extends the same AIF specific data model AIF-OSCORE-
    GROUPCOMM as defined below.  In particular, it defines how the same
    scope can (also) include scope entries that express authorization
-   information for Administrators of OSCORE groups.  In the rest of this
-   section, these are referred to as "admin scope entries".
+   information for Administrators of OSCORE groups.  Hereafter, these
+   are referred to as "admin scope entries", or simply as "scope
+   entries" unless otherwise indicated.
 
    Like in the original definition of the data model AIF-OSCORE-
    GROUPCOMM, and with reference to the generic AIF model
@@ -556,9 +558,6 @@ Table of Contents
    case the requesting Client wishes to be a user for some OSCORE groups
    and at the same time Administrator for some (other) OSCORE groups
    under the same Group Manager.
-
-   Throughout the rest of this document, the term "scope entry" is used
-   as referred to "admin scope entry", unless otherwise indicated.
 
 3.1.  On Using Group Name Patterns
 
@@ -3138,7 +3137,11 @@ Appendix B.  Document Updates
 
    RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-B.1.  Version -09 to -10
+B.1.  Version -10 to -11
+
+   *  Editorial fixes and improvements.
+
+B.2.  Version -09 to -10
 
    *  Consistent use of 4.03 (Forbidden) error responses.
 
@@ -3161,7 +3164,7 @@ B.1.  Version -09 to -10
 
    *  Editorial fixes and improvements.
 
-B.2.  Version -08 to -09
+B.3.  Version -08 to -09
 
    *  Removed use of CoRAL.
 
@@ -3177,7 +3180,7 @@ B.2.  Version -08 to -09
 
    *  Fixes and editorial improvements.
 
-B.3.  Version -07 to -08
+B.4.  Version -07 to -08
 
    *  Consistency of parameter names.
 
@@ -3199,7 +3202,7 @@ B.3.  Version -07 to -08
 
    *  Various clarifications and editorial improvements.
 
-B.4.  Version -06 to -07
+B.5.  Version -06 to -07
 
    *  Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
@@ -3215,7 +3218,7 @@ B.4.  Version -06 to -07
 
    *  Editorial improvements.
 
-B.5.  Version -05 to -06
+B.6.  Version -05 to -06
 
    *  Use and extend the same AIF specific data model AIF-OSCORE-
       GROUPCOMM defined in [I-D.ietf-ace-key-groupcomm-oscore].
@@ -3237,7 +3240,7 @@ B.5.  Version -05 to -06
 
    *  Editorial improvements.
 
-B.6.  Version -04 to -05
+B.7.  Version -04 to -05
 
    *  Defined format of scope based on a new AIF data model.
 
@@ -3259,7 +3262,7 @@ B.6.  Version -04 to -05
 
    *  Revised order of sections; editorial improvements.
 
-B.7.  Version -03 to -04
+B.8.  Version -03 to -04
 
    *  Clarifications on what to do in case of enhanced error responses.
 
@@ -3274,7 +3277,7 @@ B.7.  Version -03 to -04
 
    *  Editorial improvements.
 
-B.8.  Version -02 to -03
+B.9.  Version -02 to -03
 
    *  Aligned new and old parameters to core-groupcomm-oscore and ace-
       key-groupcomm-oscore.
@@ -3287,7 +3290,7 @@ B.8.  Version -02 to -03
 
    *  New error type "Group currently active".
 
-B.9.  Version -01 to -02
+B.10.  Version -01 to -02
 
    *  Admit multiple Administrators and limited access to admin
       resources.
@@ -3301,7 +3304,7 @@ B.9.  Version -01 to -02
 
    *  Editorial improvements.
 
-B.10.  Version -00 to -01
+B.11.  Version -00 to -01
 
    *  Names of application groups as status parameter.
 
