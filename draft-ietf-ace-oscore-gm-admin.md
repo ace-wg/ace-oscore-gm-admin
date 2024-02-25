@@ -236,9 +236,9 @@ This section defines the exact format and encoding of scope to use, in order to 
 
 To this end, this document uses the Authorization Information Format (AIF) {{RFC9237}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured in scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. In the rest of this section, these are referred to as "user scope entries".
+The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured in scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. Hereafter, these are referred to as "user scope entries".
 
-This document extends the same AIF specific data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. In the rest of this section, these are referred to as "admin scope entries".
+This document extends the same AIF specific data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. Hereafter, these are referred to as "admin scope entries", or simply as "scope entries" unless otherwise indicated.
 
 Like in the original definition of the data model AIF-OSCORE-GROUPCOMM, and with reference to the generic AIF model
 
@@ -317,8 +317,6 @@ Therefore, an Administrator is always allowed to retrieve a list of existing gro
 Building on the above, the same single scope can include user scope entries as well as admin scope entries, whose specific format is defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and earlier in this section, respectively. The two types of scope entries can be unambiguously distinguished by means of the least significant bit of their permission set "Tperm", which has value 0 for the user scope entries and 1 for the admin scope entries.
 
 The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.
-
-Throughout the rest of this document, the term "scope entry" is used as referred to "admin scope entry", unless otherwise indicated.
 
 ## On Using Group Name Patterns
 
@@ -1538,6 +1536,10 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -10 to -11 ## {#sec-10-11}
+
+* Editorial fixes and improvements.
 
 ## Version -09 to -10 ## {#sec-09-10}
 
