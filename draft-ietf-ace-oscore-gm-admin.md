@@ -36,8 +36,7 @@ author:
         ins: P. van der Stok
         name: Peter van der Stok
         org: Consultant
-        phone: +31-492474673 (Netherlands), +33-966015248 (France)
-        email: stokcons@bbhmail.nl
+        email: stokcons@kpnmail.nl
       -
         ins: F. Palombini
         name: Francesca Palombini
