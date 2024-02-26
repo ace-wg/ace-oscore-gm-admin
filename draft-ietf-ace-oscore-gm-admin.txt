@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 28 August 2024                                  P. van der Stok
+Expires: 29 August 2024                                  P. van der Stok
                                                               Consultant
                                                             F. Palombini
                                                              Ericsson AB
-                                                        25 February 2024
+                                                        26 February 2024
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 August 2024.
+   This Internet-Draft will expire on 29 August 2024.
 
 Copyright Notice
 
@@ -169,7 +169,7 @@ Table of Contents
    case, the Group Manager application can create and configure OSCORE
    groups when needed, by using a local application interface.  However,
    this requires the Group Manager to be application-specific, which in
-   turn leads to error prone deployments and is poorly flexible.
+   turn leads to error-prone deployments and is poorly flexible.
 
    In other deployments, a separate Administrator entity, such as a
    Commissioning Tool, is directly responsible for creating and
@@ -201,8 +201,8 @@ Table of Contents
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in BCP
-   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
    Readers are expected to be familiar with the terms and concepts from
@@ -255,7 +255,7 @@ Table of Contents
    document does not use the CoAP definition of "endpoint", which is "An
    entity participating in the CoAP protocol".
 
-   This document also refers to the following terminology.
+   This document also refers to the following terminology:
 
    *  Administrator: entity responsible to create, configure and delete
       OSCORE groups at a Group Manager.
@@ -330,11 +330,11 @@ Table of Contents
                     ___
           Group    /   \
        Collection  \___/
-                        \
-                         \____________________
-                          \___    \___        \___
-                          /   \   /   \  ...  /   \        Group
-                          \___/   \___/       \___/   Configurations
+                       \
+                        \____________________
+                         \___    \___        \___
+                         /   \   /   \  ...  /   \        Group
+                         \___/   \___/       \___/   Configurations
 
                 Figure 1: Admin Resources of a Group Manager
 
@@ -474,7 +474,7 @@ Table of Contents
       -  Each permission in the permission set is converted into the
          corresponding numeric identifier X from the "Value" column of
          the "Group OSCORE Admin Permissions" registry, for which this
-         document defines the entries in Figure 2.
+         document defines the entries in Table 1.
 
       -  The set of N numbers is converted into the single value Q, by
          taking two to the power of each numeric identifier X_1, X_2,
@@ -490,26 +490,26 @@ Table of Contents
       issuing a GET or FETCH request to the group-collection resource,
       respectively.
 
-        +--------+-------+----------------------------------------+
-        | Name   | Value | Description                            |
-        +========+=======+========================================+
-        | List   | 0     | Retrieve list of group configurations  |
-        +--------+-------+----------------------------------------+
-        | Create | 1     | Create new group configurations        |
-        +--------+-------+----------------------------------------+
-        | Read   | 2     | Retrieve group configurations          |
-        +--------+-------+----------------------------------------+
-        | Write  | 3     | Change group configurations            |
-        +--------+-------+----------------------------------------+
-        | Delete | 4     | Delete group configurations            |
-        +--------+-------+----------------------------------------+
+        +========+=======+=======================================+
+        | Name   | Value | Description                           |
+        +========+=======+=======================================+
+        | List   | 0     | Retrieve list of group configurations |
+        +--------+-------+---------------------------------------+
+        | Create | 1     | Create new group configurations       |
+        +--------+-------+---------------------------------------+
+        | Read   | 2     | Retrieve group configurations         |
+        +--------+-------+---------------------------------------+
+        | Write  | 3     | Change group configurations           |
+        +--------+-------+---------------------------------------+
+        | Delete | 4     | Delete group configurations           |
+        +--------+-------+---------------------------------------+
 
-          Figure 2: Numeric identifier of permissions on the admin
-                        resources at a Group Manager
+            Table 1: Numeric identifier of permissions on the
+                    admin resources at a Group Manager
 
    The following CDDL [RFC8610] notation defines an admin scope entry
    that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of
-   permissions from those in Figure 2.
+   permissions from those in Table 1.
 
       AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
 
@@ -2030,7 +2030,7 @@ Table of Contents
       app_groups_diff = [app_groups_del: name-patch,
                          app_groups_add: name-patch]
 
-          Figure 3: CDDL definition of the 'app_groups_diff' field
+          Figure 2: CDDL definition of the 'app_groups_diff' field
 
    The Group Manager MUST respond with a 4.00 (Bad Request) response in
    case: both the inner CBOR arrays 'app_groups_del' and
@@ -2348,7 +2348,7 @@ Table of Contents
         | app_groups_diff | TBD      | array        | [RFC-XXXX] |
         +-----------------+----------+--------------+------------+
 
-                     Figure 4: ACE Groupcomm Parameters
+                     Figure 3: ACE Groupcomm Parameters
 
    The following holds for the Group Manager.
 
@@ -2361,7 +2361,7 @@ Table of Contents
       which the Group Manager defined in
       [I-D.ietf-ace-key-groupcomm-oscore] is a specific instance.
 
-   *  It MUST support all the parameters listed in Figure 4, with the
+   *  It MUST support all the parameters listed in Figure 3, with the
       exception of the 'app_groups_diff' parameter, which MUST be
       supported only if the Group Manager supports the selective update
       of a group configuration (see Section 6.7).
@@ -2372,7 +2372,7 @@ Table of Contents
       'ace_groupcomm_profile', 'exp' and 'group_policies', which are
       defined in Section 8 of [I-D.ietf-ace-key-groupcomm].
 
-   *  It MUST support all the parameters listed in Figure 4, with the
+   *  It MUST support all the parameters listed in Figure 3, with the
       following exceptions.
 
       -  'conf_filter', which MUST be supported only if the
@@ -2401,7 +2401,7 @@ Table of Contents
                | 12    | Unsupported group configuration  |
                +-------+----------------------------------+
 
-                 Figure 5: ACE Groupcomm Error Identifiers
+                 Figure 4: ACE Groupcomm Error Identifiers
 
    When receiving an error response from the Group Manager, an
    Administrator may use the information conveyed in the 'error'
@@ -2566,7 +2566,7 @@ Table of Contents
       would not have allowed to compute exactly the Observe request
       associated with the ongoing Observation.  This occurs, for
       example, when the new group configuration specifies a signature
-      algorithm different than the one used in the group when the
+      algorithm different from the one used in the group when the
       Observe request was protected.
 
 9.2.  Group Manager
@@ -2574,7 +2574,7 @@ Table of Contents
    In addition to what is discussed in Section 10.1 of
    [I-D.ietf-ace-key-groupcomm], a compromised Group Manager would allow
    an adversary to also monitor the group configurations specified by an
-   Administrator, or to enforce group configurations different than the
+   Administrator, or to enforce group configurations different from the
    specified ones, which can result in communications in the OSCORE
    groups not attaining the originally intended security level.
 
@@ -2807,7 +2807,7 @@ Table of Contents
    *  Reference: This contains a pointer to the public specification for
       the permission.
 
-   This registry will be initially populated by the values in Figure 2.
+   This registry will be initially populated by the values in Table 1.
 
    The Reference column for all of these entries will be [RFC-XXXX].
 
@@ -2816,7 +2816,7 @@ Table of Contents
    The IANA registry established in this document is defined as "Expert
    Review".  This section gives some general guidelines for what the
    experts should be looking for, but they are being designated as
-   experts for a reason so they should be given substantial latitude.
+   experts for a reason, so they should be given substantial latitude.
 
    Expert reviewers should take into consideration the following points:
 
@@ -3135,7 +3135,7 @@ Appendix A.  Processing of Group Name Patterns at the AS
 
 Appendix B.  Document Updates
 
-   RFC EDITOR: PLEASE REMOVE THIS SECTION.
+   This section is to be removed before publishing as an RFC.
 
 B.1.  Version -10 to -11
 
