@@ -5,10 +5,6 @@ title: Admin Interface for the OSCORE Group Manager
 abbrev: Admin Interface for the OSCORE GM
 docname: draft-ietf-ace-oscore-gm-admin-latest
 
-
-# stand_alone: true
-
-ipr: trust200902
 area: Security
 wg: ACE Working Group
 kw: Internet-Draft
@@ -16,11 +12,6 @@ cat: std
 submissiontype: IETF
 
 coding: utf-8
-pi:    # can use array (if all yes) or hash here
-
-  toc: yes
-  sortrefs:   # defaults to yes
-  symrefs: yes
 
 author:
       -
@@ -62,14 +53,12 @@ normative:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-core-groupcomm-bis:
-  RFC2119:
   RFC6690:
   RFC6749:
   RFC7252:
   RFC7641:
   RFC8126:
   RFC8132:
-  RFC8174:
   RFC8610:
   RFC8613:
   RFC8949:
@@ -116,7 +105,7 @@ When group communication for CoAP is protected with Group OSCORE, nodes are requ
 
 The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. Such a method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, so ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
 
-In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or on pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error prone deployments and is poorly flexible.
+In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or on pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error-prone deployments and is poorly flexible.
 
 In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining them during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.
 
@@ -128,7 +117,7 @@ The ACE framework is used to ensure authentication and authorization of the Admi
 
 ## Terminology ## {#terminology}
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all capitals, as shown here.
+{::boilerplate bcp14-tagged}
 
 Readers are expected to be familiar with the terms and concepts from the following specifications.
 
@@ -150,9 +139,9 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
 * The management of keying material for groups in ACE {{I-D.ietf-ace-key-groupcomm}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager, that new members access to join the OSCORE group, while current members can access to retrieve updated keying material.
 
-Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS, and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
+Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as `/token` and `/introspect` at the AS, and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
-This document also refers to the following terminology.
+This document also refers to the following terminology:
 
 * Administrator: entity responsible to create, configure and delete OSCORE groups at a Group Manager.
 
@@ -186,15 +175,15 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 {{fig-api}} shows the resources of a Group Manager available to an Administrator.
 
-~~~~~~~~~~~
+~~~~~~~~~~~ aasvg
              ___
    Group    /   \
 Collection  \___/
-                 \
-                  \____________________
-                   \___    \___        \___
-                   /   \   /   \  ...  /   \        Group
-                   \___/   \___/       \___/   Configurations
+                \
+                 \____________________
+                  \___    \___        \___
+                  /   \   /   \  ...  /   \        Group
+                  \___/   \___/       \___/   Configurations
 ~~~~~~~~~~~
 {: #fig-api title="Admin Resources of a Group Manager" artwork-align="center"}
 
@@ -266,30 +255,22 @@ Then, the following applies for each admin scope entry intended to express autho
 
 * The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has to perform operations on the admin resources at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
 
-   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry, for which this document defines the entries in {{fig-permission-values}}.
+   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry, for which this document defines the entries in {{tab-permission-values}}.
 
    - The set of N numbers is converted into the single value Q, by taking two to the power of each numeric identifier X_1, X_2, ..., X_N, and then computing the inclusive OR of the binary representations of all the power values.
 
    In general, a single permission can be associated with multiple different operations that are possible to be performed when interacting with the Group Manager. For example, the "List" permission allows the Administrator to retrieve a list of group configurations (see {{collection-resource-get}}) or only a subset of that according to specified filter criteria (see {{collection-resource-fetch}}), by issuing a GET or FETCH request to the group-collection resource, respectively.
 
-~~~~~~~~~~~
-+--------+-------+----------------------------------------+
-| Name   | Value | Description                            |
-+========+=======+========================================+
-| List   | 0     | Retrieve list of group configurations  |
-+--------+-------+----------------------------------------+
-| Create | 1     | Create new group configurations        |
-+--------+-------+----------------------------------------+
-| Read   | 2     | Retrieve group configurations          |
-+--------+-------+----------------------------------------+
-| Write  | 3     | Change group configurations            |
-+--------+-------+----------------------------------------+
-| Delete | 4     | Delete group configurations            |
-+--------+-------+----------------------------------------+
-~~~~~~~~~~~
-{: #fig-permission-values title="Numeric identifier of permissions on the admin resources at a Group Manager" artwork-align="center"}
+| Name   | Value | Description                           |
+|--------|-------|---------------------------------------|
+| List   |     0 | Retrieve list of group configurations |
+| Create |     1 | Create new group configurations       |
+| Read   |     2 | Retrieve group configurations         |
+| Write  |     3 | Change group configurations           |
+| Delete |     4 | Delete group configurations           |
+{: #tab-permission-values title="Numeric identifier of permissions on the admin resources at a Group Manager" align="center"}
 
-The following CDDL {{RFC8610}} notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in {{fig-permission-values}}.
+The following CDDL {{RFC8610}} notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in {{tab-permission-values}}.
 
 ~~~~~~~~~~~~~~~~~~~~ CDDL
    AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
@@ -334,7 +315,7 @@ All communications between the involved entities rely on the CoAP protocol and M
 
 In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession, and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
 
-With reference to the AS, communications between the Administrator and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
+With reference to the AS, communications between the Administrator and the AS (`/token` endpoint) as well as between the Group Manager and the AS (`/introspect` endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this document.
 
 In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token, as well as for the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of RFC9200}}).
 
@@ -1282,11 +1263,11 @@ With respect to changing group configurations, the following security considerat
 
    A group configuration (possibly together with the group keying material) may have been updated while a Block-Wise transfer is ongoing between two group members. This will result in blocks being resent, if the block sender and recipient are not yet both aligned with the new group configuration (and group keying material), in which case the block recipient would reply with an error message.
 
-   After a change of group configuration, a group member MUST terminate an ongoing Observation if the new group configuration would not have allowed to compute exactly the Observe request associated with the ongoing Observation. This occurs, for example, when the new group configuration specifies a signature algorithm different than the one used in the group when the Observe request was protected.
+   After a change of group configuration, a group member MUST terminate an ongoing Observation if the new group configuration would not have allowed to compute exactly the Observe request associated with the ongoing Observation. This occurs, for example, when the new group configuration specifies a signature algorithm different from the one used in the group when the Observe request was protected.
 
 ## Group Manager
 
-In addition to what is discussed in {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different than the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
+In addition to what is discussed in {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
 
 Although this is undesirable, it is not worse than the control that the adversary would gain on the group keying material through the compromised Group Manager (see {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}).
 
@@ -1477,13 +1458,13 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the permission.
 
-This registry will be initially populated by the values in {{fig-permission-values}}.
+This registry will be initially populated by the values in {{tab-permission-values}}.
 
 The Reference column for all of these entries will be {{&SELF}}.
 
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
-The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
+The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason, so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
@@ -1493,7 +1474,7 @@ Expert reviewers should take into consideration the following points:
 
 * Duplicated registration and point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments.
 
-* Experts should take into account the expected usage of permissions when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.
+* Experts should take into account the expected usage of permissions when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2<sup>V+1</sup> - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2<sup>V+1</sup> - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.
 
 * Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.
 
@@ -1534,8 +1515,7 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
 # Document Updates # {#sec-document-updates}
-
-RFC EDITOR: PLEASE REMOVE THIS SECTION.
+{:removeinrfc}
 
 ## Version -10 to -11 ## {#sec-10-11}
 
@@ -1698,7 +1678,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Fixes, clarifications and editorial improvements.
 
 # Acknowledgments # {#acknowledgment}
-{: numbered="no"}
+{:unnumbered}
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
