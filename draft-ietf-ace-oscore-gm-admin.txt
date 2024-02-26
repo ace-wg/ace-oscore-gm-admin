@@ -6,7 +6,7 @@ ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
 Expires: 29 August 2024                                  P. van der Stok
-                                                              Consultant
+                                                                        
                                                             F. Palombini
                                                              Ericsson AB
                                                         26 February 2024
@@ -3350,7 +3350,6 @@ Authors' Addresses
 
 
    Peter van der Stok
-   Consultant
    Email: stokcons@kpnmail.nl
 
 
