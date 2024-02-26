@@ -3351,8 +3351,7 @@ Authors' Addresses
 
    Peter van der Stok
    Consultant
-   Phone: +31-492474673 (Netherlands), +33-966015248 (France)
-   Email: stokcons@bbhmail.nl
+   Email: stokcons@kpnmail.nl
 
 
    Francesca Palombini
