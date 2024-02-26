@@ -35,7 +35,7 @@ author:
       -
         ins: P. van der Stok
         name: Peter van der Stok
-        org: Consultant
+        org:
         email: stokcons@kpnmail.nl
       -
         ins: F. Palombini
