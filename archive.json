@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-25T01:01:05.953357+00:00",
+  "timestamp": "2024-02-27T00:56:35.680116+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -162,6 +162,69 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOEOo5985n2xK6",
+      "title": "Editorial nits from WGLC review",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/5",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-26T01:16:57Z",
+      "updatedAt": "2024-02-26T08:47:44Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "22bff178641558fcb02450189e2b8eaa0f5c4cf2",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "nits-cabo",
+      "headRefOid": "8872dfd7f45a8a38c7f5bca05a84d61f34d2659a",
+      "closedAt": "2024-02-26T08:47:44Z",
+      "mergedAt": "2024-02-26T08:47:44Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "fb59e75aa35e46d0bf7dd6ecd269d1fe4f92f0fb"
+      },
+      "comments": [
+        {
+          "author": "petervanderstok",
+          "authorAssociation": "NONE",
+          "body": "OK for me; peter",
+          "createdAt": "2024-02-26T08:27:57Z",
+          "updatedAt": "2024-02-26T08:27:57Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEOo5985xQ0yh",
+          "commit": {
+            "abbreviatedOid": "8872dfd"
+          },
+          "author": "petervanderstok",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "thanks, Peter",
+          "createdAt": "2024-02-26T08:30:28Z",
+          "updatedAt": "2024-02-26T08:30:28Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEOo5985xQ8pd",
+          "commit": {
+            "abbreviatedOid": "8872dfd"
+          },
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks!",
+          "createdAt": "2024-02-26T08:47:20Z",
+          "updatedAt": "2024-02-26T08:47:20Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
