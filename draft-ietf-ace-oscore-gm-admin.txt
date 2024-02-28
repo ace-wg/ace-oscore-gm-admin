@@ -2695,7 +2695,7 @@ Table of Contents
 10.1.  ACE Groupcomm Parameters
 
    IANA is asked to register the following entries in the "ACE Groupcomm
-   Parameters" registry defined in Section 11.6 of
+   Parameters" registry defined in Section 11.7 of
    [I-D.ietf-ace-key-groupcomm].
 
    Name: hkdf
@@ -2816,7 +2816,7 @@ Table of Contents
 10.2.  ACE Groupcomm Errors
 
    IANA is asked to register the following entry in the "ACE Groupcomm
-   Errors" registry defined in Section 11.11 of
+   Errors" registry defined in Section 11.12 of
    [I-D.ietf-ace-key-groupcomm].
 
    Value: 10
