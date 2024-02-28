@@ -272,9 +272,11 @@ Then, the following applies for each admin scope entry intended to express autho
 The following CDDL {{RFC8610}} notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in {{tab-permission-values}}.
 
 ~~~~~~~~~~~~~~~~~~~~ CDDL
+   ;# include rfc9237
+
    AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
 
-   oscore-gname = true / tstr / #6.nnn(any) ; Group name pattern
+   oscore-gname = true / tstr / #6.<uint>(any) ; Group name pattern
    oscore-gperm = uint .bits admin-permissions
 
    admin-permissions = &(
