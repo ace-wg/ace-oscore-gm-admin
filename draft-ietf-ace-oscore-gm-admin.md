@@ -564,7 +564,11 @@ This operation MUST be supported by the Group Manager and MAY be supported by an
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}).
+The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
+
+Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}), with the exception that the parameter 'group_name' (if present) can also be encoded as a tagged CBOR data item, specifying a group name pattern with the semantics signaled by the CBOR tag.
+
+In such a case, the parameter 'group_name' expresses a group name pattern in the same way as a complex pattern Toid does in a scope entry (see Section 3). In particular, the filter criterion is satisfied by any group name that matches with the group name pattern specified by the parameter 'group_name' in the payload of the FETCH request.
 
 The Group Manager MUST prepare the list L to include in the response as follows.
 
@@ -597,6 +601,34 @@ An example of message exchange is shown below.
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
 ~~~~~~~~~~~
 
+The following, additional example considers a request payload that uses both configuration parameters and status parameters as filter criteria. In particular, the following is assumed.
+
+* In the URI of every group-configuration resource, the path component is /manage/GROUPNAME, where GROUPNAME is the group name of the associated OSCORE group.
+
+* The Group Manager hosts four group-configuration resources, for the OSCORE groups with names "gp4", "gp5", "gp6", and "foo". All the OSCORE groups use the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10). Also, all the OSCORE groups are currently active, except for "gp6".
+
+~~~~~~~~~~~
+=> 0.05 FETCH
+   Uri-Path: manage
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+
+   Payload:
+
+   {
+       "gp_enc_alg" : 10,
+       "group_name" : 21065("^gp[0-9]*$"),
+           "active" : true
+   }
+
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+
+   Payload:
+
+   <coap://[2001:db8::ab]/manage/gp4>;rt="core.osc.gconf",
+   <coap://[2001:db8::ab]/manage/gp5>;rt="core.osc.gconf"
+~~~~~~~~~~~
+
 ## Create a New Group Configuration ## {#collection-resource-post}
 
 This operation MUST be supported by the Group Manager and an Administrator.
@@ -607,7 +639,7 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 
 * The payload MAY include any of the configuration parameters defined in {{config-repr-config-properties}}.
 
-* The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
+* The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name encoded as a CBOR text string.
 
 * The payload MAY include any of the status parameters 'active', 'group_description', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in {{config-repr-status-properties}}.
 
@@ -1134,62 +1166,63 @@ In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, t
 Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~~~~~~~~
-+-------------------+----------+--------------+------------+
-| Name              | CBOR Key | CBOR Type    | Reference  |
-+-------------------+----------+--------------+------------+
-| hkdf              | TBD      | tstr / int   | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| cred_fmt          | TBD      | int          | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| group_mode        | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| gp_enc_alg        | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| sign_alg          | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| sign_params       | TBD      | array /      | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| pairwise_mode     | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| alg               | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| ecdh_alg          | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| ecdh_params       | TBD      | array /      | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| det_req           | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| det_hash_alg      | TBD      | tstr / int   | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| rt                | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| active            | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| group_name        | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| group_description | TBD      | tstr /       | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| max_stale_sets    | TBD      | uint         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| gid_reuse         | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| app_groups        | TBD      | array        | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| joining_uri       | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| as_uri            | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| conf_filter       | TBD      | array        | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| app_groups_diff   | TBD      | array        | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
++-------------------+----------+----------------+------------+
+| Name              | CBOR Key | CBOR Type      | Reference  |
++-------------------+----------+----------------+------------+
+| hkdf              | TBD      | tstr / int     | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| cred_fmt          | TBD      | int            | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| group_mode        | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| gp_enc_alg        | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| sign_alg          | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| sign_params       | TBD      | array /        | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| pairwise_mode     | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| alg               | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| ecdh_alg          | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| ecdh_params       | TBD      | array /        | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| det_req           | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| det_hash_alg      | TBD      | tstr / int     | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| rt                | TBD      | tstr           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| active            | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| group_name        | TBD      | tstr /         | [RFC-XXXX] |
+|                   |          | #6.<uint>(any) |            |
++-------------------+----------+----------------+------------+
+| group_description | TBD      | tstr /         | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| max_stale_sets    | TBD      | uint           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| gid_reuse         | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| app_groups        | TBD      | array          | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| joining_uri       | TBD      | tstr           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| as_uri            | TBD      | tstr           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| conf_filter       | TBD      | array          | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| app_groups_diff   | TBD      | array          | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
 
@@ -1547,6 +1580,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Removed moot paragraph about the benefits of group name patterns.
 
 * Renamed 'group_title' as 'group_description'.
+
+* Added a second example of FETCH to the group-collection resource.
 
 * Editorial fixes and improvements.
 
