@@ -1733,6 +1733,10 @@ Table of Contents
    entries specifying the "Write" permission), the Group Manager MUST
    reply with a 4.03 (Forbidden) error response.
 
+   If the group-configuration resource targeted by the PUT request does
+   not currently exist, then the Group Manager MUST NOT create the
+   resource and MUST reply with a 4.04 (Not Found) error response.
+
    If the updated group configuration would include parameter values
    that prevent the Group Manager from performing the operations defined
    in [I-D.ietf-ace-key-groupcomm-oscore] (e.g., due to the Group
@@ -3233,6 +3237,8 @@ B.1.  Version -10 to -11
    *  Added a second example of FETCH to the group-collection resource.
 
    *  Avoiding accidental deactivation of a group when updating it.
+
+   *  Avoid alternative ways to create a group configuration resource.
 
    *  Editorial fixes and improvements.
 
