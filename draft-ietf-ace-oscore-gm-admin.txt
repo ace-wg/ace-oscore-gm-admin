@@ -534,6 +534,29 @@ Table of Contents
 
       scope_entry = [oscore-gname, oscore-gperm]
 
+   The following example in CBOR diagnostic notation shows a CBOR array
+   including five scope entries as its elements.
+
+   [[true,   / Toid (wildcard pattern) /
+     5       / Tperm (List + Read) /
+    ],
+    ["gp1",  / Toid (literal pattern) /
+     31      / Tperm (List + Create +
+               Read + Write + Delete) /
+    ],
+    ["gp2",  / Toid (literal pattern) /
+     31      / Tperm (List + Create +
+               Read + Write + Delete) /
+    ],
+    [21065("^[A-K][0-9][-a-z0-9]*$"),  / Toid (complex pattern) /
+     31                                / Tperm (List + Create +
+                                         Read + Write + Delete) /
+    ],
+    [21065("^[J-Z][0-9][-a-z0-9]*$"),  / Toid (complex pattern) /
+     13                                / Tperm (List + Read + Write) /
+    ]
+   ]
+
    Future specifications that define new permissions on the admin
    resources at the Group Manager MUST register a corresponding numeric
    identifier in the "Group OSCORE Admin Permissions" registry defined
@@ -3148,6 +3171,8 @@ Appendix B.  Document Updates
 B.1.  Version -10 to -11
 
    *  Early mentioned that issued Access Tokens can have other purposes.
+
+   *  Added example of array of scope entries.
 
    *  Editorial fixes and improvements.
 

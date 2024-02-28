@@ -1674,11 +1674,35 @@ In general, a single permission can be associated with multiple different operat
    scope_entry = [oscore-gname, oscore-gperm]
 </pre><a href="#section-3-12" class="pilcrow">¶</a>
 </div>
-<p id="section-3-13">Future specifications that define new permissions on the admin resources at the Group Manager <span class="bcp14">MUST</span> register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in <a href="#ssec-iana-group-oscore-admin-permissions-registry" class="auto internal xref">Section 10.4</a> of this document.<a href="#section-3-13" class="pilcrow">¶</a></p>
-<p id="section-3-14">When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry <span class="bcp14">MUST</span> include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.<a href="#section-3-14" class="pilcrow">¶</a></p>
-<p id="section-3-15">Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator (see <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a> and <a href="#collection-resource-fetch" class="auto internal xref">Section 6.2</a>).<a href="#section-3-15" class="pilcrow">¶</a></p>
-<p id="section-3-16">Building on the above, the same single scope can include user scope entries as well as admin scope entries, whose specific format is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-3" class="relref">Section 3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and earlier in this section, respectively. The two types of scope entries can be unambiguously distinguished by means of the least significant bit of their permission set "Tperm", which has value 0 for the user scope entries and 1 for the admin scope entries.<a href="#section-3-16" class="pilcrow">¶</a></p>
-<p id="section-3-17">The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.<a href="#section-3-17" class="pilcrow">¶</a></p>
+<p id="section-3-13">The following example in CBOR diagnostic notation shows a CBOR array including five scope entries as its elements.<a href="#section-3-13" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-14">
+<pre>
+[[true,   / Toid (wildcard pattern) /
+  5       / Tperm (List + Read) /
+ ],
+ ["gp1",  / Toid (literal pattern) /
+  31      / Tperm (List + Create +
+            Read + Write + Delete) /
+ ],
+ ["gp2",  / Toid (literal pattern) /
+  31      / Tperm (List + Create +
+            Read + Write + Delete) /
+ ],
+ [21065("^[A-K][0-9][-a-z0-9]*$"),  / Toid (complex pattern) /
+  31                                / Tperm (List + Create +
+                                      Read + Write + Delete) /
+ ],
+ [21065("^[J-Z][0-9][-a-z0-9]*$"),  / Toid (complex pattern) /
+  13                                / Tperm (List + Read + Write) /
+ ]
+]
+</pre><a href="#section-3-14" class="pilcrow">¶</a>
+</div>
+<p id="section-3-15">Future specifications that define new permissions on the admin resources at the Group Manager <span class="bcp14">MUST</span> register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in <a href="#ssec-iana-group-oscore-admin-permissions-registry" class="auto internal xref">Section 10.4</a> of this document.<a href="#section-3-15" class="pilcrow">¶</a></p>
+<p id="section-3-16">When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry <span class="bcp14">MUST</span> include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.<a href="#section-3-16" class="pilcrow">¶</a></p>
+<p id="section-3-17">Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator (see <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a> and <a href="#collection-resource-fetch" class="auto internal xref">Section 6.2</a>).<a href="#section-3-17" class="pilcrow">¶</a></p>
+<p id="section-3-18">Building on the above, the same single scope can include user scope entries as well as admin scope entries, whose specific format is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-3" class="relref">Section 3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and earlier in this section, respectively. The two types of scope entries can be unambiguously distinguished by means of the least significant bit of their permission set "Tperm", which has value 0 for the user scope entries and 1 for the admin scope entries.<a href="#section-3-18" class="pilcrow">¶</a></p>
+<p id="section-3-19">The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.<a href="#section-3-19" class="pilcrow">¶</a></p>
 <div id="on-using-group-name-patterns">
 <section id="section-3.1">
         <h3 id="name-on-using-group-name-pattern">
@@ -3357,7 +3381,10 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.1.1">Early mentioned that issued Access Tokens can have other purposes.<a href="#appendix-B.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.2">
-            <p id="appendix-B.1-1.2.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.2.1">Added example of array of scope entries.<a href="#appendix-B.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.3">
+            <p id="appendix-B.1-1.3.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
