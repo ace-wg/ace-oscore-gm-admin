@@ -3138,10 +3138,10 @@ Appendix A.  Processing of Group Name Patterns at the AS
 
    When processing an Authorization Request from an Administrator (see
    Section 4), the AS builds the authorization information expressing
-   granted permissions as scope entries, according to the AIF specific
-   data model AIF-OSCORE-GROUPCOMM and to its extension specified in
-   Section 3.  These scope entries are in turn specified as value of the
-   'scope' claim to include in the Access Token.
+   granted permissions as scope entries, according to the AIF data model
+   AIF-OSCORE-GROUPCOMM and to its extension specified in Section 3.
+   These scope entries are in turn specified as value of the 'scope'
+   claim to include in the Access Token.
 
    In order to evaluate the requested permissions against the access
    policies pertaining to the Administrator for the Group Manager in
@@ -3320,11 +3320,10 @@ B.5.  Version -06 to -07
 
 B.6.  Version -05 to -06
 
-   *  Use and extend the same AIF specific data model AIF-OSCORE-
-      GROUPCOMM defined in [I-D.ietf-ace-key-groupcomm-oscore].
+   *  Use and extend the same AIF data model AIF-OSCORE-GROUPCOMM
+      defined in [I-D.ietf-ace-key-groupcomm-oscore].
 
-   *  Revised Client-AS interaction, based on the used AIF specific data
-      model.
+   *  Revised Client-AS interaction, based on the used AIF data model.
 
    *  Categorized operations at the Group Manager as required and
       optional to support.
