@@ -330,8 +330,6 @@ Having the object identifier ("Toid") specialized as a pattern displays a number
 
 * When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know exact group names for requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
 
-* The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the invalidation of T1 (e.g., due to expiration) and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.
-
 # Getting Access to the Group Manager # {#getting-access}
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
@@ -1545,6 +1543,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Early mentioned that issued Access Tokens can have other purposes.
 
 * Added example of array of scope entries.
+
+* Removed moot paragraph about the benefits of group name patterns.
 
 * Editorial fixes and improvements.
 
