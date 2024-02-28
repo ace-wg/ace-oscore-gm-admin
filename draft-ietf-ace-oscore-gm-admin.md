@@ -288,6 +288,30 @@ The following CDDL {{RFC8610}} notation defines an admin scope entry that uses t
    scope_entry = [oscore-gname, oscore-gperm]
 ~~~~~~~~~~~~~~~~~~~~
 
+The following example in CBOR diagnostic notation shows a CBOR array including five scope entries as its elements.
+
+~~~~~~~~~~~
+[[true,   / Toid (wildcard pattern) /
+  5       / Tperm (List + Read) /
+ ],
+ ["gp1",  / Toid (literal pattern) /
+  31      / Tperm (List + Create +
+            Read + Write + Delete) /
+ ],
+ ["gp2",  / Toid (literal pattern) /
+  31      / Tperm (List + Create +
+            Read + Write + Delete) /
+ ],
+ [21065("^[A-K][0-9][-a-z0-9]*$"),  / Toid (complex pattern) /
+  31                                / Tperm (List + Create +
+                                      Read + Write + Delete) /
+ ],
+ [21065("^[J-Z][0-9][-a-z0-9]*$"),  / Toid (complex pattern) /
+  13                                / Tperm (List + Read + Write) /
+ ]
+]
+~~~~~~~~~~~
+
 Future specifications that define new permissions on the admin resources at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry MUST include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.
@@ -1519,6 +1543,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 ## Version -10 to -11 ## {#sec-10-11}
 
 * Early mentioned that issued Access Tokens can have other purposes.
+
+* Added example of array of scope entries.
 
 * Editorial fixes and improvements.
 
