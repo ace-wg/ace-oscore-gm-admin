@@ -19,10 +19,10 @@ Abstract
 
    Group communication for CoAP can be secured using Group Object
    Security for Constrained RESTful Environments (Group OSCORE).  A
-   Group Manager is responsible to handle the joining of new group
-   members, as well as to manage and distribute the group keying
+   Group Manager is responsible for handling the joining of new group
+   members, as well as managing and distributing the group keying
    material.  This document defines a RESTful admin interface at the
-   Group Manager, that allows an Administrator entity to create and
+   Group Manager that allows an Administrator entity to create and
    delete OSCORE groups, as well as to retrieve and update their
    configuration.  The ACE framework for Authentication and
    Authorization is used to enforce authentication and authorization of
@@ -149,7 +149,7 @@ Table of Contents
    scenarios.
 
    When group communication for CoAP is protected with Group OSCORE,
-   nodes are required to explicitly join the correct OSCORE group.  To
+   nodes are required to join the correct OSCORE group explicitly.  To
    this end, a joining node interacts with a Group Manager (GM) entity
    responsible for that group, and retrieves the required keying
    material to securely communicate with other group members using Group
@@ -165,7 +165,7 @@ Table of Contents
    In some deployments, the application running on the Group Manager may
    know when a new OSCORE group has to be created, as well as how it
    should be configured and later on updated or deleted, e.g., based on
-   the current application state or on pre-installed policies.  In this
+   the current application state or pre-installed policies.  In this
    case, the Group Manager application can create and configure OSCORE
    groups when needed, by using a local application interface.  However,
    this requires the Group Manager to be application-specific, which in
@@ -227,7 +227,7 @@ Table of Contents
 
       -  Group Manager, as the entity responsible for a set of OSCORE
          groups where communications among members are secured using
-         Group OSCORE.  An OSCORE group is used as security group for
+         Group OSCORE.  An OSCORE group is used as a security group for
          one or many application groups.
 
       -  Authentication credential, as the set of information associated
@@ -600,8 +600,8 @@ Table of Contents
       Administrator to operate on large pools of group names.
 
    *  When relying on wildcard patterns and complex patterns, the
-      Administrator and the AS do not need to know exact group names for
-      requesting and issuing an Access Token, respectively (see
+      Administrator and the AS do not need to know the exact group names
+      for requesting and issuing an Access Token, respectively (see
       Section 4).  In turn, the Group Manager can effectively take the
       final decision about the name to assign to an OSCORE group, upon
       its creation (see Section 6.3).
@@ -796,11 +796,10 @@ Table of Contents
    to perform some operations on the same OSCORE group.
 
    With respect to the main Administrator, such assistant Administrators
-   are expected to have less permissions to perform administrative
+   are expected to have fewer permissions to perform administrative
    operations related to the OSCORE group at the Group Manager.  For
-   example, they may not be authorized to create the OSCORE group if not
-   existing already, or to delete the OSCORE group and its
-   configuration.
+   example, they may not be authorized to create an OSCORE group, or to
+   delete an OSCORE group and its configuration.
 
    In case the main Administrator of an OSCORE group is dismissed or
    relinquishes its role, one of the assistant Administrators can be
@@ -1474,7 +1473,7 @@ Table of Contents
 
    If the POST request did not specify certain parameters and the Group
    Manager used default values different from the ones recommended in
-   Section 5.2, then the response payload MUST include also those
+   Section 5.2, then the response payload MUST also include those
    parameters, specifying the values chosen by the Group Manager for the
    current group configuration.
 
@@ -2054,7 +2053,7 @@ Table of Contents
             that it is still missing and that it needs for processing
             messages exchanged in the OSCORE group.
 
-         o  Retrieve from the Group Manager the new Group Manager's
+         o  Retrieve from the Group Manager the Group Manager's new
             authentication credential (see Section 9.5 of
             [I-D.ietf-ace-key-groupcomm-oscore]).  The new Group
             Manager's authentication credential is in the indicated
@@ -2497,9 +2496,11 @@ Table of Contents
          request to the group-collection resource specifies the same
          group name originally suggested in the previous request that
          triggered the error response (see Section 6.3).  This option
-         fundamentally relies on the Group Manager freeing up group
-         names, hence it is not viable if considerably or indefinitely
-         postponing the creation of the group is not acceptable.
+         fundamentally relies on the Group Manager making the group name
+         available again before the Administrator sends the new POST
+         request.  Hence, this option is not viable if it is
+         unacceptable for the Administrator to considerably or
+         indefinitely postpone the creation of the new group.
 
       -  The Administrator sends a new POST request to the group-
          collection resource right away, specifying a different group
@@ -2526,7 +2527,7 @@ Table of Contents
          Also, let us define PERM as the union of the permission sets
          associated with the scope entries such that GROUPNAME matches
          with the specified group name pattern.  Then, PERM specifies no
-         less permissions than PERM*.
+         fewer permissions than PERM*.
 
       -  The Administrator requests a new Access Token to the
          Authorization Server, in order to update its access rights, and
