@@ -1169,66 +1169,54 @@ In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, t
 
 Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
 
-~~~~~~~~~~~
-+-------------------+----------+----------------+------------+
-| Name              | CBOR Key | CBOR Type      | Reference  |
-+-------------------+----------+----------------+------------+
-| hkdf              | -1       | tstr / int     | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| cred_fmt          | -2       | int            | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| group_mode        | -3       | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| gp_enc_alg        | -4       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| sign_alg          | -5       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| sign_params       | -6       | array /        | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| pairwise_mode     | -7       | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| alg               | -8       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| ecdh_alg          | -9       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| ecdh_params       | -10      | array /        | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| det_req           | -25      | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| det_hash_alg      | -26      | tstr / int     | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| rt                | -11      | tstr           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| active            | -12      | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| group_name        | -13      | tstr /         | [RFC-XXXX] |
-|                   |          | #6.<uint>(any) |            |
-+-------------------+----------+----------------+------------+
-| group_description | -14      | tstr /         | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| max_stale_sets    | -15      | uint           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| gid_reuse         | -16      | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| app_groups        | -17      | array          | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| joining_uri       | -18      | tstr           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| as_uri            | -19      | tstr           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| conf_filter       | -27      | array          | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| app_groups_diff   | -28      | array          | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-~~~~~~~~~~~
-{: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
+| Name              | CBOR Key | CBOR Type                      | Reference |
+|-------------------|----------|--------------------------------|-----------|
+| hkdf              | -1       | tstr / int                     | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| cred_fmt          | -2       | int                            | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| group_mode        | -3       | simple value                   | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| gp_enc_alg        | -4       | tstr / int / <br> simple value | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| sign_alg          | -5       | tstr / int / <br> simple value | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| sign_params       | -6       | array / <br> simple value      | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| pairwise_mode     | -7       | simple value                   | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| alg               | -8       | tstr / int / <br> simple value | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| ecdh_alg          | -9       | tstr / int / <br> simple value | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| ecdh_params       | -10      | array / <br> simple value      | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| det_req           | -25      | simple value                   | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| det_hash_alg      | -26      | tstr / int                     | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| rt                | -11      | tstr                           | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| active            | -12      | simple value                   | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| group_name        | -13      | tstr / <br> #6.\<uint\>(any)   | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| group_description | -14      | tstr / <br> simple value       | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| max_stale_sets    | -15      | uint                           | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| gid_reuse         | -16      | simple value                   | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| app_groups        | -17      | array                          | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| joining_uri       | -18      | tstr                           | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| as_uri            | -19      | tstr                           | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| conf_filter       | -27      | array                          | {{&SELF}} |
+|-------------------|----------|--------------------------------|-----------|
+| app_groups_diff   | -28      | array                          | {{&SELF}} |
+{: #tab-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" align="center"}
 
 The following holds for the Group Manager.
 
@@ -1236,13 +1224,13 @@ The following holds for the Group Manager.
 
    This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
-* It MUST support all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
+* It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
 
 The following holds for an Administrator.
 
 * It MUST support the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
-* It MUST support all the parameters listed in {{fig-ACE-Groupcomm-Parameters}}, with the following exceptions.
+* It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
    - 'conf_filter', which MUST be supported only if the Administrator supports the partial retrieval of a group configuration by filters (see {{configuration-resource-fetch}}).
 
@@ -1252,18 +1240,14 @@ The following holds for an Administrator.
 
 In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
 
-~~~~~~~~~~~
-+-------+----------------------------------+
-| Value | Description                      |
-+-------+----------------------------------+
-| 10    | Group currently active           |
-+-------+----------------------------------+
-| 11    | Unable to determine a group name |
-+-------+----------------------------------+
-| 12    | Unsupported group configuration  |
-+-------+----------------------------------+
-~~~~~~~~~~~
-{: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
+| Value | Description                      | Reference |
+|-------|----------------------------------|-----------|
+| 10    | Group currently active           | {{&SELF}} |
+|-------|----------------------------------|-----------|
+| 11    | Unable to determine a group name | {{&SELF}} |
+|-------|----------------------------------|-----------|
+| 12    | Unsupported group configuration  | {{&SELF}} |
+{: #tab-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" align="center"}
 
 When receiving an error response from the Group Manager, an Administrator may use the information conveyed in the 'error' parameter to determine what actions to take next. If it is included in the error response, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
 
