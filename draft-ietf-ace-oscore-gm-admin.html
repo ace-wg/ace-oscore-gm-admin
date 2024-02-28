@@ -1891,7 +1891,7 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
               <p id="section-5.1.2-2.3.1">'group_name', with value the group name of the OSCORE group encoded as a CBOR text string.<a href="#section-5.1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.2-2.4">
-              <p id="section-5.1.2-2.4.1">'group_title', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified.<a href="#section-5.1.2-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.1.2-2.4.1">'group_description', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified.<a href="#section-5.1.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.2-2.5">
               <p id="section-5.1.2-2.5.1">'ace_groupcomm_profile', defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18#section-4.3.1" class="relref">Section 4.3.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>, with value "coap_group_oscore_app" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-16.5" class="relref">Section 16.5</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> encoded as a CBOR integer.<a href="#section-5.1.2-2.5.1" class="pilcrow">¶</a></p>
@@ -1974,7 +1974,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
               <p id="section-5.2.2-2.1.1">For 'active', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value "false" (0xf4).<a href="#section-5.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.2">
-              <p id="section-5.2.2-2.2.1">For 'group_title', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value "null" (0xf6).<a href="#section-5.2.2-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.2.1">For 'group_description', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value "null" (0xf6).<a href="#section-5.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.3">
               <p id="section-5.2.2-2.3.1">For 'max_stale_sets', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR unsigned integer with value 3.<a href="#section-5.2.2-2.3.1" class="pilcrow">¶</a></p>
@@ -2101,7 +2101,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
             <p id="section-6.3-4.2.1">The payload <span class="bcp14">MUST</span> include the status parameter 'group_name' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a> and specifying the intended group name.<a href="#section-6.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-4.3">
-            <p id="section-6.3-4.3.1">The payload <span class="bcp14">MAY</span> include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a>.<a href="#section-6.3-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-4.3.1">The payload <span class="bcp14">MAY</span> include any of the status parameters 'active', 'group_description', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a>.<a href="#section-6.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-4.4">
             <p id="section-6.3-4.4.1">The payload <span class="bcp14">MUST NOT</span> include any of the status parameters 'rt', 'ace_groupcomm_profile', and 'joining_uri' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a>.<a href="#section-6.3-4.4.1" class="pilcrow">¶</a></p>
@@ -2202,14 +2202,14 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
    Payload:
 
    {
-        "gp_enc_alg" : 10,
-              "hkdf" : 5,
-     "pairwise_mode" : true,
-            "active" : true,
-        "group_name" : "gp4",
-       "group_title" : "rooms 1 and 2",
-        "app_groups" : ["room1", "room2"],
-            "as_uri" : "coap://as.example.com/token"
+            "gp_enc_alg" : 10,
+                  "hkdf" : 5,
+         "pairwise_mode" : true,
+                "active" : true,
+            "group_name" : "gp4",
+     "group_description" : "rooms 1 and 2",
+            "app_groups" : ["room1", "room2"],
+                "as_uri" : "coap://as.example.com/token"
    }
 
 &lt;= 2.01 Created
@@ -2266,7 +2266,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
                         "rt" : "core.osc.gconf",
                     "active" : true,
                 "group_name" : "gp4",
-               "group_title" : "rooms 1 and 2",
+         "group_description" : "rooms 1 and 2",
      "ace_groupcomm_profile" : "coap_group_oscore_app",
             "max_stale_sets" : 3,
                        "exp" : 1360289224,
@@ -2310,7 +2310,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
                       "hkdf",
                       "pairwise_mode",
                       "active",
-                      "group_title",
+                      "group_description",
                       "app_groups"]
    }
 
@@ -2320,12 +2320,12 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
    Payload:
 
    {
-        "gp_enc_alg" : 10,
-              "hkdf" : 5,
-     "pairwise_mode" : true,
-            "active" : true,
-       "group_title" : "rooms 1 and 2",
-        "app_groups" : ["room1", "room2"]
+            "gp_enc_alg" : 10,
+                  "hkdf" : 5,
+         "pairwise_mode" : true,
+                "active" : true,
+     "group_description" : "rooms 1 and 2",
+            "app_groups" : ["room1", "room2"]
    }
 
 </pre><a href="#section-6.5-9" class="pilcrow">¶</a>
@@ -2697,62 +2697,62 @@ The response, <span class="bcp14">MAY</span> include the current representation 
 <figure id="figure-3">
         <div class="alignCenter art-text artwork" id="section-7-3.1">
 <pre>
-+-----------------+----------+--------------+------------+
-| Name            | CBOR Key | CBOR Type    | Reference  |
-+-----------------+----------+--------------+------------+
-| hkdf            | TBD      | tstr / int   | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| cred_fmt        | TBD      | int          | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| group_mode      | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| gp_enc_alg      | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| sign_alg        | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| sign_params     | TBD      | array /      | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| pairwise_mode   | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| alg             | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| ecdh_alg        | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| ecdh_params     | TBD      | array /      | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| det_req         | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| det_hash_alg    | TBD      | tstr / int   | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| rt              | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| active          | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| group_name      | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| group_title     | TBD      | tstr /       | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| max_stale_sets  | TBD      | uint         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| gid_reuse       | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| app_groups      | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| joining_uri     | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| as_uri          | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| conf_filter     | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| app_groups_diff | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
++-------------------+----------+--------------+------------+
+| Name              | CBOR Key | CBOR Type    | Reference  |
++-------------------+----------+--------------+------------+
+| hkdf              | TBD      | tstr / int   | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| cred_fmt          | TBD      | int          | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| group_mode        | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| gp_enc_alg        | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| sign_alg          | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| sign_params       | TBD      | array /      | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| pairwise_mode     | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| alg               | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| ecdh_alg          | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| ecdh_params       | TBD      | array /      | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| det_req           | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| det_hash_alg      | TBD      | tstr / int   | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| rt                | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| active            | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| group_name        | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| group_description | TBD      | tstr /       | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| max_stale_sets    | TBD      | uint         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| gid_reuse         | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| app_groups        | TBD      | array        | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| joining_uri       | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| as_uri            | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| conf_filter       | TBD      | array        | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| app_groups_diff   | TBD      | array        | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
@@ -3008,7 +3008,7 @@ CBOR Key: TBD
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
-Name: group_title
+Name: group_description
 CBOR Key: TBD
 CBOR Type: tstr / simple value
 Reference: [RFC-XXXX]
@@ -3384,7 +3384,10 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.3.1">Removed moot paragraph about the benefits of group name patterns.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.4">
-            <p id="appendix-B.1-1.4.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.4.1">Renamed 'group_title' as 'group_description'.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.5">
+            <p id="appendix-B.1-1.5.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
