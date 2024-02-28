@@ -456,7 +456,7 @@ The CBOR map includes the following status parameters. Unless specified otherwis
 
 * 'group_name', with value the group name of the OSCORE group encoded as a CBOR text string.
 
-* 'group_title', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified.
+* 'group_description', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value "null" (0xf6) if no description is specified.
 
 * 'ace_groupcomm_profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
@@ -508,7 +508,7 @@ For each of the status parameters listed below, the Group Manager refers to the 
 
 * For 'active', the Group Manager SHOULD use the CBOR simple value "false" (0xf4).
 
-* For 'group_title', the Group Manager SHOULD use the CBOR simple value "null" (0xf6).
+* For 'group_description', the Group Manager SHOULD use the CBOR simple value "null" (0xf6).
 
 * For 'max_stale_sets', the Group Manager SHOULD use the CBOR unsigned integer with value 3.
 
@@ -609,7 +609,7 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 
 * The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name.
 
-* The payload MAY include any of the status parameters 'active', 'group_title', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in {{config-repr-status-properties}}.
+* The payload MAY include any of the status parameters 'active', 'group_description', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in {{config-repr-status-properties}}.
 
 * The payload MUST NOT include any of the status parameters 'rt', 'ace_groupcomm_profile', and 'joining_uri' defined in {{config-repr-status-properties}}.
 
@@ -705,14 +705,14 @@ An example of message exchange is shown below.
    Payload:
 
    {
-        "gp_enc_alg" : 10,
-              "hkdf" : 5,
-     "pairwise_mode" : true,
-            "active" : true,
-        "group_name" : "gp4",
-       "group_title" : "rooms 1 and 2",
-        "app_groups" : ["room1", "room2"],
-            "as_uri" : "coap://as.example.com/token"
+            "gp_enc_alg" : 10,
+                  "hkdf" : 5,
+         "pairwise_mode" : true,
+                "active" : true,
+            "group_name" : "gp4",
+     "group_description" : "rooms 1 and 2",
+            "app_groups" : ["room1", "room2"],
+                "as_uri" : "coap://as.example.com/token"
    }
 
 <= 2.01 Created
@@ -770,7 +770,7 @@ An example of message exchange is shown below.
                         "rt" : "core.osc.gconf",
                     "active" : true,
                 "group_name" : "gp4",
-               "group_title" : "rooms 1 and 2",
+         "group_description" : "rooms 1 and 2",
      "ace_groupcomm_profile" : "coap_group_oscore_app",
             "max_stale_sets" : 3,
                        "exp" : 1360289224,
@@ -812,7 +812,7 @@ An example of message exchange is shown below.
                       "hkdf",
                       "pairwise_mode",
                       "active",
-                      "group_title",
+                      "group_description",
                       "app_groups"]
    }
 
@@ -822,12 +822,12 @@ An example of message exchange is shown below.
    Payload:
 
    {
-        "gp_enc_alg" : 10,
-              "hkdf" : 5,
-     "pairwise_mode" : true,
-            "active" : true,
-       "group_title" : "rooms 1 and 2",
-        "app_groups" : ["room1", "room2"]
+            "gp_enc_alg" : 10,
+                  "hkdf" : 5,
+         "pairwise_mode" : true,
+                "active" : true,
+     "group_description" : "rooms 1 and 2",
+            "app_groups" : ["room1", "room2"]
    }
 
 ~~~~~~~~~~~
@@ -1134,62 +1134,62 @@ In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, t
 Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~~~~~~~~
-+-----------------+----------+--------------+------------+
-| Name            | CBOR Key | CBOR Type    | Reference  |
-+-----------------+----------+--------------+------------+
-| hkdf            | TBD      | tstr / int   | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| cred_fmt        | TBD      | int          | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| group_mode      | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| gp_enc_alg      | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| sign_alg        | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| sign_params     | TBD      | array /      | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| pairwise_mode   | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| alg             | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| ecdh_alg        | TBD      | tstr / int / | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| ecdh_params     | TBD      | array /      | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| det_req         | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| det_hash_alg    | TBD      | tstr / int   | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| rt              | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| active          | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| group_name      | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| group_title     | TBD      | tstr /       | [RFC-XXXX] |
-|                 |          | simple value |            |
-+-----------------+----------+--------------+------------+
-| max_stale_sets  | TBD      | uint         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| gid_reuse       | TBD      | simple value | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| app_groups      | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| joining_uri     | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| as_uri          | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| conf_filter     | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| app_groups_diff | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
++-------------------+----------+--------------+------------+
+| Name              | CBOR Key | CBOR Type    | Reference  |
++-------------------+----------+--------------+------------+
+| hkdf              | TBD      | tstr / int   | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| cred_fmt          | TBD      | int          | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| group_mode        | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| gp_enc_alg        | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| sign_alg          | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| sign_params       | TBD      | array /      | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| pairwise_mode     | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| alg               | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| ecdh_alg          | TBD      | tstr / int / | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| ecdh_params       | TBD      | array /      | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| det_req           | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| det_hash_alg      | TBD      | tstr / int   | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| rt                | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| active            | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| group_name        | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| group_description | TBD      | tstr /       | [RFC-XXXX] |
+|                   |          | simple value |            |
++-------------------+----------+--------------+------------+
+| max_stale_sets    | TBD      | uint         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| gid_reuse         | TBD      | simple value | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| app_groups        | TBD      | array        | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| joining_uri       | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| as_uri            | TBD      | tstr         | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| conf_filter       | TBD      | array        | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
+| app_groups_diff   | TBD      | array        | [RFC-XXXX] |
++-------------------+----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
 
@@ -1388,7 +1388,7 @@ CBOR Key: TBD
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
-Name: group_title
+Name: group_description
 CBOR Key: TBD
 CBOR Type: tstr / simple value
 Reference: [RFC-XXXX]
@@ -1545,6 +1545,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Added example of array of scope entries.
 
 * Removed moot paragraph about the benefits of group name patterns.
+
+* Renamed 'group_title' as 'group_description'.
 
 * Editorial fixes and improvements.
 
