@@ -1416,7 +1416,7 @@ Table of Contents
    refers to the default values specified in Section 5.2.
 
    After that, the Group Manager creates a new group-membership resource
-   accessible at ace-group/GROUPNAME to nodes that want to join the
+   accessible at /ace-group/GROUPNAME to nodes that want to join the
    OSCORE group, as specified in Section 6.1 of
    [I-D.ietf-ace-key-groupcomm-oscore].  Note that such group
    membership-resource comprises a number of sub-resources intended to
