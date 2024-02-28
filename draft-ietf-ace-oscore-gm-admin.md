@@ -878,6 +878,8 @@ Consistently with what is defined at step 4 of {{getting-access}}, the Group Man
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Write" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
 
+If the group-configuration resource targeted by the PUT request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
+
 If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
 
 If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
@@ -1584,6 +1586,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Added a second example of FETCH to the group-collection resource.
 
 * Avoiding accidental deactivation of a group when updating it.
+
+* Avoid alternative ways to create a group configuration resource.
 
 * Editorial fixes and improvements.
 
