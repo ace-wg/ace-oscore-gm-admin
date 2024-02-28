@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 29 August 2024                                  P. van der Stok
+Expires: 31 August 2024                                  P. van der Stok
                                                                         
                                                             F. Palombini
                                                              Ericsson AB
-                                                        26 February 2024
+                                                        28 February 2024
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2024.
+   This Internet-Draft will expire on 31 August 2024.
 
 Copyright Notice
 
@@ -320,7 +320,15 @@ Table of Contents
 
       The AS MAY release Access Tokens to the Administrator for other
       purposes than accessing admin resources of registered Group
-      Managers.
+      Managers.  For example, an Access Token can specify authorization
+      information for joining OSCORE groups at a Group Manager (see
+      [I-D.ietf-ace-key-groupcomm-oscore]), possibly combined with
+      authorization information for accessing admin resources at the
+      same Group Manager (see Section 3).  Also, an AS can of course
+      issue an Access Token that specifies authorization information
+      unrelated to OSCORE groups, but instead pertaining to the access
+      of other resources hosted by the Group Manager or other Resource
+      Servers.
 
 2.1.  Managing OSCORE Groups
 
@@ -3138,6 +3146,8 @@ Appendix B.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 B.1.  Version -10 to -11
+
+   *  Early mentioned that issued Access Tokens can have other purposes.
 
    *  Editorial fixes and improvements.
 
