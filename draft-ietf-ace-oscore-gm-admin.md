@@ -1029,7 +1029,7 @@ The CBOR map in the request payload includes the field 'app_groups_diff', whose 
 
 - The second element is a CBOR array, namely 'app_groups_add'. Each of its elements is a CBOR text string, with value the name of an application group to add to the 'app_groups' status parameter.
 
-The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the response from the Group Manager is provided below.
+The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the request from the Administrator is provided below.
 
 ~~~~~~~~~~~ CDDL
    app-group-name = tstr
