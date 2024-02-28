@@ -1351,117 +1351,117 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 ~~~~~~~~~~~
 Name: hkdf
-CBOR Key: TBD
+CBOR Key: -1
 CBOR Type: tstr / int
 Reference: [RFC-XXXX]
 
 Name: cred_fmt
-CBOR Key: TBD
+CBOR Key: -2
 CBOR Type: int
 Reference: [RFC-XXXX]
 
 Name: group_mode
-CBOR Key: TBD
+CBOR Key: -3
 CBOR Type: simple value
 Reference: [RFC-XXXX]
 
 Name: gp_enc_alg
-CBOR Key: TBD
+CBOR Key: -4
 CBOR Type: tstr / int / simple value
 Reference: [RFC-XXXX]
 
 Name: sign_alg
-CBOR Key: TBD
+CBOR Key: -5
 CBOR Type: tstr / int / simple value
 Reference: [RFC-XXXX]
 
 Name: sign_params
-CBOR Key: TBD
+CBOR Key: -6
 CBOR Type: array / simple value
 Reference: [RFC-XXXX]
 
 Name: pairwise_mode
-CBOR Key: TBD
+CBOR Key: -7
 CBOR Type: simple value
 Reference: [RFC-XXXX]
 
 Name: alg
-CBOR Key: TBD
+CBOR Key: -8
 CBOR Type: tstr / int / simple value
 Reference: [RFC-XXXX]
 
 Name: ecdh_alg
-CBOR Key: TBD
+CBOR Key: -9
 CBOR Type: tstr / int / simple value
 Reference: [RFC-XXXX]
 
 Name: ecdh_params
-CBOR Key: TBD
+CBOR Key: -10
 CBOR Type: array / simple value
 Reference: [RFC-XXXX]
 
 Name: det_req
-CBOR Key: TBD
+CBOR Key: -25
 CBOR Type: simple value
 Reference: [RFC-XXXX]
 
 Name: det_hash_alg
-CBOR Key: TBD
+CBOR Key: -26
 CBOR Type: tstr / int
 Reference: [RFC-XXXX]
 
 Name: rt
-CBOR Key: TBD
+CBOR Key: -11
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
 Name: active
-CBOR Key: TBD
+CBOR Key: -12
 CBOR Type: simple value
 Reference: [RFC-XXXX]
 
 Name: group_name
-CBOR Key: TBD
+CBOR Key: -13
 CBOR Type: tstr / #6.<uint>(any)
 Reference: [RFC-XXXX]
 
 Name: group_description
-CBOR Key: TBD
+CBOR Key: -14
 CBOR Type: tstr / simple value
 Reference: [RFC-XXXX]
 
 Name: max_stale_sets
-CBOR Key: TBD
+CBOR Key: -15
 CBOR Type: uint
 Reference: [RFC-XXXX]
 
 Name: gid_reuse
-CBOR Key: TBD
+CBOR Key: -16
 CBOR Type: simple value
 Reference: [RFC-XXXX]
 
 Name: app_groups
-CBOR Key: TBD
+CBOR Key: -17
 CBOR Type: array
 Reference: [RFC-XXXX]
 
 Name: joining_uri
-CBOR Key: TBD
+CBOR Key: -18
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
 Name: as_uri
-CBOR Key: TBD
+CBOR Key: -19
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
 Name: conf_filter
-CBOR Key: TBD
+CBOR Key: -27
 CBOR Type: array
 Reference: [RFC-XXXX]
 
 Name: app_groups_diff
-CBOR Key: TBD
+CBOR Key: -28
 CBOR Type: array
 Reference: [RFC-XXXX]
 ~~~~~~~~~~~
