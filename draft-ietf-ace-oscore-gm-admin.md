@@ -1418,7 +1418,7 @@ Reference: [RFC-XXXX]
 
 Name: group_name
 CBOR Key: TBD
-CBOR Type: tstr
+CBOR Type: tstr / #6.<uint>(any)
 Reference: [RFC-XXXX]
 
 Name: group_description
