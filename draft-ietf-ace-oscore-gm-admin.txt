@@ -519,9 +519,11 @@ Table of Contents
    that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of
    permissions from those in Table 1.
 
+      ;# include rfc9237
+
       AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
 
-      oscore-gname = true / tstr / #6.nnn(any) ; Group name pattern
+      oscore-gname = true / tstr / #6.<uint>(any) ; Group name pattern
       oscore-gperm = uint .bits admin-permissions
 
       admin-permissions = &(

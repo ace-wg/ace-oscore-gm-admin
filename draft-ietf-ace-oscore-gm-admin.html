@@ -1658,9 +1658,11 @@ In general, a single permission can be associated with multiple different operat
 <p id="section-3-11">The following CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in <a href="#tab-permission-values" class="auto internal xref">Table 1</a>.<a href="#section-3-11" class="pilcrow">¶</a></p>
 <div class="lang-CDDL sourcecode" id="section-3-12">
 <pre>
+   ;# include rfc9237
+
    AIF-OSCORE-GROUPCOMM = AIF-Generic&lt;oscore-gname, oscore-gperm&gt;
 
-   oscore-gname = true / tstr / #6.nnn(any) ; Group name pattern
+   oscore-gname = true / tstr / #6.&lt;uint&gt;(any) ; Group name pattern
    oscore-gperm = uint .bits admin-permissions
 
    admin-permissions = &amp;(
