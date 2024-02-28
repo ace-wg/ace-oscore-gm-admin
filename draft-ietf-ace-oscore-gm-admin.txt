@@ -2376,9 +2376,9 @@ Table of Contents
    when these parameters are transported in the respective message
    fields.
 
-      +-------------------+----------+----------------+------------+
+      +===================+==========+================+============+
       | Name              | CBOR Key | CBOR Type      | Reference  |
-      +-------------------+----------+----------------+------------+
+      +===================+==========+================+============+
       | hkdf              | -1       | tstr / int     | [RFC-XXXX] |
       +-------------------+----------+----------------+------------+
       | cred_fmt          | -2       | int            | [RFC-XXXX] |
@@ -2434,7 +2434,7 @@ Table of Contents
       | app_groups_diff   | -28      | array          | [RFC-XXXX] |
       +-------------------+----------+----------------+------------+
 
-                     Figure 3: ACE Groupcomm Parameters
+                    Table 2: ACE Groupcomm Parameters
 
    The following holds for the Group Manager.
 
@@ -2447,7 +2447,7 @@ Table of Contents
       which the Group Manager defined in
       [I-D.ietf-ace-key-groupcomm-oscore] is a specific instance.
 
-   *  It MUST support all the parameters listed in Figure 3, with the
+   *  It MUST support all the parameters listed in Table 2, with the
       exception of the 'app_groups_diff' parameter, which MUST be
       supported only if the Group Manager supports the selective update
       of a group configuration (see Section 6.7).
@@ -2458,7 +2458,7 @@ Table of Contents
       'ace_groupcomm_profile', 'exp' and 'group_policies', which are
       defined in Section 8 of [I-D.ietf-ace-key-groupcomm].
 
-   *  It MUST support all the parameters listed in Figure 3, with the
+   *  It MUST support all the parameters listed in Table 2, with the
       following exceptions.
 
       -  'conf_filter', which MUST be supported only if the
@@ -2477,17 +2477,17 @@ Table of Contents
    field of an error response with Content-Format application/ace-
    groupcomm+cbor.
 
-               +-------+----------------------------------+
-               | Value | Description                      |
-               +-------+----------------------------------+
-               | 10    | Group currently active           |
-               +-------+----------------------------------+
-               | 11    | Unable to determine a group name |
-               +-------+----------------------------------+
-               | 12    | Unsupported group configuration  |
-               +-------+----------------------------------+
+         +=======+==================================+============+
+         | Value | Description                      | Reference  |
+         +=======+==================================+============+
+         | 10    | Group currently active           | [RFC-XXXX] |
+         +-------+----------------------------------+------------+
+         | 11    | Unable to determine a group name | [RFC-XXXX] |
+         +-------+----------------------------------+------------+
+         | 12    | Unsupported group configuration  | [RFC-XXXX] |
+         +-------+----------------------------------+------------+
 
-                 Figure 4: ACE Groupcomm Error Identifiers
+                  Table 3: ACE Groupcomm Error Identifiers
 
    When receiving an error response from the Group Manager, an
    Administrator may use the information conveyed in the 'error'

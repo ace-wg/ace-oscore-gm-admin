@@ -2731,72 +2731,161 @@ The response, <span class="bcp14">MAY</span> include the current representation 
       </h2>
 <p id="section-7-1">In addition to what is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>, this document defines additional parameters used in the messages exchanged between the Administrator and the Group Manager (see <a href="#interactions" class="auto internal xref">Section 6</a>). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">Note that the media type application/ace-groupcomm+cbor <span class="bcp14">MUST</span> be used when these parameters are transported in the respective message fields.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<span id="name-ace-groupcomm-parameters-2"></span><div id="fig-ACE-Groupcomm-Parameters">
-<figure id="figure-3">
-        <div class="alignCenter art-text artwork" id="section-7-3.1">
-<pre>
-+-------------------+----------+----------------+------------+
-| Name              | CBOR Key | CBOR Type      | Reference  |
-+-------------------+----------+----------------+------------+
-| hkdf              | -1       | tstr / int     | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| cred_fmt          | -2       | int            | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| group_mode        | -3       | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| gp_enc_alg        | -4       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| sign_alg          | -5       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| sign_params       | -6       | array /        | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| pairwise_mode     | -7       | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| alg               | -8       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| ecdh_alg          | -9       | tstr / int /   | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| ecdh_params       | -10      | array /        | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| det_req           | -25      | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| det_hash_alg      | -26      | tstr / int     | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| rt                | -11      | tstr           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| active            | -12      | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| group_name        | -13      | tstr /         | [RFC-XXXX] |
-|                   |          | #6.&lt;uint&gt;(any) |            |
-+-------------------+----------+----------------+------------+
-| group_description | -14      | tstr /         | [RFC-XXXX] |
-|                   |          | simple value   |            |
-+-------------------+----------+----------------+------------+
-| max_stale_sets    | -15      | uint           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| gid_reuse         | -16      | simple value   | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| app_groups        | -17      | array          | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| joining_uri       | -18      | tstr           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| as_uri            | -19      | tstr           | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| conf_filter       | -27      | array          | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-| app_groups_diff   | -28      | array          | [RFC-XXXX] |
-+-------------------+----------+----------------+------------+
-</pre>
-</div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<span id="name-ace-groupcomm-parameters-2"></span><div id="tab-ACE-Groupcomm-Parameters">
+<table class="center" id="table-2">
+        <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
 <a href="#name-ace-groupcomm-parameters-2" class="selfRef">ACE Groupcomm Parameters</a>
-        </figcaption></figure>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Name</th>
+            <th class="text-left" rowspan="1" colspan="1">CBOR Key</th>
+            <th class="text-left" rowspan="1" colspan="1">CBOR Type</th>
+            <th class="text-left" rowspan="1" colspan="1">Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">hkdf</td>
+            <td class="text-left" rowspan="1" colspan="1">-1</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / int</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">cred_fmt</td>
+            <td class="text-left" rowspan="1" colspan="1">-2</td>
+            <td class="text-left" rowspan="1" colspan="1">int</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">group_mode</td>
+            <td class="text-left" rowspan="1" colspan="1">-3</td>
+            <td class="text-left" rowspan="1" colspan="1">simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">gp_enc_alg</td>
+            <td class="text-left" rowspan="1" colspan="1">-4</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / int / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">sign_alg</td>
+            <td class="text-left" rowspan="1" colspan="1">-5</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / int / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">sign_params</td>
+            <td class="text-left" rowspan="1" colspan="1">-6</td>
+            <td class="text-left" rowspan="1" colspan="1">array / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">pairwise_mode</td>
+            <td class="text-left" rowspan="1" colspan="1">-7</td>
+            <td class="text-left" rowspan="1" colspan="1">simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">alg</td>
+            <td class="text-left" rowspan="1" colspan="1">-8</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / int / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">ecdh_alg</td>
+            <td class="text-left" rowspan="1" colspan="1">-9</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / int / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">ecdh_params</td>
+            <td class="text-left" rowspan="1" colspan="1">-10</td>
+            <td class="text-left" rowspan="1" colspan="1">array / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">det_req</td>
+            <td class="text-left" rowspan="1" colspan="1">-25</td>
+            <td class="text-left" rowspan="1" colspan="1">simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">det_hash_alg</td>
+            <td class="text-left" rowspan="1" colspan="1">-26</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / int</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">rt</td>
+            <td class="text-left" rowspan="1" colspan="1">-11</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">active</td>
+            <td class="text-left" rowspan="1" colspan="1">-12</td>
+            <td class="text-left" rowspan="1" colspan="1">simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">group_name</td>
+            <td class="text-left" rowspan="1" colspan="1">-13</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / <br> #6.&lt;uint&gt;(any)</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">group_description</td>
+            <td class="text-left" rowspan="1" colspan="1">-14</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr / <br> simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">max_stale_sets</td>
+            <td class="text-left" rowspan="1" colspan="1">-15</td>
+            <td class="text-left" rowspan="1" colspan="1">uint</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">gid_reuse</td>
+            <td class="text-left" rowspan="1" colspan="1">-16</td>
+            <td class="text-left" rowspan="1" colspan="1">simple value</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">app_groups</td>
+            <td class="text-left" rowspan="1" colspan="1">-17</td>
+            <td class="text-left" rowspan="1" colspan="1">array</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">joining_uri</td>
+            <td class="text-left" rowspan="1" colspan="1">-18</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">as_uri</td>
+            <td class="text-left" rowspan="1" colspan="1">-19</td>
+            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">conf_filter</td>
+            <td class="text-left" rowspan="1" colspan="1">-27</td>
+            <td class="text-left" rowspan="1" colspan="1">array</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">app_groups_diff</td>
+            <td class="text-left" rowspan="1" colspan="1">-28</td>
+            <td class="text-left" rowspan="1" colspan="1">array</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+        </tbody>
+      </table>
 </div>
 <p id="section-7-4">The following holds for the Group Manager.<a href="#section-7-4" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2806,7 +2895,7 @@ The response, <span class="bcp14">MAY</span> include the current representation 
 This is consistent with what is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span> for the Key Distribution Center, of which the Group Manager defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> is a specific instance.<a href="#section-7-5.1.2" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-5.2">
-          <p id="section-7-5.2.1">It <span class="bcp14">MUST</span> support all the parameters listed in <a href="#fig-ACE-Groupcomm-Parameters" class="auto internal xref">Figure 3</a>, with the exception of the 'app_groups_diff' parameter, which <span class="bcp14">MUST</span> be supported only if the Group Manager supports the selective update of a group configuration (see <a href="#configuration-resource-patch" class="auto internal xref">Section 6.7</a>).<a href="#section-7-5.2.1" class="pilcrow">¶</a></p>
+          <p id="section-7-5.2.1">It <span class="bcp14">MUST</span> support all the parameters listed in <a href="#tab-ACE-Groupcomm-Parameters" class="auto internal xref">Table 2</a>, with the exception of the 'app_groups_diff' parameter, which <span class="bcp14">MUST</span> be supported only if the Group Manager supports the selective update of a group configuration (see <a href="#configuration-resource-patch" class="auto internal xref">Section 6.7</a>).<a href="#section-7-5.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-7-6">The following holds for an Administrator.<a href="#section-7-6" class="pilcrow">¶</a></p>
@@ -2815,7 +2904,7 @@ This is consistent with what is defined in <span><a href="https://datatracker.ie
           <p id="section-7-7.1.1">It <span class="bcp14">MUST</span> support the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>.<a href="#section-7-7.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-7.2">
-          <p id="section-7-7.2.1">It <span class="bcp14">MUST</span> support all the parameters listed in <a href="#fig-ACE-Groupcomm-Parameters" class="auto internal xref">Figure 3</a>, with the following exceptions.<a href="#section-7-7.2.1" class="pilcrow">¶</a></p>
+          <p id="section-7-7.2.1">It <span class="bcp14">MUST</span> support all the parameters listed in <a href="#tab-ACE-Groupcomm-Parameters" class="auto internal xref">Table 2</a>, with the following exceptions.<a href="#section-7-7.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7-7.2.2.1">
               <p id="section-7-7.2.2.1.1">'conf_filter', which <span class="bcp14">MUST</span> be supported only if the Administrator supports the partial retrieval of a group configuration by filters (see <a href="#configuration-resource-fetch" class="auto internal xref">Section 6.5</a>).<a href="#section-7-7.2.2.1.1" class="pilcrow">¶</a></p>
@@ -2834,24 +2923,37 @@ This is consistent with what is defined in <span><a href="https://datatracker.ie
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-ace-groupcomm-error-identif" class="section-name selfRef">ACE Groupcomm Error Identifiers</a>
       </h2>
 <p id="section-8-1">In addition to what is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18#section-9" class="relref">Section 9</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<span id="name-ace-groupcomm-error-identifi"></span><div id="fig-ACE-Groupcomm-Error">
-<figure id="figure-4">
-        <div class="alignCenter art-text artwork" id="section-8-2.1">
-<pre>
-+-------+----------------------------------+
-| Value | Description                      |
-+-------+----------------------------------+
-| 10    | Group currently active           |
-+-------+----------------------------------+
-| 11    | Unable to determine a group name |
-+-------+----------------------------------+
-| 12    | Unsupported group configuration  |
-+-------+----------------------------------+
-</pre>
-</div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<span id="name-ace-groupcomm-error-identifi"></span><div id="tab-ACE-Groupcomm-Error">
+<table class="center" id="table-3">
+        <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
 <a href="#name-ace-groupcomm-error-identifi" class="selfRef">ACE Groupcomm Error Identifiers</a>
-        </figcaption></figure>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Value</th>
+            <th class="text-left" rowspan="1" colspan="1">Description</th>
+            <th class="text-left" rowspan="1" colspan="1">Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">10</td>
+            <td class="text-left" rowspan="1" colspan="1">Group currently active</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">11</td>
+            <td class="text-left" rowspan="1" colspan="1">Unable to determine a group name</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">12</td>
+            <td class="text-left" rowspan="1" colspan="1">Unsupported group configuration</td>
+            <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
+          </tr>
+        </tbody>
+      </table>
 </div>
 <p id="section-8-3">When receiving an error response from the Group Manager, an Administrator may use the information conveyed in the 'error' parameter to determine what actions to take next. If it is included in the error response, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.<a href="#section-8-3" class="pilcrow">¶</a></p>
 <ul class="normal">
