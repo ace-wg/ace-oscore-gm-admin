@@ -653,7 +653,7 @@ If the group configuration to be created would include parameter values that pre
 
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
-* Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters.
+* Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters. In particular, the value of the status parameter 'exp' (if present) is not valid if the indicated expiration date is not in the future.
 
 * The Group Manager does not trust the Authorization Server with URI specified in the 'as_uri' parameter, and has no alternative Authorization Server to consider for the OSCORE group to create.
 
