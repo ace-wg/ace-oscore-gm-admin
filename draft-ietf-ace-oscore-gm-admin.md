@@ -92,7 +92,7 @@ entity:
 
 --- abstract
 
-Group communication for CoAP can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible to handle the joining of new group members, as well as to manage and distribute the group keying material. This document defines a RESTful admin interface at the Group Manager, that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof-of-possession, and server authentication.
+Group communication for CoAP can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible for handling the joining of new group members, as well as managing and distributing the group keying material. This document defines a RESTful admin interface at the Group Manager that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof-of-possession, and server authentication.
 
 --- middle
 
@@ -100,11 +100,11 @@ Group communication for CoAP can be secured using Group Object Security for Cons
 
 The Constrained Application Protocol (CoAP) {{RFC7252}} can also be used for group communication {{I-D.ietf-core-groupcomm-bis}}, where messages are exchanged between members of a group, e.g., over IP multicast. Applications relying on CoAP can achieve end-to-end security at the application layer by using Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}}, and especially Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} in group communication scenarios.
 
-When group communication for CoAP is protected with Group OSCORE, nodes are required to explicitly join the correct OSCORE group. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.
+When group communication for CoAP is protected with Group OSCORE, nodes are required to join the correct OSCORE group explicitly. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.
 
 The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. Such a method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, so ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
 
-In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or on pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error-prone deployments and is poorly flexible.
+In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error-prone deployments and is poorly flexible.
 
 In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining them during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.
 
@@ -130,7 +130,7 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
 * The OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} security protocols. These especially include the following concepts.
 
-   - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as security group for one or many application groups.
+   - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as a security group for one or many application groups.
 
    - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}}, and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
 
@@ -328,7 +328,7 @@ Having the object identifier ("Toid") specialized as a pattern displays a number
 
 * When relying on wildcard patterns and complex patterns, the encoded scope can be compact in size while allowing the Administrator to operate on large pools of group names.
 
-* When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know exact group names for requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
+* When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know the exact group names for requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
 
 # Getting Access to the Group Manager # {#getting-access}
 
@@ -394,7 +394,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
 In addition to a "main" primary Administrator responsible for an OSCORE group at the Group Manager, it is also possible to have "assistant" secondary Administrators that are effectively authorized to perform some operations on the same OSCORE group.
 
-With respect to the main Administrator, such assistant Administrators are expected to have less permissions to perform administrative operations related to the OSCORE group at the Group Manager. For example, they may not be authorized to create the OSCORE group if not existing already, or to delete the OSCORE group and its configuration.
+With respect to the main Administrator, such assistant Administrators are expected to have fewer permissions to perform administrative operations related to the OSCORE group at the Group Manager. For example, they may not be authorized to create an OSCORE group, or to delete an OSCORE group and its configuration.
 
 In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new Access Token and to upload it to the Group Manager. If allowed by the used transport profile of ACE, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
 
@@ -705,7 +705,7 @@ The response payload is a CBOR map, where entries use the same abbreviations def
 
 If the POST request specified the parameter 'gid_reuse' encoding the CBOR simple value "true" (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value "false" (0xf4), then the response payload MUST include also the parameter 'gid_reuse' encoding the CBOR simple value "false" (0xf4).
 
-If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
@@ -1011,7 +1011,7 @@ The following holds when the value of specific parameters is updated.
 
          Consistently, the group member has to retrieve the new authentication credentials of other group members as they are uploaded to the Group Manager (see {{Section 9.3 of I-D.ietf-ace-key-groupcomm-oscore}}). In order to ensure the retrieval of latest authentication credentials that are consistent with the new group configuration, it is preferable that the group member retrieves such authentication credentials after a pre-configured time interval has elapsed since uploading its own authentication credential. Later on, the group member will need to retrieve other group members' authentication credentials that it is still missing and that it needs for processing messages exchanged in the OSCORE group.
 
-      - Retrieve from the Group Manager the new Group Manager's authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
+      - Retrieve from the Group Manager the Group Manager's new authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
@@ -1267,7 +1267,7 @@ When receiving an error response from the Group Manager, an Administrator may us
 
 * In case of error 11, the Administrator has the following options.
 
-   - The Administrator simply tries again later on. The new POST request to the group-collection resource specifies the same group name originally suggested in the previous request that triggered the error response (see {{collection-resource-post}}). This option fundamentally relies on the Group Manager freeing up group names, hence it is not viable if considerably or indefinitely postponing the creation of the group is not acceptable.
+   - The Administrator simply tries again later on. The new POST request to the group-collection resource specifies the same group name originally suggested in the previous request that triggered the error response (see {{collection-resource-post}}). This option fundamentally relies on the Group Manager making the group name available again before the Administrator sends the new POST request. Hence, this option is not viable if it is unacceptable for the Administrator to considerably or indefinitely postpone the creation of the new group.
 
    - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.
 
@@ -1275,7 +1275,7 @@ When receiving an error response from the Group Manager, an Administrator may us
 
       The Administrator should choose the new group name GROUPNAME to suggest, in such a way that it does not renounce permissions that were granted per the old group name GROUPNAME*. This is the case if the following holds.
 
-      With reference to the 'scope' claim of the Administrator's Access Token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no less permissions than PERM*.
+      With reference to the 'scope' claim of the Administrator's Access Token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no fewer permissions than PERM*.
 
    - The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.
 
