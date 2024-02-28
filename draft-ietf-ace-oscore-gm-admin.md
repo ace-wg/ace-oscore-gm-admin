@@ -139,11 +139,11 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
 * The management of keying material for groups in ACE {{I-D.ietf-ace-key-groupcomm}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager, that new members access to join the OSCORE group, while current members can access to retrieve updated keying material.
 
-Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as `/token` and `/introspect` at the AS, and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
+Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as `/token` and `/introspect` at the AS, and `/authz-info` at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
 This document also refers to the following terminology:
 
-* Administrator: entity responsible to create, configure and delete OSCORE groups at a Group Manager.
+* Administrator: entity responsible to create, configure, and delete OSCORE groups at a Group Manager.
 
 * Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment.
 
@@ -958,7 +958,7 @@ After having overwritten a group configuration, the Group Manager informs the me
 
 To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). Such messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
 
-* Only the parameters 'gkty', 'key', 'num', 'exp' and 'ace_groupcomm_profile' are present.
+* Only the parameters 'gkty', 'key', 'num', 'exp', and 'ace_groupcomm_profile' are present.
 
 * The 'key' parameter includes only the following parameters, with values reflecting the new configuration of the OSCORE group.
 
@@ -1006,7 +1006,7 @@ The following holds when the value of specific parameters is updated.
 
 * Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 'sign_params', 'ecdh_alg', and 'ecdh_params' MUST either:
 
-   - Leave the OSCORE group, e.g., if not supporting the indicated new format, algorithms, parameters and encoding; or
+   - Leave the OSCORE group, e.g., if not supporting the indicated new format, algorithms, parameters, and encoding; or
 
    - Leave the OSCORE group and rejoin it (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}). When rejoining the group, an authentication credential in the indicated format used in the OSCORE group MUST be provided to the Group Manager. The authentication credential as well as the included public key MUST be compatible with the indicated algorithms and parameters.
 
@@ -1158,7 +1158,7 @@ An example of message exchange is shown below.
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication association established with that member during its joining process (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace_groupcomm_profile' are present, and the 'key' parameter is the empty CBOR map.
+* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key', and 'ace_groupcomm_profile' are present, and the 'key' parameter is the empty CBOR map.
 
 * A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 5 ("Group deleted").
 
@@ -1221,7 +1221,7 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 
 The following holds for the Group Manager.
 
-* It MUST support the parameters 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
    This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
@@ -1229,7 +1229,7 @@ The following holds for the Group Manager.
 
 The following holds for an Administrator.
 
-* It MUST support the parameters 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
 * It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
@@ -1318,7 +1318,7 @@ Unlike what is defined in {{Section 10.2 of I-D.ietf-ace-key-groupcomm}} with re
 
 ## Administrators
 
-If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group and how they achieve and maintain such an alignment with each other.
+If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group, and how they achieve and maintain such an alignment with each other.
 
 A compromised Administrator may collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
 
@@ -1531,7 +1531,7 @@ In order to evaluate the requested permissions against the access policies perta
 
 The following specifically refers only to "admin scope entries", i.e., scope entries that express authorization information for Administrators of OSCORE groups.
 
-1. The AS initializes three empty sets of scope entries, namely S1, S2 and S3.
+1. The AS initializes three empty sets of scope entries, namely S1, S2, and S3.
 
 2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
@@ -1555,7 +1555,7 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
       - If no crosspattern is built, the AS proceeds with the next pattern in its access policies related to administrative operations at the Group Manager for the Administrator, if any. Otherwise, the AS adds to the set S3 a scope entry, such that its Toid is the same as in the crosspattern P\*\*, while its Tperm is the AND of the Tperm from the pattern P\* and the Tperm in the scope entry E.
 
-5. If the sets S1, S2 and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2 and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+5. If the sets S1, S2, and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2, and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
