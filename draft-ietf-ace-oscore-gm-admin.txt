@@ -257,7 +257,7 @@ Table of Contents
 
    This document also refers to the following terminology:
 
-   *  Administrator: entity responsible to create, configure and delete
+   *  Administrator: entity responsible to create, configure, and delete
       OSCORE groups at a Group Manager.
 
    *  Group name: stable and invariant name of an OSCORE group.  The
@@ -1899,7 +1899,7 @@ Table of Contents
    Response defined in Section 6.3 of
    [I-D.ietf-ace-key-groupcomm-oscore], with the following differences.
 
-   *  Only the parameters 'gkty', 'key', 'num', 'exp' and
+   *  Only the parameters 'gkty', 'key', 'num', 'exp', and
       'ace_groupcomm_profile' are present.
 
    *  The 'key' parameter includes only the following parameters, with
@@ -2036,7 +2036,7 @@ Table of Contents
       either:
 
       -  Leave the OSCORE group, e.g., if not supporting the indicated
-         new format, algorithms, parameters and encoding; or
+         new format, algorithms, parameters, and encoding; or
 
       -  Leave the OSCORE group and rejoin it (see Section 6 of
          [I-D.ietf-ace-key-groupcomm-oscore]).  When rejoining the
@@ -2348,7 +2348,7 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore]).  The Group Manager uses the
       same format of the Join Response message in Section 6.3 of
       [I-D.ietf-ace-key-groupcomm-oscore], where only the parameters
-      'gkty', 'key' and 'ace_groupcomm_profile' are present, and the
+      'gkty', 'key', and 'ace_groupcomm_profile' are present, and the
       'key' parameter is the empty CBOR map.
 
    *  A group member may subscribe for updates to the group-membership
@@ -2445,7 +2445,7 @@ Table of Contents
 
    The following holds for the Group Manager.
 
-   *  It MUST support the parameters 'ace_groupcomm_profile', 'exp' and
+   *  It MUST support the parameters 'ace_groupcomm_profile', 'exp', and
       'group_policies', which are defined in Section 8 of
       [I-D.ietf-ace-key-groupcomm].
 
@@ -2461,7 +2461,7 @@ Table of Contents
 
    The following holds for an Administrator.
 
-   *  It MUST support the parameters 'ace_groupcomm_profile', 'exp' and
+   *  It MUST support the parameters 'ace_groupcomm_profile', 'exp', and
       'group_policies', which are defined in Section 8 of
       [I-D.ietf-ace-key-groupcomm].
 
@@ -2698,8 +2698,8 @@ Table of Contents
    responsibility, as well as to be aligned on what is in the best
    interest of the OSCORE group and its secure operation.  It is out of
    the scope of this document to define how different Administrators are
-   appointed as responsible for an OSCORE group and how they achieve and
-   maintain such an alignment with each other.
+   appointed as responsible for an OSCORE group, and how they achieve
+   and maintain such an alignment with each other.
 
    A compromised Administrator may collude with unauthorized parties.
    Within the extent of the granted access rights, the compromised
@@ -3173,7 +3173,7 @@ Appendix A.  Processing of Group Name Patterns at the AS
    Administrators of OSCORE groups.
 
    1.  The AS initializes three empty sets of scope entries, namely S1,
-       S2 and S3.
+       S2, and S3.
 
    2.  For each scope entry E in the 'scope' parameter of the
        Authorization Request, the AS performs the following actions.
@@ -3233,10 +3233,10 @@ Appendix A.  Processing of Group Name Patterns at the AS
              while its Tperm is the AND of the Tperm from the pattern P*
              and the Tperm in the scope entry E.
 
-   5.  If the sets S1, S2 and S3 are all empty, the Authorization
+   5.  If the sets S1, S2, and S3 are all empty, the Authorization
        Request has not been successfully verified, and the AS returns an
        error response as per Section 5.8.3 of [RFC9200].  Otherwise, the
-       AS uses the scope entries in the sets S1, S2 and S3 as the scope
+       AS uses the scope entries in the sets S1, S2, and S3 as the scope
        entries for the 'scope' claim to include in the Access Token, as
        per the format defined in Section 3.
 
