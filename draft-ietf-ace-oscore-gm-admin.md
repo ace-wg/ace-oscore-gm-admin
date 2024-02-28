@@ -168,7 +168,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
     The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}} and {{getting-access}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
 
-    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers.
+    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an Access Token can specify authorization information for joining OSCORE groups at a Group Manager (see {{I-D.ietf-ace-key-groupcomm-oscore}}), possibly combined with authorization information for accessing admin resources at the same Group Manager (see Section 3). Also, an AS can of course issue an Access Token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
@@ -1517,6 +1517,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 {:removeinrfc}
 
 ## Version -10 to -11 ## {#sec-10-11}
+
+* Early mentioned that issued Access Tokens can have other purposes.
 
 * Editorial fixes and improvements.
 
