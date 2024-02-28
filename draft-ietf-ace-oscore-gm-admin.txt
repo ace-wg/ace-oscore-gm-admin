@@ -606,14 +606,6 @@ Table of Contents
       final decision about the name to assign to an OSCORE group, upon
       its creation (see Section 6.3).
 
-   *  The Administrator may have established a secure communication
-      association with the Group Manager based on a first Access Token
-      T1, and then created an OSCORE group G.  Following the
-      invalidation of T1 (e.g., due to expiration) and the establishment
-      of a new secure communication association with the Group Manager
-      based on a new Access Token T2, the Administrator can seamlessly
-      perform authorized operations on the previously created group G.
-
 4.  Getting Access to the Group Manager
 
    All communications between the involved entities rely on the CoAP
@@ -3173,6 +3165,8 @@ B.1.  Version -10 to -11
    *  Early mentioned that issued Access Tokens can have other purposes.
 
    *  Added example of array of scope entries.
+
+   *  Removed moot paragraph about the benefits of group name patterns.
 
    *  Editorial fixes and improvements.
 

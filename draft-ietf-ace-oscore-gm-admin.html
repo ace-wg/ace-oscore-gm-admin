@@ -1716,9 +1716,6 @@ In general, a single permission can be associated with multiple different operat
           <li class="normal" id="section-3.1-2.2">
             <p id="section-3.1-2.2.1">When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know exact group names for requesting and issuing an Access Token, respectively (see <a href="#getting-access" class="auto internal xref">Section 4</a>). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>).<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.1-2.3">
-            <p id="section-3.1-2.3.1">The Administrator may have established a secure communication association with the Group Manager based on a first Access Token T1, and then created an OSCORE group G. Following the invalidation of T1 (e.g., due to expiration) and the establishment of a new secure communication association with the Group Manager based on a new Access Token T2, the Administrator can seamlessly perform authorized operations on the previously created group G.<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
         </ul>
 </section>
 </div>
@@ -3384,7 +3381,10 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.2.1">Added example of array of scope entries.<a href="#appendix-B.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.3">
-            <p id="appendix-B.1-1.3.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.3.1">Removed moot paragraph about the benefits of group name patterns.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.4">
+            <p id="appendix-B.1-1.4.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
