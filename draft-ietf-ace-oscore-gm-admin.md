@@ -1173,59 +1173,59 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 +-------------------+----------+----------------+------------+
 | Name              | CBOR Key | CBOR Type      | Reference  |
 +-------------------+----------+----------------+------------+
-| hkdf              | TBD      | tstr / int     | [RFC-XXXX] |
+| hkdf              | -1       | tstr / int     | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| cred_fmt          | TBD      | int            | [RFC-XXXX] |
+| cred_fmt          | -2       | int            | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| group_mode        | TBD      | simple value   | [RFC-XXXX] |
+| group_mode        | -3       | simple value   | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| gp_enc_alg        | TBD      | tstr / int /   | [RFC-XXXX] |
+| gp_enc_alg        | -4       | tstr / int /   | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| sign_alg          | TBD      | tstr / int /   | [RFC-XXXX] |
+| sign_alg          | -5       | tstr / int /   | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| sign_params       | TBD      | array /        | [RFC-XXXX] |
+| sign_params       | -6       | array /        | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| pairwise_mode     | TBD      | simple value   | [RFC-XXXX] |
+| pairwise_mode     | -7       | simple value   | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| alg               | TBD      | tstr / int /   | [RFC-XXXX] |
+| alg               | -8       | tstr / int /   | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| ecdh_alg          | TBD      | tstr / int /   | [RFC-XXXX] |
+| ecdh_alg          | -9       | tstr / int /   | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| ecdh_params       | TBD      | array /        | [RFC-XXXX] |
+| ecdh_params       | -10      | array /        | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| det_req           | TBD      | simple value   | [RFC-XXXX] |
+| det_req           | -25      | simple value   | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| det_hash_alg      | TBD      | tstr / int     | [RFC-XXXX] |
+| det_hash_alg      | -26      | tstr / int     | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| rt                | TBD      | tstr           | [RFC-XXXX] |
+| rt                | -11      | tstr           | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| active            | TBD      | simple value   | [RFC-XXXX] |
+| active            | -12      | simple value   | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| group_name        | TBD      | tstr /         | [RFC-XXXX] |
+| group_name        | -13      | tstr /         | [RFC-XXXX] |
 |                   |          | #6.<uint>(any) |            |
 +-------------------+----------+----------------+------------+
-| group_description | TBD      | tstr /         | [RFC-XXXX] |
+| group_description | -14      | tstr /         | [RFC-XXXX] |
 |                   |          | simple value   |            |
 +-------------------+----------+----------------+------------+
-| max_stale_sets    | TBD      | uint           | [RFC-XXXX] |
+| max_stale_sets    | -15      | uint           | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| gid_reuse         | TBD      | simple value   | [RFC-XXXX] |
+| gid_reuse         | -16      | simple value   | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| app_groups        | TBD      | array          | [RFC-XXXX] |
+| app_groups        | -17      | array          | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| joining_uri       | TBD      | tstr           | [RFC-XXXX] |
+| joining_uri       | -18      | tstr           | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| as_uri            | TBD      | tstr           | [RFC-XXXX] |
+| as_uri            | -19      | tstr           | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| conf_filter       | TBD      | array          | [RFC-XXXX] |
+| conf_filter       | -27      | array          | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
-| app_groups_diff   | TBD      | array          | [RFC-XXXX] |
+| app_groups_diff   | -28      | array          | [RFC-XXXX] |
 +-------------------+----------+----------------+------------+
 ~~~~~~~~~~~
 {: #fig-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" artwork-align="center"}
@@ -1590,6 +1590,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Avoiding accidental deactivation of a group when updating it.
 
 * Avoid alternative ways to create a group configuration resource.
+
+* Added integer abbreviations for the new entries in the "ACE Groupcomm Parameters" registry.
 
 * Editorial fixes and improvements.
 
