@@ -66,6 +66,7 @@ normative:
   RFC9200:
   RFC9202:
   RFC9203:
+  RFC9290:
   RFC9237:
   RFC9277:
   COSE.Algorithms:
@@ -651,7 +652,7 @@ Consistently with what is defined at step 4 of {{getting-access}}, the Group Man
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Create" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
 
-If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
+If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
@@ -671,7 +672,7 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 * With reference to the 'scope' claim in the stored Access Token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
 
-If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 11 ("Unable to determine a group name").
+If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
 
@@ -882,7 +883,7 @@ If the verification above fails (i.e., there are no matching scope entries speci
 
 If the group-configuration resource targeted by the PUT request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
 
-If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
 If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
 
@@ -1057,7 +1058,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
 Furthermore, the Group Manager MUST perform the same authorization checks defined for the processing of a PUT request to a group-configuration resource in {{configuration-resource-put}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Write" permission applicable to the targeted group-configuration resource.
 
-If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 12 ("Unsupported group configuration") and the 'error_description' parameter SHOULD be included in order to provide additional context.
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
@@ -1133,7 +1134,7 @@ If the verification above fails (i.e., there are no matching scope entries speci
 
 Otherwise, the Group Manager continues processing the request, which would be successful only on an inactive OSCORE group. That is, the DELETE request actually yields a successful deletion of the OSCORE group, only if the corresponding status parameter 'active' has current value "false" (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-put}}), and setting the corresponding status parameter 'active' to "false" (0xf4).
 
-If, upon receiving the DELETE request, the current value of the status parameter 'active' is "true" (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 10 ("Group currently active").
+If, upon receiving the DELETE request, the current value of the status parameter 'active' is "true" (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
 
 After a successful processing of the DELETE request, the Group Manager performs the following actions.
 
@@ -1159,7 +1160,7 @@ After having deleted an OSCORE group, the Group Manager can inform the group mem
 
 * The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key' and 'ace_groupcomm_profile' are present, and the 'key' parameter is the empty CBOR map.
 
-* A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("Group deleted").
+* A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 5 ("Group deleted").
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated with that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
@@ -1220,7 +1221,7 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 
 The following holds for the Group Manager.
 
-* It MUST support the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
    This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
@@ -1228,7 +1229,7 @@ The following holds for the Group Manager.
 
 The following holds for an Administrator.
 
-* It MUST support the parameters 'error', 'error_description', 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'ace_groupcomm_profile', 'exp' and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
 
 * It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
@@ -1238,7 +1239,7 @@ The following holds for an Administrator.
 
 # ACE Groupcomm Error Identifiers {#error-types}
 
-In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines a new value that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
+In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines new values that the Group Manager can use as error identifiers. These are used in error responses with Content-Format application/concise-problem-details+cbor {{RFC9290}}, as values of the 'error-id' field within the Custom Problem Detail entry 'ace-groupcomm-error' (see {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}).
 
 | Value | Description                      | Reference |
 |-------|----------------------------------|-----------|
@@ -1249,7 +1250,7 @@ In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, t
 | 12    | Unsupported group configuration  | {{&SELF}} |
 {: #tab-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" align="center"}
 
-When receiving an error response from the Group Manager, an Administrator may use the information conveyed in the 'error' parameter to determine what actions to take next. If it is included in the error response, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
+If the Administrator supports the problem-details format {{RFC9290}} and the Custom Problem Detail entry 'ace-groupcomm-error' defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, and is able to understand the error specified in the 'error-id' field therein, then the Administrator may use that information to determine what actions to take next. If the Concise Problem Details data item specified in the error response includes the 'detail' entry and the Administrator supports it, such an entry may provide additional context. In particular, the following guidelines apply.
 
 * In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
 
@@ -1271,11 +1272,11 @@ When receiving an error response from the Group Manager, an Administrator may us
 
 * In case of error 12, the Administrator has the following options.
 
-   - If the Administrator has attempted to create a new group configuration (see {{collection-resource-post}}), the Administrator can take into account what the Group Manager specifies in the 'error_description' parameter of the error response, and send a new request to the Group Manager for accordingly creating the group configuration.
+   - If the Administrator has attempted to create a new group configuration (see {{collection-resource-post}}), the Administrator can take into account what the Group Manager specifies in the 'detail' entry of the Concise Problem Details data item {{RFC9290}} specified in the error response, and send a new request to the Group Manager for accordingly creating the group configuration.
 
       This requires that the Administrator finds acceptable to create a group configuration different from the originally intended one.
 
-   - If the Administrator has attempted to overwrite (see {{configuration-resource-put}}) or selectively update (see {{configuration-resource-patch}}) an existing group configuration, the Administrator can take into account what the Group Manager specifies in the 'error_description' parameter of the error response, and send a new request to the Group Manager for accordingly overwriting or selectively updating the group configuration.
+   - If the Administrator has attempted to overwrite (see {{configuration-resource-put}}) or selectively update (see {{configuration-resource-patch}}) an existing group configuration, the Administrator can take into account what the Group Manager specifies in the 'detail' entry of the Concise Problem Details data item {{RFC9290}} specified in the error response, and send a new request to the Group Manager for accordingly overwriting or selectively updating the group configuration.
 
       This requires that the Administrator finds acceptable to overwrite or update the current group configuration differently than how it was originally intended. If this is not attainable, the Administrator may decide to not take further actions and keep the current group configuration as is, or instead to delete the group configuration altogether (see {{configuration-resource-delete}}).
 
@@ -1574,6 +1575,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Avoiding accidental deactivation of a group when updating it.
 
 * Avoid alternative ways to create a group configuration resource.
+
+* RFC 9290 is used instead of the custom format for error responses.
 
 * Added integer abbreviations for the new entries in the "ACE Groupcomm Parameters" registry.
 
