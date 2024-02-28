@@ -2048,18 +2048,20 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
         </h3>
 <p id="section-6.2-1">This operation <span class="bcp14">MUST</span> be supported by the Group Manager and <span class="bcp14">MAY</span> be supported by an Administrator.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2-3">The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in <a href="#config-repr" class="auto internal xref">Section 5.1</a> and use the same abbreviations defined in <a href="#groupcomm-parameters" class="auto internal xref">Section 7</a>. Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>).<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.2-4">The Group Manager <span class="bcp14">MUST</span> prepare the list L to include in the response as follows.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.2-5">
-<li id="section-6.2-5.1">
-            <p id="section-6.2-5.1.1">The Group Manager prepares a preliminary version of the list L, as specified in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a> for the processing of a GET request to the group-collection resource.<a href="#section-6.2-5.1.1" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in <a href="#config-repr" class="auto internal xref">Section 5.1</a> and use the same abbreviations defined in <a href="#groupcomm-parameters" class="auto internal xref">Section 7</a>.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-4">Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>), with the exception that the parameter 'group_name' (if present) can also be encoded as a tagged CBOR data item, specifying a group name pattern with the semantics signaled by the CBOR tag.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-5">In such a case, the parameter 'group_name' expresses a group name pattern in the same way as a complex pattern Toid does in a scope entry (see Section 3). In particular, the filter criterion is satisfied by any group name that matches with the group name pattern specified by the parameter 'group_name' in the payload of the FETCH request.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-6">The Group Manager <span class="bcp14">MUST</span> prepare the list L to include in the response as follows.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.2-7">
+<li id="section-6.2-7.1">
+            <p id="section-6.2-7.1.1">The Group Manager prepares a preliminary version of the list L, as specified in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a> for the processing of a GET request to the group-collection resource.<a href="#section-6.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.2-5.2">
-            <p id="section-6.2-5.2.1">The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.<a href="#section-6.2-5.2.1" class="pilcrow">¶</a></p>
+          <li id="section-6.2-7.2">
+            <p id="section-6.2-7.2.1">The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.<a href="#section-6.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-6.2-6">An example of message exchange is shown below.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.2-7">
+<p id="section-6.2-8">An example of message exchange is shown below.<a href="#section-6.2-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2-9">
 <pre>
 =&gt; 0.05 FETCH
    Uri-Path: manage
@@ -2081,7 +2083,39 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
    &lt;coap://[2001:db8::ab]/manage/gp1&gt;;rt="core.osc.gconf",
    &lt;coap://[2001:db8::ab]/manage/gp2&gt;;rt="core.osc.gconf",
    &lt;coap://[2001:db8::ab]/manage/gp3&gt;;rt="core.osc.gconf"
-</pre><a href="#section-6.2-7" class="pilcrow">¶</a>
+</pre><a href="#section-6.2-9" class="pilcrow">¶</a>
+</div>
+<p id="section-6.2-10">The following, additional example considers a request payload that uses both configuration parameters and status parameters as filter criteria. In particular, the following is assumed.<a href="#section-6.2-10" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2-11.1">
+            <p id="section-6.2-11.1.1">In the URI of every group-configuration resource, the path component is /manage/GROUPNAME, where GROUPNAME is the group name of the associated OSCORE group.<a href="#section-6.2-11.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-11.2">
+            <p id="section-6.2-11.2.1">The Group Manager hosts four group-configuration resources, for the OSCORE groups with names "gp4", "gp5", "gp6", and "foo". All the OSCORE groups use the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10). Also, all the OSCORE groups are currently active, except for "gp6".<a href="#section-6.2-11.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div class="alignLeft art-text artwork" id="section-6.2-12">
+<pre>
+=&gt; 0.05 FETCH
+   Uri-Path: manage
+   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+
+   Payload:
+
+   {
+       "gp_enc_alg" : 10,
+       "group_name" : 21065("^gp[0-9]*$"),
+           "active" : true
+   }
+
+&lt;= 2.05 Content
+   Content-Format: 40 (application/link-format)
+
+   Payload:
+
+   &lt;coap://[2001:db8::ab]/manage/gp4&gt;;rt="core.osc.gconf",
+   &lt;coap://[2001:db8::ab]/manage/gp5&gt;;rt="core.osc.gconf"
+</pre><a href="#section-6.2-12" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2098,7 +2132,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
             <p id="section-6.3-4.1.1">The payload <span class="bcp14">MAY</span> include any of the configuration parameters defined in <a href="#config-repr-config-properties" class="auto internal xref">Section 5.1.1</a>.<a href="#section-6.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-4.2">
-            <p id="section-6.3-4.2.1">The payload <span class="bcp14">MUST</span> include the status parameter 'group_name' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a> and specifying the intended group name.<a href="#section-6.3-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-4.2.1">The payload <span class="bcp14">MUST</span> include the status parameter 'group_name' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a> and specifying the intended group name encoded as a CBOR text string.<a href="#section-6.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-4.3">
             <p id="section-6.3-4.3.1">The payload <span class="bcp14">MAY</span> include any of the status parameters 'active', 'group_description', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in <a href="#config-repr-status-properties" class="auto internal xref">Section 5.1.2</a>.<a href="#section-6.3-4.3.1" class="pilcrow">¶</a></p>
@@ -2697,62 +2731,63 @@ The response, <span class="bcp14">MAY</span> include the current representation 
 <figure id="figure-3">
         <div class="alignCenter art-text artwork" id="section-7-3.1">
 <pre>
-+-------------------+----------+--------------+------------+
-| Name              | CBOR Key | CBOR Type    | Reference  |
-+-------------------+----------+--------------+------------+
-| hkdf              | TBD      | tstr / int   | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| cred_fmt          | TBD      | int          | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| group_mode        | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| gp_enc_alg        | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| sign_alg          | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| sign_params       | TBD      | array /      | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| pairwise_mode     | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| alg               | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| ecdh_alg          | TBD      | tstr / int / | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| ecdh_params       | TBD      | array /      | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| det_req           | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| det_hash_alg      | TBD      | tstr / int   | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| rt                | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| active            | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| group_name        | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| group_description | TBD      | tstr /       | [RFC-XXXX] |
-|                   |          | simple value |            |
-+-------------------+----------+--------------+------------+
-| max_stale_sets    | TBD      | uint         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| gid_reuse         | TBD      | simple value | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| app_groups        | TBD      | array        | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| joining_uri       | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| as_uri            | TBD      | tstr         | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| conf_filter       | TBD      | array        | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
-| app_groups_diff   | TBD      | array        | [RFC-XXXX] |
-+-------------------+----------+--------------+------------+
++-------------------+----------+----------------+------------+
+| Name              | CBOR Key | CBOR Type      | Reference  |
++-------------------+----------+----------------+------------+
+| hkdf              | TBD      | tstr / int     | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| cred_fmt          | TBD      | int            | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| group_mode        | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| gp_enc_alg        | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| sign_alg          | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| sign_params       | TBD      | array /        | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| pairwise_mode     | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| alg               | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| ecdh_alg          | TBD      | tstr / int /   | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| ecdh_params       | TBD      | array /        | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| det_req           | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| det_hash_alg      | TBD      | tstr / int     | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| rt                | TBD      | tstr           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| active            | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| group_name        | TBD      | tstr /         | [RFC-XXXX] |
+|                   |          | #6.&lt;uint&gt;(any) |            |
++-------------------+----------+----------------+------------+
+| group_description | TBD      | tstr /         | [RFC-XXXX] |
+|                   |          | simple value   |            |
++-------------------+----------+----------------+------------+
+| max_stale_sets    | TBD      | uint           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| gid_reuse         | TBD      | simple value   | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| app_groups        | TBD      | array          | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| joining_uri       | TBD      | tstr           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| as_uri            | TBD      | tstr           | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| conf_filter       | TBD      | array          | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
+| app_groups_diff   | TBD      | array          | [RFC-XXXX] |
++-------------------+----------+----------------+------------+
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
@@ -3387,7 +3422,10 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.4.1">Renamed 'group_title' as 'group_description'.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.5">
-            <p id="appendix-B.1-1.5.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.5.1">Added a second example of FETCH to the group-collection resource.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.6">
+            <p id="appendix-B.1-1.6.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
