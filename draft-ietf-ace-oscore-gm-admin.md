@@ -882,11 +882,11 @@ If the updated group configuration would include parameter values that prevent t
 
 If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged. For each other parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. The corresponding group-membership resource is also accordingly updated.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
 
+For each other parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value "false" (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the PUT request has to include the parameter 'active' specifying the CBOR simple value "true" (0xf5).
 
-
-The operation of overwriting the group-configuration resource and accordingly updating the group-membership resource MUST be atomic.
+When updating the group-configuration resource, the corresponding group-membership resource is also accordingly updated. The overwriting of such two resources MUST be atomic.
 
 If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -1582,6 +1582,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Renamed 'group_title' as 'group_description'.
 
 * Added a second example of FETCH to the group-collection resource.
+
+* Avoiding accidental deactivation of a group when updating it.
 
 * Editorial fixes and improvements.
 
