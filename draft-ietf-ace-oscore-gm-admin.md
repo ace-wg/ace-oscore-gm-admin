@@ -1538,7 +1538,7 @@ Expert reviewers should take into consideration the following points:
 
 # Processing of Group Name Patterns at the AS # {#sec-as-scope-processing}
 
-When processing an Authorization Request from an Administrator (see {{getting-access}}), the AS builds the authorization information expressing granted permissions as scope entries, according to the AIF specific data model AIF-OSCORE-GROUPCOMM and to its extension specified in {{scope-format}}. These scope entries are in turn specified as value of the 'scope' claim to include in the Access Token.
+When processing an Authorization Request from an Administrator (see {{getting-access}}), the AS builds the authorization information expressing granted permissions as scope entries, according to the AIF data model AIF-OSCORE-GROUPCOMM and to its extension specified in {{scope-format}}. These scope entries are in turn specified as value of the 'scope' claim to include in the Access Token.
 
 In order to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question, the AS can perform the following steps.
 
@@ -1663,9 +1663,9 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 ## Version -05 to -06 ## {#sec-05-06}
 
-* Use and extend the same AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
+* Use and extend the same AIF data model AIF-OSCORE-GROUPCOMM defined in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* Revised Client-AS interaction, based on the used AIF specific data model.
+* Revised Client-AS interaction, based on the used AIF data model.
 
 * Categorized operations at the Group Manager as required and optional to support.
 
