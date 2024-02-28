@@ -510,7 +510,7 @@ For each of the status parameters listed below, the Group Manager refers to the 
 
 * For 'group_description', the Group Manager SHOULD use the CBOR simple value "null" (0xf6).
 
-* For 'max_stale_sets', the Group Manager SHOULD use the CBOR unsigned integer with value 3.
+* For 'max_stale_sets', the Group Manager SHOULD use the CBOR unsigned integer with value 3, consistent with what is defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * For 'gid_reuse', the Group Manager SHOULD use the CBOR simple value "false" (0xf4).
 
