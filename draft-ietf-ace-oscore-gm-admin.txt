@@ -2106,8 +2106,7 @@ Table of Contents
       application group to add to the 'app_groups' status parameter.
 
    The CDDL definition [RFC8610] of the CBOR array 'app_groups_diff'
-   formatted as in the response from the Group Manager is provided
-   below.
+   formatted as in the request from the Administrator is provided below.
 
       app-group-name = tstr
       name-patch = [* app-group-name]
