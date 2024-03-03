@@ -121,7 +121,7 @@ The ACE framework is used to ensure authentication and authorization of the Admi
 
 Readers are expected to be familiar with the terms and concepts from the following specifications.
 
-* CBOR {{RFC8949}} and COSE {{RFC9052}}{{RFC9053}}.
+* CDDL {{RFC8610}}, CBOR {{RFC8949}} and COSE {{RFC9052}}{{RFC9053}}.
 
 * The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These especially include the following concepts.
 
