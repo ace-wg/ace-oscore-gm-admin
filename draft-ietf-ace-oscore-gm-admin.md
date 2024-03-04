@@ -69,6 +69,7 @@ normative:
   RFC9290:
   RFC9237:
   RFC9277:
+  RFC9485:
   COSE.Algorithms:
     author:
       org: IANA
@@ -103,9 +104,9 @@ The Constrained Application Protocol (CoAP) {{RFC7252}} can also be used for gro
 
 When group communication for CoAP is protected with Group OSCORE, nodes are required to join the correct OSCORE group explicitly. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.
 
-The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. Such a method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, so ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
+The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. That method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
 
-In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error-prone deployments and is poorly flexible.
+In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn may lead to error-prone deployments and is poorly flexible.
 
 In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining them during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.
 
@@ -137,13 +138,13 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
 * The ACE framework for authentication and authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
-* The management of keying material for groups in ACE {{I-D.ietf-ace-key-groupcomm}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager, that new members access to join the OSCORE group, while current members can access to retrieve updated keying material.
+* The management of keying material for groups in ACE {{I-D.ietf-ace-key-groupcomm}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager that new members access to join the OSCORE group, and that current members can access to retrieve updated keying material.
 
-Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as `/token` and `/introspect` at the AS, and `/authz-info` at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
+Note that the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as `/token` and `/introspect` at the AS, and `/authz-info` at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
 This document also refers to the following terminology:
 
-* Administrator: entity responsible to create, configure, and delete OSCORE groups at a Group Manager.
+* Administrator: entity responsible for creating, configuring, and deleting OSCORE groups at a Group Manager.
 
 * Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment.
 
@@ -153,7 +154,7 @@ This document also refers to the following terminology:
 
 * Group-configuration resource: a resource hosted by the Group Manager, associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.
 
-   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.
+   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this same construct, and can define their own instead.
 
 * Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
@@ -169,7 +170,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
     The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}} and {{getting-access}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
 
-    The AS MAY release Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an Access Token can specify authorization information for joining OSCORE groups at a Group Manager (see {{I-D.ietf-ace-key-groupcomm-oscore}}), possibly combined with authorization information for accessing admin resources at the same Group Manager (see Section 3). Also, an AS can of course issue an Access Token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.
+    The AS MAY issue Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an Access Token can specify authorization information for joining OSCORE groups at a Group Manager (see {{I-D.ietf-ace-key-groupcomm-oscore}}), possibly combined with authorization information for accessing admin resources at the same Group Manager (see Section 3). Also, an AS can of course issue an Access Token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
@@ -187,15 +188,15 @@ Collection  \___/
 ~~~~~~~~~~~
 {: #fig-api title="Admin Resources of a Group Manager" artwork-align="center"}
 
-The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" defined in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator to:
+The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" registered in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator to:
 
 * Retrieve the list of existing OSCORE groups.
 
-* Retrieve the list of existing OSCORE groups matching with specified filter criteria.
+* Retrieve a list of existing OSCORE groups matching with specified filter criteria.
 
 * Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.
 
-The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "core.osc.gconf" defined in {{iana-rt}} of this document, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in {{interactions}} allows the Administrator to:
+The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "core.osc.gconf" registered in {{iana-rt}} of this document, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in {{interactions}} allows the Administrator to:
 
 * Retrieve the complete current configuration of the OSCORE group.
 
@@ -211,11 +212,11 @@ The Group Manager exports one group-configuration resource for each of its OSCOR
 
 A collection of group configurations is represented as a Link Format document {{RFC6690}} containing the list of corresponding group-configuration resources.
 
-Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, and the link target attribute 'rt' (Resource Type) with value "core.osc.gconf" defined in {{iana-rt}} of this document.
+Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, and the link target attribute 'rt' (Resource Type) with value "core.osc.gconf".
 
 ## Discovery
 
-The Administrator can discover the group-collection resource from a Resource Directory {{RFC9176}} or from .well-known/core, by using the resource type "core.osc.gcoll" defined in {{iana-rt}} of this document.
+The Administrator can discover group-collection resources from a Resource Directory {{RFC9176}} or from .well-known/core, by using the resource type "core.osc.gcoll".
 
 The Administrator can discover group-configuration resources for the group-collection resource as specified in {{collection-resource-get}} and {{collection-resource-fetch}}.
 
@@ -225,7 +226,7 @@ This section defines the exact format and encoding of scope to use, in order to 
 
 To this end, this document uses the Authorization Information Format (AIF) {{RFC9237}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured in scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. Hereafter, these are referred to as "user scope entries".
+The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured into scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. Hereafter, these are referred to as "user scope entries".
 
 This document extends the same AIF specific data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. Hereafter, these are referred to as "admin scope entries", or simply as "scope entries" unless otherwise indicated.
 
@@ -247,7 +248,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
    - Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.
 
-      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{Section 3.4.5.3 of RFC8949}}).
+      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065 or 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{RFC9485}} and {{Section 3.4.5.3 of RFC8949}}).
 
       In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
 
@@ -1567,6 +1568,8 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 * Added example of array of scope entries.
 
 * Removed moot paragraph about the benefits of group name patterns.
+
+* Use of CBOR tag 21065 to indicate a regular expression.
 
 * Renamed 'group_title' as 'group_description'.
 
