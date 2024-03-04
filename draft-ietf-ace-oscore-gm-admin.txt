@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 4 September 2024                                P. van der Stok
+Expires: 5 September 2024                                P. van der Stok
                                                                         
                                                             F. Palombini
                                                              Ericsson AB
-                                                            3 March 2024
+                                                            4 March 2024
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -442,7 +442,7 @@ Table of Contents
       scope entry.
 
       -  Wildcard pattern: "Toid" is specialized as the CBOR simple
-         value "true" (0xf5), specifying the wildcard pattern.  That is,
+         value true (0xf5), specifying the wildcard pattern.  That is,
          any group name expressed as a literal text string matches with
          this group name pattern.
 
@@ -871,14 +871,14 @@ Table of Contents
       parameter of the Group_OSCORE_Input_Material object, defined in
       Section 6.3 of [I-D.ietf-ace-key-groupcomm-oscore].
 
-   *  'group_mode', encoded as a CBOR simple value.  Its value is "true"
+   *  'group_mode', encoded as a CBOR simple value.  Its value is true
       (0xf5) if the OSCORE group uses the group mode of Group OSCORE
-      (see Section 8 of [I-D.ietf-core-oscore-groupcomm]), or "false"
+      (see Section 8 of [I-D.ietf-core-oscore-groupcomm]), or false
       (0xf4) otherwise.
 
    *  'gp_enc_alg', which is formatted as follows.  If the configuration
-      parameter 'group_mode' has value "false" (0xf4), this parameter
-      has as value the CBOR simple value "null" (0xf6).  Otherwise, this
+      parameter 'group_mode' has value false (0xf4), this parameter has
+      as value the CBOR simple value null (0xf6).  Otherwise, this
       parameter specifies the Group Encryption Algorithm used in the
       OSCORE group to encrypt messages protected with the group mode
       (see Section 2 of [I-D.ietf-core-oscore-groupcomm]), encoded as a
@@ -896,8 +896,8 @@ Table of Contents
       [I-D.ietf-core-oscore-groupcomm].
 
    *  'sign_alg', which is formatted as follows.  If the configuration
-      parameter 'group_mode' has value "false" (0xf4), this parameter
-      has as value the CBOR simple value "null" (0xf6).  Otherwise, this
+      parameter 'group_mode' has value false (0xf4), this parameter has
+      as value the CBOR simple value null (0xf6).  Otherwise, this
       parameter specifies the Signature Algorithm used in the OSCORE
       group (see Section 2 of [I-D.ietf-core-oscore-groupcomm]), encoded
       as a CBOR text string or a CBOR integer.  Possible values are the
@@ -906,8 +906,8 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  'sign_params', which is formatted as follows.  If the
-      configuration parameter 'group_mode' has value "false" (0xf4),
-      this parameter has as value the CBOR simple value "null" (0xf6).
+      configuration parameter 'group_mode' has value false (0xf4), this
+      parameter has as value the CBOR simple value null (0xf6).
       Otherwise, this parameter specifies the additional parameters for
       the Signature Algorithm used in the OSCORE group, encoded as a
       CBOR array.  Possible formats and values are the same ones
@@ -916,13 +916,13 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  'pairwise_mode', encoded as a CBOR simple value.  Its value is
-      "true" (0xf5) if the OSCORE group uses the pairwise mode of Group
+      true (0xf5) if the OSCORE group uses the pairwise mode of Group
       OSCORE (see Section 9 of [I-D.ietf-core-oscore-groupcomm]), or
-      "false" (0xf4) otherwise.
+      false (0xf4) otherwise.
 
    *  'alg', which is formatted as follows.  If the configuration
-      parameter 'pairwise_mode' has value "false" (0xf4), this parameter
-      has as value the CBOR simple value "null" (0xf6).  Otherwise, this
+      parameter 'pairwise_mode' has value false (0xf4), this parameter
+      has as value the CBOR simple value null (0xf6).  Otherwise, this
       parameter specifies the AEAD Algorithm used in the OSCORE group to
       encrypt messages protected with the pairwise mode (see Section 2
       of [I-D.ietf-core-oscore-groupcomm]), encoded as a CBOR text
@@ -932,8 +932,8 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  'ecdh_alg', which is formatted as follows.  If the configuration
-      parameter 'pairwise_mode' has value "false" (0xf4), this parameter
-      has as value the CBOR simple value "null" (0xf6).  Otherwise, this
+      parameter 'pairwise_mode' has value false (0xf4), this parameter
+      has as value the CBOR simple value null (0xf6).  Otherwise, this
       parameter specifies the Pairwise Key Agreement Algorithm used in
       the OSCORE group (see Section 2 of
       [I-D.ietf-core-oscore-groupcomm]), encoded as a CBOR text string
@@ -943,8 +943,8 @@ Table of Contents
       [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  'ecdh_params', which is formatted as follows.  If the
-      configuration parameter 'pairwise_mode' has value "false" (0xf4),
-      this parameter has as value the CBOR simple value "null" (0xf6).
+      configuration parameter 'pairwise_mode' has value false (0xf4),
+      this parameter has as value the CBOR simple value null (0xf6).
       Otherwise, this parameter specifies the parameters for the
       Pairwise Key Agreement Algorithm used in the OSCORE group, encoded
       as a CBOR array.  Possible formats and values are the same ones
@@ -952,11 +952,11 @@ Table of Contents
       Group_OSCORE_Input_Material object, defined in Section 6.3 of
       [I-D.ietf-ace-key-groupcomm-oscore].
 
-   *  'det_req', encoded as a CBOR simple value.  Its value is "true"
+   *  'det_req', encoded as a CBOR simple value.  Its value is true
       (0xf5) if the OSCORE group uses deterministic requests as defined
-      in [I-D.amsuess-core-cachable-oscore], or "false" (0xf4)
-      otherwise.  This parameter MUST NOT be present if the
-      configuration parameter 'group_mode' has value "false" (0xf4).
+      in [I-D.amsuess-core-cachable-oscore], or false (0xf4) otherwise.
+      This parameter MUST NOT be present if the configuration parameter
+      'group_mode' has value false (0xf4).
 
    *  'det_hash_alg', encoded as a CBOR integer or text string.  If
       present, this parameter specifies the Hash Algorithm used in the
@@ -966,11 +966,11 @@ Table of Contents
       [COSE.Algorithms].
 
       This parameter MUST NOT be present if the configuration parameter
-      'det_req' is not present or if it is present with value "false"
+      'det_req' is not present or if it is present with value false
       (0xf4).  If the configuration parameter 'det_req' is present with
-      value "true" (0xf5) and 'det_hash_alg' is not present, the choice
-      of the Hash Algorithm to use when producing deterministic requests
-      is left to the Group Manager.
+      value true (0xf5) and 'det_hash_alg' is not present, the choice of
+      the Hash Algorithm to use when producing deterministic requests is
+      left to the Group Manager.
 
 5.1.2.  Status Properties
 
@@ -981,17 +981,16 @@ Table of Contents
    *  'rt', with value the resource type "core.osc.gconf" associated
       with group-configuration resources, encoded as a CBOR text string.
 
-   *  'active', encoding the CBOR simple value "true" (0xf5) if the
-      OSCORE group is currently active, or the CBOR simple value "false"
-      (0xf4) otherwise.
+   *  'active', encoding the CBOR simple value true (0xf5) if the OSCORE
+      group is currently active, or the CBOR simple value false (0xf4)
+      otherwise.
 
    *  'group_name', with value the group name of the OSCORE group
       encoded as a CBOR text string.
 
    *  'group_description', with value either a human-readable
       description of the OSCORE group encoded as a CBOR text string, or
-      the CBOR simple value "null" (0xf6) if no description is
-      specified.
+      the CBOR simple value null (0xf6) if no description is specified.
 
    *  'ace_groupcomm_profile', defined in Section 4.3.1 of
       [I-D.ietf-ace-key-groupcomm], with value "coap_group_oscore_app"
@@ -1006,12 +1005,12 @@ Table of Contents
 
    *  'exp', defined in Section 4.3.1 of [I-D.ietf-ace-key-groupcomm].
 
-   *  'gid_reuse', encoding the CBOR simple value "true" (0xf5) if, upon
+   *  'gid_reuse', encoding the CBOR simple value true (0xf5) if, upon
       rekeying the OSCORE group, the Group Manager can reassign the
       values of the OSCORE Group ID used as OSCORE ID Context, as per
       Section 3.2.1.1 of [I-D.ietf-core-oscore-groupcomm] and Section 11
       of [I-D.ietf-ace-key-groupcomm-oscore].  Otherwise, this parameter
-      encodes the CBOR simple value "false" (0xf4).
+      encodes the CBOR simple value false (0xf4).
 
    *  'app_groups', with value a list of names of application groups,
       encoded as a CBOR array.  Each element of the array is a CBOR text
@@ -1060,9 +1059,9 @@ Table of Contents
    is specified by the Administrator.
 
    *  For 'group_mode', the Group Manager SHOULD use the CBOR simple
-      value "true" (0xf5).
+      value true (0xf5).
 
-   *  If 'group_mode' has value "true" (0xf5), the Group Manager SHOULD
+   *  If 'group_mode' has value true (0xf5), the Group Manager SHOULD
       use the default values defined in Section 14.2 of
       [I-D.ietf-ace-key-groupcomm-oscore] as follows: the value of
       'sign_enc_alg' for the parameter 'gp_enc_alg' defined in this
@@ -1077,19 +1076,19 @@ Table of Contents
       consistently with the naming used in the latest version of
       [I-D.ietf-core-oscore-groupcomm].
 
-   *  If 'group_mode' has value "true" (0xf5), the Group Manager SHOULD
-      use the CBOR simple value "false" (0xf4) for the parameter
+   *  If 'group_mode' has value true (0xf5), the Group Manager SHOULD
+      use the CBOR simple value false (0xf4) for the parameter
       'det_req'.
 
-   *  If 'det_req' has value "true" (0xf5), the Group Manager SHOULD use
+   *  If 'det_req' has value true (0xf5), the Group Manager SHOULD use
       SHA-256 (COSE algorithm encoding: -16) as default value for the
       parameter 'det_hash_alg'.
 
    *  For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple
-      value "true" (0xf5).
+      value true (0xf5).
 
-   *  If 'pairwise_mode' has value "true" (0xf5), the Group Manager
-      SHOULD use the same default values defined in Section 14.3 of
+   *  If 'pairwise_mode' has value true (0xf5), the Group Manager SHOULD
+      use the same default values defined in Section 14.3 of
       [I-D.ietf-ace-key-groupcomm-oscore] for the parameters 'alg',
       'ecdh_alg', and 'ecdh_params'.
 
@@ -1104,17 +1103,17 @@ Table of Contents
    specified by the Administrator.
 
    *  For 'active', the Group Manager SHOULD use the CBOR simple value
-      "false" (0xf4).
+      false (0xf4).
 
    *  For 'group_description', the Group Manager SHOULD use the CBOR
-      simple value "null" (0xf6).
+      simple value null (0xf6).
 
    *  For 'max_stale_sets', the Group Manager SHOULD use the CBOR
       unsigned integer with value 3, consistent with what is defined in
       Section 14.1 of [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  For 'gid_reuse', the Group Manager SHOULD use the CBOR simple
-      value "false" (0xf4).
+      value false (0xf4).
 
    *  For 'app_groups', the Group Manager SHOULD use the empty CBOR
       array.
@@ -1409,12 +1408,12 @@ Table of Contents
    group configuration information for the newly created OSCORE group.
 
    If the request specifies the parameter 'gid_reuse' encoding the CBOR
-   simple value "true" (0xf5) and the Group Manager does not support the
+   simple value true (0xf5) and the Group Manager does not support the
    reassignment of OSCORE Group ID values (see Section 3.2.1.1 of
    [I-D.ietf-core-oscore-groupcomm] and Section 11 of
    [I-D.ietf-ace-key-groupcomm-oscore]), then the Group Manager sets the
    value of the 'gid_reuse' status parameter in the group-configuration
-   resource to the CBOR simple value "false" (0xf4).
+   resource to the CBOR simple value false (0xf4).
 
    For each parameter not specified in the request, the Group Manager
    refers to the default values specified in Section 5.2.
@@ -1473,11 +1472,11 @@ Table of Contents
       Manager as 'as_uri' status property for the OSCORE group.
 
    If the POST request specified the parameter 'gid_reuse' encoding the
-   CBOR simple value "true" (0xf5) but the Group Manager has set the
-   value of the 'gid_reuse' status parameter in the group-configuration
-   resource to the CBOR simple value "false" (0xf4), then the response
+   CBOR simple value true (0xf5) but the Group Manager has set the value
+   of the 'gid_reuse' status parameter in the group-configuration
+   resource to the CBOR simple value false (0xf4), then the response
    payload MUST include also the parameter 'gid_reuse' encoding the CBOR
-   simple value "false" (0xf4).
+   simple value false (0xf4).
 
    If the POST request did not specify certain parameters and the Group
    Manager used default values different from the ones recommended in
@@ -1766,10 +1765,10 @@ Table of Contents
    For each other parameter not specified in the PUT request, the Group
    Manager MUST use default values as specified in Section 5.2.  Note
    that the default value recommended for the status parameter 'active'
-   is the CBOR simple value "false" (0xf4).  Therefore, if the
+   is the CBOR simple value false (0xf4).  Therefore, if the
    Administrator intends to preserve the current status of the group as
    active, then the payload of the PUT request has to include the
-   parameter 'active' specifying the CBOR simple value "true" (0xf5).
+   parameter 'active' specifying the CBOR simple value true (0xf5).
 
    When updating the group-configuration resource, the corresponding
    group-membership resource is also accordingly updated.  The
@@ -1870,15 +1869,15 @@ Table of Contents
 6.6.1.  Effects on Joining Nodes
 
    After having overwritten a group configuration, if the value of the
-   status parameter 'active' is changed from "true" (0xf5) to "false"
+   status parameter 'active' is changed from true (0xf5) to false
    (0xf4), the Group Manager MUST stop admitting new members in the
    OSCORE group.  In particular, until the status parameter 'active' is
-   changed back to "true" (0xf5), the Group Manager MUST respond to a
-   Join Request with a 5.03 (Service Unavailable) response, as defined
-   in Section 6.2 of [I-D.ietf-ace-key-groupcomm-oscore].
+   changed back to true (0xf5), the Group Manager MUST respond to a Join
+   Request with a 5.03 (Service Unavailable) response, as defined in
+   Section 6.2 of [I-D.ietf-ace-key-groupcomm-oscore].
 
-   If the value of the status parameter 'active' is changed from "false"
-   (0xf4) to "true" (0xf5), the Group Manager resumes admitting new
+   If the value of the status parameter 'active' is changed from false
+   (0xf4) to true (0xf5), the Group Manager resumes admitting new
    members in the OSCORE group, by processing their Join Requests (see
    Section 6.2 of [I-D.ietf-ace-key-groupcomm-oscore]).
 
@@ -1909,8 +1908,8 @@ Table of Contents
 
       -  'sign_enc_alg', 'sign_alg', and 'sign_params', only in case the
          configuration parameter 'group_mode' in the group-configuration
-         resource has value "true" (0xf5), i.e., the OSCORE group uses
-         the group mode of Group OSCORE.
+         resource has value true (0xf5), i.e., the OSCORE group uses the
+         group mode of Group OSCORE.
 
          Editor's note: as per the text above, the referred version of
          [I-D.ietf-ace-key-groupcomm-oscore] still uses 'sign_enc_alg'
@@ -1922,12 +1921,12 @@ Table of Contents
 
       -  'alg', 'ecdh_alg', and 'ecdh_params', only in case the
          configuration parameter 'pairwise_mode' in the group-
-         configuration resource has value "true" (0xf5), i.e., the
-         OSCORE group uses the pairwise mode of Group OSCORE.
+         configuration resource has value true (0xf5), i.e., the OSCORE
+         group uses the pairwise mode of Group OSCORE.
 
       -  'det_hash_alg' defined in Section 4 of
          [I-D.amsuess-core-cachable-oscore], only in case the
-         configuration parameter 'det_req' is present with value "true"
+         configuration parameter 'det_req' is present with value true
          (0xf5), and specifying the Hash Algorithm used in the OSCORE
          group when producing deterministic requests, as defined in
          [I-D.amsuess-core-cachable-oscore].
@@ -1943,7 +1942,7 @@ Table of Contents
    the group in question (see Section 2 of
    [I-D.ietf-core-oscore-groupcomm].  If any of 'sign_enc_alg',
    'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value
-   "null" (0xf6), then the corresponding parameter in the Group OSCORE
+   null (0xf6), then the corresponding parameter in the Group OSCORE
    Security Context becomes unset if it is not already.  According to
    the new parameter values, each group member derives new Sender/
    Recipient Keys, a new Common IV, and new Pairwise Keys.  When doing
@@ -1960,13 +1959,13 @@ Table of Contents
 
    The following holds when the value of specific parameters is updated.
 
-   *  If the value of the status parameter 'active' is changed from
-      "true" (0xf5) to "false" (0xf4):
+   *  If the value of the status parameter 'active' is changed from true
+      (0xf5) to false (0xf4):
 
       -  The Group Manager MUST stop accepting requests for new
          individual keying material from current group members (see
          Section 9.2 of [I-D.ietf-ace-key-groupcomm-oscore]), until the
-         status parameter 'active' is changed back to "true" (0xf5).
+         status parameter 'active' is changed back to true (0xf5).
          Until then, the Group Manager MUST respond to a Key Renewal
          Request with a 5.03 (Service Unavailable) response, as defined
          in Section 9.2 of [I-D.ietf-ace-key-groupcomm-oscore].
@@ -1974,18 +1973,17 @@ Table of Contents
       -  The Group Manager MUST stop accepting updated authentication
          credentials uploaded by current group members (see Section 9.4
          of [I-D.ietf-ace-key-groupcomm-oscore]), until the status
-         parameter 'active' is changed back to "true" (0xf5).  Until
-         then, the Group Manager MUST respond to an Authentication
-         Credential Update Request with a 5.03 (Service Unavailable)
-         response, as defined in Section 9.4 of
-         [I-D.ietf-ace-key-groupcomm-oscore].
+         parameter 'active' is changed back to true (0xf5).  Until then,
+         the Group Manager MUST respond to an Authentication Credential
+         Update Request with a 5.03 (Service Unavailable) response, as
+         defined in Section 9.4 of [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  Every group member, upon learning that the OSCORE group has been
-      deactivated (i.e., 'active' has value "false" (0xf4)), SHOULD stop
+      deactivated (i.e., 'active' has value false (0xf4)), SHOULD stop
       communicating in the group.
 
       Every group member, upon learning that the OSCORE group has been
-      reactivated (i.e., 'active' has value "true" (0xf5) again), can
+      reactivated (i.e., 'active' has value true (0xf5) again), can
       resume communicating in the group.
 
    *  If the value of 'gp_enc_alg' and/or 'alg' is changed, the Group
@@ -2296,13 +2294,13 @@ Table of Contents
    would be successful only on an inactive OSCORE group.  That is, the
    DELETE request actually yields a successful deletion of the OSCORE
    group, only if the corresponding status parameter 'active' has
-   current value "false" (0xf4).  The Administrator can ensure that, by
+   current value false (0xf4).  The Administrator can ensure that, by
    first performing an update of the group-configuration resource
    associated with the OSCORE group (see Section 6.6), and setting the
-   corresponding status parameter 'active' to "false" (0xf4).
+   corresponding status parameter 'active' to false (0xf4).
 
    If, upon receiving the DELETE request, the current value of the
-   status parameter 'active' is "true" (0xf5), the Group Manager MUST
+   status parameter 'active' is true (0xf5), the Group Manager MUST
    respond with a 4.09 (Conflict) response.  The response MUST have
    Content-Format set to application/concise-problem-details+cbor
    [RFC9290] and is formatted as defined in Section 4.1.2 of
@@ -3113,9 +3111,9 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-07, 20 October 2023,
+              ietf-cose-cbor-encoded-cert-08, 4 March 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-07>.
+              cbor-encoded-cert-08>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
@@ -3294,7 +3292,7 @@ B.3.  Version -08 to -09
 
    *  Removed use of CoRAL.
 
-   *  Use of the pairwise mode changed to "true" by default.
+   *  Use of the pairwise mode changed to true by default.
 
    *  Clarified effects on group members after a group configuration
       change.
