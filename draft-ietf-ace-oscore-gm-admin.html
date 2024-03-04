@@ -1359,8 +1359,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
       </h2>
 <p id="section-1-1">The Constrained Application Protocol (CoAP) <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> can also be used for group communication <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, where messages are exchanged between members of a group, e.g., over IP multicast. Applications relying on CoAP can achieve end-to-end security at the application layer by using Object Security for Constrained RESTful Environments (OSCORE) <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>, and especially Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> in group communication scenarios.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">When group communication for CoAP is protected with Group OSCORE, nodes are required to join the correct OSCORE group explicitly. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The method in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> specifies how nodes can join an OSCORE group through the respective Group Manager. Such a method builds on the ACE framework for Authentication and Authorization <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span>, so ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn leads to error-prone deployments and is poorly flexible.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-3">The method in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> specifies how nodes can join an OSCORE group through the respective Group Manager. That method builds on the ACE framework for Authentication and Authorization <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span>, ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, as well as how it should be configured and later on updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn may lead to error-prone deployments and is poorly flexible.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining them during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to specify and update their configuration.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">Interaction examples are provided in Link Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> and in CBOR <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>. The examples in CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations.<a href="#section-1-7" class="pilcrow">¶</a></p>
@@ -1405,14 +1405,14 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <p id="section-1.1-3.4.1">The ACE framework for authentication and authorization <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span>. The terminology for entities in the considered architecture is defined in OAuth 2.0 <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).<a href="#section-1.1-3.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-3.5">
-            <p id="section-1.1-3.5.1">The management of keying material for groups in ACE <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span> and specifically for OSCORE groups <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. These include the concept of group-membership resource hosted by the Group Manager, that new members access to join the OSCORE group, while current members can access to retrieve updated keying material.<a href="#section-1.1-3.5.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-3.5.1">The management of keying material for groups in ACE <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span> and specifically for OSCORE groups <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. These include the concept of group-membership resource hosted by the Group Manager that new members access to join the OSCORE group, and that current members can access to retrieve updated keying material.<a href="#section-1.1-3.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.1-4">Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as <code>/token</code> and <code>/introspect</code> at the AS, and <code>/authz-info</code> at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">Note that the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as <code>/token</code> and <code>/introspect</code> at the AS, and <code>/authz-info</code> at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <p id="section-1.1-5">This document also refers to the following terminology:<a href="#section-1.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-6.1">
-            <p id="section-1.1-6.1.1">Administrator: entity responsible to create, configure, and delete OSCORE groups at a Group Manager.<a href="#section-1.1-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-6.1.1">Administrator: entity responsible for creating, configuring, and deleting OSCORE groups at a Group Manager.<a href="#section-1.1-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-6.2">
             <p id="section-1.1-6.2.1">Group name: stable and invariant name of an OSCORE group. The group name <span class="bcp14">MUST</span> be unique under the same Group Manager, and <span class="bcp14">MUST</span> include only characters that are valid for a URI path segment.<a href="#section-1.1-6.2.1" class="pilcrow">¶</a></p>
@@ -1425,7 +1425,7 @@ As an example, this document uses /manage as the url-path of the group-collectio
           <li class="normal" id="section-1.1-6.4">
             <p id="section-1.1-6.4.1">Group-configuration resource: a resource hosted by the Group Manager, associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.<a href="#section-1.1-6.4.1" class="pilcrow">¶</a></p>
 <p id="section-1.1-6.4.2">
-The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this name, and can define their own instead.<a href="#section-1.1-6.4.2" class="pilcrow">¶</a></p>
+The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this same construct, and can define their own instead.<a href="#section-1.1-6.4.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-6.5">
             <p id="section-1.1-6.5.1">Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.<a href="#section-1.1-6.5.1" class="pilcrow">¶</a></p>
@@ -1453,7 +1453,7 @@ The url-path to a group-configuration resource has GROUPNAME as last segment, wi
 <p id="section-2-2.3.2">
 The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see <a href="#scope-format" class="auto internal xref">Section 3</a> and <a href="#getting-access" class="auto internal xref">Section 4</a>). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.<a href="#section-2-2.3.2" class="pilcrow">¶</a></p>
 <p id="section-2-2.3.3">
-The AS <span class="bcp14">MAY</span> release Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an Access Token can specify authorization information for joining OSCORE groups at a Group Manager (see <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), possibly combined with authorization information for accessing admin resources at the same Group Manager (see Section 3). Also, an AS can of course issue an Access Token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.<a href="#section-2-2.3.3" class="pilcrow">¶</a></p>
+The AS <span class="bcp14">MAY</span> issue Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an Access Token can specify authorization information for joining OSCORE groups at a Group Manager (see <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), possibly combined with authorization information for accessing admin resources at the same Group Manager (see Section 3). Also, an AS can of course issue an Access Token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.<a href="#section-2-2.3.3" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="managing-groups">
@@ -1509,19 +1509,19 @@ The AS <span class="bcp14">MAY</span> release Access Tokens to the Administrator
 <a href="#name-admin-resources-of-a-group-" class="selfRef">Admin Resources of a Group Manager</a>
           </figcaption></figure>
 </div>
-<p id="section-2.1-3">The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" defined in <a href="#iana-rt" class="auto internal xref">Section 10.3</a> of this document. The interface for the group-collection resource defined in <a href="#interactions" class="auto internal xref">Section 6</a> allows the Administrator to:<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" registered in <a href="#iana-rt" class="auto internal xref">Section 10.3</a> of this document. The interface for the group-collection resource defined in <a href="#interactions" class="auto internal xref">Section 6</a> allows the Administrator to:<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-4.1">
             <p id="section-2.1-4.1.1">Retrieve the list of existing OSCORE groups.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.2">
-            <p id="section-2.1-4.2.1">Retrieve the list of existing OSCORE groups matching with specified filter criteria.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.2.1">Retrieve a list of existing OSCORE groups matching with specified filter criteria.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.3">
             <p id="section-2.1-4.3.1">Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.<a href="#section-2.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.1-5">The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "core.osc.gconf" defined in <a href="#iana-rt" class="auto internal xref">Section 10.3</a> of this document, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in <a href="#interactions" class="auto internal xref">Section 6</a> allows the Administrator to:<a href="#section-2.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.1-5">The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "core.osc.gconf" registered in <a href="#iana-rt" class="auto internal xref">Section 10.3</a> of this document, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in <a href="#interactions" class="auto internal xref">Section 6</a> allows the Administrator to:<a href="#section-2.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-6.1">
             <p id="section-2.1-6.1.1">Retrieve the complete current configuration of the OSCORE group.<a href="#section-2.1-6.1.1" class="pilcrow">¶</a></p>
@@ -1547,7 +1547,7 @@ The AS <span class="bcp14">MAY</span> release Access Tokens to the Administrator
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-collection-representation" class="section-name selfRef">Collection Representation</a>
         </h3>
 <p id="section-2.2-1">A collection of group configurations is represented as a Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> containing the list of corresponding group-configuration resources.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2">Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, and the link target attribute 'rt' (Resource Type) with value "core.osc.gconf" defined in <a href="#iana-rt" class="auto internal xref">Section 10.3</a> of this document.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, and the link target attribute 'rt' (Resource Type) with value "core.osc.gconf".<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="discovery">
@@ -1555,7 +1555,7 @@ The AS <span class="bcp14">MAY</span> release Access Tokens to the Administrator
         <h3 id="name-discovery">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-discovery" class="section-name selfRef">Discovery</a>
         </h3>
-<p id="section-2.3-1">The Administrator can discover the group-collection resource from a Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or from .well-known/core, by using the resource type "core.osc.gcoll" defined in <a href="#iana-rt" class="auto internal xref">Section 10.3</a> of this document.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">The Administrator can discover group-collection resources from a Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or from .well-known/core, by using the resource type "core.osc.gcoll".<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.3-2">The Administrator can discover group-configuration resources for the group-collection resource as specified in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a> and <a href="#collection-resource-fetch" class="auto internal xref">Section 6.2</a>.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1568,7 +1568,7 @@ The AS <span class="bcp14">MAY</span> release Access Tokens to the Administrator
       </h2>
 <p id="section-3-1">This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see <a href="#getting-access" class="auto internal xref">Section 4</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">To this end, this document uses the Authorization Information Format (AIF) <span>[<a href="#RFC9237" class="cite xref">RFC9237</a>]</span>. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-3" class="relref">Section 3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured in scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. Hereafter, these are referred to as "user scope entries".<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-3">The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured into scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. Hereafter, these are referred to as "user scope entries".<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">This document extends the same AIF specific data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. Hereafter, these are referred to as "admin scope entries", or simply as "scope entries" unless otherwise indicated.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">Like in the original definition of the data model AIF-OSCORE-GROUPCOMM, and with reference to the generic AIF model<a href="#section-3-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3-6">
@@ -1591,7 +1591,7 @@ The AS <span class="bcp14">MAY</span> release Access Tokens to the Administrator
             <li class="normal" id="section-3-9.1.2.3">
               <p id="section-3-9.1.2.3.1">Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.<a href="#section-3-9.1.2.3.1" class="pilcrow">¶</a></p>
 <p id="section-3-9.1.2.3.2">
-For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see <span><a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.5.3" class="relref">Section 3.4.5.3</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>).<a href="#section-3-9.1.2.3.2" class="pilcrow">¶</a></p>
+For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065 or 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see <span>[<a href="#RFC9485" class="cite xref">RFC9485</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.5.3" class="relref">Section 3.4.5.3</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>).<a href="#section-3-9.1.2.3.2" class="pilcrow">¶</a></p>
 <p id="section-3-9.1.2.3.3">
 In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.<a href="#section-3-9.1.2.3.3" class="pilcrow">¶</a></p>
 <p id="section-3-9.1.2.3.4">
@@ -3392,8 +3392,12 @@ Entries that do not meet these objective of clarity and completeness should not 
 <span class="refAuthor">Richardson, M.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"On Stable Storage for Items in Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">RFC 9277</span>, <span class="seriesInfo">DOI 10.17487/RFC9277</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9277">https://www.rfc-editor.org/rfc/rfc9277</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9290">[RFC9290]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Fossati, T.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Problem Details for Constrained Application Protocol (CoAP) APIs"</span>, <span class="seriesInfo">RFC 9290</span>, <span class="seriesInfo">DOI 10.17487/RFC9290</span>, <time datetime="2022-10" class="refDate">October 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9290">https://www.rfc-editor.org/rfc/rfc9290</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9485">[RFC9485]</dt>
+      <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">T. Bray</span>, <span class="refTitle">"I-Regexp: An Interoperable Regular Expression Format"</span>, <span class="seriesInfo">RFC 9485</span>, <span class="seriesInfo">DOI 10.17487/RFC9485</span>, <time datetime="2023-10" class="refDate">October 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9485">https://www.rfc-editor.org/rfc/rfc9485</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3414,7 +3418,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <dd class="break"></dd>
 <dt id="I-D.ietf-cose-cbor-encoded-cert">[I-D.ietf-cose-cbor-encoded-cert]</dt>
         <dd>
-<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-08</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-08">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-08</a>&gt;</span>. </dd>
+<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-09</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-09">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-09</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tiloca-core-oscore-discovery">[I-D.tiloca-core-oscore-discovery]</dt>
         <dd>
@@ -3529,25 +3533,28 @@ Entries that do not meet these objective of clarity and completeness should not 
             <p id="appendix-B.1-1.3.1">Removed moot paragraph about the benefits of group name patterns.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.4">
-            <p id="appendix-B.1-1.4.1">Renamed 'group_title' as 'group_description'.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.4.1">Use of CBOR tag 21065 to indicate a regular expression.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.5">
-            <p id="appendix-B.1-1.5.1">Added a second example of FETCH to the group-collection resource.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.5.1">Renamed 'group_title' as 'group_description'.<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.6">
-            <p id="appendix-B.1-1.6.1">Avoiding accidental deactivation of a group when updating it.<a href="#appendix-B.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.6.1">Added a second example of FETCH to the group-collection resource.<a href="#appendix-B.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.7">
-            <p id="appendix-B.1-1.7.1">Avoid alternative ways to create a group configuration resource.<a href="#appendix-B.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.7.1">Avoiding accidental deactivation of a group when updating it.<a href="#appendix-B.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.8">
-            <p id="appendix-B.1-1.8.1">RFC 9290 is used instead of the custom format for error responses.<a href="#appendix-B.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.8.1">Avoid alternative ways to create a group configuration resource.<a href="#appendix-B.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.9">
-            <p id="appendix-B.1-1.9.1">Added integer abbreviations for the new entries in the "ACE Groupcomm Parameters" registry.<a href="#appendix-B.1-1.9.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.9.1">RFC 9290 is used instead of the custom format for error responses.<a href="#appendix-B.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.10">
-            <p id="appendix-B.1-1.10.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.10.1">Added integer abbreviations for the new entries in the "ACE Groupcomm Parameters" registry.<a href="#appendix-B.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.11">
+            <p id="appendix-B.1-1.11.1">Editorial fixes and improvements.<a href="#appendix-B.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

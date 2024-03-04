@@ -156,10 +156,10 @@ Table of Contents
    OSCORE.
 
    The method in [I-D.ietf-ace-key-groupcomm-oscore] specifies how nodes
-   can join an OSCORE group through the respective Group Manager.  Such
-   a method builds on the ACE framework for Authentication and
-   Authorization [RFC9200], so ensuring a secure joining process as well
-   as authentication and authorization of joining nodes (clients) at the
+   can join an OSCORE group through the respective Group Manager.  That
+   method builds on the ACE framework for Authentication and
+   Authorization [RFC9200], ensuring a secure joining process as well as
+   authentication and authorization of joining nodes (clients) at the
    Group Manager (resource server).
 
    In some deployments, the application running on the Group Manager may
@@ -169,7 +169,7 @@ Table of Contents
    case, the Group Manager application can create and configure OSCORE
    groups when needed, by using a local application interface.  However,
    this requires the Group Manager to be application-specific, which in
-   turn leads to error-prone deployments and is poorly flexible.
+   turn may lead to error-prone deployments and is poorly flexible.
 
    In other deployments, a separate Administrator entity, such as a
    Commissioning Tool, is directly responsible for creating and
@@ -245,20 +245,20 @@ Table of Contents
    *  The management of keying material for groups in ACE
       [I-D.ietf-ace-key-groupcomm] and specifically for OSCORE groups
       [I-D.ietf-ace-key-groupcomm-oscore].  These include the concept of
-      group-membership resource hosted by the Group Manager, that new
-      members access to join the OSCORE group, while current members can
-      access to retrieve updated keying material.
+      group-membership resource hosted by the Group Manager that new
+      members access to join the OSCORE group, and that current members
+      can access to retrieve updated keying material.
 
-   Note that, unless otherwise indicated, the term "endpoint" is used
-   here following its OAuth definition, aimed at denoting resources such
-   as /token and /introspect at the AS, and /authz-info at the RS.  This
-   document does not use the CoAP definition of "endpoint", which is "An
-   entity participating in the CoAP protocol".
+   Note that the term "endpoint" is used here following its OAuth
+   definition, aimed at denoting resources such as /token and
+   /introspect at the AS, and /authz-info at the RS.  This document does
+   not use the CoAP definition of "endpoint", which is "An entity
+   participating in the CoAP protocol".
 
    This document also refers to the following terminology:
 
-   *  Administrator: entity responsible to create, configure, and delete
-      OSCORE groups at a Group Manager.
+   *  Administrator: entity responsible for creating, configuring, and
+      deleting OSCORE groups at a Group Manager.
 
    *  Group name: stable and invariant name of an OSCORE group.  The
       group name MUST be unique under the same Group Manager, and MUST
@@ -286,8 +286,8 @@ Table of Contents
       upon its creation.  Building on the considered url-path of the
       group-collection resource, this document uses /manage/GROUPNAME as
       the url-path of a group-configuration resource; implementations
-      are not required to use this name, and can define their own
-      instead.
+      are not required to use this same construct, and can define their
+      own instead.
 
    *  Admin resource: a group-collection resource or a group-
       configuration resource hosted by the Group Manager.
@@ -318,7 +318,7 @@ Table of Contents
       collection resource and the (same) group-configuration resources
       at the Group Manager.
 
-      The AS MAY release Access Tokens to the Administrator for other
+      The AS MAY issue Access Tokens to the Administrator for other
       purposes than accessing admin resources of registered Group
       Managers.  For example, an Access Token can specify authorization
       information for joining OSCORE groups at a Group Manager (see
@@ -347,24 +347,24 @@ Table of Contents
                 Figure 1: Admin Resources of a Group Manager
 
    The Group Manager exports a single group-collection resource, with
-   resource type "core.osc.gcoll" defined in Section 10.3 of this
+   resource type "core.osc.gcoll" registered in Section 10.3 of this
    document.  The interface for the group-collection resource defined in
    Section 6 allows the Administrator to:
 
    *  Retrieve the list of existing OSCORE groups.
 
-   *  Retrieve the list of existing OSCORE groups matching with
-      specified filter criteria.
+   *  Retrieve a list of existing OSCORE groups matching with specified
+      filter criteria.
 
    *  Create a new OSCORE group, specifying its invariant group name
       and, optionally, its configuration.
 
    The Group Manager exports one group-configuration resource for each
    of its OSCORE groups.  Each group-configuration resource has resource
-   type "core.osc.gconf" defined in Section 10.3 of this document, and
-   is identified by the group name specified upon creating the OSCORE
-   group.  The interface for a group-configuration resource defined in
-   Section 6 allows the Administrator to:
+   type "core.osc.gconf" registered in Section 10.3 of this document,
+   and is identified by the group name specified upon creating the
+   OSCORE group.  The interface for a group-configuration resource
+   defined in Section 6 allows the Administrator to:
 
    *  Retrieve the complete current configuration of the OSCORE group.
 
@@ -387,14 +387,13 @@ Table of Contents
    Each group configuration is represented as a link, which specifies
    the URI of the group-configuration resource as link target, and the
    link target attribute 'rt' (Resource Type) with value
-   "core.osc.gconf" defined in Section 10.3 of this document.
+   "core.osc.gconf".
 
 2.3.  Discovery
 
-   The Administrator can discover the group-collection resource from a
+   The Administrator can discover group-collection resources from a
    Resource Directory [RFC9176] or from .well-known/core, by using the
-   resource type "core.osc.gcoll" defined in Section 10.3 of this
-   document.
+   resource type "core.osc.gcoll".
 
    The Administrator can discover group-configuration resources for the
    group-collection resource as specified in Section 6.1 and
@@ -412,7 +411,7 @@ Table of Contents
    [I-D.ietf-ace-key-groupcomm-oscore].
 
    The original definition of the data model AIF-OSCORE-GROUPCOMM
-   specifies a scope as structured in scope entries, which express
+   specifies a scope as structured into scope entries, which express
    authorization information for users of an OSCORE group, i.e., actual
    group members or external signature verifiers.  Hereafter, these are
    referred to as "user scope entries".
@@ -458,10 +457,10 @@ Table of Contents
          name pattern.
 
          For example, and as typically expected, the data item can be a
-         CBOR text string marked with the CBOR tag 35.  This indicates
-         that the group name pattern specified as value of the CBOR text
-         string is a regular expression (see Section 3.4.5.3 of
-         [RFC8949]).
+         CBOR text string marked with the CBOR tag 21065 or 35.  This
+         indicates that the group name pattern specified as value of the
+         CBOR text string is a regular expression (see [RFC9485] and
+         Section 3.4.5.3 of [RFC8949]).
 
          In case the AIF specific data model AIF-OSCORE-GROUPCOMM is
          used in a JSON payload, the semantics information conveyed by
@@ -3089,6 +3088,11 @@ Table of Contents
               DOI 10.17487/RFC9290, October 2022,
               <https://www.rfc-editor.org/rfc/rfc9290>.
 
+   [RFC9485]  Bormann, C. and T. Bray, "I-Regexp: An Interoperable
+              Regular Expression Format", RFC 9485,
+              DOI 10.17487/RFC9485, October 2023,
+              <https://www.rfc-editor.org/rfc/rfc9485>.
+
 11.2.  Informative References
 
    [I-D.amsuess-core-cachable-oscore]
@@ -3111,9 +3115,9 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-08, 4 March 2024,
+              ietf-cose-cbor-encoded-cert-09, 4 March 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-08>.
+              cbor-encoded-cert-09>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
@@ -3249,6 +3253,8 @@ B.1.  Version -10 to -11
    *  Added example of array of scope entries.
 
    *  Removed moot paragraph about the benefits of group name patterns.
+
+   *  Use of CBOR tag 21065 to indicate a regular expression.
 
    *  Renamed 'group_title' as 'group_description'.
 
