@@ -112,7 +112,13 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to specify and update their configuration.
 
-Interaction examples are provided in Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR diagnostic notation without the tag and value abbreviations.
+Interaction examples are provided in Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR diagnostic notation.
+
+Throughout this document, examples for CBOR data items are expressed in CBOR extended diagnostic notation as defined in {{Section 8 of RFC8949}} and {{Appendix G of RFC8610}} ("diagnostic notation"). Diagnostic notation comments are often used to provide a textual representation of the numeric parameter names and values.
+
+In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': e'AES-CCM-16-64-128'} stands for {-13: "gp1", -4: 10}.
+
+Note to RFC Editor: Please delete the paragraph immediately precending this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
 
 The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession, and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
 
@@ -590,9 +596,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-       "group_mode" : true,
-       "gp_enc_alg" : 10,
-             "hkdf" : 5
+       e'group_mode' : true,
+       e'gp_enc_alg' : e'AES-CCM-16-64-128',
+             e'hkdf' : e'HMAC-256-256'
    }
 
 <= 2.05 Content
@@ -619,9 +625,9 @@ The following, additional example considers a request payload that uses both con
    Payload:
 
    {
-       "gp_enc_alg" : 10,
-       "group_name" : 21065("^gp[0-9]*$"),
-           "active" : true
+       e'gp_enc_alg' : e'AES-CCM-16-64-128',
+       e'group_name' : 21065("^gp[0-9]*$"),
+           e'active' : true
    }
 
 <= 2.05 Content
@@ -741,14 +747,14 @@ An example of message exchange is shown below.
    Payload:
 
    {
-            "gp_enc_alg" : 10,
-                  "hkdf" : 5,
-         "pairwise_mode" : true,
-                "active" : true,
-            "group_name" : "gp4",
-     "group_description" : "rooms 1 and 2",
-            "app_groups" : ["room1", "room2"],
-                "as_uri" : "coap://as.example.com/token"
+            e'gp_enc_alg' : e'AES-CCM-16-64-128',
+                  e'hkdf' : e'HMAC-256-256',
+         e'pairwise_mode' : true,
+                e'active' : true,
+            e'group_name' : "gp4",
+     e'group_description' : "rooms 1 and 2",
+            e'app_groups' : ["room1", "room2"],
+                e'as_uri' : "coap://as.example.com/token"
    }
 
 <= 2.01 Created
@@ -759,9 +765,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-      "group_name" : "gp4",
-     "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-          "as_uri" : "coap://as.example.com/token"
+      e'group_name' : "gp4",
+     e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
+          e'as_uri' : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -792,28 +798,28 @@ An example of message exchange is shown below.
    Payload:
 
    {
-                      "hkdf" : 5,
-                  "cred_fmt" : 33,
-                "group_mode" : true,
-                "gp_enc_alg" : 10,
-                  "sign_alg" : -8,
-               "sign_params" : [[1], [1, 6]],
-             "pairwise_mode" : true,
-                       "alg" : 10,
-                  "ecdh_alg" : -27,
-               "ecdh_params" : [[1], [1, 6]],
-                   "det_req" : false,
-                        "rt" : "core.osc.gconf",
-                    "active" : true,
-                "group_name" : "gp4",
-         "group_description" : "rooms 1 and 2",
-     "ace_groupcomm_profile" : "coap_group_oscore_app",
-            "max_stale_sets" : 3,
-                       "exp" : 1360289224,
-                 "gid_reuse" : false,
-                "app_groups" : ["room1", "room2"],
-               "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-                    "as_uri" : "coap://as.example.com/token"
+                      e'hkdf' : e'HMAC-256-256',
+                  e'cred_fmt' : e'x5chain',
+                e'group_mode' : true,
+                e'gp_enc_alg' : e'AES-CCM-16-64-128',
+                  e'sign_alg' : e'EdDSA',
+               e'sign_params' : [[e'OKP'], [e'OKP', e'Ed25519']],
+             e'pairwise_mode' : true,
+                       e'alg' : e'AES-CCM-16-64-128',
+                  e'ecdh_alg' : e'ECDH-SS-HKDF-256',
+               e'ecdh_params' : [[e'OKP'], [e'OKP', e'X25519']],
+                   e'det_req' : false,
+                        e'rt' : "core.osc.gconf",
+                    e'active' : true,
+                e'group_name' : "gp4",
+         e'group_description' : "rooms 1 and 2",
+     e'ace_groupcomm_profile' : "coap_group_oscore_app",
+            e'max_stale_sets' : 3,
+                       e'exp' : 1360289224,
+                 e'gid_reuse' : false,
+                e'app_groups' : ["room1", "room2"],
+               e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
+                    e'as_uri' : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -844,12 +850,12 @@ An example of message exchange is shown below.
    Payload:
 
    {
-     "conf_filter" : ["gp_enc_alg",
-                      "hkdf",
-                      "pairwise_mode",
-                      "active",
-                      "group_description",
-                      "app_groups"]
+     e'conf_filter' : [e'gp_enc_alg',
+                       e'hkdf',
+                       e'pairwise_mode',
+                       e'active',
+                       e'group_description',
+                       e'app_groups']
    }
 
 <= 2.05 Content
@@ -858,12 +864,12 @@ An example of message exchange is shown below.
    Payload:
 
    {
-            "gp_enc_alg" : 10,
-                  "hkdf" : 5,
-         "pairwise_mode" : true,
-                "active" : true,
-     "group_description" : "rooms 1 and 2",
-            "app_groups" : ["room1", "room2"]
+            e'gp_enc_alg' : e'AES-CCM-16-64-128',
+                  e'hkdf' : e'HMAC-256-256',
+         e'pairwise_mode' : true,
+                e'active' : true,
+     e'group_description' : "rooms 1 and 2",
+            e'app_groups' : ["room1", "room2"]
    }
 
 ~~~~~~~~~~~
@@ -931,8 +937,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-       "gp_enc_alg" : 11,
-             "hkdf" : 5
+       e'gp_enc_alg' : e'AES-CCM-16-64-256',
+             e'hkdf' : e'HMAC-256-256'
    }
 
 <= 2.04 Changed
@@ -941,9 +947,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-      "group_name" : "gp4",
-     "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-          "as_uri" : "coap://as.example.com/token"
+      e'group_name' : "gp4",
+     e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
+          e'as_uri' : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -1098,9 +1104,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-          "gp_enc_alg" : 10,
-     "app_groups_diff" : [["room1"],
-                          ["room3", "room4"]]
+          e'gp_enc_alg' : e'AES-CCM-16-64-128',
+     e'app_groups_diff' : [["room1"], ["room3", "room4"]]
    }
 
 <= 2.04 Changed
@@ -1109,9 +1114,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-      "group_name" : "gp4",
-     "joining_uri" : "coap://[2001:db8::ab]/ace-group/gp4/",
-          "as_uri" : "coap://as.example.com/token"
+      e'group_name' : "gp4",
+     e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
+          e'as_uri' : "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -1556,8 +1561,55 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 5. If the sets S1, S2, and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2, and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
+# CDDL Model # {#sec-cddl-model}
+{:removeinrfc}
+
+~~~~~~~~~~~~~~~~~~~~ CDDL
+hkdf = -1
+cred_fmt = -2
+group_mode = -3
+gp_enc_alg = -4
+sign_alg = -5
+sign_params = -6
+pairwise_mode = -7
+alg = -8
+ecdh_alg = -9
+ecdh_params = -10
+det_req = -25
+det_hash_alg = -26
+rt = -11
+active = -12
+group_name = -13
+group_description = -14
+max_stale_sets = -15
+gid_reuse = -16
+app_groups = -17
+joining_uri = -18
+as_uri = -19
+conf_filter = -27
+app_groups_diff = -28
+
+ace_groupcomm_profile = 10
+exp = 11
+
+HMAC-256-256 = 5
+AES-CCM-16-64-128 = 10
+x5chain = 33
+EdDSA = -8
+OKP = 1
+Ed25519 = 6
+ECDH-SS-HKDF-256 = -27
+X25519 = 4
+AES-CCM-16-64-256 = 11
+~~~~~~~~~~~~~~~~~~~~
+{: #fig-cddl-model title="CDDL model" artwork-align="left"}
+
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -11 to -12 ## {#sec-11-12}
+
+* CBOR diagnostic notation uses placeholders from a CDDL model.
 
 ## Version -10 to -11 ## {#sec-10-11}
 
