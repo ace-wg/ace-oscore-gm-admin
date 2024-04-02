@@ -718,7 +718,7 @@ From then on, the Group Manager will rely on the current group configuration to 
 
 * The Group ID, used as OSCORE ID Context, which MUST be unique within the set of OSCORE groups under the Group Manager.
 
-Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response. The Location-Path option MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
+Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response. One or more Location-Path options MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
 
 The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri', from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
