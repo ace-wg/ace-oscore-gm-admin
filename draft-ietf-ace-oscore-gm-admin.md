@@ -169,7 +169,7 @@ This document also refers to the following terminology:
 
 With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
 
-* The Group Manager acts as Resource Server (RS). It provides one single group-collection resource, and one group-configuration resource per existing OSCORE group.
+* The Group Manager acts as Resource Server (RS). The Group Manager provides one single group-collection resource, and one group-configuration resource per existing OSCORE group.
 
 * The Administrator acts as Client (C), and requests to access the group-collection resource and group-configuration resources at the Group Manager.
 
@@ -1615,6 +1615,8 @@ AES-CCM-16-64-256 = 11
 * Clarified relation between group name and URI path segment.
 
 * /manage is a url-path chosen as an example, but not a default one.
+
+* Minor clarifications and editorial improvements.
 
 ## Version -10 to -11 ## {#sec-10-11}
 
