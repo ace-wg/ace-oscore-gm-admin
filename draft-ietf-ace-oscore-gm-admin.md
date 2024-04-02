@@ -233,11 +233,11 @@ Building on the definition in {{Section 3.3 of RFC6749}} considered in the ACE f
 
 This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
 
-To this end, this document uses the Authorization Information Format (AIF) {{RFC9237}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+To this end, this document uses the Authorization Information Format (AIF) {{RFC9237}}. In particular, it uses and extends the AIF data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 The original definition of the data model AIF-OSCORE-GROUPCOMM specifies a scope as structured into scope entries, which express authorization information for users of an OSCORE group, i.e., actual group members or external signature verifiers. Hereafter, these are referred to as "user scope entries".
 
-This document extends the same AIF specific data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. Hereafter, these are referred to as "admin scope entries", or simply as "scope entries" unless otherwise indicated.
+This document extends the same AIF data model AIF-OSCORE-GROUPCOMM as defined below. In particular, it defines how the same scope can (also) include scope entries that express authorization information for Administrators of OSCORE groups. Hereafter, these are referred to as "admin scope entries", or simply as "scope entries" unless otherwise indicated.
 
 Like in the original definition of the data model AIF-OSCORE-GROUPCOMM, and with reference to the generic AIF model
 
@@ -259,7 +259,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
       For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065 or 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{RFC9485}} and {{Section 3.4.5.3 of RFC8949}}).
 
-      In case the AIF specific data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
+      In case the AIF data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
 
       The AS and the Group Manager are expected to have agreed on commonly supported semantics for group name patterns. This can happen, for instance, as part of the registration process of the Group Manager at the AS.
 
@@ -357,7 +357,7 @@ Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 
 
 Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of RFC9277}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
 
-This indicates that the binary encoded scope, as conveying the actual access control information, follows the scope semantics of the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
+This indicates that the binary encoded scope, as conveying the actual access control information, follows the scope semantics of the AIF data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
