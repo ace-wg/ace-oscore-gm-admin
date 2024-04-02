@@ -157,7 +157,7 @@ This document also refers to the following terminology:
 
 * Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups, or to create a new OSCORE group, under that Group Manager.
 
-   As an example, this document uses /manage as the url-path of the group-collection resource; implementations are not required to use this name, and can define their own instead.
+   When defining operations at the Group Manager and providing examples, this document uses /manage as the url-path of the group-collection resource; implementations can use a different url-path.
 
 * Group-configuration resource: a resource hosted by the Group Manager, associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.
 
@@ -1613,6 +1613,8 @@ AES-CCM-16-64-256 = 11
 * CBOR diagnostic notation uses placeholders from a CDDL model.
 
 * Clarified relation between group name and URI path segment.
+
+* /manage is a url-path chosen as an example, but not a default one.
 
 ## Version -10 to -11 ## {#sec-10-11}
 
