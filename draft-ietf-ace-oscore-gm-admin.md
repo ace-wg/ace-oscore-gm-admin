@@ -694,9 +694,15 @@ If the Group Manager does not manage to determine a group name for which both th
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
 
-The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic.
+The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters set, the following applies.
 
-The value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
+* The group-configuration resource MUST NOT be accessible through other operations.
+
+* The group-collection resource MUST NOT be updated to reflect the presence of the new group-configuration resource.
+
+When the group-collection resource is eventually updated to reflect the presence of the new group-configuration resource, this update MUST NOT be interrupted by other updates to the group-collection resource due to the creation or deletion of group-configuration resources.
+
+In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
 
 If the request specifies the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
 
@@ -909,7 +915,15 @@ First, the Group Manager updates the group-configuration resource, consistently 
 
 For each other parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the PUT request has to include the parameter 'active' specifying the CBOR simple value `true` (0xf5).
 
-When updating the group-configuration resource, the corresponding group-membership resource is also accordingly updated. The overwriting of such two resources MUST be atomic.
+When updating the group-configuration resource, the corresponding group-membership resource is also accordingly updated. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters set, the following applies.
+
+* The group-configuration resource MUST NOT be accessible through other operations.
+
+* The group-membership resource MUST NOT be updated to reflect the new group configuration.
+
+* The filter criteria specified in a FETCH request to the group-collection resource (see Section 6.2) MUST be compared against the representation that the group-configuration resource had before its update started.
+
+When the group-membership resource is eventually updated to reflect the new group configuration, this update MUST NOT be interrupted by other operations performed on the group-membership resource.
 
 If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -1082,7 +1096,7 @@ If no error occurs and the PATCH/iPATCH request is successfully processed, the G
 
 First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also accordingly updated.
 
-The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic.
+The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic. That is, the same as defined in {{configuration-resource-put}} when atomically overwriting a group-configuration resource applies.
 
 Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
 
@@ -1157,9 +1171,19 @@ After a successful processing of the DELETE request, the Group Manager performs 
 
 First, the Group Manager deletes the OSCORE group, deallocates both the group-configuration resource as well as the group-membership resource associated with that group, and accordingly updates the group-collection resource.
 
-The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic.
+The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is deleted, the following applies.
 
-Then, the Group Manager replies to the Administrator with a 2.02 (Deleted) response.
+* The group-configuration resource MUST NOT be accessible through other operations.
+
+* The group-membership resource MUST NOT be deleted.
+
+* The group-collection resource MUST NOT be updated to reflect the deletion of the group-configuration resource.
+
+When the group-membership resource is eventually deleted, this deletion MUST NOT be interrupted by other operations performed on the group-membership resource.
+
+When the group-collection resource is eventually updated to reflect the deletion of the group-configuration resource, this update MUST NOT be interrupted by other updates to the group-collection resource due to the creation or deletion of group-configuration resources, or to other operations performed on those.
+
+After deleting the group-configuration resource, the Group Manager replies to the Administrator with a 2.02 (Deleted) response.
 
 An example of message exchange is shown below.
 
@@ -1631,6 +1655,8 @@ AES-CCM-16-64-256 = 11
 * Main/optional Admininistrator is presented more as an example.
 
 * Added considerations on race conditions with multiple Administrators.
+
+* Clarified requirement for some operations to be atomic.
 
 * Minor clarifications and editorial improvements.
 
