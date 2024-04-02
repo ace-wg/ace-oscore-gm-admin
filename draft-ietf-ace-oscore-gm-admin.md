@@ -1052,6 +1052,8 @@ The following holds when the value of specific parameters is updated.
 
       - Retrieve from the Group Manager the Group Manager's new authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
+As discussed above, after the group configuration has been updated, some group members may leave the OSCORE group and rejoin it. Shortly following an update of group configuration, the Group Manager SHOULD prioritize the re-join of such current group members before processing Join Requests from other, new group members.
+
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
 This operation MAY be supported by the Group Manager and an Administrator.
@@ -1338,8 +1340,6 @@ With respect to changing group configurations, the following security considerat
 * A change of the current group configuration (see {{configuration-resource-post}} and {{configuration-resource-patch}}) might result in generating and distributing new group keying material, consistently with the newly enforced algorithms and related parameters. In such a case, the Group Manager can perform a group rekeying as per {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}, or provide the new group keying material together with the new group configuration as per {{configuration-resource-post}} and {{configuration-resource-patch}} of this document.
 
    After gaining knowledge of the new group configuration, current group members may also leave the OSCORE group and rejoin it, hence obtaining the new group configuration parameters and the up-to-date group keying material. When this happens, the Group Manager SHOULD NOT repeatedly rekey the group upon the re-join of every current group member, each of which is identifiable by means of the secure association that it has with the Group Manager.
-
-   Shortly following an update of group configuration, the Group Manager SHOULD prioritize the re-join of such current group members before processing Join Requests from new group members.
 
 * Following the enforcement of a new group configuration, a group member might not deem it conducive to a sufficient security level (e.g., in terms of security algorithms and related parameters). In such a case, it is RECOMMENDED that the group member leaves the group.
 
@@ -1667,6 +1667,8 @@ AES-CCM-16-64-256 = 11
 * Example of inconsistent configuration following a PATCH request.
 
 * Clarified invalid semantics of an iPATCH request.
+
+* Repositioned text from security to operational considerations.
 
 * Minor clarifications and editorial improvements.
 
