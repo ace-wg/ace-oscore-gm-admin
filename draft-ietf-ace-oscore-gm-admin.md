@@ -413,7 +413,7 @@ With respect to the main Administrator, such assistant Administrators are expect
 
 In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new Access Token and to upload it to the Group Manager. If allowed by the used transport profile of ACE, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
 
-If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator regularly obtains a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-put}}), updating (see {{configuration-resource-patch}}), or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
+If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator regularly obtains a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-post}}), updating (see {{configuration-resource-patch}}), or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
 
 * The Administrator performs a regular polling of the group configuration, by sending a GET request to the corresponding group-configuration resource (see {{configuration-resource-get}}).
 
@@ -895,27 +895,27 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 
-## Overwrite a Group Configuration ## {#configuration-resource-put}
+## Overwrite a Group Configuration ## {#configuration-resource-post}
 
 This operation MAY be supported by the Group Manager and an Administrator.
 
-The Administrator can send a PUT request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
+The Administrator can send a POST request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
 
 The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
-The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
+The error handling for the POST request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.
 
-If the group-configuration resource targeted by the PUT request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
+If the group-configuration resource targeted by the POST request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
 
 If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
-If no error occurs and the PUT request is successfully processed, the Group Manager performs the following actions.
+If no error occurs and the POST request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PUT request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
 
-For each other parameter not specified in the PUT request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the PUT request has to include the parameter 'active' specifying the CBOR simple value `true` (0xf5).
+For each other parameter not specified in the POST request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the parameter 'active' specifying the CBOR simple value `true` (0xf5).
 
 When updating the group-configuration resource, the corresponding group-membership resource is also accordingly updated. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters set, the following applies.
 
@@ -933,7 +933,7 @@ From then on, the Group Manager relies on the latest updated configuration to bu
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the PUT request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration, as defined in {{Section 3 of I-D.tiloca-core-oscore-discovery}}.
 
@@ -941,22 +941,22 @@ Alternatively, the Administrator can update the registration in the Resource Dir
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.04 (Changed) response.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the PUT request.
+* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
 
 * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.04 (Changed) response.
 
 * As to every other information element describing the current group configuration, the following applies.
 
-   - If a certain parameter was specified in the PUT request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the PUT request otherwise.
+   - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
 
-   - If a certain parameter was not specified in the PUT request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
 
 As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
 An example of message exchange is shown below.
 
 ~~~~~~~~~~~
-=> 0.03 PUT
+=> 0.03 POST
    Uri-Path: manage
    Uri-Path: gp4
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
@@ -1058,7 +1058,7 @@ This operation MAY be supported by the Group Manager and an Administrator.
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
-The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
+The request payload has the same format of the POST request defined in {{configuration-resource-post}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
 The CBOR map in the request payload includes the field 'app_groups_diff'. This field is encoded as a CBOR array including the following two elements.
 
@@ -1078,7 +1078,7 @@ The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as
 
 The Group Manager MUST respond with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
-The error handling for the PATCH/iPATCH request is the same as for the PUT request defined in {{configuration-resource-put}}, with the following additions.
+The error handling for the PATCH/iPATCH request is the same as for the POST request defined in {{configuration-resource-post}}, with the following additions.
 
 * The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map.
 
@@ -1098,9 +1098,9 @@ If no error occurs and the PATCH/iPATCH request is successfully processed, the G
 
 First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also accordingly updated.
 
-The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic. That is, the same as defined in {{configuration-resource-put}} when atomically overwriting a group-configuration resource applies.
+The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic. That is, the same as defined in {{configuration-resource-post}} when atomically overwriting a group-configuration resource applies.
 
-Unlike for the PUT request defined in {{configuration-resource-put}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
+Unlike for the POST request defined in {{configuration-resource-post}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
 
 Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.
 
@@ -1118,7 +1118,7 @@ After having updated the group-configuration resource, from then on the Group Ma
 
 Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-The same considerations as for the PUT request defined in {{configuration-resource-put}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{RFC9176}}.
+The same considerations as for the POST request defined in {{configuration-resource-post}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{RFC9176}}.
 
 An example of message exchange is shown below.
 
@@ -1163,7 +1163,7 @@ The Administrator can send a DELETE request to the group-configuration resource 
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Delete" as PERMISSION.
 
-Otherwise, the Group Manager continues processing the request, which would be successful only on an inactive OSCORE group. That is, the DELETE request actually yields a successful deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-put}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
+Otherwise, the Group Manager continues processing the request, which would be successful only on an inactive OSCORE group. That is, the DELETE request actually yields a successful deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-post}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
 
 If, upon receiving the DELETE request, the current value of the status parameter 'active' is `true` (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
 
@@ -1293,7 +1293,7 @@ In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, t
 
 If the Administrator supports the problem-details format {{RFC9290}} and the Custom Problem Detail entry 'ace-groupcomm-error' defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, and is able to understand the error specified in the 'error-id' field therein, then the Administrator may use that information to determine what actions to take next. If the Concise Problem Details data item specified in the error response includes the 'detail' entry and the Administrator supports it, such an entry may provide additional context. In particular, the following guidelines apply.
 
-* In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-put}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
+* In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-post}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
 
 * In case of error 11, the Administrator has the following options.
 
@@ -1317,7 +1317,7 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
       This requires that the Administrator finds acceptable to create a group configuration different from the originally intended one.
 
-   - If the Administrator has attempted to overwrite (see {{configuration-resource-put}}) or selectively update (see {{configuration-resource-patch}}) an existing group configuration, the Administrator can take into account what the Group Manager specifies in the 'detail' entry of the Concise Problem Details data item {{RFC9290}} specified in the error response, and send a new request to the Group Manager for accordingly overwriting or selectively updating the group configuration.
+   - If the Administrator has attempted to overwrite (see {{configuration-resource-post}}) or selectively update (see {{configuration-resource-patch}}) an existing group configuration, the Administrator can take into account what the Group Manager specifies in the 'detail' entry of the Concise Problem Details data item {{RFC9290}} specified in the error response, and send a new request to the Group Manager for accordingly overwriting or selectively updating the group configuration.
 
       This requires that the Administrator finds acceptable to overwrite or update the current group configuration differently than how it was originally intended. If this is not attainable, the Administrator may decide to not take further actions and keep the current group configuration as is, or instead to delete the group configuration altogether (see {{configuration-resource-delete}}).
 
@@ -1333,7 +1333,7 @@ Further security considerations are compiled below.
 
 With respect to changing group configurations, the following security considerations hold.
 
-* A change of the current group configuration (see {{configuration-resource-put}} and {{configuration-resource-patch}}) might result in generating and distributing new group keying material, consistently with the newly enforced algorithms and related parameters. In such a case, the Group Manager can perform a group rekeying as per {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}, or provide the new group keying material together with the new group configuration as per {{configuration-resource-put}} and {{configuration-resource-patch}} of this document.
+* A change of the current group configuration (see {{configuration-resource-post}} and {{configuration-resource-patch}}) might result in generating and distributing new group keying material, consistently with the newly enforced algorithms and related parameters. In such a case, the Group Manager can perform a group rekeying as per {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}, or provide the new group keying material together with the new group configuration as per {{configuration-resource-post}} and {{configuration-resource-patch}} of this document.
 
    After gaining knowledge of the new group configuration, current group members may also leave the OSCORE group and rejoin it, hence obtaining the new group configuration parameters and the up-to-date group keying material. When this happens, the Group Manager SHOULD NOT repeatedly rekey the group upon the re-join of every current group member, each of which is identifiable by means of the secure association that it has with the Group Manager.
 
@@ -1659,6 +1659,8 @@ AES-CCM-16-64-256 = 11
 * Clarified requirement for some operations to be atomic.
 
 * Early centralization of what it means to have permissions.
+
+* POST (instead of PUT) for overwriting a group-configuration resource.
 
 * Minor clarifications and editorial improvements.
 
