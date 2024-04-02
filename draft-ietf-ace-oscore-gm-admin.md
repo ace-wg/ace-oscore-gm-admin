@@ -165,6 +165,8 @@ This document also refers to the following terminology:
 
 * Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
+* Secure communication association: a security association established between any two of the Administrator, the AS, and the Group Manager and used for protecting their message exchanges. For example, depending on the used transport profile of ACE, this can rely on DTLS {{RFC9147}} as per {{RFC9202}}, or on OSCORE {{RFC8613}} as per {{RFC9203}}.
+
 # Group Administration # {#overview}
 
 With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
@@ -1616,7 +1618,7 @@ AES-CCM-16-64-256 = 11
 
 * /manage is a url-path chosen as an example, but not a default one.
 
-* Recapped concept of scope.
+* Recapped concepts of scope and secure communication association.
 
 * Minor clarifications and editorial improvements.
 
