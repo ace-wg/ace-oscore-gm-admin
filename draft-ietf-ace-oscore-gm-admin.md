@@ -676,7 +676,7 @@ Otherwise, if any of the following occurs, the Group Manager MUST respond with a
 
 * Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters. In particular, the value of the status parameter 'exp' (if present) is not valid if the indicated expiration date is not in the future.
 
-* The Group Manager does not trust the Authorization Server with URI specified in the 'as_uri' parameter, and has no alternative Authorization Server to consider for the OSCORE group to create.
+* The Group Manager does not trust or deem acceptable the Authorization Server with URI specified in the 'as_uri' parameter, and has no alternative Authorization Server to consider for the OSCORE group to create.
 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
