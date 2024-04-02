@@ -469,7 +469,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 The CBOR map includes the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
 
-* 'rt', with value the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
+* 'rt', which specifies the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
 * 'active', encoding the CBOR simple value `true` (0xf5) if the OSCORE group is currently active, or the CBOR simple value `false` (0xf4) otherwise.
 
