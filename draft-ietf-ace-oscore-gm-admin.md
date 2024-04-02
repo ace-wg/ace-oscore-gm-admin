@@ -956,7 +956,7 @@ As discussed in {{collection-resource-post}}, it is RECOMMENDED that registratio
 An example of message exchange is shown below.
 
 ~~~~~~~~~~~
-=> 0.03 POST
+=> 0.02 POST
    Uri-Path: manage
    Uri-Path: gp4
    Content-Format: CT_TBD (application/ace-groupcomm+cbor)
