@@ -413,13 +413,15 @@ With respect to the main Administrator, such assistant Administrators are expect
 
 In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new Access Token and to upload it to the Group Manager. If allowed by the used transport profile of ACE, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
 
-If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator ensures to have a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-put}}), updating (see {{configuration-resource-patch}}), or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
+If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator regularly obtains a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-put}}), updating (see {{configuration-resource-patch}}), or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
 
 * The Administrator performs a regular polling of the group configuration, by sending a GET request to the corresponding group-configuration resource (see {{configuration-resource-get}}).
 
 * If the group-configuration resource associated with the OSCORE group is Observable, then the Administrator subscribes to that resource by using CoAP Observe {{RFC7641}}. The Observation request is a GET request sent to the group-configuration resource (see {{configuration-resource-get}}). In such a case, the Group Manager will also send a 4.04 (Not Found) response in case another Administrator deletes the group-configuration resource, as a result of deleting the associated OSCORE group and its configuration.
 
 If the Administrator gains knowledge that the group configuration has changed compared to the latest known representation, then the Administrator might hold the execution of writing or deletion operation on the group-configuration resource, and first attempt checking with other Administrators responsible for the same OSCORE group about the changes they have made.
+
+In order to avoid race conditions due to possible concurrent updates of the group-configuration resource (i.e., the "lost update" problem), the Group Manager can include the ETag Option in the responses to the GET requests sent to the group-configuration resource (see {{Section 5.10.6 of RFC7252}}). Then, when sending to the Group Manager a request for overwriting or updating the group-configuration resource, the Administrator includes an If-Match Option with value the most recent ETag that the Administrator knows for that resource (see {{Section 5.10.8.1 of RFC7252}}).
 
 # Group Configurations # {#group-configurations}
 
@@ -1623,6 +1625,8 @@ AES-CCM-16-64-256 = 11
 * Recapped concepts of scope and secure communication association.
 
 * Main/optional Admininistrator is presented more as an example.
+
+* Added considerations on race conditions with multiple Administrators.
 
 * Minor clarifications and editorial improvements.
 
