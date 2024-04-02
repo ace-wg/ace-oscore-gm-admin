@@ -251,7 +251,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
 * The object identifier ("Toid") is specialized as either of the following, and specifies a group name pattern P for the admin scope entry.
 
-   - Wildcard pattern: "Toid" is specialized as the CBOR simple value `true` (0xf5), specifying the wildcard pattern. That is, any group name expressed as a literal text string matches with this group name pattern.
+   - Wildcard pattern: "Toid" is specialized as the CBOR simple value `true` (0xf5), specifying the wildcard pattern. That is, any group name matches with this group name pattern.
 
    - Literal pattern: "Toid" is specialized as a CBOR text string, whose value specifies an exact group name as a literal string. That is, only one specific group name expressed as a literal text string matches with this group name pattern.
 
