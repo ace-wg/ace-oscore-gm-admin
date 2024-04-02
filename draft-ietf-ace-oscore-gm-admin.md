@@ -547,7 +547,13 @@ For each operation, it is defined whether that operation is required or optional
 
 When checking the scope claim of a stored Access Token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
-Upon receiving from the Administrator a POST request to the group-collection resource or a request to a group-configuration resource, the Group Manager performs the following authorization checks, consistently with what is defined at step 4 of {{getting-access}}. The Group Manager MUST check whether the group name TARGETNAME pertaining to the request matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator. In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission PERMISSION required to perform the requested administrative operation. Further details on TARGETNAME and PERMISSION are defined separately for each operation at the Group Manager.
+Upon receiving from the Administrator a POST request to the group-collection resource or a request to a group-configuration resource, the Group Manager performs the following authorization checks, consistently with what is defined at step 4 of {{getting-access}}.
+
+* The Group Manager MUST check whether the group name TARGETNAME pertaining to the request matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator.
+
+* In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission PERMISSION required to perform the requested administrative operation.
+
+If there are no matching scope entries specifying the permission PERMISSION, the Group Manager MUST reply with a 4.03 (Forbidden) error response. Further details on TARGETNAME and PERMISSION are defined separately for each operation at the Group Manager.
 
 The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
 
@@ -669,8 +675,6 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 * The payload MUST NOT include any of the status parameters 'rt', 'ace_groupcomm_profile', and 'joining_uri' defined in {{config-repr-status-properties}}.
 
 When performing the authorization checks, the Group Manager uses the value of the 'group_name' parameter from the request as TARGETNAME, and "Create" as PERMISSION.
-
-If the verification above fails (i.e., there are no matching scope entries specifying the "Create" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
 
 If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
@@ -798,8 +802,6 @@ The Administrator can send a GET request to the group-configuration resource man
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
-If the verification above fails (i.e., there are no matching scope entries specifying the "Read" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
-
 Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration parameters and status parameters.
 
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}.
@@ -852,7 +854,7 @@ The request payload is a CBOR map, which contains the following field:
 
 * 'conf_filter', encoded as a CBOR array. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}), encoded with the corresponding CBOR abbreviation defined in {{groupcomm-parameters}}.
 
-When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION. If the checks fail (i.e., there are no matching scope entries specifying the "Read" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
+When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
 After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration parameters and status parameters requested by the Administrator in the FETCH request.
 
@@ -904,8 +906,6 @@ The payload of the request has the same format of the POST request defined in {{
 The error handling for the PUT request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.
-
-If the verification above fails (i.e., there are no matching scope entries specifying the "Write" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
 
 If the group-configuration resource targeted by the PUT request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
 
@@ -1090,7 +1090,7 @@ The error handling for the PATCH/iPATCH request is the same as for the PUT reque
 
 * When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map includes the parameter 'app_groups_diff'.
 
-When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION. If the checks fail (i.e., there are no matching scope entries specifying the "Write" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
+When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.
 
 If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
@@ -1162,8 +1162,6 @@ This operation MUST be supported by the Group Manager and an Administrator.
 The Administrator can send a DELETE request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to delete that OSCORE group.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Delete" as PERMISSION.
-
-If the verification above fails (i.e., there are no matching scope entries specifying the "Delete" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
 
 Otherwise, the Group Manager continues processing the request, which would be successful only on an inactive OSCORE group. That is, the DELETE request actually yields a successful deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-put}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
 
