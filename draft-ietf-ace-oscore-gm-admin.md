@@ -405,7 +405,9 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
 ## Multiple Administrators for the Same OSCORE Group
 
-In addition to a "main" primary Administrator responsible for an OSCORE group at the Group Manager, it is also possible to have "assistant" secondary Administrators that are effectively authorized to perform some operations on the same OSCORE group.
+It is possible that multiple Administrators are authorized to operate on the same Group Manager in the interest of the same OSCORE group, while also taking different responsibilities.
+
+For example, in addition to a "main" primary Administrator responsible for an OSCORE group at the Group Manager, it is also possible to have "assistant" secondary Administrators that are effectively authorized to perform some operations on the same OSCORE group.
 
 With respect to the main Administrator, such assistant Administrators are expected to have fewer permissions to perform administrative operations related to the OSCORE group at the Group Manager. For example, they may not be authorized to create an OSCORE group, or to delete an OSCORE group and its configuration.
 
@@ -1619,6 +1621,8 @@ AES-CCM-16-64-256 = 11
 * /manage is a url-path chosen as an example, but not a default one.
 
 * Recapped concepts of scope and secure communication association.
+
+* Main/optional Admininistrator is presented more as an example.
 
 * Minor clarifications and editorial improvements.
 
