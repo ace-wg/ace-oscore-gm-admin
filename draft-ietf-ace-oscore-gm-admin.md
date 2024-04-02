@@ -229,6 +229,8 @@ The Administrator can discover group-configuration resources for the group-colle
 
 # Format of Scope # {#scope-format}
 
+Building on the definition in {{Section 3.3 of RFC6749}} considered in the ACE framework {{RFC9200}}, scope denotes: the permissions that the Client (i.e., the Administrator) seeks to obtain from the AS for accessing resources at a Resource Server (i.e., the Group Manager); and the permissions that the AS actually issues to the Client following its request. This process is detailed in {{Sections 5.8.1 and 5.8.2 of RFC9200}}.
+
 This section defines the exact format and encoding of scope to use, in order to express authorization information for the Administrator (see {{getting-access}}).
 
 To this end, this document uses the Authorization Information Format (AIF) {{RFC9237}}. In particular, it uses and extends the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}}.
@@ -1615,6 +1617,8 @@ AES-CCM-16-64-256 = 11
 * Clarified relation between group name and URI path segment.
 
 * /manage is a url-path chosen as an example, but not a default one.
+
+* Recapped concept of scope.
 
 * Minor clarifications and editorial improvements.
 
