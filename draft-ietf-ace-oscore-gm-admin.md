@@ -724,11 +724,11 @@ The response payload specifies the parameters 'group_name', 'joining_uri', and '
 
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the following applies.
 
-* 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
+* 'group_name', which specifies the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
 
-* 'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
+* 'joining_uri', which specifies the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
 
-* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'as_uri' status parameter for the OSCORE group.
+* 'as_uri', which specifies the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'as_uri' status parameter for the OSCORE group.
 
 If the POST request specified the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST include also the parameter 'gid_reuse' encoding the CBOR simple value `false` (0xf4).
 
@@ -736,7 +736,7 @@ If the POST request did not specify certain parameters and the Group Manager use
 
 The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
-Alternatively, the Administrator can perform the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
+It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
 
 * The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.01 (Created) response.
 
