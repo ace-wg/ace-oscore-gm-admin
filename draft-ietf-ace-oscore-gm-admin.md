@@ -1086,6 +1086,8 @@ The error handling for the PATCH/iPATCH request is the same as for the POST requ
 
 * When applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST respond with a 4.09 (Conflict) response.
 
+   As an example, this is the case if the resulting group configuration would include the parameter 'sign_alg' specifying the signature algorithm EdDSA (COSE algorithm encoding: -8) and, at the same time, the parameter 'sign_params' specifying EC2 as COSE key type and P-256 as COSE elliptic curve (i.e., as the CBOR array `[[2], [2, 1]]`).
+
    The response MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{configuration-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
 
 * When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map includes the parameter 'app_groups_diff'.
@@ -1661,6 +1663,8 @@ AES-CCM-16-64-256 = 11
 * Early centralization of what it means to have permissions.
 
 * POST (instead of PUT) for overwriting a group-configuration resource.
+
+* Example of inconsistent configuration following a PATCH request.
 
 * Minor clarifications and editorial improvements.
 
