@@ -433,9 +433,11 @@ In particular, configuration parameters specify how members of the OSCORE group 
 
 The group configuration representation is a CBOR map, which includes the configuration parameters specified in {{config-repr-config-properties}} and the status parameters specified in {{config-repr-status-properties}}.
 
+Unless stated otherwise, these parameters are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
+
 ### Configuration Parameters ### {#config-repr-config-properties}
 
-The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
+The CBOR map includes the following configuration parameters.
 
 * 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -467,7 +469,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 ### Status Parameters ### {#config-repr-status-properties}
 
-The CBOR map includes the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
+The CBOR map includes the following status parameters.
 
 * 'rt', which specifies the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
@@ -583,7 +585,7 @@ This operation MUST be supported by the Group Manager and MAY be supported by an
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
+The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}}.
 
 Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}), with the exception that the parameter 'group_name' (if present) can also be encoded as a tagged CBOR data item, specifying a group name pattern with the semantics signaled by the CBOR tag.
 
@@ -654,7 +656,7 @@ This operation MUST be supported by the Group Manager and an Administrator.
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME, and MAY specify the intended group title together with pieces of information concerning the group configuration.
 
-The request payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}. In particular:
+The request payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular:
 
 * The payload MAY include any of the configuration parameters defined in {{config-repr-config-properties}}.
 
@@ -714,7 +716,7 @@ Finally, the Group Manager replies to the Administrator with a 2.01 (Created) re
 
 The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri', from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
-The response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}.
+The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the following applies.
 
 * 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
 
@@ -792,7 +794,7 @@ If the verification above fails (i.e., there are no matching scope entries speci
 
 Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration parameters and status parameters.
 
-The response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
+The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}.
 
 An example of message exchange is shown below.
 
@@ -1042,7 +1044,7 @@ The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-confi
 
 The request payload has the same format of the PUT request defined in {{configuration-resource-put}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
 
-The CBOR map in the request payload includes the field 'app_groups_diff', whose CBOR abbreviation is defined in {{groupcomm-parameters}}. This field is encoded as a CBOR array including the following two elements.
+The CBOR map in the request payload includes the field 'app_groups_diff'. This field is encoded as a CBOR array including the following two elements.
 
 - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
 
