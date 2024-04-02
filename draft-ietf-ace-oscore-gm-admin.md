@@ -545,7 +545,7 @@ For each operation, it is defined whether that operation is required or optional
 
 When checking the scope claim of a stored Access Token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
-The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the entry labels defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
+The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
