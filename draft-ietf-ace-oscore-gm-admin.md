@@ -473,9 +473,9 @@ The CBOR map includes the following status parameters. Unless specified otherwis
 
 * 'active', which specifies whether the OSCORE group is currently active, encoded as the CBOR simple value `true` (0xf5) of `false` (0xf4).
 
-* 'group_name', with value the group name of the OSCORE group encoded as a CBOR text string.
+* 'group_name', which specifies the group name of the OSCORE group encoded as a CBOR text string.
 
-* 'group_description', with value either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value `null` (0xf6) if no description is specified.
+* 'group_description', which specifies either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value `null` (0xf6) if no description is specified.
 
 * 'ace_groupcomm_profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
 
