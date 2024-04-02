@@ -1090,7 +1090,7 @@ The error handling for the PATCH/iPATCH request is the same as for the POST requ
 
    The response MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{configuration-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
 
-* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map includes the parameter 'app_groups_diff'.
+* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map includes the parameter 'app_groups_diff' and the name of an application group is specified both in the 'app_groups_del' and 'app_groups_add' inner arrays.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.
 
@@ -1665,6 +1665,8 @@ AES-CCM-16-64-256 = 11
 * POST (instead of PUT) for overwriting a group-configuration resource.
 
 * Example of inconsistent configuration following a PATCH request.
+
+* Clarified invalid semantics of an iPATCH request.
 
 * Minor clarifications and editorial improvements.
 
