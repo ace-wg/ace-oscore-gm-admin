@@ -660,7 +660,7 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 
 * The payload MAY include any of the configuration parameters defined in {{config-repr-config-properties}}.
 
-* The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name encoded as a CBOR text string.
+* The payload MUST include the status parameter 'group_name' defined in {{config-repr-status-properties}} and specifying the intended group name encoded as a CBOR text string. As defined later in this section, the group name specified in this parameter is simply a suggestion to the Group Manager, which makes the final decision about the name to assign to the new group.
 
 * The payload MAY include any of the status parameters 'active', 'group_description', 'max_stale_sets', 'exp', 'gid_reuse', 'app_groups', 'group_policies', and 'as_uri' defined in {{config-repr-status-properties}}.
 
