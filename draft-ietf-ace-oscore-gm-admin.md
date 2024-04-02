@@ -1568,35 +1568,41 @@ Expert reviewers should take into consideration the following points:
 
 When processing an Authorization Request from an Administrator (see {{getting-access}}), the AS builds the authorization information expressing granted permissions as scope entries, according to the AIF data model AIF-OSCORE-GROUPCOMM and to its extension specified in {{scope-format}}. These scope entries are in turn specified as value of the 'scope' claim to include in the Access Token.
 
-In order to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question, the AS can perform the following steps.
+This appendix provides an example of how the AS can evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question.
 
 The following specifically refers only to "admin scope entries", i.e., scope entries that express authorization information for Administrators of OSCORE groups.
 
-1. The AS initializes three empty sets of scope entries, namely S1, S2, and S3.
+Also, it is assumed that the AS stores the access policies as a set of "admin policy entries", which have the same format of the scope entries according to the AIF data model AIF-OSCORE-GROUPCOMM (see {{scope-format}}). The following specifically considers only "admin policy entries", i.e., policy entries for Administrators of OSCORE groups hereafter shortly referred to as "policy entries".
 
-2. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+The AS performs the following steps.
 
-   * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name superpattern P\*, such that every group name matching with the pattern P of the scope entry E matches also with P\*.
+1. The AS initializes three empty sets of scope entries, namely S_OUT.
 
-   * If no superpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes Tperm\* as the union of the permission sets associated with the superpatterns found at the previous step. That is, Tperm\* is the inclusive OR of the binary representations of the Tperm values associated with the found superpatterns and encoding the corresponding permission sets as per {{scope-format}}.
+2. For each scope entry E_S in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-   * The AS adds to the set S1 a scope entry, such that its Toid is the same as in the scope entry E, while its Tperm is the AND of Tperm\* with the Tperm in the scope entry E.
+   a. The AS initializes an empty set of policy entries, namely S_AUX.
 
-3. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+   b. The AS considers all the policy entries related to the Administrator and the Group Manager in question. For each policy entry E_P among those policy entries, the AS determines whether every group name matching with the Toid of E_S would also match with the Toid of E_P. If that is the case, then the AS adds E_P to the set S_AUX. The particular way that the AS uses to make a determination is implementation specific.
 
-   * In its access policies related to administrative operations at the Group Manager for the Administrator, the AS determines every group name subpattern P\*, such that: i) the pattern P of the scope entry E is different from P\*; and ii) every group name matching with P\* also matches with P.
+   c. If the set S_AUX is empty, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes TPERM_AUX as the union of the permission sets associated with the policy entries in the set S_AUX. That is, TPERM_AUX is the inclusive OR of the binary representation of the Tperm values in the policy entries within the set S_AUX.
 
-   * If no subpatterns are found, the AS proceeds with the next scope entry, if any. Otherwise, for each found subpattern P\*, the AS adds to the set S2 a scope entry, such that its Toid is the same as in the subpattern P\*, while its Tperm is the AND of the Tperm from the subpattern P\* with the Tperm in the scope entry E.
+   d. The AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the scope entry E_S, while its Tperm is the AND of TPERM_AUX with the Tperm in the scope entry E_S.
 
-4. For each scope entry E in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+3. For each scope entry E_S in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-   * For each group name pattern P\* in its access policies related to administrative operations at the Group Manager for the Administrator, the AS performs the following actions.
+   a. The AS initializes an empty set of policy entries, namely S_AUX.
 
-      - The AS attempts to determine a crosspattern P\*\* such that: i) in the previous steps, P\*\* was not identified as a superpattern or subpattern for the pattern P of the scope entry E; ii) every group name matching with P\*\* also matches with both P and P\*.
+   b. The AS considers all the policy entries related to the Administrator and the Group Manager in question. For each policy entry E_P among those policy entries, and such that the Toid of E_P is different from the Toid of E_S, the AS determines whether every group name matching with the Toid of E_P would also match with the Toid of E_S. If that is the case, then the AS adds E_S to the set S_AUX. The particular way that the AS uses to make a determination is implementation specific.
 
-      - If no crosspattern is built, the AS proceeds with the next pattern in its access policies related to administrative operations at the Group Manager for the Administrator, if any. Otherwise, the AS adds to the set S3 a scope entry, such that its Toid is the same as in the crosspattern P\*\*, while its Tperm is the AND of the Tperm from the pattern P\* and the Tperm in the scope entry E.
+   c. If the set S_AUX is empty, the AS proceeds with the next scope entry, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the policy entry E_P, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
 
-5. If the sets S1, S2, and S3 are all empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the sets S1, S2, and S3 as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+4. For each scope entry E_S in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
+
+   a. The AS considers all the policy entries related to the Administrator and the Group Manager in question, such that they were never added to the set S_AUX during the previous steps 2 and 3. For each policy entry E_P among those policy entries, the AS attempts to determine a group name pattern TOID_AUX such that every group name matching with TOID_AUX would also match with the Toid of E_P as well as with the Toid of E_S. The particular way that the AS uses to make a determination is implementation specific.
+
+   b. If the AS could not determine a group name pattern TOID_AUX, then the AS proceeds with the next policy entry E_P, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is TOID_AUX, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
+
+5. If the set S_OUT is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the set S_OUT as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
 
 # CDDL Model # {#sec-cddl-model}
 {:removeinrfc}
@@ -1669,6 +1675,8 @@ AES-CCM-16-64-256 = 11
 * Clarified invalid semantics of an iPATCH request.
 
 * Repositioned text from security to operational considerations.
+
+* Revised appendix with an example of name pattern processing at the AS.
 
 * Minor clarifications and editorial improvements.
 
