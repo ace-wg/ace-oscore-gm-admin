@@ -1165,7 +1165,7 @@ The Administrator can send a DELETE request to the group-configuration resource 
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Delete" as PERMISSION.
 
-Otherwise, the Group Manager continues processing the request, which MUST fail it the OSCORE group is active. That is, the DELETE request MUST yield the deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-post}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
+Otherwise, the Group Manager continues processing the request, which MUST fail it the OSCORE group is active. That is, the DELETE request MUST yield the deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-post}} and {{configuration-resource-patch}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
 
 If, upon receiving the DELETE request, the current value of the status parameter 'active' is `true` (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
 
