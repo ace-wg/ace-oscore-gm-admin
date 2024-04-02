@@ -495,7 +495,7 @@ The CBOR map includes the following status parameters. Unless specified otherwis
 
 ## Default Values {#default-values}
 
-This section defines the default values that the Group Manager refers to for configuration and status parameters.
+This section defines the default values that the Group Manager assumes for the configuration and status parameters.
 
 The Group Manager MAY choose different default values instead of those recommended in this section. A possible reason is to ensure that each of those are consistent with what the Group Manager supports, e.g., in terms of signature algorithm and format of authentication credentials used in the OSCORE group.
 
@@ -503,7 +503,7 @@ This ensures that the Group Manager is able to perform the operations defined in
 
 ### Configuration Parameters {#default-values-conf}
 
-For each of the configuration parameters listed below, the Group Manager refers to the following pre-configured default value, if none is specified by the Administrator.
+For each of the configuration parameters listed below, the Group Manager assumes the following pre-configured default value, if none is specified by the Administrator.
 
 * For 'group_mode', the Group Manager SHOULD use the CBOR simple value `true` (0xf5).
 
@@ -523,7 +523,7 @@ For each of the configuration parameters listed below, the Group Manager refers 
 
 ### Status Parameters
 
-For each of the status parameters listed below, the Group Manager refers to the following pre-configured default value, if none is specified by the Administrator.
+For each of the status parameters listed below, the Group Manager assumes the following pre-configured default value, if none is specified by the Administrator.
 
 * For 'active', the Group Manager SHOULD use the CBOR simple value `false` (0xf4).
 
