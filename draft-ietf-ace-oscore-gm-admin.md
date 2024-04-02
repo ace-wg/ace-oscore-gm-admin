@@ -471,7 +471,7 @@ The CBOR map includes the following status parameters. Unless specified otherwis
 
 * 'rt', which specifies the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
-* 'active', encoding the CBOR simple value `true` (0xf5) if the OSCORE group is currently active, or the CBOR simple value `false` (0xf4) otherwise.
+* 'active', which specifies whether the OSCORE group is currently active, encoded as the CBOR simple value `true` (0xf5) of `false` (0xf4).
 
 * 'group_name', with value the group name of the OSCORE group encoded as a CBOR text string.
 
