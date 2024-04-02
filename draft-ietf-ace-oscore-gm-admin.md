@@ -52,6 +52,7 @@ normative:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-core-groupcomm-bis:
+  RFC3986:
   RFC6690:
   RFC6749:
   RFC7252:
@@ -152,7 +153,7 @@ This document also refers to the following terminology:
 
 * Administrator: entity responsible for creating, configuring, and deleting OSCORE groups at a Group Manager.
 
-* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment.
+* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST be consistent with the ABNF rule "segment = *pchar" defined in {{Section 3.3 of RFC3986}}.
 
 * Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups, or to create a new OSCORE group, under that Group Manager.
 
@@ -1610,6 +1611,8 @@ AES-CCM-16-64-256 = 11
 ## Version -11 to -12 ## {#sec-11-12}
 
 * CBOR diagnostic notation uses placeholders from a CDDL model.
+
+* Clarified relation between group name and URI path segment.
 
 ## Version -10 to -11 ## {#sec-10-11}
 
