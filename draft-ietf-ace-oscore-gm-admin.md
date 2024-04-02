@@ -425,13 +425,15 @@ In order to avoid race conditions due to possible concurrent updates of the grou
 
 # Group Configurations # {#group-configurations}
 
-A group configuration consists of a set of parameters.
+A group configuration consists of information related to an OSCORE group, as organized into configuration parameters and status parameters.
+
+In particular, configuration parameters specify how members of the OSCORE group use the Group OSCORE protocol to protect their communications (e.g., by using which algorithms). Instead, status parameters specify information concerning the management of the OSCORE group and its current setting at the Group Manager (e.g., for handling identifiers and the joining of group members).
 
 ## Group Configuration Representation ## {#config-repr}
 
-The group configuration representation is a CBOR map, which includes configuration properties and status properties.
+The group configuration representation is a CBOR map, which includes the configuration parameters specified in {{config-repr-config-properties}} and the status parameters specified in {{config-repr-status-properties}}.
 
-### Configuration Properties ### {#config-repr-config-properties}
+### Configuration Parameters ### {#config-repr-config-properties}
 
 The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{groupcomm-parameters}} of this document.
 
@@ -463,7 +465,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
    This parameter MUST NOT be present if the configuration parameter 'det_req' is not present or if it is present with value `false` (0xf4). If the configuration parameter 'det_req' is present with value `true` (0xf5) and 'det_hash_alg' is not present, the choice of the Hash Algorithm to use when producing deterministic requests is left to the Group Manager.
 
-### Status Properties ### {#config-repr-status-properties}
+### Status Parameters ### {#config-repr-status-properties}
 
 The CBOR map includes the following status parameters. Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{groupcomm-parameters}}.
 
@@ -710,15 +712,15 @@ From then on, the Group Manager will rely on the current group configuration to 
 
 Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response. The Location-Path option MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
 
-The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri', from the status properties of the newly created OSCORE group (see {{config-repr}}), as detailed below.
+The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri', from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
 The response payload is a CBOR map, where entries use the same abbreviations defined in {{groupcomm-parameters}}.
 
-* 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'group_name' status property for the OSCORE group. This parameter MUST be included.
+* 'group_name', with value the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
 
 * 'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
 
-* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as 'as_uri' status property for the OSCORE group.
+* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'as_uri' status parameter for the OSCORE group.
 
 If the POST request specified the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST include also the parameter 'gid_reuse' encoding the CBOR simple value `false` (0xf4).
 
@@ -788,7 +790,7 @@ Consistently with what is defined at step 4 of {{getting-access}}, the Group Man
 
 If the verification above fails (i.e., there are no matching scope entries specifying the "Read" permission), the Group Manager MUST reply with a 4.03 (Forbidden) error response.
 
-Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration properties and status properties.
+Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration parameters and status parameters.
 
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}} and use the same abbreviations defined in {{groupcomm-parameters}}.
 
@@ -842,7 +844,7 @@ The request payload is a CBOR map, which contains the following field:
 
 The Group Manager MUST perform the same authorization checks defined for the processing of a GET request to a group-configuration resource in {{configuration-resource-get}}. That is, the Group Manager MUST verify that the Administrator has been granted a "Read" permission applicable to the targeted group-configuration resource.
 
-After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration properties and status properties requested by the Administrator in the FETCH request.
+After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration parameters and status parameters requested by the Administrator in the FETCH request.
 
 The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}). If the request payload specifies a parameter that is not included in the group configuration, then the response payload MUST NOT include a corresponding parameter.
 
