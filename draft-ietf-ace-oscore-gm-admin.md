@@ -259,7 +259,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
    - Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.
 
-      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065 or 35. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{RFC9485}} and {{Section 3.4.5.3 of RFC8949}}).
+      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{RFC9485}} and {{Section 3.4.5.3 of RFC8949}}).
 
       In case the AIF data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
 
@@ -1661,6 +1661,8 @@ AES-CCM-16-64-256 = 11
 * Recapped concepts of scope and secure communication association.
 
 * Main/optional Admininistrator is presented more as an example.
+
+* The use of CBOR Tag 35 is not mentioned anymore.
 
 * Added considerations on race conditions with multiple Administrators.
 
