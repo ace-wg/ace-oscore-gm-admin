@@ -195,7 +195,7 @@ Collection  \___/
 ~~~~~~~~~~~
 {: #fig-api title="Admin Resources of a Group Manager" artwork-align="center"}
 
-The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" registered in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator to:
+The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" registered in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator, if permitted, to:
 
 * Retrieve the list of existing OSCORE groups.
 
@@ -203,7 +203,7 @@ The Group Manager exports a single group-collection resource, with resource type
 
 * Create a new OSCORE group, specifying its invariant group name and, optionally, its configuration.
 
-The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "core.osc.gconf" registered in {{iana-rt}} of this document, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in {{interactions}} allows the Administrator to:
+The Group Manager exports one group-configuration resource for each of its OSCORE groups. Each group-configuration resource has resource type "core.osc.gconf" registered in {{iana-rt}} of this document, and is identified by the group name specified upon creating the OSCORE group. The interface for a group-configuration resource defined in {{interactions}} allows the Administrator, if permitted, to:
 
 * Retrieve the complete current configuration of the OSCORE group.
 
