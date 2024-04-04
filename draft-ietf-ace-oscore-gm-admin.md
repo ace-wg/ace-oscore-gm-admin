@@ -117,7 +117,7 @@ Interaction examples are provided in Link Format {{RFC6690}} and in CBOR {{RFC89
 
 Throughout this document, examples for CBOR data items are expressed in CBOR extended diagnostic notation as defined in {{Section 8 of RFC8949}} and {{Appendix G of RFC8610}} ("diagnostic notation"). Diagnostic notation comments are often used to provide a textual representation of the numeric parameter names and values.
 
-In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': e'AES-CCM-16-64-128'} stands for {-13: "gp1", -4: 10}.
+In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': 10} stands for {-13: "gp1", -4: 10}.
 
 Note to RFC Editor: Please delete the paragraph immediately precending this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
 
@@ -616,8 +616,8 @@ An example of message exchange is shown below.
 
    {
        e'group_mode' : true,
-       e'gp_enc_alg' : e'AES-CCM-16-64-128',
-             e'hkdf' : e'HMAC-256-256'
+       e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
+             e'hkdf' : 5 / HMAC-256-256 /
    }
 
 <= 2.05 Content
@@ -644,7 +644,7 @@ The following, additional example considers a request payload that uses both con
    Payload:
 
    {
-       e'gp_enc_alg' : e'AES-CCM-16-64-128',
+       e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
        e'group_name' : 21065("^gp[0-9]*$"),
            e'active' : true
    }
@@ -770,8 +770,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-            e'gp_enc_alg' : e'AES-CCM-16-64-128',
-                  e'hkdf' : e'HMAC-256-256',
+            e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
+                  e'hkdf' : 5 / HMAC-256-256 /,
          e'pairwise_mode' : true,
                 e'active' : true,
             e'group_name' : "gp4",
@@ -819,16 +819,18 @@ An example of message exchange is shown below.
    Payload:
 
    {
-                      e'hkdf' : e'HMAC-256-256',
-                  e'cred_fmt' : e'x5chain',
+                      e'hkdf' : 5 / HMAC-256-256 /,
+                  e'cred_fmt' : 33 / x5chain /,
                 e'group_mode' : true,
-                e'gp_enc_alg' : e'AES-CCM-16-64-128',
-                  e'sign_alg' : e'EdDSA',
-               e'sign_params' : [[e'OKP'], [e'OKP', e'Ed25519']],
+                e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
+                  e'sign_alg' : -8 / EdDSA /,
+               e'sign_params' : [[1], [1, 6]]
+                                / [[OKP], [OKP, Ed25519]] /,
              e'pairwise_mode' : true,
-                       e'alg' : e'AES-CCM-16-64-128',
-                  e'ecdh_alg' : e'ECDH-SS-HKDF-256',
-               e'ecdh_params' : [[e'OKP'], [e'OKP', e'X25519']],
+                       e'alg' : 10 / AES-CCM-16-64-128 /,
+                  e'ecdh_alg' : -27 / ECDH-SS-HKDF-256 /,
+               e'ecdh_params' : [[1], [1, 4]]
+                                / [[OKP], [OKP, X25519]] /,
                    e'det_req' : false,
                         e'rt' : "core.osc.gconf",
                     e'active' : true,
@@ -885,8 +887,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-            e'gp_enc_alg' : e'AES-CCM-16-64-128',
-                  e'hkdf' : e'HMAC-256-256',
+            e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
+                  e'hkdf' : 5 / HMAC-256-256 /,
          e'pairwise_mode' : true,
                 e'active' : true,
      e'group_description' : "rooms 1 and 2",
@@ -964,8 +966,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-       e'gp_enc_alg' : e'AES-CCM-16-64-256',
-             e'hkdf' : e'HMAC-256-256'
+       e'gp_enc_alg' : 11 / AES-CCM-16-64-256 /,
+             e'hkdf' : 5 / HMAC-256-256 /
    }
 
 <= 2.04 Changed
@@ -1135,7 +1137,7 @@ An example of message exchange is shown below.
    Payload:
 
    {
-          e'gp_enc_alg' : e'AES-CCM-16-64-128',
+          e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
      e'app_groups_diff' : [["room1"], ["room3", "room4"]]
    }
 
@@ -1634,16 +1636,6 @@ app_groups_diff = -28
 
 ace_groupcomm_profile = 10
 exp = 11
-
-HMAC-256-256 = 5
-AES-CCM-16-64-128 = 10
-x5chain = 33
-EdDSA = -8
-OKP = 1
-Ed25519 = 6
-ECDH-SS-HKDF-256 = -27
-X25519 = 4
-AES-CCM-16-64-256 = 11
 ~~~~~~~~~~~~~~~~~~~~
 {: #fig-cddl-model title="CDDL model" artwork-align="left"}
 
