@@ -1217,53 +1217,53 @@ In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, t
 
 Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
 
-| Name              | CBOR Key | CBOR Type                      | Reference |
-|-------------------|----------|--------------------------------|-----------|
-| hkdf              | -1       | tstr / int                     | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| cred_fmt          | -2       | int                            | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| group_mode        | -3       | simple value                   | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| gp_enc_alg        | -4       | tstr / int / <br> simple value | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| sign_alg          | -5       | tstr / int / <br> simple value | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| sign_params       | -6       | array / <br> simple value      | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| pairwise_mode     | -7       | simple value                   | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| alg               | -8       | tstr / int / <br> simple value | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| ecdh_alg          | -9       | tstr / int / <br> simple value | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| ecdh_params       | -10      | array / <br> simple value      | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| det_req           | -25      | simple value                   | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| det_hash_alg      | -26      | tstr / int                     | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| rt                | -11      | tstr                           | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| active            | -12      | simple value                   | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| group_name        | -13      | tstr / <br> #6.\<uint\>(any)   | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| group_description | -14      | tstr / <br> simple value       | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| max_stale_sets    | -15      | uint                           | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| gid_reuse         | -16      | simple value                   | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| app_groups        | -17      | array                          | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| joining_uri       | -18      | tstr                           | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| as_uri            | -19      | tstr                           | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| conf_filter       | -27      | array                          | {{&SELF}} |
-|-------------------|----------|--------------------------------|-----------|
-| app_groups_diff   | -28      | array                          | {{&SELF}} |
+| Name              | CBOR Key | CBOR Type                | Reference |
+|-------------------|----------|--------------------------|-----------|
+| hkdf              | -1       | tstr or int              | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| cred_fmt          | -2       | int                      | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| group_mode        | -3       | True or False            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| gp_enc_alg        | -4       | Null or tstr or int      | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| sign_alg          | -5       | Null or tstr or int      | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| sign_params       | -6       | Null or array            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| pairwise_mode     | -7       | True or False            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| alg               | -8       | Null or tstr or int      | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| ecdh_alg          | -9       | Null or tstr or int      | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| ecdh_params       | -10      | Null or array            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| det_req           | -25      | True or False            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| det_hash_alg      | -26      | tstr or int              | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| rt                | -11      | tstr                     | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| active            | -12      | True or False            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| group_name        | -13      | tstr or #6.\<uint\>(any) | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| group_description | -14      | Null or tstr             | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| max_stale_sets    | -15      | uint                     | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| gid_reuse         | -16      | True or False            | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| app_groups        | -17      | array                    | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| joining_uri       | -18      | tstr                     | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| as_uri            | -19      | tstr                     | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| conf_filter       | -27      | array                    | {{&SELF}} |
+|-------------------|----------|--------------------------|-----------|
+| app_groups_diff   | -28      | array                    | {{&SELF}} |
 {: #tab-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" align="center"}
 
 The following holds for the Group Manager.
@@ -1382,7 +1382,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 ~~~~~~~~~~~
 Name: hkdf
 CBOR Key: -1
-CBOR Type: tstr / int
+CBOR Type: tstr or int
 Reference: [RFC-XXXX]
 
 Name: cred_fmt
@@ -1392,52 +1392,52 @@ Reference: [RFC-XXXX]
 
 Name: group_mode
 CBOR Key: -3
-CBOR Type: simple value
+CBOR Type: True or False
 Reference: [RFC-XXXX]
 
 Name: gp_enc_alg
 CBOR Key: -4
-CBOR Type: tstr / int / simple value
+CBOR Type: Null or tstr or int
 Reference: [RFC-XXXX]
 
 Name: sign_alg
 CBOR Key: -5
-CBOR Type: tstr / int / simple value
+CBOR Type: Null or tstr or int
 Reference: [RFC-XXXX]
 
 Name: sign_params
 CBOR Key: -6
-CBOR Type: array / simple value
+CBOR Type: Null or array
 Reference: [RFC-XXXX]
 
 Name: pairwise_mode
 CBOR Key: -7
-CBOR Type: simple value
+CBOR Type: True or False
 Reference: [RFC-XXXX]
 
 Name: alg
 CBOR Key: -8
-CBOR Type: tstr / int / simple value
+CBOR Type: Null or tstr or int
 Reference: [RFC-XXXX]
 
 Name: ecdh_alg
 CBOR Key: -9
-CBOR Type: tstr / int / simple value
+CBOR Type: Null or tstr or int
 Reference: [RFC-XXXX]
 
 Name: ecdh_params
 CBOR Key: -10
-CBOR Type: array / simple value
+CBOR Type: Null or array
 Reference: [RFC-XXXX]
 
 Name: det_req
 CBOR Key: -25
-CBOR Type: simple value
+CBOR Type: True or False
 Reference: [RFC-XXXX]
 
 Name: det_hash_alg
 CBOR Key: -26
-CBOR Type: tstr / int
+CBOR Type: tstr or int
 Reference: [RFC-XXXX]
 
 Name: rt
@@ -1447,17 +1447,17 @@ Reference: [RFC-XXXX]
 
 Name: active
 CBOR Key: -12
-CBOR Type: simple value
+CBOR Type: True or False
 Reference: [RFC-XXXX]
 
 Name: group_name
 CBOR Key: -13
-CBOR Type: tstr / #6.<uint>(any)
+CBOR Type: tstr or #6.<uint>(any)
 Reference: [RFC-XXXX]
 
 Name: group_description
 CBOR Key: -14
-CBOR Type: tstr / simple value
+CBOR Type: Null or tstr
 Reference: [RFC-XXXX]
 
 Name: max_stale_sets
@@ -1467,7 +1467,7 @@ Reference: [RFC-XXXX]
 
 Name: gid_reuse
 CBOR Key: -16
-CBOR Type: simple value
+CBOR Type: True or False
 Reference: [RFC-XXXX]
 
 Name: app_groups
