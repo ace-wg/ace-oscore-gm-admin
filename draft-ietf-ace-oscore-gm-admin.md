@@ -1861,4 +1861,4 @@ Klaus Hartke provided substantial contribution in defining the resource model ba
 
 The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Jim Schaad}}}, {{{Göran Selander}}}, and {{{Cigdem Sengul}}} for their comments and feedback.
 
-The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
+The work on this document has been partly supported by the Sweden's Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and CYPRESS; and by the H2020 project SIFIS-Home (Grant agreement 952652).
