@@ -2826,155 +2826,285 @@ Table of Contents
 10.1.  ACE Groupcomm Parameters
 
    IANA is asked to register the following entries in the "ACE Groupcomm
-   Parameters" registry defined in Section 11.7 of
-   [I-D.ietf-ace-key-groupcomm].
+   Parameters" registry within the "Authentication and Authorization for
+   Constrained Environments (ACE)" registry group.
 
-   Name: hkdf
-   CBOR Key: -1
-   CBOR Type: tstr or int
-   Reference: [RFC-XXXX]
+   *  Name: hkdf
 
-   Name: cred_fmt
-   CBOR Key: -2
-   CBOR Type: int
-   Reference: [RFC-XXXX]
+   *  CBOR Key: -1
 
-   Name: group_mode
-   CBOR Key: -3
-   CBOR Type: True or False
-   Reference: [RFC-XXXX]
+   *  CBOR Type: tstr or int
 
-   Name: gp_enc_alg
-   CBOR Key: -4
-   CBOR Type: Null or tstr or int
-   Reference: [RFC-XXXX]
+   *  Reference: [RFC-XXXX]
 
-   Name: sign_alg
-   CBOR Key: -5
-   CBOR Type: Null or tstr or int
-   Reference: [RFC-XXXX]
 
-   Name: sign_params
-   CBOR Key: -6
-   CBOR Type: Null or array
-   Reference: [RFC-XXXX]
 
-   Name: pairwise_mode
-   CBOR Key: -7
-   CBOR Type: True or False
-   Reference: [RFC-XXXX]
+   *  Name: cred_fmt
 
-   Name: alg
-   CBOR Key: -8
-   CBOR Type: Null or tstr or int
-   Reference: [RFC-XXXX]
+   *  CBOR Key: -2
 
-   Name: ecdh_alg
-   CBOR Key: -9
-   CBOR Type: Null or tstr or int
-   Reference: [RFC-XXXX]
+   *  CBOR Type: int
 
-   Name: ecdh_params
-   CBOR Key: -10
-   CBOR Type: Null or array
-   Reference: [RFC-XXXX]
+   *  Reference: [RFC-XXXX]
 
-   Name: det_req
-   CBOR Key: -25
-   CBOR Type: True or False
-   Reference: [RFC-XXXX]
 
-   Name: det_hash_alg
-   CBOR Key: -26
-   CBOR Type: tstr or int
-   Reference: [RFC-XXXX]
 
-   Name: rt
-   CBOR Key: -11
-   CBOR Type: tstr
-   Reference: [RFC-XXXX]
+   *  Name: group_mode
 
-   Name: active
-   CBOR Key: -12
-   CBOR Type: True or False
-   Reference: [RFC-XXXX]
+   *  CBOR Key: -3
 
-   Name: group_name
-   CBOR Key: -13
-   CBOR Type: tstr or #6.<uint>(any)
-   Reference: [RFC-XXXX]
+   *  CBOR Type: True or False
 
-   Name: group_description
-   CBOR Key: -14
-   CBOR Type: Null or tstr
-   Reference: [RFC-XXXX]
+   *  Reference: [RFC-XXXX]
 
-   Name: max_stale_sets
-   CBOR Key: -15
-   CBOR Type: uint
-   Reference: [RFC-XXXX]
 
-   Name: gid_reuse
-   CBOR Key: -16
-   CBOR Type: True or False
-   Reference: [RFC-XXXX]
 
-   Name: app_groups
-   CBOR Key: -17
-   CBOR Type: array
-   Reference: [RFC-XXXX]
+   *  Name: gp_enc_alg
 
-   Name: joining_uri
-   CBOR Key: -18
-   CBOR Type: tstr
-   Reference: [RFC-XXXX]
+   *  CBOR Key: -4
 
-   Name: as_uri
-   CBOR Key: -19
-   CBOR Type: tstr
-   Reference: [RFC-XXXX]
+   *  CBOR Type: Null or tstr or int
 
-   Name: conf_filter
-   CBOR Key: -27
-   CBOR Type: array
-   Reference: [RFC-XXXX]
+   *  Reference: [RFC-XXXX]
 
-   Name: app_groups_diff
-   CBOR Key: -28
-   CBOR Type: array
-   Reference: [RFC-XXXX]
+
+
+   *  Name: sign_alg
+
+   *  CBOR Key: -5
+
+   *  CBOR Type: Null or tstr or int
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: sign_params
+
+   *  CBOR Key: -6
+
+   *  CBOR Type: Null or array
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: pairwise_mode
+
+   *  CBOR Key: -7
+
+   *  CBOR Type: True or False
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: alg
+
+   *  CBOR Key: -8
+
+   *  CBOR Type: Null or tstr or int
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: ecdh_alg
+
+   *  CBOR Key: -9
+
+   *  CBOR Type: Null or tstr or int
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: ecdh_params
+
+   *  CBOR Key: -10
+
+   *  CBOR Type: Null or array
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: det_req
+
+   *  CBOR Key: -25
+
+   *  CBOR Type: True or False
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: det_hash_alg
+
+   *  CBOR Key: -26
+
+   *  CBOR Type: tstr or int
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: rt
+
+   *  CBOR Key: -11
+
+   *  CBOR Type: tstr
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: active
+
+   *  CBOR Key: -12
+
+   *  CBOR Type: True or False
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: group_name
+
+   *  CBOR Key: -13
+
+   *  CBOR Type: tstr or #6.<uint>(any)
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: group_description
+
+   *  CBOR Key: -14
+
+   *  CBOR Type: Null or tstr
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: max_stale_sets
+
+   *  CBOR Key: -15
+
+   *  CBOR Type: uint
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: gid_reuse
+
+   *  CBOR Key: -16
+
+   *  CBOR Type: True or False
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: app_groups
+
+   *  CBOR Key: -17
+
+   *  CBOR Type: array
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: joining_uri
+
+   *  CBOR Key: -18
+
+   *  CBOR Type: tstr
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: as_uri
+
+   *  CBOR Key: -19
+
+   *  CBOR Type: tstr
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: conf_filter
+
+   *  CBOR Key: -27
+
+   *  CBOR Type: array
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Name: app_groups_diff
+
+   *  CBOR Key: -28
+
+   *  CBOR Type: array
+
+   *  Reference: [RFC-XXXX]
 
 10.2.  ACE Groupcomm Errors
 
-   IANA is asked to register the following entry in the "ACE Groupcomm
-   Errors" registry defined in Section 11.12 of
-   [I-D.ietf-ace-key-groupcomm].
+   IANA is asked to register the following entries in the "ACE Groupcomm
+   Errors" registry within the "Authentication and Authorization for
+   Constrained Environments (ACE)" registry group.
 
-   Value: 10
-   Description: Group currently active
-   Reference: [RFC-XXXX]
+   *  Value: 10
 
-   Value: 11
-   Description: Unable to determine a group name
-   Reference: [RFC-XXXX]
+   *  Description: Group currently active
 
-   Value: 12
-   Description: Unsupported group configuration
-   Reference: [RFC-XXXX]
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Value: 11
+
+   *  Description: Unable to determine a group name
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Value: 12
+
+   *  Description: Unsupported group configuration
+
+   *  Reference: [RFC-XXXX]
 
 10.3.  Resource Types
 
-   IANA is asked to enter the following values in the "Resource Type
+   IANA is asked to enter the following entries in the "Resource Type
    (rt=) Link Target Attribute Values" registry within the "Constrained
    Restful Environments (CoRE) Parameters" registry group.
 
-   Value: core.osc.gcoll
-   Description: Group-collection resource of an OSCORE Group Manager
-   Reference: [RFC-XXXX]
+   *  Value: core.osc.gcoll
 
-   Value: core.osc.gconf
-   Description: Group-configuration resource of an OSCORE Group Manager
-   Reference: [RFC-XXXX]
+   *  Description: Group-collection resource of an OSCORE Group Manager
+
+   *  Reference: [RFC-XXXX]
+
+
+
+   *  Value: core.osc.gconf
+
+   *  Description: Group-configuration resource of an OSCORE Group
+      Manager
+
+   *  Reference: [RFC-XXXX]
 
 10.4.  Group OSCORE Admin Permissions
 
