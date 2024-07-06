@@ -5,6 +5,7 @@ title: Admin Interface for the OSCORE Group Manager
 abbrev: Admin Interface for the OSCORE GM
 docname: draft-ietf-ace-oscore-gm-admin-latest
 
+ipr: trust200902
 area: Security
 wg: ACE Working Group
 kw: Internet-Draft
@@ -1855,7 +1856,7 @@ exp = 11
 * Fixes, clarifications and editorial improvements.
 
 # Acknowledgments # {#acknowledgment}
-{:unnumbered}
+{: numbered="no"}
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
