@@ -1697,7 +1697,7 @@ exp = 11
 
 * Recapped concepts of scope and secure communication association.
 
-* Main/optional Admininistrator is presented more as an example.
+* Main/optional Administrator is presented more as an example.
 
 * The use of CBOR Tag 35 is not mentioned anymore.
 
