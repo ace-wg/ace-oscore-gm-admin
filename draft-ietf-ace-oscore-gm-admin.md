@@ -611,7 +611,7 @@ An example of message exchange is shown below.
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: manage
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -640,7 +640,7 @@ The following, additional example considers a request payload that uses both con
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: manage
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -766,7 +766,7 @@ An example of message exchange is shown below.
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: manage
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -784,7 +784,7 @@ An example of message exchange is shown below.
 <= 2.01 Created
    Location-Path: manage
    Location-Path: gp4
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -815,7 +815,7 @@ An example of message exchange is shown below.
    Uri-Path: gp4
 
 <= 2.05 Content
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -869,7 +869,7 @@ An example of message exchange is shown below.
 => 0.05 FETCH
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -883,7 +883,7 @@ An example of message exchange is shown below.
    }
 
 <= 2.05 Content
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -962,7 +962,7 @@ An example of message exchange is shown below.
 => 0.02 POST
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -972,7 +972,7 @@ An example of message exchange is shown below.
    }
 
 <= 2.04 Changed
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -1133,7 +1133,7 @@ An example of message exchange is shown below.
 => 0.06 PATCH
    Uri-Path: manage
    Uri-Path: gp4
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
@@ -1143,7 +1143,7 @@ An example of message exchange is shown below.
    }
 
 <= 2.04 Changed
-   Content-Format: CT_TBD (application/ace-groupcomm+cbor)
+   Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
 
