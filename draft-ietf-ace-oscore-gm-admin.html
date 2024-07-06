@@ -1879,7 +1879,7 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
               <p id="section-5.1.1-2.10.1">'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value <code>false</code> (0xf4), this parameter has as value the CBOR simple value <code>null</code> (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. This parameter can take the same values as the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.1.1-2.10.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.1-2.11">
-              <p id="section-5.1.1-2.11.1">'det_req', encoded as a CBOR simple value. Its value is <code>true</code> (0xf5) if the OSCORE group uses deterministic requests as defined in <span>[<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>, or <code>false</code> (0xf4) otherwise. This parameter <span class="bcp14">MUST NOT</span> be present if the configuration parameter 'group_mode' has value <code>false</code> (0xf4).<a href="#section-5.1.1-2.11.1" class="pilcrow">¶</a></p>
+              <p id="section-5.1.1-2.11.1">'det_req', encoded as a CBOR simple value. Its value is <code>true</code> (0xf5) if the OSCORE group uses deterministic requests as defined in <span>[<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>, or <code>false</code> (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value <code>true</code> (0xf5), and <span class="bcp14">MUST NOT</span> be present otherwise.<a href="#section-5.1.1-2.11.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.1-2.12">
               <p id="section-5.1.1-2.12.1">'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in <span>[<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry <span>[<a href="#COSE.Algorithms" class="cite xref">COSE.Algorithms</a>]</span>.<a href="#section-5.1.1-2.12.1" class="pilcrow">¶</a></p>
@@ -1950,32 +1950,30 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
           <h4 id="name-configuration-parameters-2">
 <a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-configuration-parameters-2" class="section-name selfRef">Configuration Parameters</a>
           </h4>
-<p id="section-5.2.1-1">For each of the configuration parameters listed below, the Group Manager assumes the following pre-configured default value, if none is specified by the Administrator.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-1">For each of the configuration parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2.1-2.1">
-              <p id="section-5.2.1-2.1.1">For 'group_mode', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>true</code> (0xf5).<a href="#section-5.2.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.1.1">'group_mode' - The Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>true</code> (0xf5).<a href="#section-5.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.2">
-              <p id="section-5.2.1-2.2.1">If 'group_mode' has value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> use the default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.2" class="relref">Section 14.2</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> as follows: the value of 'sign_enc_alg' for the parameter 'gp_enc_alg' defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.<a href="#section-5.2.1-2.2.1" class="pilcrow">¶</a></p>
-<p id="section-5.2.1-2.2.2">
-Editor's note: as per the text above, the referred version of <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> still uses 'sign_enc_alg' as parameter name. The next version of <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-5.2.1-2.2.2" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.2.1">'pairwise_mode' - The Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>true</code> (0xf5).<a href="#section-5.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.3">
-              <p id="section-5.2.1-2.3.1">If 'group_mode' has value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>false</code> (0xf4) for the parameter 'det_req'.<a href="#section-5.2.1-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.3.1">'gp_enc_alg', 'sign_alg', and 'sign_params' - If the value of 'group_mode' is determined to be the CBOR simple value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> use the default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.2" class="relref">Section 14.2</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> as follows: the value of 'sign_enc_alg' for the parameter 'gp_enc_alg' defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.<a href="#section-5.2.1-2.3.1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-2.3.2">
+Editor's note: as per the text above, the referred version of <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> still uses 'sign_enc_alg' as parameter name. The next version of <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-5.2.1-2.3.2" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.4">
-              <p id="section-5.2.1-2.4.1">If 'det_req' has value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> use SHA-256 (COSE algorithm encoding: -16) as default value for the parameter 'det_hash_alg'.<a href="#section-5.2.1-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.4.1">'alg', 'ecdh_alg', and 'ecdh_params' - If the value of 'pairwise_mode' is determined to be the CBOR simple value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> use the same default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.3" class="relref">Section 14.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.<a href="#section-5.2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.5">
-              <p id="section-5.2.1-2.5.1">For 'pairwise_mode', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>true</code> (0xf5).<a href="#section-5.2.1-2.5.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.5.1">'det_req' - If the value of both 'group_mode' and 'pairwise_mode' is determined to be the CBOR simple value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> add the parameter 'det_req' to the group configuration and <span class="bcp14">SHOULD</span> set its value to the CBOR simple value <code>false</code> (0xf4).<a href="#section-5.2.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.6">
-              <p id="section-5.2.1-2.6.1">If 'pairwise_mode' has value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> use the same default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.3" class="relref">Section 14.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.<a href="#section-5.2.1-2.6.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5.2.1-2.7">
-              <p id="section-5.2.1-2.7.1">For any other configuration parameter, the Group Manager <span class="bcp14">SHOULD</span> use the same default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.1" class="relref">Section 14.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.2.1-2.7.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.6.1">'det_hash_alg' - If the value of 'det_req' is determined to be the CBOR simple value <code>true</code> (0xf5), the Group Manager <span class="bcp14">SHOULD</span> add the parameter 'det_hash_alg' to the group configuration and <span class="bcp14">SHOULD</span> set its value to -16 (COSE algorithm encoding for SHA-256).<a href="#section-5.2.1-2.6.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
+<p id="section-5.2.1-3">For any other configuration parameter, the Group Manager <span class="bcp14">SHOULD</span> use the same default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.1" class="relref">Section 14.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="status-parameters">
@@ -1983,25 +1981,25 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
           <h4 id="name-status-parameters-2">
 <a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-status-parameters-2" class="section-name selfRef">Status Parameters</a>
           </h4>
-<p id="section-5.2.2-1">For each of the status parameters listed below, the Group Manager assumes the following pre-configured default value, if none is specified by the Administrator.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-1">For each of the status parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2.2-2.1">
-              <p id="section-5.2.2-2.1.1">For 'active', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>false</code> (0xf4).<a href="#section-5.2.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.1.1">'active' - The Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>false</code> (0xf4).<a href="#section-5.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.2">
-              <p id="section-5.2.2-2.2.1">For 'group_description', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>null</code> (0xf6).<a href="#section-5.2.2-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.2.1">'group_description' - The Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>null</code> (0xf6).<a href="#section-5.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.3">
-              <p id="section-5.2.2-2.3.1">For 'max_stale_sets', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR unsigned integer with value 3, consistent with what is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.1" class="relref">Section 14.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.2.2-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.3.1">'max_stale_sets' - The Group Manager <span class="bcp14">SHOULD</span> use the CBOR unsigned integer with value 3, consistent with what is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-14.1" class="relref">Section 14.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.2.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.4">
-              <p id="section-5.2.2-2.4.1">For 'gid_reuse', the Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>false</code> (0xf4).<a href="#section-5.2.2-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.4.1">'gid_reuse' - The Group Manager <span class="bcp14">SHOULD</span> use the CBOR simple value <code>false</code> (0xf4).<a href="#section-5.2.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.5">
-              <p id="section-5.2.2-2.5.1">For 'app_groups', the Group Manager <span class="bcp14">SHOULD</span> use the empty CBOR array.<a href="#section-5.2.2-2.5.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.5.1">'app_groups' - The Group Manager <span class="bcp14">SHOULD</span> use the empty CBOR array.<a href="#section-5.2.2-2.5.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.2-2.6">
-              <p id="section-5.2.2-2.6.1">For 'group_policies', the Group Manager <span class="bcp14">SHOULD</span> use the default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.2.2-2.6.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.2-2.6.1">'group_policies' - The Group Manager <span class="bcp14">SHOULD</span> use the default values defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-5.2.2-2.6.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -3641,22 +3639,25 @@ exp = 11
             <p id="appendix-C.1-1.9.1">Early centralization of what it means to have permissions.<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.10">
-            <p id="appendix-C.1-1.10.1">POST (instead of PUT) for overwriting a group-configuration resource.<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.10.1">Improved presentation of default values for the parameters.<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.11">
-            <p id="appendix-C.1-1.11.1">Example of inconsistent configuration following a PATCH request.<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.11.1">POST (instead of PUT) for overwriting a group-configuration resource.<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.12">
-            <p id="appendix-C.1-1.12.1">Clarified invalid semantics of an iPATCH request.<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.12.1">Example of inconsistent configuration following a PATCH request.<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.13">
-            <p id="appendix-C.1-1.13.1">Repositioned text from security to operational considerations.<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.13.1">Clarified invalid semantics of an iPATCH request.<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.14">
-            <p id="appendix-C.1-1.14.1">Revised appendix with an example of name pattern processing at the AS.<a href="#appendix-C.1-1.14.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.14.1">Repositioned text from security to operational considerations.<a href="#appendix-C.1-1.14.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.15">
-            <p id="appendix-C.1-1.15.1">Minor clarifications and editorial improvements.<a href="#appendix-C.1-1.15.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.15.1">Revised appendix with an example of name pattern processing at the AS.<a href="#appendix-C.1-1.15.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.16">
+            <p id="appendix-C.1-1.16.1">Minor clarifications and editorial improvements.<a href="#appendix-C.1-1.16.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
