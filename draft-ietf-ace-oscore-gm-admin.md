@@ -462,7 +462,7 @@ The CBOR map includes the following configuration parameters.
 
 * 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. This parameter can take the same values as the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or `false` (0xf4) otherwise. This parameter MUST NOT be present if the configuration parameter 'group_mode' has value `false` (0xf4).
+* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and MUST NOT be present otherwise.
 
 * 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.amsuess-core-cachable-oscore}}. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -506,39 +506,39 @@ This ensures that the Group Manager is able to perform the operations defined in
 
 ### Configuration Parameters {#default-values-conf}
 
-For each of the configuration parameters listed below, the Group Manager assumes the following pre-configured default value, if none is specified by the Administrator.
+For each of the configuration parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.
 
-* For 'group_mode', the Group Manager SHOULD use the CBOR simple value `true` (0xf5).
+* 'group_mode' - The Group Manager SHOULD use the CBOR simple value `true` (0xf5).
 
-* If 'group_mode' has value `true` (0xf5), the Group Manager SHOULD use the default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} as follows: the value of 'sign_enc_alg' for the parameter 'gp_enc_alg' defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.
+* 'pairwise_mode' - The Group Manager SHOULD use the CBOR simple value `true` (0xf5).
+
+* 'gp_enc_alg', 'sign_alg', and 'sign_params' - If the value of 'group_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} as follows: the value of 'sign_enc_alg' for the parameter 'gp_enc_alg' defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.
 
    Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
 
-* If 'group_mode' has value `true` (0xf5), the Group Manager SHOULD use the CBOR simple value `false` (0xf4) for the parameter 'det_req'.
+* 'alg', 'ecdh_alg', and 'ecdh_params' - If the value of 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.
 
-* If 'det_req' has value `true` (0xf5), the Group Manager SHOULD use SHA-256 (COSE algorithm encoding: -16) as default value for the parameter 'det_hash_alg'.
+* 'det_req' - If the value of both 'group_mode' and 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the parameter 'det_req' to the group configuration and SHOULD set its value to the CBOR simple value `false` (0xf4).
 
-* For 'pairwise_mode', the Group Manager SHOULD use the CBOR simple value `true` (0xf5).
+* 'det_hash_alg' - If the value of 'det_req' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the parameter 'det_hash_alg' to the group configuration and SHOULD set its value to -16 (COSE algorithm encoding for SHA-256).
 
-* If 'pairwise_mode' has value `true` (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.
-
-* For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
+For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 ### Status Parameters
 
-For each of the status parameters listed below, the Group Manager assumes the following pre-configured default value, if none is specified by the Administrator.
+For each of the status parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.
 
-* For 'active', the Group Manager SHOULD use the CBOR simple value `false` (0xf4).
+* 'active' - The Group Manager SHOULD use the CBOR simple value `false` (0xf4).
 
-* For 'group_description', the Group Manager SHOULD use the CBOR simple value `null` (0xf6).
+* 'group_description' - The Group Manager SHOULD use the CBOR simple value `null` (0xf6).
 
-* For 'max_stale_sets', the Group Manager SHOULD use the CBOR unsigned integer with value 3, consistent with what is defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'max_stale_sets' - The Group Manager SHOULD use the CBOR unsigned integer with value 3, consistent with what is defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* For 'gid_reuse', the Group Manager SHOULD use the CBOR simple value `false` (0xf4).
+* 'gid_reuse' - The Group Manager SHOULD use the CBOR simple value `false` (0xf4).
 
-* For 'app_groups', the Group Manager SHOULD use the empty CBOR array.
+* 'app_groups' - The Group Manager SHOULD use the empty CBOR array.
 
-* For 'group_policies', the Group Manager SHOULD use the default values defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'group_policies' - The Group Manager SHOULD use the default values defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 # Interactions with the Group Manager # {#interactions}
 
@@ -1662,6 +1662,8 @@ exp = 11
 * Clarified requirement for some operations to be atomic.
 
 * Early centralization of what it means to have permissions.
+
+* Improved presentation of default values for the parameters.
 
 * POST (instead of PUT) for overwriting a group-configuration resource.
 
