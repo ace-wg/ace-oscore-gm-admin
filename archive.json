@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-04T01:05:43.245031+00:00",
+  "timestamp": "2024-07-07T01:11:28.418963+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -231,24 +231,26 @@
       "id": "PR_kwDOEOo5985rdscX",
       "title": "Carsten's WG Last Call Comments",
       "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/6",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "marco-tiloca-sics",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-04-02T16:59:03Z",
-      "updatedAt": "2024-04-29T16:45:46Z",
+      "updatedAt": "2024-07-06T09:24:06Z",
       "baseRepository": "ace-wg/ace-oscore-gm-admin",
       "baseRefName": "master",
       "baseRefOid": "155bf3d2a2fa5d0c0a01ec1fcdd5f266162736c4",
       "headRepository": "ace-wg/ace-oscore-gm-admin",
       "headRefName": "carsten-wglc-comments",
       "headRefOid": "d3ce1ccc79d6e300501d9bccee1c7076699f5be5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-07-06T09:24:06Z",
+      "mergedAt": "2024-07-06T09:24:06Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "59d5d3b8b771ce558b46e70d775e368cf4aeeddd"
+      },
       "comments": [],
       "reviews": []
     }
