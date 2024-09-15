@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 7 January 2025                                  P. van der Stok
+Expires: 19 March 2025                                   P. van der Stok
                                                                         
                                                             F. Palombini
                                                              Ericsson AB
-                                                             6 July 2024
+                                                       15 September 2024
 
 
               Admin Interface for the OSCORE Group Manager
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2025.
+   This Internet-Draft will expire on 19 March 2025.
 
 Copyright Notice
 
@@ -3221,9 +3221,9 @@ Table of Contents
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and R. Höglund, "Group Object Security for Constrained
               RESTful Environments (Group OSCORE)", Work in Progress,
-              Internet-Draft, draft-ietf-core-oscore-groupcomm-21, 4
-              March 2024, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-core-oscore-groupcomm-21>.
+              Internet-Draft, draft-ietf-core-oscore-groupcomm-22, 28
+              August 2024, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-core-oscore-groupcomm-22>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -3337,9 +3337,9 @@ Table of Contents
    [I-D.amsuess-core-cachable-oscore]
               Amsüss, C. and M. Tiloca, "Cacheable OSCORE", Work in
               Progress, Internet-Draft, draft-amsuess-core-cachable-
-              oscore-08, 10 January 2024,
+              oscore-09, 8 July 2024,
               <https://datatracker.ietf.org/doc/html/draft-amsuess-core-
-              cachable-oscore-08>.
+              cachable-oscore-09>.
 
    [I-D.ietf-ace-revoked-token-notification]
               Tiloca, M., Palombini, F., Echeverria, S., and G. Lewis,
@@ -3354,17 +3354,17 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-09, 4 March 2024,
+              ietf-cose-cbor-encoded-cert-11, 8 July 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-09>.
+              cbor-encoded-cert-11>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
               OSCORE Groups with the CoRE Resource Directory", Work in
               Progress, Internet-Draft, draft-tiloca-core-oscore-
-              discovery-15, 4 March 2024,
+              discovery-16, 4 September 2024,
               <https://datatracker.ietf.org/doc/html/draft-tiloca-core-
-              oscore-discovery-15>.
+              oscore-discovery-16>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
