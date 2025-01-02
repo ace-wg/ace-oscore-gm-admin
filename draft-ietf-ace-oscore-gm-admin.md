@@ -260,7 +260,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
    - Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.
 
-      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see {{RFC9485}} and {{Section 3.4.5.3 of RFC8949}}).
+      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression in the I-Regexp flavor {{RFC9485}}.
 
       In case the AIF data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
 
@@ -1690,6 +1690,8 @@ exp = 11
 ## Version -12 to -13 ## {#sec-12-13}
 
 * Uri-Path and Location-Path as text strings in examples.
+
+* Removed moot reference to Section 3.4.5.3 of RFC 8949.
 
 * Updated references.
 
