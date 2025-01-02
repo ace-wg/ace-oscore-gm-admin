@@ -1381,161 +1381,161 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group.
 
 * Name: hkdf
-* CBOR Key: -1
+* CBOR Key: -1 (suggested)
 * CBOR Type: tstr or int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: cred_fmt
-* CBOR Key: -2
+* CBOR Key: -2 (suggested)
 * CBOR Type: int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: group_mode
-* CBOR Key: -3
+* CBOR Key: -3 (suggested)
 * CBOR Type: True or False
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: gp_enc_alg
-* CBOR Key: -4
+* CBOR Key: -4 (suggested)
 * CBOR Type: Null or tstr or int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: sign_alg
-* CBOR Key: -5
+* CBOR Key: -5 (suggested)
 * CBOR Type: Null or tstr or int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: sign_params
-* CBOR Key: -6
+* CBOR Key: -6 (suggested)
 * CBOR Type: Null or array
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: pairwise_mode
-* CBOR Key: -7
+* CBOR Key: -7 (suggested)
 * CBOR Type: True or False
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: alg
-* CBOR Key: -8
+* CBOR Key: -8 (suggested)
 * CBOR Type: Null or tstr or int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: ecdh_alg
-* CBOR Key: -9
+* CBOR Key: -9 (suggested)
 * CBOR Type: Null or tstr or int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: ecdh_params
-* CBOR Key: -10
+* CBOR Key: -10 (suggested)
 * CBOR Type: Null or array
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: det_req
-* CBOR Key: -25
+* CBOR Key: -25 (suggested)
 * CBOR Type: True or False
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: det_hash_alg
-* CBOR Key: -26
+* CBOR Key: -26 (suggested)
 * CBOR Type: tstr or int
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: rt
-* CBOR Key: -11
+* CBOR Key: -11 (suggested)
 * CBOR Type: tstr
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: active
-* CBOR Key: -12
+* CBOR Key: -12 (suggested)
 * CBOR Type: True or False
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: group_name
-* CBOR Key: -13
+* CBOR Key: -13 (suggested)
 * CBOR Type: tstr or \#6.\<uint\>(any)
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: group_description
-* CBOR Key: -14
+* CBOR Key: -14 (suggested)
 * CBOR Type: Null or tstr
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: max_stale_sets
-* CBOR Key: -15
+* CBOR Key: -15 (suggested)
 * CBOR Type: uint
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: gid_reuse
-* CBOR Key: -16
+* CBOR Key: -16 (suggested)
 * CBOR Type: True or False
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: app_groups
-* CBOR Key: -17
+* CBOR Key: -17 (suggested)
 * CBOR Type: array
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: joining_uri
-* CBOR Key: -18
+* CBOR Key: -18 (suggested)
 * CBOR Type: tstr
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: as_uri
-* CBOR Key: -19
+* CBOR Key: -19 (suggested)
 * CBOR Type: tstr
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: conf_filter
-* CBOR Key: -27
+* CBOR Key: -27 (suggested)
 * CBOR Type: array
 * Reference: {{&SELF}}
 
 <br>
 
 * Name: app_groups_diff
-* CBOR Key: -28
+* CBOR Key: -28 (suggested)
 * CBOR Type: array
 * Reference: {{&SELF}}
 
@@ -1543,19 +1543,19 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group.
 
-* Value: 10
+* Value: 10 (suggested)
 * Description: Group currently active
 * Reference: {{&SELF}}
 
 <br>
 
-* Value: 11
+* Value: 11 (suggested)
 * Description: Unable to determine a group name
 * Reference: {{&SELF}}
 
 <br>
 
-* Value: 12
+* Value: 12 (suggested)
 * Description: Unsupported group configuration
 * Reference: {{&SELF}}
 
@@ -1694,6 +1694,8 @@ exp = 11
 * Removed moot reference to Section 3.4.5.3 of RFC 8949.
 
 * Fixed example to correctly use the I-Regexp flavor from RFC 9485.
+
+* Highlighted that values to register for IANA are suggested.
 
 * Updated references.
 
