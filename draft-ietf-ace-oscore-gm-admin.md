@@ -50,7 +50,6 @@ author:
 
 normative:
   I-D.ietf-core-oscore-groupcomm:
-  I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-core-groupcomm-bis:
   RFC3986:
@@ -72,6 +71,7 @@ normative:
   RFC9237:
   RFC9277:
   RFC9485:
+  RFC9594:
   COSE.Algorithms:
     author:
       org: IANA
@@ -146,7 +146,7 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
 * The ACE framework for authentication and authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
-* The management of keying material for groups in ACE {{I-D.ietf-ace-key-groupcomm}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager that new members access to join the OSCORE group, and that current members can access to retrieve updated keying material.
+* The management of keying material for groups in ACE {{RFC9594}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager that new members access to join the OSCORE group, and that current members can access to retrieve updated keying material.
 
 Note that the term "endpoint" is used here following its OAuth definition {{RFC6749}}, aimed at denoting resources such as `/token` and `/introspect` at the AS, and `/authz-info` at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
@@ -358,7 +358,7 @@ In order to specify authorization information for Administrators, the format and
 
 If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern (see {{scope-format}}), then all such scope entries MUST adhere to the same pattern semantics. Also, in the 'scope' claim of the Access Token issued by the AS, that semantics MUST be used for all the scope entries that specify a complex pattern.
 
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type application/aif+cbor registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of RFC9594}} for the 'scope' claim of the Access Token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type application/aif+cbor registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of RFC9277}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
 
@@ -444,7 +444,7 @@ The CBOR map includes the following configuration parameters.
 
 * 'cred_fmt', which specifies the Authentication Credential Format used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR integer. This parameter can take the same values as the 'cred\_fmt' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'group_mode', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses the group mode of Group OSCORE (see {{Section 8 of I-D.ietf-core-oscore-groupcomm}}), or `false` (0xf4) otherwise.
+* 'group_mode', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses the group mode of Group OSCORE (see {{Section 7 of I-D.ietf-core-oscore-groupcomm}}), or `false` (0xf4) otherwise.
 
 * 'gp_enc_alg', which is formatted as follows. If the configuration parameter 'group_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'sign_enc_alg' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -454,7 +454,7 @@ The CBOR map includes the following configuration parameters.
 
 * 'sign_params', which is formatted as follows. If the configuration parameter 'group_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the additional parameters for the Signature Algorithm used in the OSCORE group, encoded as a CBOR array. This parameter can take the same values as the 'sign_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'pairwise_mode', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses the pairwise mode of Group OSCORE (see {{Section 9 of I-D.ietf-core-oscore-groupcomm}}), or `false` (0xf4) otherwise.
+* 'pairwise_mode', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses the pairwise mode of Group OSCORE (see {{Section 8 of I-D.ietf-core-oscore-groupcomm}}), or `false` (0xf4) otherwise.
 
 * 'alg', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the AEAD Algorithm used in the OSCORE group to encrypt messages protected with the pairwise mode (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'alg' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -480,19 +480,19 @@ The CBOR map includes the following status parameters.
 
 * 'group_description', which specifies either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value `null` (0xf6) if no description is specified.
 
-* 'ace_groupcomm_profile', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with value "coap_group_oscore_app" defined in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}} encoded as a CBOR integer.
+* 'ace_groupcomm_profile', defined in {{Section 4.3.1 of RFC9594}}, with value "coap_group_oscore_app" registered in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR integer.
 
 * 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores for the group.
 
-* 'exp', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}.
+* 'exp', defined in {{Section 4.3.1 of RFC9594}}.
 
-* 'gid_reuse', encoding the CBOR simple value `true` (0xf5) if, upon rekeying the OSCORE group, the Group Manager can reassign the values of the OSCORE Group ID used as OSCORE ID Context, as per {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}. Otherwise, this parameter encodes the CBOR simple value `false` (0xf4).
+* 'gid_reuse', encoding the CBOR simple value `true` (0xf5) if, upon rekeying the OSCORE group, the Group Manager can reassign the values of the OSCORE Group ID used as OSCORE ID Context, as per {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}. Otherwise, this parameter encodes the CBOR simple value `false` (0xf4).
 
 * 'app_groups', with value a list of names of application groups, encoded as a CBOR array. Each element of the array is a CBOR text string, specifying the name of an application group using the OSCORE group as security group (see {{Section 2.1 of I-D.ietf-core-groupcomm-bis}}).
 
 * 'joining_uri', with value the URI of the group-membership resource for joining the newly created OSCORE group as per {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR text string.
 
-* 'group_policies', defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, and consistent with the format and content defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'group_policies', defined in {{Section 4.3.1 of RFC9594}}, and consistent with the format and content defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 5 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -556,7 +556,7 @@ Upon receiving from the Administrator a POST request to the group-collection res
 
 If there are no matching scope entries specifying the permission PERMISSION, the Group Manager MUST reply with a 4.03 (Forbidden) error response. Further details on TARGETNAME and PERMISSION are defined separately for each operation at the Group Manager.
 
-The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of I-D.ietf-ace-key-groupcomm}}. Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
+The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of RFC9594}}. Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
@@ -677,7 +677,7 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 
 When performing the authorization checks, the Group Manager uses the value of the 'group_name' parameter from the request as TARGETNAME, and "Create" as PERMISSION.
 
-If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
+If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
 Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
 
@@ -697,7 +697,7 @@ If the Group Manager has selected a name GROUPNAME different from the name GROUP
 
 * With reference to the 'scope' claim in the stored Access Token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
 
-If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
+If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
 
 Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
 
@@ -711,11 +711,11 @@ When the group-collection resource is eventually updated to reflect the presence
 
 In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
 
-If the request specifies the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
+If the request specifies the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
 
 For each parameter not specified in the request, the Group Manager refers to the default values specified in {{default-values}}.
 
-After that, the Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
+After that, the Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of RFC9594}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group:
 
@@ -912,7 +912,7 @@ When performing the authorization checks, the Group Manager uses GROUPNAME as TA
 
 If the group-configuration resource targeted by the POST request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
 
-If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
 If no error occurs and the POST request is successfully processed, the Group Manager performs the following actions.
 
@@ -993,7 +993,7 @@ If the value of the status parameter 'active' is changed from `false` (0xf4) to 
 
 After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). Such messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of RFC9594}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). Such messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
 
 * Only the parameters 'gkty', 'key', 'num', 'exp', and 'ace_groupcomm_profile' are present.
 
@@ -1099,7 +1099,7 @@ The error handling for the PATCH/iPATCH request is the same as for the POST requ
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.
 
-If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
@@ -1172,7 +1172,7 @@ When performing the authorization checks, the Group Manager uses GROUPNAME as TA
 
 Otherwise, the Group Manager continues processing the request, which MUST fail it the OSCORE group is active. That is, the DELETE request MUST yield the deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-post}} and {{configuration-resource-patch}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
 
-If, upon receiving the DELETE request, the current value of the status parameter 'active' is `true` (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
+If, upon receiving the DELETE request, the current value of the status parameter 'active' is `true` (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
 
 After a successful processing of the DELETE request, the Group Manager performs the following actions.
 
@@ -1208,13 +1208,13 @@ After having deleted an OSCORE group, the Group Manager can inform the group mem
 
 * The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key', and 'ace_groupcomm_profile' are present, and the 'key' parameter is the empty CBOR map.
 
-* A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 6 ("Group deleted").
+* A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of RFC9594}}). The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 6 ("Group deleted").
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated with that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
 # ACE Groupcomm Parameters {#groupcomm-parameters}
 
-In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, this document defines additional parameters used in the messages exchanged between the Administrator and the Group Manager (see {{interactions}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
+In addition to what is defined in {{Section 8 of RFC9594}}, this document defines additional parameters used in the messages exchanged between the Administrator and the Group Manager (see {{interactions}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
 Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
 
@@ -1269,15 +1269,15 @@ Note that the media type application/ace-groupcomm+cbor MUST be used when these 
 
 The following holds for the Group Manager.
 
-* It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of RFC9594}}.
 
-   This is consistent with what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
+   This is consistent with what is defined in {{Section 8 of RFC9594}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
 * It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
 
 The following holds for an Administrator.
 
-* It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}.
+* It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of RFC9594}}.
 
 * It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the following exceptions.
 
@@ -1287,7 +1287,7 @@ The following holds for an Administrator.
 
 # ACE Groupcomm Error Identifiers {#error-types}
 
-In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, this document defines new values that the Group Manager can use as error identifiers. These are used in error responses with Content-Format application/concise-problem-details+cbor {{RFC9290}}, as values of the 'error-id' field within the Custom Problem Detail entry 'ace-groupcomm-error' (see {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}).
+In addition to what is defined in {{Section 9 of RFC9594}}, this document defines new values that the Group Manager can use as error identifiers. These are used in error responses with Content-Format application/concise-problem-details+cbor {{RFC9290}}, as values of the 'error-id' field within the Custom Problem Detail entry 'ace-groupcomm-error' (see {{Section 4.1.2 of RFC9594}}).
 
 | Value | Description                      | Reference |
 |-------|----------------------------------|-----------|
@@ -1298,7 +1298,7 @@ In addition to what is defined in {{Section 9 of I-D.ietf-ace-key-groupcomm}}, t
 | 12    | Unsupported group configuration  | {{&SELF}} |
 {: #tab-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" align="center"}
 
-If the Administrator supports the problem-details format {{RFC9290}} and the Custom Problem Detail entry 'ace-groupcomm-error' defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, and is able to understand the error specified in the 'error-id' field therein, then the Administrator may use that information to determine what actions to take next. If the Concise Problem Details data item specified in the error response includes the 'detail' entry and the Administrator supports it, such an entry may provide additional context. In particular, the following guidelines apply.
+If the Administrator supports the problem-details format {{RFC9290}} and the Custom Problem Detail entry 'ace-groupcomm-error' defined in {{Section 4.1.2 of RFC9594}}, and is able to understand the error specified in the 'error-id' field therein, then the Administrator may use that information to determine what actions to take next. If the Concise Problem Details data item specified in the error response includes the 'detail' entry and the Administrator supports it, such an entry may provide additional context. In particular, the following guidelines apply.
 
 * In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-post}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
 
@@ -1332,7 +1332,7 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
 Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
 
-The same security considerations from {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with particular reference to the process of rekeying OSCORE groups.
+The same security considerations from {{RFC9594}} and {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with particular reference to the process of rekeying OSCORE groups.
 
 Further security considerations are compiled below.
 
@@ -1356,11 +1356,11 @@ With respect to changing group configurations, the following security considerat
 
 ## Group Manager
 
-In addition to what is discussed in {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
+In addition to what is discussed in {{Section 10.1 of RFC9594}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
 
-Although this is undesirable, it is not worse than the control that the adversary would gain on the group keying material through the compromised Group Manager (see {{Section 10.1 of I-D.ietf-ace-key-groupcomm}}).
+Although this is undesirable, it is not worse than the control that the adversary would gain on the group keying material through the compromised Group Manager (see {{Section 10.1 of RFC9594}}).
 
-Unlike what is defined in {{Section 10.2 of I-D.ietf-ace-key-groupcomm}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for, after having experienced a reboot.
+Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for, after having experienced a reboot.
 
 ## Administrators
 
@@ -1686,6 +1686,12 @@ exp = 11
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -12 to -13 ## {#sec-12-13}
+
+* Updated references.
+
+* Editorial fixes.
 
 ## Version -11 to -12 ## {#sec-11-12}
 
