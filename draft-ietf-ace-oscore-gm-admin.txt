@@ -495,8 +495,8 @@ Table of Contents
          For example, and as typically expected, the data item can be a
          CBOR text string marked with the CBOR tag 21065.  This
          indicates that the group name pattern specified as value of the
-         CBOR text string is a regular expression (see [RFC9485] and
-         Section 3.4.5.3 of [RFC8949]).
+         CBOR text string is a regular expression in the I-Regexp flavor
+         [RFC9485].
 
          In case the AIF data model AIF-OSCORE-GROUPCOMM is used in a
          JSON payload, the semantics information conveyed by the CBOR
@@ -3526,6 +3526,8 @@ Appendix C.  Document Updates
 C.1.  Version -12 to -13
 
    *  Uri-Path and Location-Path as text strings in examples.
+
+   *  Removed moot reference to Section 3.4.5.3 of RFC 8949.
 
    *  Updated references.
 

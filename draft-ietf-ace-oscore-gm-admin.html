@@ -1626,7 +1626,7 @@ The AS <span class="bcp14">MAY</span> issue Access Tokens to the Administrator f
             <li class="normal" id="section-3-10.1.2.3">
               <p id="section-3-10.1.2.3.1">Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.<a href="#section-3-10.1.2.3.1" class="pilcrow">¶</a></p>
 <p id="section-3-10.1.2.3.2">
-For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression (see <span>[<a href="#RFC9485" class="cite xref">RFC9485</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.5.3" class="relref">Section 3.4.5.3</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>).<a href="#section-3-10.1.2.3.2" class="pilcrow">¶</a></p>
+For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression in the I-Regexp flavor <span>[<a href="#RFC9485" class="cite xref">RFC9485</a>]</span>.<a href="#section-3-10.1.2.3.2" class="pilcrow">¶</a></p>
 <p id="section-3-10.1.2.3.3">
 In case the AIF data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.<a href="#section-3-10.1.2.3.3" class="pilcrow">¶</a></p>
 <p id="section-3-10.1.2.3.4">
@@ -3898,10 +3898,13 @@ exp = 11
             <p id="appendix-C.1-1.1.1">Uri-Path and Location-Path as text strings in examples.<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.2">
-            <p id="appendix-C.1-1.2.1">Updated references.<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.2.1">Removed moot reference to Section 3.4.5.3 of RFC 8949.<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.3">
-            <p id="appendix-C.1-1.3.1">Editorial fixes.<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.3.1">Updated references.<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.4">
+            <p id="appendix-C.1-1.4.1">Editorial fixes.<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
