@@ -646,7 +646,7 @@ The following, additional example considers a request payload that uses both con
 
    {
        e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-       e'group_name' : 21065("^gp[0-9]*$"),
+       e'group_name' : 21065("gp[0-9]*"),
            e'active' : true
    }
 
@@ -1692,6 +1692,8 @@ exp = 11
 * Uri-Path and Location-Path as text strings in examples.
 
 * Removed moot reference to Section 3.4.5.3 of RFC 8949.
+
+* Fixed example to correctly use the I-Regexp flavor from RFC 9485.
 
 * Updated references.
 
