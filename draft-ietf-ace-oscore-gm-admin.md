@@ -576,7 +576,7 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.01 GET
-   Uri-Path: manage
+   Uri-Path: "manage"
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
@@ -610,7 +610,7 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.05 FETCH
-   Uri-Path: manage
+   Uri-Path: "manage"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -639,7 +639,7 @@ The following, additional example considers a request payload that uses both con
 
 ~~~~~~~~~~~
 => 0.05 FETCH
-   Uri-Path: manage
+   Uri-Path: "manage"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -765,7 +765,7 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.02 POST
-   Uri-Path: manage
+   Uri-Path: "manage"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -782,8 +782,8 @@ An example of message exchange is shown below.
    }
 
 <= 2.01 Created
-   Location-Path: manage
-   Location-Path: gp4
+   Location-Path: "manage"
+   Location-Path: "gp4"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -811,8 +811,8 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.01 GET
-   Uri-Path: manage
-   Uri-Path: gp4
+   Uri-Path: "manage"
+   Uri-Path: "gp4"
 
 <= 2.05 Content
    Content-Format: 261 (application/ace-groupcomm+cbor)
@@ -867,8 +867,8 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.05 FETCH
-   Uri-Path: manage
-   Uri-Path: gp4
+   Uri-Path: "manage"
+   Uri-Path: "gp4"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -960,8 +960,8 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.02 POST
-   Uri-Path: manage
-   Uri-Path: gp4
+   Uri-Path: "manage"
+   Uri-Path: "gp4"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -1131,8 +1131,8 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.06 PATCH
-   Uri-Path: manage
-   Uri-Path: gp4
+   Uri-Path: "manage"
+   Uri-Path: "gp4"
    Content-Format: 261 (application/ace-groupcomm+cbor)
 
    Payload:
@@ -1196,8 +1196,8 @@ An example of message exchange is shown below.
 
 ~~~~~~~~~~~
 => 0.04 DELETE
-   Uri-Path: manage
-   Uri-Path: gp4
+   Uri-Path: "manage"
+   Uri-Path: "gp4"
 
 <= 2.02 Deleted
 ~~~~~~~~~~~
@@ -1688,6 +1688,8 @@ exp = 11
 {:removeinrfc}
 
 ## Version -12 to -13 ## {#sec-12-13}
+
+* Uri-Path and Location-Path as text strings in examples.
 
 * Updated references.
 
