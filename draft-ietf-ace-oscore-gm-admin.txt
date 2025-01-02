@@ -2819,7 +2819,7 @@ Table of Contents
 
    *  Name: hkdf
 
-   *  CBOR Key: -1
+   *  CBOR Key: -1 (suggested)
 
    *  CBOR Type: tstr or int
 
@@ -2829,7 +2829,7 @@ Table of Contents
 
    *  Name: cred_fmt
 
-   *  CBOR Key: -2
+   *  CBOR Key: -2 (suggested)
 
    *  CBOR Type: int
 
@@ -2839,7 +2839,7 @@ Table of Contents
 
    *  Name: group_mode
 
-   *  CBOR Key: -3
+   *  CBOR Key: -3 (suggested)
 
    *  CBOR Type: True or False
 
@@ -2849,7 +2849,7 @@ Table of Contents
 
    *  Name: gp_enc_alg
 
-   *  CBOR Key: -4
+   *  CBOR Key: -4 (suggested)
 
    *  CBOR Type: Null or tstr or int
 
@@ -2859,7 +2859,7 @@ Table of Contents
 
    *  Name: sign_alg
 
-   *  CBOR Key: -5
+   *  CBOR Key: -5 (suggested)
 
    *  CBOR Type: Null or tstr or int
 
@@ -2869,7 +2869,7 @@ Table of Contents
 
    *  Name: sign_params
 
-   *  CBOR Key: -6
+   *  CBOR Key: -6 (suggested)
 
    *  CBOR Type: Null or array
 
@@ -2879,7 +2879,7 @@ Table of Contents
 
    *  Name: pairwise_mode
 
-   *  CBOR Key: -7
+   *  CBOR Key: -7 (suggested)
 
    *  CBOR Type: True or False
 
@@ -2889,7 +2889,7 @@ Table of Contents
 
    *  Name: alg
 
-   *  CBOR Key: -8
+   *  CBOR Key: -8 (suggested)
 
    *  CBOR Type: Null or tstr or int
 
@@ -2899,7 +2899,7 @@ Table of Contents
 
    *  Name: ecdh_alg
 
-   *  CBOR Key: -9
+   *  CBOR Key: -9 (suggested)
 
    *  CBOR Type: Null or tstr or int
 
@@ -2909,7 +2909,7 @@ Table of Contents
 
    *  Name: ecdh_params
 
-   *  CBOR Key: -10
+   *  CBOR Key: -10 (suggested)
 
    *  CBOR Type: Null or array
 
@@ -2919,7 +2919,7 @@ Table of Contents
 
    *  Name: det_req
 
-   *  CBOR Key: -25
+   *  CBOR Key: -25 (suggested)
 
    *  CBOR Type: True or False
 
@@ -2929,7 +2929,7 @@ Table of Contents
 
    *  Name: det_hash_alg
 
-   *  CBOR Key: -26
+   *  CBOR Key: -26 (suggested)
 
    *  CBOR Type: tstr or int
 
@@ -2939,7 +2939,7 @@ Table of Contents
 
    *  Name: rt
 
-   *  CBOR Key: -11
+   *  CBOR Key: -11 (suggested)
 
    *  CBOR Type: tstr
 
@@ -2949,7 +2949,7 @@ Table of Contents
 
    *  Name: active
 
-   *  CBOR Key: -12
+   *  CBOR Key: -12 (suggested)
 
    *  CBOR Type: True or False
 
@@ -2959,7 +2959,7 @@ Table of Contents
 
    *  Name: group_name
 
-   *  CBOR Key: -13
+   *  CBOR Key: -13 (suggested)
 
    *  CBOR Type: tstr or #6.<uint>(any)
 
@@ -2969,7 +2969,7 @@ Table of Contents
 
    *  Name: group_description
 
-   *  CBOR Key: -14
+   *  CBOR Key: -14 (suggested)
 
    *  CBOR Type: Null or tstr
 
@@ -2979,7 +2979,7 @@ Table of Contents
 
    *  Name: max_stale_sets
 
-   *  CBOR Key: -15
+   *  CBOR Key: -15 (suggested)
 
    *  CBOR Type: uint
 
@@ -2989,7 +2989,7 @@ Table of Contents
 
    *  Name: gid_reuse
 
-   *  CBOR Key: -16
+   *  CBOR Key: -16 (suggested)
 
    *  CBOR Type: True or False
 
@@ -2999,7 +2999,7 @@ Table of Contents
 
    *  Name: app_groups
 
-   *  CBOR Key: -17
+   *  CBOR Key: -17 (suggested)
 
    *  CBOR Type: array
 
@@ -3009,7 +3009,7 @@ Table of Contents
 
    *  Name: joining_uri
 
-   *  CBOR Key: -18
+   *  CBOR Key: -18 (suggested)
 
    *  CBOR Type: tstr
 
@@ -3019,7 +3019,7 @@ Table of Contents
 
    *  Name: as_uri
 
-   *  CBOR Key: -19
+   *  CBOR Key: -19 (suggested)
 
    *  CBOR Type: tstr
 
@@ -3029,7 +3029,7 @@ Table of Contents
 
    *  Name: conf_filter
 
-   *  CBOR Key: -27
+   *  CBOR Key: -27 (suggested)
 
    *  CBOR Type: array
 
@@ -3039,7 +3039,7 @@ Table of Contents
 
    *  Name: app_groups_diff
 
-   *  CBOR Key: -28
+   *  CBOR Key: -28 (suggested)
 
    *  CBOR Type: array
 
@@ -3051,7 +3051,7 @@ Table of Contents
    Errors" registry within the "Authentication and Authorization for
    Constrained Environments (ACE)" registry group.
 
-   *  Value: 10
+   *  Value: 10 (suggested)
 
    *  Description: Group currently active
 
@@ -3059,7 +3059,7 @@ Table of Contents
 
 
 
-   *  Value: 11
+   *  Value: 11 (suggested)
 
    *  Description: Unable to determine a group name
 
@@ -3067,7 +3067,7 @@ Table of Contents
 
 
 
-   *  Value: 12
+   *  Value: 12 (suggested)
 
    *  Description: Unsupported group configuration
 
@@ -3530,6 +3530,8 @@ C.1.  Version -12 to -13
    *  Removed moot reference to Section 3.4.5.3 of RFC 8949.
 
    *  Fixed example to correctly use the I-Regexp flavor from RFC 9485.
+
+   *  Highlighted that values to register for IANA are suggested.
 
    *  Updated references.
 
