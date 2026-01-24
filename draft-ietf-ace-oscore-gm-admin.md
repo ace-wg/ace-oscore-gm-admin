@@ -614,9 +614,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-       e'group_mode' : true,
-       e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-             e'hkdf' : 5 / HMAC-256-256 /
+     e'group_mode': true,
+     e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+           e'hkdf': 5 / HMAC with SHA-256 /
    }
 
 <= 2.05 Content
@@ -643,9 +643,9 @@ The following, additional example considers a request payload that uses both con
    Payload:
 
    {
-       e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-       e'group_name' : 21065("gp[0-9]*"),
-           e'active' : true
+     e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+     e'group_name': 21065("gp[0-9]*"),
+         e'active': true
    }
 
 <= 2.05 Content
@@ -771,14 +771,14 @@ An example of message exchange is shown below.
    Payload:
 
    {
-            e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-                  e'hkdf' : 5 / HMAC-256-256 /,
-         e'pairwise_mode' : true,
-                e'active' : true,
-            e'group_name' : "gp4",
-     e'group_description' : "rooms 1 and 2",
-            e'app_groups' : ["room1", "room2"],
-                e'as_uri' : "coap://as.example.com/token"
+            e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+                  e'hkdf': 5 / HMAC with SHA-256 /,
+         e'pairwise_mode': true,
+                e'active': true,
+            e'group_name': "gp4",
+     e'group_description': "rooms 1 and 2",
+            e'app_groups': ["room1", "room2"],
+                e'as_uri': "coap://as.example.com/token"
    }
 
 <= 2.01 Created
@@ -789,9 +789,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-      e'group_name' : "gp4",
-     e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
-          e'as_uri' : "coap://as.example.com/token"
+      e'group_name': "gp4",
+     e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
+          e'as_uri': "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -820,30 +820,31 @@ An example of message exchange is shown below.
    Payload:
 
    {
-                      e'hkdf' : 5 / HMAC-256-256 /,
-                  e'cred_fmt' : 33 / x5chain /,
-                e'group_mode' : true,
-                e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-                  e'sign_alg' : -8 / EdDSA /,
-               e'sign_params' : [[1], [1, 6]]
+                       e'hkdf': 5 / HMAC with SHA-256 /,
+                   e'cred_fmt': 33 / x5chain /,
+                 e'group_mode': true,
+                 e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+                   e'sign_alg': -8 / EdDSA /,
+                e'sign_params': [[1], [1, 6]]
                                 / [[OKP], [OKP, Ed25519]] /,
-             e'pairwise_mode' : true,
-                       e'alg' : 10 / AES-CCM-16-64-128 /,
-                  e'ecdh_alg' : -27 / ECDH-SS-HKDF-256 /,
-               e'ecdh_params' : [[1], [1, 4]]
+              e'pairwise_mode': true,
+                        e'alg': 10 / AES-CCM-16-64-128 /,
+                   e'ecdh_alg': -27 / ECDH-SS-HKDF-256 /,
+                e'ecdh_params': [[1], [1, 4]]
                                 / [[OKP], [OKP, X25519]] /,
-                   e'det_req' : false,
-                        e'rt' : "core.osc.gconf",
-                    e'active' : true,
-                e'group_name' : "gp4",
-         e'group_description' : "rooms 1 and 2",
-     e'ace_groupcomm_profile' : "coap_group_oscore_app",
-            e'max_stale_sets' : 3,
-                       e'exp' : 1360289224,
-                 e'gid_reuse' : false,
-                e'app_groups' : ["room1", "room2"],
-               e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
-                    e'as_uri' : "coap://as.example.com/token"
+                    e'det_req': false,
+                         e'rt': "core.osc.gconf",
+                     e'active': true,
+                 e'group_name': "gp4",
+          e'group_description': "rooms 1 and 2",
+     / ace_groupcomm_profile /
+                            10: e'coap_group_oscore_app',
+             e'max_stale_sets': 3,
+                    / exp / 11: 1360289224,
+                  e'gid_reuse': false,
+                 e'app_groups': ["room1", "room2"],
+                e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
+                     e'as_uri': "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -876,12 +877,12 @@ An example of message exchange is shown below.
    Payload:
 
    {
-     e'conf_filter' : [e'gp_enc_alg',
-                       e'hkdf',
-                       e'pairwise_mode',
-                       e'active',
-                       e'group_description',
-                       e'app_groups']
+     e'conf_filter': [e'gp_enc_alg',
+                      e'hkdf',
+                      e'pairwise_mode',
+                      e'active',
+                      e'group_description',
+                      e'app_groups']
    }
 
 <= 2.05 Content
@@ -890,12 +891,12 @@ An example of message exchange is shown below.
    Payload:
 
    {
-            e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-                  e'hkdf' : 5 / HMAC-256-256 /,
-         e'pairwise_mode' : true,
-                e'active' : true,
-     e'group_description' : "rooms 1 and 2",
-            e'app_groups' : ["room1", "room2"]
+            e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+                  e'hkdf': 5 / HMAC with SHA-256 /,
+         e'pairwise_mode': true,
+                e'active': true,
+     e'group_description': "rooms 1 and 2",
+            e'app_groups': ["room1", "room2"]
    }
 
 ~~~~~~~~~~~
@@ -969,8 +970,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-       e'gp_enc_alg' : 11 / AES-CCM-16-64-256 /,
-             e'hkdf' : 5 / HMAC-256-256 /
+     e'gp_enc_alg': 11 / AES-CCM-16-64-256 /,
+           e'hkdf': 5 / HMAC with SHA-256 /
    }
 
 <= 2.04 Changed
@@ -979,9 +980,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-      e'group_name' : "gp4",
-     e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
-          e'as_uri' : "coap://as.example.com/token"
+      e'group_name': "gp4",
+     e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
+          e'as_uri': "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -1138,8 +1139,8 @@ An example of message exchange is shown below.
    Payload:
 
    {
-          e'gp_enc_alg' : 10 / AES-CCM-16-64-128 /,
-     e'app_groups_diff' : [["room1"], ["room3", "room4"]]
+          e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+     e'app_groups_diff': [["room1"], ["room3", "room4"]]
    }
 
 <= 2.04 Changed
@@ -1148,9 +1149,9 @@ An example of message exchange is shown below.
    Payload:
 
    {
-      e'group_name' : "gp4",
-     e'joining_uri' : "coap://[2001:db8::ab]/ace-group/gp4/",
-          e'as_uri' : "coap://as.example.com/token"
+      e'group_name': "gp4",
+     e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
+          e'as_uri': "coap://as.example.com/token"
    }
 ~~~~~~~~~~~
 
@@ -1655,6 +1656,7 @@ The AS performs the following steps.
 {:removeinrfc}
 
 ~~~~~~~~~~~~~~~~~~~~ CDDL
+; ACE Groupcomm Parameters
 hkdf = -1
 cred_fmt = -2
 group_mode = -3
@@ -1679,8 +1681,8 @@ as_uri = -19
 conf_filter = -27
 app_groups_diff = -28
 
-ace_groupcomm_profile = 10
-exp = 11
+; ACE Groupcomm Profiles
+coap_group_oscore_app = 1
 ~~~~~~~~~~~~~~~~~~~~
 {: #fig-cddl-model title="CDDL model" artwork-align="left"}
 
