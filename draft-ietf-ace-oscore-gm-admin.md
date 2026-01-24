@@ -1634,15 +1634,15 @@ The AS performs the following steps.
 
    a. The AS initializes an empty set of policy entries, namely S_AUX.
 
-   b. The AS considers all the policy entries related to the Administrator and the Group Manager in question. For each policy entry E_P among those policy entries, and such that the Toid of E_P is different from the Toid of E_S, the AS determines whether every group name matching with the Toid of E_P would also match with the Toid of E_S. If that is the case, then the AS adds E_S to the set S_AUX. The particular way that the AS uses to make a determination is implementation specific.
+   b. The AS considers all the policy entries related to the Administrator and the Group Manager in question. For each policy entry E_P among those policy entries, and such that the Toid of E_P is different from the Toid of E_S, the AS determines whether every group name matching with the Toid of E_P would also match with the Toid of E_S. If that is the case, then the AS adds E_P to the set S_AUX. The particular way that the AS uses to make a determination is implementation specific.
 
-   c. If the set S_AUX is empty, the AS proceeds to the next scope entry, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the policy entry E_P, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
+   c. If the set S_AUX is empty, the AS proceeds to the next scope entry, if any. Otherwise, for each policy entry E_P in S_AUX, the AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the policy entry E_P, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
 
 4. For each scope entry E_S in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
    a. The AS considers all the policy entries related to the Administrator and the Group Manager in question, such that they were never added to the set S_AUX during the previous Steps 2 and 3. For each policy entry E_P among those policy entries, the AS attempts to determine a group name pattern TOID_AUX such that every group name matching with TOID_AUX would also match with the Toid of E_P as well as with the Toid of E_S. The particular way that the AS uses to make a determination is implementation specific.
 
-   b. If the AS could not determine a group name pattern TOID_AUX, then the AS proceeds to the next policy entry E_P, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is TOID_AUX, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
+   b. If the AS could not determine a group name pattern TOID_AUX for a given policy entry E_P, then the AS proceeds to the next policy entry E_P identified at the previous Step 4a, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is TOID_AUX, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
 
 5. If the set S_OUT is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the set S_OUT as the scope entries for the 'scope' claim to include in the access token, as per the format defined in {{scope-format}}.
 
