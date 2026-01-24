@@ -438,7 +438,7 @@ Unless stated otherwise, these parameters are defined in this document and their
 
 The CBOR map includes the following configuration parameters.
 
-* 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. The HKDF Algorithm is specified by the HMAC Algorithm value. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256. This parameter can take the same values as the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'cred_fmt', which specifies the Authentication Credential Format used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR integer. This parameter can take the same values as the 'cred\_fmt' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
