@@ -346,7 +346,7 @@ Having the object identifier ("Toid") specialized as a pattern confers a number 
 
 # Getting Access to the Group Manager # {#getting-access}
 
-All communications between the involved entities rely on the CoAP protocol and MUST be secured.
+All communications between the involved entities (Administrator, Group Manager, Authorization Server) rely on CoAP, and they MUST occur and be secured in accordance with the protocol-specific transport profile of ACE used.
 
 In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof of possession, and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
 
