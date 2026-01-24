@@ -1570,7 +1570,7 @@ IANA is asked to register the following entries in the "Resource Type (rt=) Link
 
 ## Group OSCORE Admin Permissions {#ssec-iana-group-oscore-admin-permissions-registry}
 
-This document establishes the IANA "Group OSCORE Admin Permissions" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+This document establishes the IANA "Group OSCORE Admin Permissions" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
 This registry includes the possible permissions that Administrators can have to perform operations on an OSCORE Group Manager, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about performing administrative operations concerning OSCORE groups under the control of the Group Manager, as specified in {{scope-format}} of {{&SELF}}.
 
@@ -1584,7 +1584,7 @@ The columns of this registry are:
 
 * Description: This field contains a brief description of the permission.
 
-* Reference: This contains a pointer to the public specification for the permission.
+* Reference: This contains a pointer to the public specification for the permission, if one exists.
 
 This registry will be initially populated by the values in {{tab-permission-values}}. The Reference column for all of these entries will be {{&SELF}}.
 
