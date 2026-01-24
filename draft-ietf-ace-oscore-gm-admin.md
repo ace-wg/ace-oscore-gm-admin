@@ -550,13 +550,13 @@ Upon receiving from the Administrator a POST request to the group-collection res
 
 If there are no matching scope entries specifying the permission PERMISSION, the Group Manager MUST reply with a 4.03 (Forbidden) error response. Further details on TARGETNAME and PERMISSION are defined separately for each operation at the Group Manager.
 
-The Content-Format in messages containing a payload is set to application/ace-groupcomm+cbor, defined in {{Section 11.2 of RFC9594}}. Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
+The Content-Format "application/ace-groupcomm+cbor" defined in {{Section 11.2 of RFC9594}} is used in requests containing a payload and in successful responses containing a payload, except for successful responses sent in reply to GET and FETCH requests targeting the group-collection resource (for which the Content-Format "application/link-format" is used). Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
-The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This is returned as a list of links to the corresponding group-configuration resources.
+The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This list is returned as a list of links to the corresponding group-configuration resources. In particular, a successful 2.05 (Content) response MUST have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format {{RFC6690}}.
 
 The Group Manager MUST prepare the list L to include in the response as follows. For each group-configuration resource R:
 
@@ -586,7 +586,7 @@ An example of message exchange is shown below.
 
 This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
 
-The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
+The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This list is returned as a list of links to the corresponding group-configuration resources. In particular, the request MUST have Content-Format set to "application/ace-groupcomm+cbor", while a successful 2.05 (Content) response MUST have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format {{RFC6690}}.
 
 The request payload is a CBOR map, whose entries specify the filter criteria. The possible entries of the CBOR map are specified in {{config-repr}}.
 
@@ -657,7 +657,9 @@ The following, additional example considers a request payload that uses both con
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
-The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME and MAY specify the intended group description together with pieces of information concerning the group configuration.
+The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. In particular, the request MUST have Content-Format set to "application/ace-groupcomm+cbor".
+
+The request MUST specify the intended group name GROUPNAME and MAY specify the intended group description together with pieces of information concerning the group configuration.
 
 The request payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular:
 
@@ -721,7 +723,7 @@ From then on, the Group Manager will rely on the current group configuration to 
 
 * The Group ID, used as OSCORE ID Context, which MUST be unique within the set of OSCORE groups under the Group Manager.
 
-Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response. One or more Location-Path options MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
+Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". One or more Location-Path options MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
 
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the following applies.
 
@@ -799,7 +801,7 @@ The Administrator can send a GET request to the group-configuration resource man
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
-After a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response.
+After a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor".
 
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration parameters and status parameters.
 
@@ -850,13 +852,13 @@ This operation MUST be supported by the Group Manager and MAY be supported by an
 
 The Administrator can send a FETCH request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
-The request payload is a CBOR map, which contains the following field:
+The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and its payload is a CBOR map, which contains the following field:
 
 * 'conf_filter', encoded as a CBOR array. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{config-repr}}), encoded with the corresponding CBOR abbreviation defined in {{groupcomm-parameters}}.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
-After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response.
+After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor".
 
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and it is limited to the configuration parameters and status parameters requested by the Administrator in the FETCH request.
 
@@ -903,7 +905,7 @@ This operation MAY be supported by the Group Manager and an Administrator.
 
 The Administrator can send a POST request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
 
-The payload of the request has the same format of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
+The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and its payload is a CBOR map. In particular, the request payload has the same format as that of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
 The error handling for the POST request is the same as for the POST request defined in {{collection-resource-post}}, with the following difference in terms of authorization checks.
 
@@ -933,7 +935,7 @@ If a new value N' is specified for the 'max_stale_sets' status parameter and N' 
 
 From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
+Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
 If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
@@ -1056,7 +1058,7 @@ This operation MAY be supported by the Group Manager and an Administrator.
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
-The request payload has the same format of the POST request defined in {{configuration-resource-post}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. Within the CBOR map conveyed as request payload, the names of such application groups are specified by the 'app_groups_diff' field, which is encoded as a CBOR array that includes the following two elements.
+The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and its payload is a CBOR map. In particular, the request payload has the same format as that of the POST request defined in {{configuration-resource-post}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. Within the CBOR map conveyed as request payload, the names of such application groups are specified by the 'app_groups_diff' field, which is encoded as a CBOR array that includes the following two elements.
 
 - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
 
@@ -1114,7 +1116,7 @@ Special processing occurs when updating the 'app_groups' status parameter by dif
 
 After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
+Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
 The same considerations as for the POST request defined in {{configuration-resource-post}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{RFC9176}}.
 
