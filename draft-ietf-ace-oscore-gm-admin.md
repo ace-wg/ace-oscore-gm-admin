@@ -81,15 +81,15 @@ normative:
 
 informative:
   I-D.tiloca-core-oscore-discovery:
-  I-D.amsuess-core-cachable-oscore:
+  I-D.ietf-core-cacheable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
-  I-D.ietf-ace-revoked-token-notification:
   RFC5280:
   RFC7959:
   RFC8392:
   RFC9147:
   RFC9176:
   RFC9177:
+  RFC9770:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -356,9 +356,9 @@ In order to specify authorization information for Administrators, the format and
 
 If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern (see {{scope-format}}), then all such scope entries MUST adhere to the same pattern semantics. Also, in the 'scope' claim of the access token issued by the AS, that semantics MUST be used for all the scope entries that specify a complex pattern.
 
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of RFC9594}} for the 'scope' claim of the access token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type "application/aif+cbor" registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of RFC9594}} for the 'scope' claim of the access token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type "application/aif+cbor" registered in {{Section 17.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of RFC9277}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
+Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of RFC9277}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 17.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
 
 This indicates that the binary encoded scope, as conveying the actual access control information, follows the scope semantics of the AIF data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
 
@@ -460,9 +460,9 @@ The CBOR map includes the following configuration parameters.
 
 * 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. This parameter can take the same values as the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and it MUST NOT be present otherwise.
+* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.ietf-core-cacheable-oscore}}, or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and it MUST NOT be present otherwise.
 
-* 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.amsuess-core-cachable-oscore}}. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+* 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.ietf-core-cacheable-oscore}}. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    This parameter MUST NOT be present if the configuration parameter 'det_req' is not present or if it is present with value `false` (0xf4). If the configuration parameter 'det_req' is present with value `true` (0xf5) and 'det_hash_alg' is not present, the choice of the Hash Algorithm to use when producing deterministic requests is left to the Group Manager.
 
@@ -478,7 +478,7 @@ The CBOR map includes the following status parameters.
 
 * 'group_description', which specifies either a human-readable description of the OSCORE group encoded as a CBOR text string, or the CBOR simple value `null` (0xf6) if no description is specified.
 
-* 'ace_groupcomm_profile', defined in {{Section 4.3.1 of RFC9594}}, with value "coap_group_oscore_app" registered in {{Section 16.5 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR integer.
+* 'ace_groupcomm_profile', defined in {{Section 4.3.1 of RFC9594}}, with value "coap_group_oscore_app" registered in {{Section 17.5 of I-D.ietf-ace-key-groupcomm-oscore}}, encoded as a CBOR integer.
 
 * 'max_stale_sets', encoding a CBOR unsigned integer with value strictly greater than 1. With reference to {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}, this parameter specifies N, i.e., the maximum number of sets of stale OSCORE Sender IDs that the Group Manager stores for the group.
 
@@ -1010,7 +1010,7 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
    - 'alg', 'ecdh_alg', and 'ecdh_params', only in case the configuration parameter 'pairwise_mode' in the group-configuration resource has value `true` (0xf5), i.e., the OSCORE group uses the pairwise mode of Group OSCORE.
 
-   - 'det_hash_alg' defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}, only in case the configuration parameter 'det_req' is present with value `true` (0xf5), and specifying the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.amsuess-core-cachable-oscore}}.
+   - 'det_hash_alg' defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}, only in case the configuration parameter 'det_req' is present with value `true` (0xf5), and specifying the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.ietf-core-cacheable-oscore}}.
 
 Alternatively, group members can obtain the information above by accessing the group-membership resource associated with the OSCORE group (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}), optionally by subscribing for updates to such a resource, e.g., by using CoAP Observe {{RFC7641}}.
 
@@ -1369,7 +1369,7 @@ If multiple Administrators are responsible for the same OSCORE group, they are e
 
 A compromised Administrator could collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
 
-When an Administrator is found compromised, the pertaining access tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked access tokens is defined in {{I-D.ietf-ace-revoked-token-notification}}.
+When an Administrator is found compromised, the pertaining access tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked access tokens is defined in {{RFC9770}}.
 
 # IANA Considerations # {#iana}
 
