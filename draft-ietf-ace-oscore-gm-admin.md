@@ -96,7 +96,7 @@ entity:
 
 --- abstract
 
-Group communication for CoAP can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible for handling the joining of new group members, as well as managing and distributing the group keying material. This document defines a RESTful admin interface at the Group Manager that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof-of-possession, and server authentication.
+Group communication for the Constrained Application Protocol (CoAP) can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible for handling the joining of new group members, as well as for managing and distributing the group keying material. This document defines a RESTful admin interface at the Group Manager that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof of possession, and server authentication.
 
 --- middle
 
@@ -114,15 +114,13 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to specify and update their configuration.
 
-Interaction examples are provided in Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR diagnostic notation.
-
-Throughout this document, examples for CBOR data items are expressed in CBOR extended diagnostic notation as defined in {{Section 8 of RFC8949}} and {{Appendix G of RFC8610}} ("diagnostic notation"). Diagnostic notation comments are often used to provide a textual representation of the numeric parameter names and values.
+Interaction examples are provided in the CoRE Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR extended diagnostic notation as defined in {{Section 8 of RFC8949}} and {{Appendix G of RFC8610}} ("diagnostic notation"). Diagnostic notation comments are often used to provide a textual representation of the numeric parameter names and values.
 
 In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': 10} stands for {-13: "gp1", -4: 10}.
 
 Note to RFC Editor: Please delete the paragraph immediately preceding this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
 
-The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof-of-possession, and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
+The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof of possession, and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
 
 ## Terminology ## {#terminology}
 
@@ -130,61 +128,61 @@ The ACE framework is used to ensure authentication and authorization of the Admi
 
 Readers are expected to be familiar with the terms and concepts from the following specifications.
 
-* CDDL {{RFC8610}}, CBOR {{RFC8949}} and COSE {{RFC9052}}{{RFC9053}}.
+* CDDL {{RFC8610}}, CBOR {{RFC8949}}, and COSE {{RFC9052}}{{RFC9053}}.
 
-* The CoAP protocol {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These especially include the following concepts.
+* CoAP {{RFC7252}}, also in group communication scenarios {{I-D.ietf-core-groupcomm-bis}}. These especially include the following concepts.
 
    - "application group", as a set of CoAP nodes that share a common set of resources.
 
-   - "security group", as a set of CoAP nodes that share the same security material, and use it to protect and verify exchanged messages.
+   - "security group", as a set of CoAP nodes that share the same security material and use it to protect and verify exchanged messages.
 
-* The OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} security protocols. These especially include the following concepts.
+* The security protocols OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}. These especially include the following concepts.
 
    - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as a security group for one or many application groups.
 
    - Authentication credential, as the set of information associated with an entity, including that entity's public key and parameters associated with the public key. Examples of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}}, and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}.
 
-* The ACE framework for authentication and authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
+* The ACE framework for Authentication and Authorization {{RFC9200}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
 * The management of keying material for groups in ACE {{RFC9594}} and specifically for OSCORE groups {{I-D.ietf-ace-key-groupcomm-oscore}}. These include the concept of group-membership resource hosted by the Group Manager that new members access to join the OSCORE group, and that current members can access to retrieve updated keying material.
 
-Note that the term "endpoint" is used here following its OAuth definition {{RFC6749}}, aimed at denoting resources such as `/token` and `/introspect` at the AS, and `/authz-info` at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
+Note that the term "endpoint" is used here following its OAuth definition {{RFC6749}}, aimed at denoting resources such as `/token` and `/introspect` at the AS, and `/authz-info` at the RS. The CoAP definition, which is "\[a\]n entity participating in the CoAP protocol" {{RFC7252}}, is not used in this document.
 
 This document also refers to the following terminology:
 
 * Administrator: entity responsible for creating, configuring, and deleting OSCORE groups at a Group Manager.
 
-* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST be consistent with the ABNF rule "segment = *pchar" defined in {{Section 3.3 of RFC3986}}.
+* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager and MUST be consistent with the ABNF rule "segment = *pchar" defined in {{Section 3.3 of RFC3986}}.
 
-* Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups, or to create a new OSCORE group, under that Group Manager.
+* Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups or to create a new OSCORE group, under that Group Manager.
 
    When defining operations at the Group Manager and providing examples, this document uses /manage as the url-path of the group-collection resource; implementations can use a different url-path.
 
-* Group-configuration resource: a resource hosted by the Group Manager, associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.
+* Group-configuration resource: a resource hosted by the Group Manager and associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.
 
-   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this same construct, and can define their own instead.
+   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this same construct and can define their own instead.
 
 * Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
-* Secure communication association: a security association established between any two of the Administrator, the AS, and the Group Manager and used for protecting their message exchanges. For example, depending on the used transport profile of ACE, this can rely on DTLS {{RFC9147}} as per {{RFC9202}}, or on OSCORE {{RFC8613}} as per {{RFC9203}}.
+* Secure communication association: a security association established between any two of the Administrator, the AS, and the Group Manager and used for protecting their message exchanges. For example, depending on the transport profile of ACE used, this can rely on DTLS {{RFC9147}} as per {{RFC9202}} or on OSCORE {{RFC8613}} as per {{RFC9203}}.
 
 # Group Administration # {#overview}
 
 With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
 
-* The Group Manager acts as Resource Server (RS). The Group Manager provides one single group-collection resource, and one group-configuration resource per existing OSCORE group.
+* The Group Manager acts as Resource Server (RS). The Group Manager provides one single group-collection resource and one group-configuration resource per existing OSCORE group.
 
-* The Administrator acts as Client (C), and requests to access the group-collection resource and group-configuration resources at the Group Manager.
+* The Administrator acts as Client (C) and requests to access the group-collection resource and group-configuration resources at the Group Manager.
 
 * The Authorization Server (AS) authorizes the Administrator to access the group-collection resource and group-configuration resources at a Group Manager. Multiple Group Managers can be associated with the same AS.
 
-    The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the Access Token issued to that Administrator (see {{scope-format}} and {{getting-access}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
+    The authorized access for an Administrator can be limited to performing only a subset of operations, according to what is allowed by the authorization information in the access token issued to that Administrator (see {{scope-format}} and {{getting-access}}). The AS can authorize multiple Administrators to access the group-collection resource and the (same) group-configuration resources at the Group Manager.
 
-    The AS MAY issue Access Tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an Access Token can specify authorization information for joining OSCORE groups at a Group Manager (see {{I-D.ietf-ace-key-groupcomm-oscore}}), possibly combined with authorization information for accessing admin resources at the same Group Manager (see Section 3). Also, an AS can of course issue an Access Token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.
+    The AS MAY issue access tokens to the Administrator for other purposes than accessing admin resources of registered Group Managers. For example, an access token can specify authorization information for joining OSCORE groups at a Group Manager (see {{I-D.ietf-ace-key-groupcomm-oscore}}), possibly combined with authorization information for accessing admin resources at the same Group Manager (see {{scope-format}}). Also, an AS can of course issue an access token that specifies authorization information unrelated to OSCORE groups, but instead pertaining to the access of other resources hosted by the Group Manager or other Resource Servers.
 
 ## Managing OSCORE Groups ## {#managing-groups}
 
-{{fig-api}} shows the resources of a Group Manager available to an Administrator.
+{{fig-api}} shows the resources of a Group Manager that are available to an Administrator.
 
 ~~~~~~~~~~~ aasvg
              ___
@@ -220,13 +218,13 @@ The Group Manager exports one group-configuration resource for each of its OSCOR
 
 ## Collection Representation
 
-A collection of group configurations is represented as a Link Format document {{RFC6690}} containing the list of corresponding group-configuration resources.
+A collection of group configurations is represented as a CoRE Link Format document {{RFC6690}} containing the list of corresponding group-configuration resources.
 
-Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, and the link target attribute 'rt' (Resource Type) with value "core.osc.gconf".
+Each group configuration is represented as a link, which specifies the URI of the group-configuration resource as link target, as well as the link target attribute 'rt' (Resource Type) with value "core.osc.gconf".
 
 ## Discovery
 
-The Administrator can discover group-collection resources from a Resource Directory {{RFC9176}} or from .well-known/core, by using the resource type "core.osc.gcoll".
+The Administrator can discover group-collection resources from a Resource Directory {{RFC9176}} or from the resource /.well-known/core hosted by the Group Manager, by using the resource type "core.osc.gcoll".
 
 The Administrator can discover group-configuration resources for the group-collection resource as specified in {{collection-resource-get}} and {{collection-resource-fetch}}.
 
@@ -252,7 +250,7 @@ the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toi
 
 Then, the following applies for each admin scope entry intended to express authorization information for an Administrator, as defined in this document.
 
-* The object identifier ("Toid") is specialized as either of the following, and specifies a group name pattern P for the admin scope entry.
+* The object identifier ("Toid") is specialized as either of the following and specifies a group name pattern P for the admin scope entry.
 
    - Wildcard pattern: "Toid" is specialized as the CBOR simple value `true` (0xf5), specifying the wildcard pattern. That is, any group name matches with this group name pattern.
 
@@ -260,15 +258,15 @@ Then, the following applies for each admin scope entry intended to express autho
 
    - Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.
 
-      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag 21065. This indicates that the group name pattern specified as value of the CBOR text string is a regular expression in the I-Regexp flavor {{RFC9485}}.
+      For example, and as typically expected, the data item can be a CBOR text string marked with the CBOR tag of number 21065. This indicates that the group name pattern specified as the value of the CBOR text string is a regular expression in the I-Regexp flavor {{RFC9485}}.
 
       In case the AIF data model AIF-OSCORE-GROUPCOMM is used in a JSON payload, the semantics information conveyed by the CBOR tag can be equivalently conveyed, for example, in a nested JSON object.
 
       The AS and the Group Manager are expected to have agreed on commonly supported semantics for group name patterns. This can happen, for instance, as part of the registration process of the Group Manager at the AS.
 
-* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has with respect to performing operations on the admin resources at the Group Manager, as pertaining to any OSCORE group whose name matches with the pattern P. The value Q is computed as follows.
+* The permission set ("Tperm") is specialized as a CBOR unsigned integer with value Q. This specifies the permissions that the Administrator has with respect to performing operations on the admin resources at the Group Manager, as pertaining to any OSCORE group whose name matches with the group name pattern P specified by the object identifier ("Toid") of the same admin scope entry. The value Q is computed as follows.
 
-   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry, for which this document defines the entries in {{tab-permission-values}}.
+   - Each permission in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}}, for which this document defines the entries in {{tab-permission-values}}.
 
    - The set of N numbers is converted into the single value Q, by taking two to the power of each numeric identifier X_1, X_2, ..., X_N, and then computing the inclusive OR of the binary representations of all the power values.
 
@@ -332,11 +330,11 @@ Future specifications that define new permissions on the admin resources at the 
 
 When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry MUST include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.
 
-Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's Access Token, as well as on possible filter criteria specified in the request from the Administrator (see {{collection-resource-get}} and {{collection-resource-fetch}}).
+Therefore, an Administrator is always allowed to retrieve a list of existing group configurations. The exact elements included in the returned list are determined by the Group Manager, based on the group name patterns specified in the admin scope entries of the Administrator's access token, as well as on possible filter criteria specified in the request from the Administrator (see {{collection-resource-get}} and {{collection-resource-fetch}}).
 
 Building on the above, the same single scope can include user scope entries as well as admin scope entries, whose specific format is defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and earlier in this section, respectively. The two types of scope entries can be unambiguously distinguished by means of the least significant bit of their permission set "Tperm", which has value 0 for the user scope entries and 1 for the admin scope entries.
 
-The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single Access Token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.
+The coexistence of user scope entries and admin scope entries within the same scope makes it possible to issue a single access token, in case the requesting Client wishes to be a user for some OSCORE groups and at the same time Administrator for some (other) OSCORE groups under the same Group Manager.
 
 ## On Using Group Name Patterns
 
@@ -344,21 +342,21 @@ Having the object identifier ("Toid") specialized as a pattern confers a number 
 
 * When relying on wildcard patterns and complex patterns, the encoded scope can be compact in size while allowing the Administrator to operate on large pools of group names.
 
-* When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know the exact group names for requesting and issuing an Access Token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group, upon its creation (see {{collection-resource-post}}).
+* When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know the exact group names for requesting and issuing an access token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group when creating it (see {{collection-resource-post}}).
 
 # Getting Access to the Group Manager # {#getting-access}
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession, and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
+In particular, communications between the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof of possession, and server authentication. To this end, the AS may explicitly signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{RFC9200}}.
 
-With reference to the AS, communications between the Administrator and the AS (`/token` endpoint) as well as between the Group Manager and the AS (`/introspect` endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the transport profile of ACE in use, and are out of the scope of this document.
+With reference to the AS, communications between the Administrator and the AS (`/token` endpoint) as well as between the Group Manager and the AS (`/introspect` endpoint) can be secured by different means, for instance using DTLS {{RFC9147}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the Administrator and the Group Manager) depend on the transport profile of ACE used, and are out of the scope of this document.
 
-In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the Access Token and the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of RFC9200}}).
+In order to specify authorization information for Administrators, the format and encoding of scope defined in {{scope-format}} of this document MUST be used, for both the 'scope' claim in the access token and the 'scope' parameter in the Authorization Request and Authorization Response exchanged with the AS (see {{Sections 5.8.1 and 5.8.2 of RFC9200}}).
 
-If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern (see {{scope-format}}), then all such scope entries MUST adhere to the same pattern semantics. Also, in the 'scope' claim of the Access Token issued by the AS, that semantics MUST be used for all the scope entries that specify a complex pattern.
+If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern (see {{scope-format}}), then all such scope entries MUST adhere to the same pattern semantics. Also, in the 'scope' claim of the access token issued by the AS, that semantics MUST be used for all the scope entries that specify a complex pattern.
 
-Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of RFC9594}} for the 'scope' claim of the Access Token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type application/aif+cbor registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
+Furthermore, the AS MAY use the extended format of scope defined in {{Section 7 of RFC9594}} for the 'scope' claim of the access token. In such a case, the AS MUST use the CBOR tag with tag number TAG_NUMBER, associated with the CoAP Content-Format CF_ID for the media type "application/aif+cbor" registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with the CBOR tag number computed as TN(ct) in {{Section 4.3 of RFC9277}}, where ct is the ID assigned to the CoAP Content-Format CF_ID registered in {{Section 16.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Then, please replace "CF_ID" with the ID assigned to that CoAP Content-Format. Finally, please delete this paragraph.
 
@@ -366,15 +364,15 @@ This indicates that the binary encoded scope, as conveying the actual access con
 
 In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
 
-1. The Administrator requests an Access Token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, the Administrator sends to the AS an Authorization Request as defined in {{Section 5.8.1 of RFC9200}}.
+1. The Administrator requests an access token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, the Administrator sends to the AS an Authorization Request as defined in {{Section 5.8.1 of RFC9200}}.
 
-   The Administrator will start or continue using a secure communication association with the Group Manager, according to the response from the AS and the transport profile of ACE in use.
+   The Administrator will start or continue using a secure communication association with the Group Manager, according to the response from the AS and the transport profile of ACE used.
 
 2. The AS processes the Authorization Request as defined in {{Section 5.8.2 of RFC9200}}, especially verifying that the Administrator is authorized to obtain the requested permissions, or possibly a subset of those.
 
-   The AS specifies the information on the authorization granted to the Administrator as the value of the 'scope' claim to include in the Access Token, in accordance with the scope format specified in {{scope-format}}. It is implementation specific which particular approach the AS takes to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question. {{sec-as-scope-processing}} provides an example of such an approach that the AS can use.
+   The AS specifies the information on the authorization granted to the Administrator as the value of the 'scope' claim to include in the access token, in accordance with the scope format specified in {{scope-format}}. It is implementation specific which particular approach the AS takes to evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question. {{sec-as-scope-processing}} provides an example of such an approach that the AS can use.
 
-   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of RFC9200}}, when the value included in the Access Token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has, with respect to performing operations at the Group Manager, encoded as specified in {{scope-format}}.
+   The AS MUST include the 'scope' parameter in the Authorization Response defined in {{Section 5.8.2 of RFC9200}}, when the value included in the access token differs from the one specified by the Administrator in the Authorization Request. In such a case, scope specifies the set of permissions that the Administrator actually has been granted with respect to performing operations at the Group Manager, encoded as specified in {{scope-format}}.
 
    If the 'scope' parameter in the Authorization Request includes scope entries whose "Toid" specifies a complex pattern and any of the following conditions holds, then the AS MUST reply with a 4.00 (Bad Request) error response (see {{Section 5.8.3 of RFC9200}}). The 'error_description' parameter carried out in the response payload MUST specify the CBOR value 1 (invalid_scope).
 
@@ -384,23 +382,23 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    Finally, as discussed in {{scope-format}}, the authorization information included in the Authorization Request or specified by the AS might also include permissions for the same Client as a user of an OSCORE group, i.e., as an actual group member or an external signature verifier. As per {{scope-format}}, such authorization information is expressed by "user scope entries", whose format and processing is specified in {{I-D.ietf-ace-key-groupcomm-oscore}}.
 
-3. The Administrator transfers authentication and authorization information to the Group Manager by posting the obtained Access Token, according to the used profile of ACE, such as {{RFC9202}} and {{RFC9203}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
+3. The Administrator transfers authentication and authorization information to the Group Manager through the uploading of the access token, according to the profile of ACE used, such as {{RFC9202}} and {{RFC9203}}. After that, the Administrator must have a secure communication association established with the Group Manager, before performing any administrative operation on that Group Manager. Possible ways to provide secure communication are DTLS {{RFC9147}} and OSCORE {{RFC8613}}. The Administrator and the Group Manager maintain the secure association, to support possible future communications.
 
-4. Consistently with what is allowed by the authorization information in the Access Token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, retrieving and changing OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
+4. Consistently with what is allowed by the authorization information in the access token, the Administrator performs administrative operations at the Group Manager, as described in {{interactions}}. These include retrieving a list of existing OSCORE groups, creating new OSCORE groups, retrieving and changing OSCORE group configurations, and removing OSCORE groups. Messages exchanged among the Administrator and the Group Manager are specified in {{interactions}}.
 
-   Upon receiving a request from the Administrator targeting the group-collection resource or a group-configuration resource, the Group Manager MUST check that it is storing a valid Access Token for that Administrator, and that the Access Token includes at least one admin scope entry. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
+   Upon receiving a request from the Administrator targeting the group-collection resource or a group-configuration resource, the Group Manager MUST check that it is storing a valid access token for that Administrator, and that the access token includes at least one admin scope entry. If this is not the case, the Group Manager MUST reply with a 4.01 (Unauthorized) error response.
 
-   If the request targets the group-collection resource for creating a new group with name GROUPNAME or it targets the group-configuration resource associated with an existing group with name GROUPNAME, then the Group Manager MUST check that it is storing a valid Access Token from that Administrator, such that the 'scope' claim specified in the Access Token: i) expresses authorization information through scope entries as defined in {{scope-format}}; and ii) specifically includes a scope entry where:
+   If the request targets the group-collection resource for creating a new group with name GROUPNAME or it targets the group-configuration resource associated with an existing group with name GROUPNAME, then the Group Manager MUST check that it is storing a valid access token for that Administrator, such that the 'scope' claim specified in the access token: i) expresses authorization information through scope entries as defined in {{scope-format}}; and ii) specifically includes a scope entry where:
 
    * The group name GROUPNAME matches with the pattern specified by the "Toid" of the scope entry; and
 
-   * The permission set specified by the "Tperm" of the scope entry allows the Administrator to perform the requested administrative operation on the targeted group-configuration resource.
+   * The permission set specified by the "Tperm" of the scope entry allows the Administrator to perform the requested administrative operation on the targeted resource.
 
    Note that the checks defined above only consider scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}, while the alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered.
 
    Further detailed checks to perform are defined separately for each operation at the Group Manager, when specified in {{interactions}}.
 
-   In case the Group Manager stores a valid Access Token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of RFC9200}}, in which case the Content-Format MUST be set to application/ace+cbor (i.e., ID: 19).
+   In case the Group Manager stores a valid access token but the verifications above fail, the Group Manager MUST reply with a 4.03 (Forbidden) error response. This response MAY be an AS Request Creation Hints, as defined in {{Section 5.3 of RFC9200}}, in which case the Content-Format MUST be set to "application/ace+cbor" (i.e., ID: 19).
 
    If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
 
@@ -412,7 +410,7 @@ For example, in addition to a "main" primary Administrator responsible for an OS
 
 With respect to the main Administrator, such assistant Administrators are expected to have fewer permissions to perform administrative operations related to the OSCORE group at the Group Manager. For example, they may not be authorized to create an OSCORE group, or to delete an OSCORE group and its configuration.
 
-In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new Access Token and to upload it to the Group Manager. If allowed by the used transport profile of ACE, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
+In case the main Administrator of an OSCORE group is dismissed or relinquishes its role, one of the assistant Administrators can be "promoted" and become main Administrator for that OSCORE group. Practically, this requires that the access policies associated with the promoted Administrator are updated accordingly at the Authorization Server. Also, the promoted Administrator has to request from the Authorization Server a new access token that has to be uploaded to the Group Manager. If allowed by the transport profile of ACE used, this process can efficiently enforce a dynamic update of access rights, thus preserving the current secure association between the promoted Administrator and the Group Manager.
 
 If an Administrator is not sure about being the only Administrator responsible for an OSCORE group, then it is RECOMMENDED that the Administrator regularly obtains a recent representation of the group-configuration resource associated with the OSCORE group before overwriting (see {{configuration-resource-post}}), updating (see {{configuration-resource-patch}}), or deleting (see {{configuration-resource-delete}}) the group configuration. This can be achieved in the following ways.
 
@@ -420,7 +418,7 @@ If an Administrator is not sure about being the only Administrator responsible f
 
 * If the group-configuration resource associated with the OSCORE group is Observable, then the Administrator subscribes to that resource by using CoAP Observe {{RFC7641}}. The Observation request is a GET request sent to the group-configuration resource (see {{configuration-resource-get}}). In such a case, the Group Manager will also send a 4.04 (Not Found) response in case another Administrator deletes the group-configuration resource, as a result of deleting the associated OSCORE group and its configuration.
 
-If the Administrator gains knowledge that the group configuration has changed compared to the latest known representation, then the Administrator might hold the execution of writing or deletion operation on the group-configuration resource, and first attempt checking with other Administrators responsible for the same OSCORE group about the changes they have made.
+If the Administrator gains knowledge that the group configuration has changed compared to the latest known representation, then the Administrator might hold the execution of writing or deletion operation on the group-configuration resource, and first attempt checking with other Administrators responsible for the same OSCORE group about the changes that they have made.
 
 In order to avoid race conditions due to possible concurrent updates of the group-configuration resource (i.e., the "lost update" problem), the Group Manager can include the ETag Option in the responses to the GET requests sent to the group-configuration resource (see {{Section 5.10.6 of RFC7252}}). Then, when sending to the Group Manager a request for overwriting or updating the group-configuration resource, the Administrator includes an If-Match Option with value the most recent ETag that the Administrator knows for that resource (see {{Section 5.10.8.1 of RFC7252}}).
 
@@ -462,7 +460,7 @@ The CBOR map includes the following configuration parameters.
 
 * 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. This parameter can take the same values as the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and MUST NOT be present otherwise.
+* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.amsuess-core-cachable-oscore}}, or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and it MUST NOT be present otherwise.
 
 * 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.amsuess-core-cachable-oscore}}. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -494,7 +492,7 @@ The CBOR map includes the following status parameters.
 
 * 'group_policies', defined in {{Section 4.3.1 of RFC9594}}, and consistent with the format and content defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an Access Token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 5 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
+* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string. Candidate group members will have to obtain an access token from that Authorization Server, before starting the joining process with the Group Manager to join the OSCORE group (see {{Sections 5 and 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 ## Default Values {#default-values}
 
@@ -512,15 +510,15 @@ For each of the configuration parameters listed below, the Group Manager uses th
 
 * 'pairwise_mode' - The Group Manager SHOULD use the CBOR simple value `true` (0xf5).
 
-* 'gp_enc_alg', 'sign_alg', and 'sign_params' - If the value of 'group_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} as follows: the value of 'sign_enc_alg' for the parameter 'gp_enc_alg' defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.
+* 'gp_enc_alg', 'sign_alg', and 'sign_params' - If the value of 'group_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} as follows: the value of 'sign_enc_alg' for the 'gp_enc_alg' parameter defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.
 
    Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
 
 * 'alg', 'ecdh_alg', and 'ecdh_params' - If the value of 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.
 
-* 'det_req' - If the value of both 'group_mode' and 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the parameter 'det_req' to the group configuration and SHOULD set its value to the CBOR simple value `false` (0xf4).
+* 'det_req' - If the value of both 'group_mode' and 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the 'det_req' parameter to the group configuration and SHOULD set its value to the CBOR simple value `false` (0xf4).
 
-* 'det_hash_alg' - If the value of 'det_req' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the parameter 'det_hash_alg' to the group configuration and SHOULD set its value to -16 (COSE algorithm encoding for SHA-256).
+* 'det_hash_alg' - If the value of 'det_req' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the 'det_hash_alg' parameter to the group configuration and SHOULD set its value to -16 (COSE algorithm encoding for SHA-256).
 
 For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -544,13 +542,13 @@ For each of the status parameters listed below, the Group Manager uses the follo
 
 This section describes the operations that are possible to perform on the group-collection resource and the group-configuration resources at the Group Manager.
 
-For each operation, it is defined whether that operation is required or optional to support for an Administrator and for the Group Manager. If an Administrator supports an operation, then the Administrator is able to produce and send the request associated with that operation. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support, then the Group Manager MUST respond with a 5.01 (Not Implemented) response.
+For each operation, it is defined whether that operation is required or optional to support for an Administrator and for the Group Manager. If an Administrator supports an operation, then the Administrator is able to produce and send the request associated with that operation. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support, then the Group Manager MUST reply with a 5.01 (Not Implemented) response.
 
-When checking the scope claim of a stored Access Token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
+When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
-Upon receiving from the Administrator a POST request to the group-collection resource or a request to a group-configuration resource, the Group Manager performs the following authorization checks, consistently with what is defined at step 4 of {{getting-access}}.
+Upon receiving from the Administrator a POST request to the group-collection resource or a request to a group-configuration resource, the Group Manager performs the following authorization checks, consistently with what is defined at Step 4 of {{getting-access}}.
 
-* The Group Manager MUST check whether the group name TARGETNAME pertaining to the request matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored Access Token for the Administrator.
+* The Group Manager MUST check whether the group name TARGETNAME pertaining to the request matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored access token for the Administrator.
 
 * In case of a positive match, the Group Manager MUST check whether the permission set in the found scope entry specifies the permission PERMISSION required to perform the requested administrative operation.
 
@@ -568,7 +566,7 @@ The Group Manager MUST prepare the list L to include in the response as follows.
 
 1. The Group Manager considers the group name GROUPNAME of the OSCORE group associated with R.
 
-2. The Group Manager retrieves the stored Access Token for the Administrator. Then, it checks whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the Access Token.
+2. The Group Manager retrieves the stored access token for the Administrator. Then, it checks whether GROUPNAME matches with the group name pattern specified in any scope entry of the 'scope' claim in the access token.
 
 3. The link to the group-configuration resource R is added to the list L only in case of a positive match.
 
@@ -594,11 +592,11 @@ This operation MUST be supported by the Group Manager and MAY be supported by an
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This is returned as a list of links to the corresponding group-configuration resources.
 
-The filter criteria are specified in the request payload as a CBOR map, whose possible entries are specified in {{config-repr}}.
+The request payload is a CBOR map, whose entries specify the filter criteria. The possible entries of the CBOR map are specified in {{config-repr}}.
 
-Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}), with the exception that the parameter 'group_name' (if present) can also be encoded as a tagged CBOR data item, specifying a group name pattern with the semantics signaled by the CBOR tag.
+Entry values are the ones admitted for the corresponding labels in the POST request for creating a group configuration (see {{collection-resource-post}}), with the exception that the 'group_name' parameter (if present) can also be encoded as a tagged CBOR data item, specifying a group name pattern with the semantics signaled by the CBOR tag.
 
-In such a case, the parameter 'group_name' expresses a group name pattern in the same way as a complex pattern Toid does in a scope entry (see Section 3). In particular, the filter criterion is satisfied by any group name that matches with the group name pattern specified by the parameter 'group_name' in the payload of the FETCH request.
+In such a case, the 'group_name' parameter expresses a group name pattern in the same way as a complex pattern Toid does in a scope entry (see {{scope-format}}). In particular, the filter criterion is satisfied by any group name that matches with the group name pattern specified by the 'group_name' parameter in the payload of the FETCH request.
 
 The Group Manager MUST prepare the list L to include in the response as follows.
 
@@ -663,7 +661,7 @@ The following, additional example considers a request payload that uses both con
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
-The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME, and MAY specify the intended group title together with pieces of information concerning the group configuration.
+The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. The request MUST specify the intended group name GROUPNAME and MAY specify the intended group description together with pieces of information concerning the group configuration.
 
 The request payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular:
 
@@ -677,13 +675,15 @@ The request payload is a CBOR map, whose possible entries are specified in {{con
 
 When performing the authorization checks, the Group Manager uses the value of the 'group_name' parameter from the request as TARGETNAME, and "Create" as PERMISSION.
 
-If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
+If the group configuration to be created would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration") and the 'detail' field SHOULD be included in order to provide additional context.
 
-Otherwise, if any of the following occurs, the Group Manager MUST respond with a 4.00 (Bad Request) response.
+Note to RFC Editor: Please make sure that "application/concise-problem-details+cbor" is on one line (no line wrapping), on every occurrence throughout the document. Then, please delete this note.
+
+Otherwise, if any of the following occurs, the Group Manager MUST reply with a 4.00 (Bad Request) response.
 
 * Any of the received parameters is not recognized, or not valid, or not consistent with respect to other related parameters. In particular, the value of the status parameter 'exp' (if present) is not valid if the indicated expiration date is not in the future.
 
-* The Group Manager does not trust or deem acceptable the Authorization Server with URI specified in the 'as_uri' parameter, and has no alternative Authorization Server to consider for the OSCORE group to create.
+* The Group Manager does not trust or deem acceptable the Authorization Server with URI specified in the 'as_uri' parameter, and it has no alternative Authorization Server to consider for the OSCORE group to create.
 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
@@ -691,17 +691,17 @@ If the 'group_name' parameter specifies the group name of an already existing OS
 
 In addition to that, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.
 
-If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME\* indicated in the parameter 'group_name' of the request, then the following conditions MUST hold.
+If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME\* indicated in the 'group_name' parameter of the request, then the following conditions MUST hold.
 
 * The chosen name GROUPNAME is available to assign; and
 
-* With reference to the 'scope' claim in the stored Access Token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
+* With reference to the 'scope' claim in the stored access token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
 
-If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
+If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
 
-Otherwise, the Group Manager creates a new group-configuration resource, accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the name of the OSCORE group as either indicated in the parameter 'group_name' of the request or uniquely assigned by the Group Manager. The group-collection resource is also accordingly updated.
+Otherwise, the Group Manager creates a new group-configuration resource accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the final name given to the OSCORE group, as either the one indicated in the 'group_name' parameter of the request and confirmed by the Group Manager, or the alternative one that has been determined and uniquely assigned by the Group Manager. The group-collection resource is also updated accordingly.
 
-The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters set, the following applies.
+The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters are set, the following applies.
 
 * The group-configuration resource MUST NOT be accessible through other operations.
 
@@ -711,13 +711,13 @@ When the group-collection resource is eventually updated to reflect the presence
 
 In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
 
-If the request specifies the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
+If the request specifies the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
 
 For each parameter not specified in the request, the Group Manager refers to the default values specified in {{default-values}}.
 
 After that, the Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of RFC9594}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information, and assigns them to the newly created OSCORE group:
+From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information and assigns them to the newly created OSCORE group:
 
 * The OSCORE Master Secret.
 
@@ -727,17 +727,17 @@ From then on, the Group Manager will rely on the current group configuration to 
 
 Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response. One or more Location-Path options MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
 
-The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri', from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
-
 The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the following applies.
 
-* 'group_name', which specifies the group name of the OSCORE group. This value can be different from the group name possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
+The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri' from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
-* 'joining_uri', which specifies the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
+* 'group_name', specifying the group name of the OSCORE group. This value can be different from the group name specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
 
-* 'as_uri', which specifies the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and reflects the final choice of the Group Manager as value of the 'as_uri' status parameter for the OSCORE group.
+* 'joining_uri', specifying the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
 
-If the POST request specified the parameter 'gid_reuse' encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST include also the parameter 'gid_reuse' encoding the CBOR simple value `false` (0xf4).
+* 'as_uri', specifying the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'as_uri' status parameter for the OSCORE group.
+
+If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST also include the 'gid_reuse' parameter encoding the CBOR simple value `false` (0xf4).
 
 If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
@@ -745,11 +745,11 @@ The Group Manager can register the link to the group-membership resource with UR
 
 It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
 
-* The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.01 (Created) response.
+* The name of the OSCORE group MUST take the value specified in the 'group_name' parameter from the 2.01 (Created) response.
 
 * The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
 
-* If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.01 (Created) response.
+* If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI specified in the 'as_uri' parameter from the 2.01 (Created) response.
 
 * As to every other information element describing the current group configuration, the following applies.
 
@@ -803,9 +803,9 @@ The Administrator can send a GET request to the group-configuration resource man
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
-Otherwise, after a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration parameters and status parameters.
+After a successful processing of the GET request, the Group Manager replies to the Administrator with a 2.05 (Content) response.
 
-The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}.
+The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the response has as payload the representation of the group configuration as specified in {{config-repr}}. The exact content of the payload reflects the current configuration of the OSCORE group. This includes both configuration parameters and status parameters.
 
 An example of message exchange is shown below.
 
@@ -859,9 +859,11 @@ The request payload is a CBOR map, which contains the following field:
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
-After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response. The response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and is limited to the configuration parameters and status parameters requested by the Administrator in the FETCH request.
+After a successful processing of the FETCH request, the Group Manager replies to the Administrator with a 2.05 (Content) response.
 
-The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}). If the request payload specifies a parameter that is not included in the group configuration, then the response payload MUST NOT include a corresponding parameter.
+The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the response has as payload a partial representation of the group configuration (see {{config-repr}}). The exact content of the payload reflects the current configuration of the OSCORE group, and it is limited to the configuration parameters and status parameters requested by the Administrator in the FETCH request.
+
+The response payload includes the requested configuration parameters and status parameters, and is formatted as in the response payload of a GET request to a group-configuration resource (see {{configuration-resource-get}}). If the request payload specifies a parameter that is not included in the group configuration of the OSCORE group, then the response payload MUST NOT include a corresponding parameter.
 
 An example of message exchange is shown below.
 
@@ -912,15 +914,15 @@ When performing the authorization checks, the Group Manager uses GROUPNAME as TA
 
 If the group-configuration resource targeted by the POST request does not currently exist, then the Group Manager MUST NOT create the resource and MUST reply with a 4.04 (Not Found) error response.
 
-If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration") and the 'detail' field SHOULD be included in order to provide additional context.
 
 If no error occurs and the POST request is successfully processed, the Group Manager performs the following actions.
 
 First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
 
-For each other parameter not specified in the POST request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the parameter 'active' specifying the CBOR simple value `true` (0xf5).
+For each other parameter not specified in the POST request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value `true` (0xf5).
 
-When updating the group-configuration resource, the corresponding group-membership resource is also accordingly updated. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters set, the following applies.
+When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.
 
 * The group-configuration resource MUST NOT be accessible through other operations.
 
@@ -930,23 +932,23 @@ When updating the group-configuration resource, the corresponding group-membersh
 
 When the group-membership resource is eventually updated to reflect the new group configuration, this update MUST NOT be interrupted by other operations performed on the group-membership resource.
 
-If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
+If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and it deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response. The payload of the response has the same format of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST include also those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration, as defined in {{Section 3 of I-D.tiloca-core-oscore-discovery}}.
 
 It is also possible that the Administrator updates the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
 
-* The name of the OSCORE group MUST take the value specified in 'group_name' from the 2.04 (Changed) response.
+* The name of the OSCORE group MUST take the value specified in the 'group_name' parameter from the 2.04 (Changed) response.
 
 * The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
 
-* If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI in 'as_uri' from the 2.04 (Changed) response.
+* If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI specified in the 'as_uri' parameter from the 2.04 (Changed) response.
 
 * As to every other information element describing the current group configuration, the following applies.
 
@@ -985,7 +987,7 @@ An example of message exchange is shown below.
 
 ### Effects on Joining Nodes ### {#sssec-effects-overwrite-joining-nodes}
 
-After having overwritten a group configuration, if the value of the status parameter 'active' is changed from `true` (0xf5) to `false` (0xf4), the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to `true` (0xf5), the Group Manager MUST respond to a Join Request with a 5.03 (Service Unavailable) response, as defined in {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
+After having overwritten a group configuration, if the value of the status parameter 'active' is changed from `true` (0xf5) to `false` (0xf4), the Group Manager MUST stop admitting new members in the OSCORE group. In particular, until the status parameter 'active' is changed back to `true` (0xf5), the Group Manager MUST reply to a Join Request with a 5.03 (Service Unavailable) response, as defined in {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 If the value of the status parameter 'active' is changed from `false` (0xf4) to `true` (0xf5), the Group Manager resumes admitting new members in the OSCORE group, by processing their Join Requests (see {{Section 6.2 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
@@ -993,7 +995,7 @@ If the value of the status parameter 'active' is changed from `false` (0xf4) to 
 
 After having overwritten a group configuration, the Group Manager informs the members of the OSCORE group, over the pairwise secure communication channels established when joining the group (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of RFC9594}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). Such messages sent by the Group Manager to each group member MUST have Content-Format set to application/ace-groupcomm+cbor, and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
+To this end, the Group Manager can individually target the 'control_uri' URI of each group member (see {{Section 4.3.1 of RFC9594}}), if provided by the intended recipient upon joining the OSCORE group (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}). Such messages sent by the Group Manager to each group member MUST have Content-Format set to "application/ace-groupcomm+cbor", and MUST be formatted as the Join Response defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, with the following differences.
 
 * Only the parameters 'gkty', 'key', 'num', 'exp', and 'ace_groupcomm_profile' are present.
 
@@ -1011,7 +1013,7 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
 Alternatively, group members can obtain the information above by accessing the group-membership resource associated with the OSCORE group (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}), optionally by subscribing for updates to such a resource, e.g., by using CoAP Observe {{RFC7641}}.
 
-When receiving such information, each group member uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If any of 'sign_enc_alg', 'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value `null` (0xf6), then the corresponding parameter in the Group OSCORE Security Context becomes unset if it is not already. According to the new parameter values, each group member derives new Sender/Recipient Keys, a new Common IV, and new Pairwise Keys. When doing so, a group member MUST NOT reset the Sender Sequence Number in its Sender Context or reset the Replay Window in its Recipient Contexts.
+When receiving such information, each group member uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If any of 'sign_enc_alg', 'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value `null` (0xf6), then the corresponding parameter in the Group OSCORE Security Context becomes unset if it is not already. According to the new parameter values, each group member derives new Sender/Recipient Keys, a new Common IV, and new Pairwise Keys. When doing so, a group member MUST NOT reset the Sender Sequence Number in its Sender Context or re-initialize the Replay Window in its Recipient Contexts.
 
 Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -1019,19 +1021,19 @@ The following holds when the value of specific parameters is updated.
 
 * If the value of the status parameter 'active' is changed from `true` (0xf5) to `false` (0xf4):
 
-   - The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5). Until then, the Group Manager MUST respond to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   - The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5). Until then, the Group Manager MUST reply to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   - The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5). Until then, the Group Manager MUST respond to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   - The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5). Until then, the Group Manager MUST reply to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value `false` (0xf4)), SHOULD stop communicating in the group.
+* Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value `false` (0xf4)), SHOULD stop communicating with other group members within the group.
 
-   Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value `true` (0xf5) again), can resume communicating in the group.
+   Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value `true` (0xf5) again), can resume communicating with other group members within the group.
 
 * If the value of 'gp_enc_alg' and/or 'alg' is changed, the Group Manager determines the new maximum size NEW_MAX_SIZE that can be used for the OSCORE Sender IDs of the group members, based on the size of the AEAD nonce of such algorithms (see {{Section 2.2 of I-D.ietf-core-oscore-groupcomm}}). In case NEW_MAX_SIZE is strictly smaller than the old, maximum size of the OSCORE Sender IDs used in the OSCORE group, the Group Manager MUST proceed as follows.
 
    * The Group Manager checks if any of the current group members has an OSCORE Sender ID whose size is strictly larger than NEW_MAX_SIZE.
 
-   * If any of such group members is found, the Group Manager MUST evict them from the OSCORE group. That is, the Group Manager MUST terminate their membership and MUST rekey the group in such a way that the new keying material is not provided to those evicted members. This also includes adding their relinquished Sender IDs to the most recent set of stale Sender IDs for the OSCORE group (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}), before rekeying the group. Such evicted group members can rejoin the OSCORE group, thus obtaining the new group keying material together with a new, valid OSCORE Sender ID.
+   * If any such group members are found, the Group Manager MUST evict them from the OSCORE group. That is, the Group Manager MUST terminate their membership and MUST rekey the group in such a way that the new keying material is not provided to those evicted members. This also includes adding their relinquished Sender IDs to the most recent set of stale Sender IDs for the OSCORE group (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}), before rekeying the group. Such evicted group members can rejoin the OSCORE group, thus obtaining the new group keying material together with a new, valid OSCORE Sender ID.
 
 * Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg', and 'alg', MUST either:
 
@@ -1055,7 +1057,7 @@ The following holds when the value of specific parameters is updated.
 
       - Retrieve from the Group Manager the Group Manager's new authentication credential (see {{Section 9.5 of I-D.ietf-ace-key-groupcomm-oscore}}). The new Group Manager's authentication credential is in the indicated format used in the OSCORE group. The new authentication credential as well as the included public key are compatible with the indicated algorithms and parameters.
 
-As discussed above, after the group configuration has been updated, some group members may leave the OSCORE group and rejoin it. Shortly following an update of group configuration, the Group Manager SHOULD prioritize the re-join of such current group members before processing Join Requests from other, new group members.
+As discussed above, after the group configuration has been updated, some group members may leave the OSCORE group and rejoin it. Shortly following an update of the group configuration, the Group Manager SHOULD prioritize the re-join of such current group members before processing Join Requests from other, new group members.
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
@@ -1063,9 +1065,7 @@ This operation MAY be supported by the Group Manager and an Administrator.
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
-The request payload has the same format of the POST request defined in {{configuration-resource-post}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. The names of such application groups are provided as defined below.
-
-The CBOR map in the request payload includes the field 'app_groups_diff'. This field is encoded as a CBOR array including the following two elements.
+The request payload has the same format of the POST request defined in {{configuration-resource-post}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. Within the CBOR map conveyed as request payload, the names of such application groups are specified by the 'app_groups_diff' field, which is encoded as a CBOR array that includes the following two elements.
 
 - The first element is a CBOR array, namely 'app_groups_del'. Each of its elements is a CBOR text string, with value the name of an application group to remove from the 'app_groups' status parameter.
 
@@ -1081,29 +1081,29 @@ The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as
 ~~~~~~~~~~~
 {: #cddl-diff title="CDDL definition of the 'app_groups_diff' field" artwork-align="left"}
 
-The Group Manager MUST respond with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
+The Group Manager MUST reply with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
-The error handling for the PATCH/iPATCH request is the same as for the POST request defined in {{configuration-resource-post}}, with the following additions.
+The error handling for the PATCH/iPATCH request is the same as that for the POST request defined in {{configuration-resource-post}}, with the following additions.
 
-* The set of group configuration parameters to update MUST NOT be empty. That is, the Group Manager MUST respond with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map.
+* The set of group configuration parameters to update MUST NOT be empty. The Group Manager MUST reply with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map.
 
-* If the Request-URI does not point to an existing group-configuration resource, the Group Manager MUST NOT create a new resource, and MUST respond with a 4.04 (Not Found) response.
+* If the request URI does not identify an existing group-configuration resource, the Group Manager MUST NOT create a new resource and MUST reply with a 4.04 (Not Found) response.
 
-* When applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST respond with a 4.09 (Conflict) response.
+* If applying the specified updated values would yield an inconsistent group configuration, the Group Manager MUST reply with a 4.09 (Conflict) response.
 
-   As an example, this is the case if the resulting group configuration would include the parameter 'sign_alg' specifying the signature algorithm EdDSA (COSE algorithm encoding: -8) and, at the same time, the parameter 'sign_params' specifying EC2 as COSE key type and P-256 as COSE elliptic curve (i.e., as the CBOR array `[[2], [2, 1]]`).
+   As an example, this is the case if the resulting group configuration would include the 'sign_alg' parameter specifying the signature algorithm EdDSA (COSE algorithm encoding: -8) and, at the same time, the 'sign_params' parameter specifying EC2 as COSE key type and P-256 as COSE elliptic curve (i.e., as the CBOR array `[[2], [2, 1]]`).
 
-   The response MAY include the current representation of the group configuration resource, like when responding to a GET request as defined in {{configuration-resource-get}}. Otherwise, the response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
+   The 4.09 (Conflict) response MAY include the current representation of the group configuration resource, like when replying with a 2.05 (Content) response to a GET request as defined in {{configuration-resource-get}}. Otherwise, the 4.09 (Conflict) response SHOULD include a diagnostic payload with additional information for the Administrator to recognize the source of the conflict.
 
-* When the request uses specifically the iPATCH method, the Group Manager MUST respond with a 4.00 (Bad Request) response, in case the CBOR map includes the parameter 'app_groups_diff' and the name of an application group is specified both in the 'app_groups_del' and 'app_groups_add' inner arrays.
+* When the request uses specifically the iPATCH method, the Group Manager MUST reply with a 4.00 (Bad Request) response, in case the CBOR map conveyed as request payload includes the 'app_groups_diff' parameter and the name of an application group is specified both in the 'app_groups_del' and 'app_groups_add' inner arrays.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.
 
-If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST respond with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration"), and the 'detail' field SHOULD be included in order to provide additional context.
+If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration") and the 'detail' field SHOULD be included in order to provide additional context.
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also accordingly updated.
+First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also updated accordingly.
 
 The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic. That is, the same as defined in {{configuration-resource-post}} when atomically overwriting a group-configuration resource applies.
 
@@ -1172,13 +1172,13 @@ When performing the authorization checks, the Group Manager uses GROUPNAME as TA
 
 Otherwise, the Group Manager continues processing the request, which MUST fail it the OSCORE group is active. That is, the DELETE request MUST yield the deletion of the OSCORE group only if the corresponding status parameter 'active' has current value `false` (0xf4). The Administrator can ensure that, by first performing an update of the group-configuration resource associated with the OSCORE group (see {{configuration-resource-post}} and {{configuration-resource-patch}}), and setting the corresponding status parameter 'active' to `false` (0xf4).
 
-If, upon receiving the DELETE request, the current value of the status parameter 'active' is `true` (0xf5), the Group Manager MUST respond with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
+If, upon receiving the DELETE request, the current value of the status parameter 'active' is `true` (0xf5), the Group Manager MUST reply with a 4.09 (Conflict) response. The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
 
 After a successful processing of the DELETE request, the Group Manager performs the following actions.
 
 First, the Group Manager deletes the OSCORE group, deallocates both the group-configuration resource as well as the group-membership resource associated with that group, and accordingly updates the group-collection resource.
 
-The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is deleted, the following applies.
+The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails or the group-configuration resource is deleted, the following applies.
 
 * The group-configuration resource MUST NOT be accessible through other operations.
 
@@ -1206,9 +1206,9 @@ An example of message exchange is shown below.
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication association established with that member during its joining process (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key', and 'ace_groupcomm_profile' are present, and the 'key' parameter is the empty CBOR map.
+* The Group Manager sends an individual request message to each group member, targeting the respective resource used to perform the group rekeying process (see {{Section 11.1 of I-D.ietf-ace-key-groupcomm-oscore}}). The Group Manager uses the same format of the Join Response message in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, where only the parameters 'gkty', 'key', and 'ace_groupcomm_profile' are present, and the value of the 'key' parameter encodes the empty CBOR map.
 
-* A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of RFC9594}}). The response MUST have Content-Format set to application/concise-problem-details+cbor {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 6 ("Group deleted").
+* A group member may subscribe for updates to the group-membership resource associated with the OSCORE group. In particular, if this relies on CoAP Observe {{RFC7641}}, a group member would receive a 4.04 (Not Found) notification response from the Group Manager, since the group-configuration resource has been deallocated upon deleting the OSCORE group (see {{Section 6.1 of RFC9594}}). The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 6 ("Group deleted").
 
 When being informed about the deletion of the OSCORE group, a group member deletes the OSCORE Security Context that it stores as associated with that group, and possibly deallocates any dedicated control resource intended for the Group Manager that it has for that group.
 
@@ -1216,7 +1216,7 @@ When being informed about the deletion of the OSCORE group, a group member delet
 
 In addition to what is defined in {{Section 8 of RFC9594}}, this document defines additional parameters used in the messages exchanged between the Administrator and the Group Manager (see {{interactions}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
-Note that the media type application/ace-groupcomm+cbor MUST be used when these parameters are transported in the respective message fields.
+Note that the media type "application/ace-groupcomm+cbor" MUST be used when these parameters are transported in the respective message fields.
 
 | Name              | CBOR Key | CBOR Type                | Reference |
 |-------------------|----------|--------------------------|-----------|
@@ -1271,9 +1271,9 @@ The following holds for the Group Manager.
 
 * It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of RFC9594}}.
 
-   This is consistent with what is defined in {{Section 8 of RFC9594}} for the Key Distribution Center, of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
+   This is consistent with what is defined in {{Section 8 of RFC9594}} for the Key Distribution Center (KDC), of which the Group Manager defined in {{I-D.ietf-ace-key-groupcomm-oscore}} is a specific instance.
 
-* It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter, which MUST be supported only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
+* It MUST support all the parameters listed in {{tab-ACE-Groupcomm-Parameters}}, with the exception of the 'app_groups_diff' parameter that MUST be supported only if the Group Manager supports the selective update of a group configuration (see {{configuration-resource-patch}}).
 
 The following holds for an Administrator.
 
@@ -1287,7 +1287,7 @@ The following holds for an Administrator.
 
 # ACE Groupcomm Error Identifiers {#error-types}
 
-In addition to what is defined in {{Section 9 of RFC9594}}, this document defines new values that the Group Manager can use as error identifiers. These are used in error responses with Content-Format application/concise-problem-details+cbor {{RFC9290}}, as values of the 'error-id' field within the Custom Problem Detail entry 'ace-groupcomm-error' (see {{Section 4.1.2 of RFC9594}}).
+In addition to what is defined in {{Section 9 of RFC9594}}, this document defines new values that the Group Manager can use as error identifiers. These are used in error responses with Content-Format "application/concise-problem-details+cbor" {{RFC9290}}, as values of the 'error-id' field within the Custom Problem Detail entry 'ace-groupcomm-error' (see {{Section 4.1.2 of RFC9594}}).
 
 | Value | Description                      | Reference |
 |-------|----------------------------------|-----------|
@@ -1300,7 +1300,7 @@ In addition to what is defined in {{Section 9 of RFC9594}}, this document define
 
 If the Administrator supports the problem-details format {{RFC9290}} and the Custom Problem Detail entry 'ace-groupcomm-error' defined in {{Section 4.1.2 of RFC9594}}, and is able to understand the error specified in the 'error-id' field therein, then the Administrator may use that information to determine what actions to take next. If the Concise Problem Details data item specified in the error response includes the 'detail' entry and the Administrator supports it, such an entry may provide additional context. In particular, the following guidelines apply.
 
-* In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions, and set the group status to inactive first (see {{configuration-resource-post}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
+* In case of error 10, the Administrator should stop sending the DELETE request to the Group Manager (see {{configuration-resource-delete}}), until the group becomes inactive. As per this document, this error is relevant only for the Administrator, if it tries to delete a group without having set its status to inactive first (see {{configuration-resource-delete}}). In such a case, the Administrator should take the expected course of actions and set the group status to inactive first (see {{configuration-resource-post}} and {{configuration-resource-patch}}), before sending a new request of group deletion to the Group Manager.
 
 * In case of error 11, the Administrator has the following options.
 
@@ -1312,15 +1312,15 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
       The Administrator should choose the new group name GROUPNAME to suggest, in such a way that it does not renounce permissions that were granted per the old group name GROUPNAME*. This is the case if the following holds.
 
-      With reference to the 'scope' claim of the Administrator's Access Token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no fewer permissions than PERM*.
+      With reference to the 'scope' claim of the Administrator's access token, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM specifies no fewer permissions than PERM*.
 
-   - The Administrator requests a new Access Token to the Authorization Server, in order to update its access rights, and have a new granted scope whose scope entries specify more and/or different group name patterns than the old Access Token.
+   - The Administrator requests a new access token to the Authorization Server, in order to update its access rights and have a new granted scope, whose scope entries specify more and/or different group name patterns than the old access token.
 
-      After uploading the new Access Token to the Group Manager, the Administrator can send a new POST request to the group-collection resource. When doing so, the Administrator suggests a new group name to the Group Manager, according to the same criteria discussed for the previous option.
+      After uploading the new access token to the Group Manager, the Administrator can send a new POST request to the group-collection resource. When doing so, the Administrator suggests a new group name to the Group Manager, according to the same criteria discussed for the previous option.
 
 * In case of error 12, the Administrator has the following options.
 
-   - If the Administrator has attempted to create a new group configuration (see {{collection-resource-post}}), the Administrator can take into account what the Group Manager specifies in the 'detail' entry of the Concise Problem Details data item {{RFC9290}} specified in the error response, and send a new request to the Group Manager for accordingly creating the group configuration.
+   - If the Administrator has attempted to create a new group configuration (see {{collection-resource-post}}), the Administrator can take into account what the Group Manager specifies in the 'detail' entry of the Concise Problem Details data item {{RFC9290}} specified in the error response, and send a new request to the Group Manager for creating the group configuration accordingly.
 
       This requires that the Administrator finds acceptable to create a group configuration different from the originally intended one.
 
@@ -1330,7 +1330,7 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
 # Security Considerations # {#sec-security-considerations}
 
-Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}}, and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
+Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}} and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
 
 The same security considerations from {{RFC9594}} and {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with particular reference to the process of rekeying OSCORE groups.
 
@@ -1366,9 +1366,9 @@ Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing t
 
 If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group, and how they achieve and maintain such an alignment with each other.
 
-A compromised Administrator may collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
+A compromised Administrator could collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
 
-When an Administrator is found compromised, the pertaining Access Tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked Access Tokens is defined in {{I-D.ietf-ace-revoked-token-notification}}.
+When an Administrator is found compromised, the pertaining access tokens MUST be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked access tokens is defined in {{I-D.ietf-ace-revoked-token-notification}}.
 
 # IANA Considerations # {#iana}
 
@@ -1561,7 +1561,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Errors" re
 
 ## Resource Types # {#iana-rt}
 
-IANA is asked to enter the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
+IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
 * Value: core.osc.gcoll
 * Description: Group-collection resource of an OSCORE Group Manager
@@ -1583,7 +1583,7 @@ The columns of this registry are:
 
 * Name: A value that can be used in documents for easier comprehension, to identify a possible permission that Administrators can perform when interacting with an OSCORE Group Manager.
 
-* Value: The numeric identifier for this permission. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" (see {{Section 4.5 of RFC8126}}).
+* Value: The numeric identifier for this permission. Integer values greater than 65535 are marked as "Private Use". All other values use the registration policy "Expert Review" (see {{Section 4.5 of RFC8126}}).
 
    Note that, in general, a single permission can be associated with multiple different operations that are possible to be performed when interacting with the Group Manager.
 
@@ -1613,7 +1613,7 @@ Expert reviewers should take into consideration the following points:
 
 # Processing of Group Name Patterns at the AS # {#sec-as-scope-processing}
 
-When processing an Authorization Request from an Administrator (see {{getting-access}}), the AS builds the authorization information expressing granted permissions as scope entries, according to the AIF data model AIF-OSCORE-GROUPCOMM and to its extension specified in {{scope-format}}. These scope entries are in turn specified as value of the 'scope' claim to include in the Access Token.
+When processing an Authorization Request from an Administrator (see {{getting-access}}), the AS builds the authorization information expressing granted permissions as scope entries, according to the AIF data model AIF-OSCORE-GROUPCOMM and to its extension specified in {{scope-format}}. These scope entries are in turn specified as the value of the 'scope' claim to include in the access token.
 
 This appendix provides an example of how the AS can evaluate the requested permissions against the access policies pertaining to the Administrator for the Group Manager in question.
 
@@ -1623,7 +1623,7 @@ Also, it is assumed that the AS stores the access policies as a set of "admin po
 
 The AS performs the following steps.
 
-1. The AS initializes three empty sets of scope entries, namely S_OUT.
+1. The AS initializes an empty set of scope entries, namely S_OUT.
 
 2. For each scope entry E_S in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
@@ -1631,7 +1631,7 @@ The AS performs the following steps.
 
    b. The AS considers all the policy entries related to the Administrator and the Group Manager in question. For each policy entry E_P among those policy entries, the AS determines whether every group name matching with the Toid of E_S would also match with the Toid of E_P. If that is the case, then the AS adds E_P to the set S_AUX. The particular way that the AS uses to make a determination is implementation specific.
 
-   c. If the set S_AUX is empty, the AS proceeds with the next scope entry, if any. Otherwise, the AS computes TPERM_AUX as the union of the permission sets associated with the policy entries in the set S_AUX. That is, TPERM_AUX is the inclusive OR of the binary representation of the Tperm values in the policy entries within the set S_AUX.
+   c. If the set S_AUX is empty, the AS proceeds to the next scope entry, if any. Otherwise, the AS computes TPERM_AUX as the union of the permission sets associated with the policy entries in the set S_AUX. That is, TPERM_AUX is the inclusive OR of the binary representations of the Tperm values in the policy entries within the set S_AUX.
 
    d. The AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the scope entry E_S, while its Tperm is the AND of TPERM_AUX with the Tperm in the scope entry E_S.
 
@@ -1641,15 +1641,15 @@ The AS performs the following steps.
 
    b. The AS considers all the policy entries related to the Administrator and the Group Manager in question. For each policy entry E_P among those policy entries, and such that the Toid of E_P is different from the Toid of E_S, the AS determines whether every group name matching with the Toid of E_P would also match with the Toid of E_S. If that is the case, then the AS adds E_S to the set S_AUX. The particular way that the AS uses to make a determination is implementation specific.
 
-   c. If the set S_AUX is empty, the AS proceeds with the next scope entry, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the policy entry E_P, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
+   c. If the set S_AUX is empty, the AS proceeds to the next scope entry, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is the same as in the policy entry E_P, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
 
 4. For each scope entry E_S in the 'scope' parameter of the Authorization Request, the AS performs the following actions.
 
-   a. The AS considers all the policy entries related to the Administrator and the Group Manager in question, such that they were never added to the set S_AUX during the previous steps 2 and 3. For each policy entry E_P among those policy entries, the AS attempts to determine a group name pattern TOID_AUX such that every group name matching with TOID_AUX would also match with the Toid of E_P as well as with the Toid of E_S. The particular way that the AS uses to make a determination is implementation specific.
+   a. The AS considers all the policy entries related to the Administrator and the Group Manager in question, such that they were never added to the set S_AUX during the previous Steps 2 and 3. For each policy entry E_P among those policy entries, the AS attempts to determine a group name pattern TOID_AUX such that every group name matching with TOID_AUX would also match with the Toid of E_P as well as with the Toid of E_S. The particular way that the AS uses to make a determination is implementation specific.
 
-   b. If the AS could not determine a group name pattern TOID_AUX, then the AS proceeds with the next policy entry E_P, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is TOID_AUX, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
+   b. If the AS could not determine a group name pattern TOID_AUX, then the AS proceeds to the next policy entry E_P, if any. Otherwise, the AS adds to the set S_OUT one scope entry, such that its Toid is TOID_AUX, while its Tperm is the AND of the Tperm in the policy entry E_P with the Tperm in the scope entry E_S.
 
-5. If the set S_OUT is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the set S_OUT as the scope entries for the 'scope' claim to include in the Access Token, as per the format defined in {{scope-format}}.
+5. If the set S_OUT is empty, the Authorization Request has not been successfully verified, and the AS returns an error response as per {{Section 5.8.3 of RFC9200}}. Otherwise, the AS uses the scope entries in the set S_OUT as the scope entries for the 'scope' claim to include in the access token, as per the format defined in {{scope-format}}.
 
 # CDDL Model # {#sec-cddl-model}
 {:removeinrfc}
@@ -1737,7 +1737,7 @@ exp = 11
 
 ## Version -10 to -11 ## {#sec-10-11}
 
-* Early mentioned that issued Access Tokens can have other purposes.
+* Early mentioned that issued access tokens can have other purposes.
 
 * Added example of array of scope entries.
 
