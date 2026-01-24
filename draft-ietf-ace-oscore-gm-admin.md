@@ -444,9 +444,7 @@ The CBOR map includes the following configuration parameters.
 
 * 'group_mode', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses the group mode of Group OSCORE (see {{Section 7 of I-D.ietf-core-oscore-groupcomm}}), or `false` (0xf4) otherwise.
 
-* 'gp_enc_alg', which is formatted as follows. If the configuration parameter 'group_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'sign_enc_alg' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
-
-   Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
+* 'gp_enc_alg', which is formatted as follows. If the configuration parameter 'group_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'gp_enc_alg' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'sign_alg', which is formatted as follows. If the configuration parameter 'group_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the Signature Algorithm used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. This parameter can take the same values as the 'sign_alg' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -510,17 +508,15 @@ For each of the configuration parameters listed below, the Group Manager uses th
 
 * 'pairwise_mode' - The Group Manager SHOULD use the CBOR simple value `true` (0xf5).
 
-* 'gp_enc_alg', 'sign_alg', and 'sign_params' - If the value of 'group_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} as follows: the value of 'sign_enc_alg' for the 'gp_enc_alg' parameter defined in this document; the value of 'sign_alg' and 'sign_params' for the corresponding parameters defined in this document.
+* 'gp_enc_alg', 'sign_alg', and 'sign_params' - If the value of 'group_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.2 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'gp_enc_alg', 'sign_alg', and 'sign_params' specified in that document, respectively.
 
-   Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
-
-* 'alg', 'ecdh_alg', and 'ecdh_params' - If the value of 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg', and 'ecdh_params'.
+* 'alg', 'ecdh_alg', and 'ecdh_params' - If the value of 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD use the same default values defined in {{Section 14.3 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameters 'alg', 'ecdh_alg', and 'ecdh_params' specified in that document, respectively.
 
 * 'det_req' - If the value of both 'group_mode' and 'pairwise_mode' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the 'det_req' parameter to the group configuration and SHOULD set its value to the CBOR simple value `false` (0xf4).
 
 * 'det_hash_alg' - If the value of 'det_req' is determined to be the CBOR simple value `true` (0xf5), the Group Manager SHOULD add the 'det_hash_alg' parameter to the group configuration and SHOULD set its value to -16 (COSE algorithm encoding for SHA-256).
 
-For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}}.
+For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameter with the same name specified in that document.
 
 ### Status Parameters
 
@@ -1004,9 +1000,7 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
    - 'hkdf' and 'cred_fmt'.
 
-   - 'sign_enc_alg', 'sign_alg', and 'sign_params', only in case the configuration parameter 'group_mode' in the group-configuration resource has value `true` (0xf5), i.e., the OSCORE group uses the group mode of Group OSCORE.
-
-      Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'gp_enc_alg', 'sign_alg', and 'sign_params', only in case the configuration parameter 'group_mode' in the group-configuration resource has value `true` (0xf5), i.e., the OSCORE group uses the group mode of Group OSCORE.
 
    - 'alg', 'ecdh_alg', and 'ecdh_params', only in case the configuration parameter 'pairwise_mode' in the group-configuration resource has value `true` (0xf5), i.e., the OSCORE group uses the pairwise mode of Group OSCORE.
 
@@ -1014,9 +1008,7 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
 Alternatively, group members can obtain the information above by accessing the group-membership resource associated with the OSCORE group (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}), optionally by subscribing for updates to such a resource, e.g., by using CoAP Observe {{RFC7641}}.
 
-When receiving such information, each group member uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If any of 'sign_enc_alg', 'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value `null` (0xf6), then the corresponding parameter in the Group OSCORE Security Context becomes unset if it is not already. According to the new parameter values, each group member derives new Sender/Recipient Keys, a new Common IV, and new Pairwise Keys. When doing so, a group member MUST NOT reset the Sender Sequence Number in its Sender Context or re-initialize the Replay Window in its Recipient Contexts.
-
-Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
+When receiving such information, each group member uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If any of 'gp_enc_alg', 'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value `null` (0xf6), then the corresponding parameter in the Group OSCORE Security Context becomes unset if it is not already. According to the new parameter values, each group member derives new Sender/Recipient Keys, a new Common IV, and new Pairwise Keys. When doing so, a group member MUST NOT reset the Sender Sequence Number in its Sender Context or re-initialize the Replay Window in its Recipient Contexts.
 
 The following holds when the value of specific parameters is updated.
 
@@ -1036,13 +1028,11 @@ The following holds when the value of specific parameters is updated.
 
    * If any such group members are found, the Group Manager MUST evict them from the OSCORE group. That is, the Group Manager MUST terminate their membership and MUST rekey the group in such a way that the new keying material is not provided to those evicted members. This also includes adding their relinquished Sender IDs to the most recent set of stale Sender IDs for the OSCORE group (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}), before rekeying the group. Such evicted group members can rejoin the OSCORE group, thus obtaining the new group keying material together with a new, valid OSCORE Sender ID.
 
-* Every group member, upon receiving updated values for 'hkdf', 'sign_enc_alg', and 'alg', MUST either:
+* Every group member, upon receiving updated values for 'hkdf', 'gp_enc_alg', and 'alg', MUST either:
 
    - Leave the OSCORE group (see {{Section 9.11 of I-D.ietf-ace-key-groupcomm-oscore}}), e.g., if not supporting the indicated new algorithms; or
 
    - Remain in the OSCORE group and use the Group OSCORE Security Context after having updated it as defined above.
-
-   Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, as already done for this document and consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
 
 * Every group member, upon receiving updated values for 'cred_fmt', 'sign_alg', 'sign_params', 'ecdh_alg', and 'ecdh_params' MUST either:
 
