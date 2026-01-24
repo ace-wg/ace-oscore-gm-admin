@@ -550,7 +550,7 @@ Upon receiving from the Administrator a POST request to the group-collection res
 
 If there are no matching scope entries specifying the permission PERMISSION, the Group Manager MUST reply with a 4.03 (Forbidden) error response. Further details on TARGETNAME and PERMISSION are defined separately for each operation at the Group Manager.
 
-The Content-Format "application/ace-groupcomm+cbor" defined in {{Section 11.2 of RFC9594}} is used in requests containing a payload and in successful responses containing a payload, except for successful responses sent in reply to GET and FETCH requests targeting the group-collection resource (for which the Content-Format "application/link-format" is used). Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
+The Content-Format "application/ace-groupcomm+cbor" defined in {{Section 11.2 of RFC9594}} is used in requests including a payload and in successful responses including a payload, except for successful responses sent in reply to GET and FETCH requests targeting the group-collection resource (for which the Content-Format "application/link-format" is used). Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
 
 ## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
 
