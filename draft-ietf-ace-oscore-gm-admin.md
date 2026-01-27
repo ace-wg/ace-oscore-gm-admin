@@ -797,7 +797,7 @@ An example of message exchange is shown below.
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
-The Administrator can send a GET request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve the complete current configuration of that group.
+The Administrator can send a GET request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve the complete current configuration of that group.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Read" as PERMISSION.
 
@@ -850,7 +850,7 @@ An example of message exchange is shown below.
 
 This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
 
-The Administrator can send a FETCH request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
+The Administrator can send a FETCH request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
 The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and its payload is a CBOR map, which contains the following field:
 
@@ -903,7 +903,7 @@ An example of message exchange is shown below.
 
 This operation MAY be supported by the Group Manager and an Administrator.
 
-The Administrator can send a POST request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
+The Administrator can send a POST request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
 
 The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and its payload is a CBOR map. In particular, the request payload has the same format as that of the POST request defined in {{collection-resource-post}}, with the exception that the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST NOT be included.
 
@@ -1056,7 +1056,7 @@ As discussed above, after the group configuration has been updated, some group m
 
 This operation MAY be supported by the Group Manager and an Administrator.
 
-The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
+The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
 The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and its payload is a CBOR map. In particular, the request payload has the same format as that of the POST request defined in {{configuration-resource-post}}, with the difference that it MAY also specify names of application groups to be removed from or added to the 'app_groups' status parameter. Within the CBOR map conveyed as request payload, the names of such application groups are specified by the 'app_groups_diff' field, which is encoded as a CBOR array that includes the following two elements.
 
@@ -1159,11 +1159,9 @@ After having selectively updated part of a group configuration, the effects on t
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
-The Administrator can send a DELETE request to the group-configuration resource manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to delete that OSCORE group.
+The Administrator can send a DELETE request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to delete that OSCORE group.
 
 When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Delete" as PERMISSION.
-
-
 
 If the OSCORE group is active, i.e., the current value of the status parameter 'active' is `true` (0xf5), then the request MUST fail and the Group Manager MUST reply with a 4.00 (Bad Request) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 10 ("Group currently active").
 
