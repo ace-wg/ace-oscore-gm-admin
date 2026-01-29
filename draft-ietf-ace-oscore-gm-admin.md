@@ -519,7 +519,7 @@ For each of the configuration parameters listed below, the Group Manager uses th
 
 For any other configuration parameter, the Group Manager SHOULD use the same default values defined in {{Section 14.1 of I-D.ietf-ace-key-groupcomm-oscore}} for the parameter with the same name specified in that document.
 
-### Status Parameters
+### Status Parameters {#default-values-status}
 
 For each of the status parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.
 
@@ -712,7 +712,7 @@ In the newly created group-configuration resource, the value of the status param
 
 If the request specifies the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
 
-For each parameter not specified in the request, the Group Manager refers to the default values specified in {{default-values}}.
+For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}.
 
 After that, the Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of RFC9594}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -738,7 +738,7 @@ The response payload specifies the parameters 'group_name', 'joining_uri', and '
 
 If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST also include the 'gid_reuse' parameter encoding the CBOR simple value `false` (0xf4).
 
-If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
@@ -754,7 +754,7 @@ It is also possible that the Administrator performs the registration in the Reso
 
    - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
 
-   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} or {{default-values-status}} otherwise.
 
 Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.
 
@@ -920,7 +920,7 @@ If no error occurs and the POST request is successfully processed, the Group Man
 
 First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
 
-For each other parameter not specified in the POST request, the Group Manager MUST use default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value `true` (0xf5).
+For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value `true` (0xf5).
 
 When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.
 
@@ -938,7 +938,7 @@ From then on, the Group Manager relies on the latest updated configuration to bu
 
 Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
 If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration, as defined in {{Section 3 of I-D.tiloca-core-oscore-discovery}}.
 
@@ -954,7 +954,7 @@ It is also possible that the Administrator updates the registration in the Resou
 
    - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
 
-   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} otherwise.
+   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} or {{default-values-status}} otherwise.
 
 As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
