@@ -1684,6 +1684,38 @@ coap_group_oscore_app = 1
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
+## Version -13 to -14 ## {#sec-13-14}
+
+* Aligned with draft-ietf-ace-key-groupcomm-oscore, 'sign_enc_alg' from that document is renamed as 'gp_enc_alg'.
+
+* Fixed error response codes in two error response messages.
+
+* Clarifications:
+
+  * Secure communications required as per the transport profile of ACE used.
+
+  * Explicitly mentioned the Content-Format used for each message.
+
+  * Effects of overwriting a group configuration on joining nodes and group members.
+
+  * Improved readability of error handling for the DELETE handler.
+
+  * Intended use of default values for configuration/status parameters.
+
+* Fixed examples: spacing and registered/placeholder codepoints.
+
+* Minor fixes in the IANA considerations:
+
+  - Mentioned the registry group including the new registry.
+
+  - Specifications are not required for Expert Review and one might not exist for a registry entry.
+
+* Fixes in the example algorithm in the appendix.
+
+* Updated references.
+
+* Minor fixes and editorial improvements.
+
 ## Version -12 to -13 ## {#sec-12-13}
 
 * Uri-Path and Location-Path as text strings in examples.
