@@ -64,6 +64,7 @@ normative:
   RFC8949:
   RFC9052:
   RFC9053:
+  RFC9176:
   RFC9200:
   RFC9202:
   RFC9203:
@@ -88,7 +89,6 @@ informative:
   RFC8392:
   RFC6347:
   RFC9147:
-  RFC9176:
   RFC9177:
   RFC9770:
 
