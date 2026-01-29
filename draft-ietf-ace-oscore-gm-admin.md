@@ -459,9 +459,9 @@ The CBOR map includes the following configuration parameters.
 
 * 'ecdh_params', which is formatted as follows. If the configuration parameter 'pairwise_mode' has value `false` (0xf4), this parameter has as value the CBOR simple value `null` (0xf6). Otherwise, this parameter specifies the parameters for the Pairwise Key Agreement Algorithm used in the OSCORE group, encoded as a CBOR array. This parameter can take the same values as the 'ecdh_params' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests as defined in {{I-D.ietf-core-cacheable-oscore}}, or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and it MUST NOT be present otherwise.
+* 'det_req', encoded as a CBOR simple value. Its value is `true` (0xf5) if the OSCORE group uses deterministic requests (see {{I-D.ietf-core-cacheable-oscore}}), or `false` (0xf4) otherwise. This parameter can be present only if both the configuration parameters 'group_mode' and 'pairwise_mode' have value `true` (0xf5), and it MUST NOT be present otherwise.
 
-* 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.ietf-core-cacheable-oscore}}. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+* 'det_hash_alg', encoded as a CBOR integer or text string. If present, this parameter specifies the Hash Algorithm used in the OSCORE group when producing deterministic requests (see {{I-D.ietf-core-cacheable-oscore}}). This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    This parameter MUST NOT be present if the configuration parameter 'det_req' is not present or if it is present with value `false` (0xf4). If the configuration parameter 'det_req' is present with value `true` (0xf5) and 'det_hash_alg' is not present, the choice of the Hash Algorithm to use when producing deterministic requests is left to the Group Manager.
 
@@ -1007,7 +1007,7 @@ To this end, the Group Manager can individually target the 'control_uri' URI of 
 
    - 'alg', 'ecdh_alg', and 'ecdh_params', only in case the configuration parameter 'pairwise_mode' in the group-configuration resource has value `true` (0xf5), i.e., the OSCORE group uses the pairwise mode of Group OSCORE.
 
-   - 'det_hash_alg' defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}, only in case the configuration parameter 'det_req' is present with value `true` (0xf5), and specifying the Hash Algorithm used in the OSCORE group when producing deterministic requests, as defined in {{I-D.ietf-core-cacheable-oscore}}.
+   - 'det_hash_alg' defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}, only in case the configuration parameter 'det_req' is present with value `true` (0xf5), and specifying the Hash Algorithm used in the OSCORE group when producing deterministic requests (see {{I-D.ietf-core-cacheable-oscore}}).
 
 Alternatively, group members can obtain the information above by accessing the group-membership resource associated with the OSCORE group (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}), optionally by subscribing for updates to such a resource, e.g., by using CoAP Observe {{RFC7641}}.
 
