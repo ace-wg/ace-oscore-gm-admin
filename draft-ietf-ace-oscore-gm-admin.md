@@ -740,7 +740,7 @@ If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple
 
 If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
-The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, as defined in {{Section 2 of I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
+The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, e.g., by using the approach described in {{I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
 It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
 
@@ -940,7 +940,7 @@ Then, the Group Manager replies to the Administrator with a 2.04 (Changed) respo
 
 If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
-If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration, as defined in {{Section 3 of I-D.tiloca-core-oscore-discovery}}.
+If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration.
 
 It is also possible that the Administrator updates the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
 
