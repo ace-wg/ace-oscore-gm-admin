@@ -495,9 +495,9 @@ The CBOR map includes the following status parameters.
 
 ## Default Values {#default-values}
 
-This section defines the default values that the Group Manager uses for the configuration and status parameters.
+This section defines the default values that the Group Manager refers to for the configuration and status parameters. In particular, {{default-values-conf}} and {{default-values-status}} define the default values that are RECOMMENDED to use for the configuration and status parameters, respectively.
 
-The Group Manager MAY choose different default values instead of those recommended in this section. A possible reason is to ensure that each of those are consistent with what the Group Manager supports, e.g., in terms of signature algorithm and format of authentication credentials used in the OSCORE group.
+Exceptionally, the Group Manager MAY choose different default values instead of those recommended in {{default-values-conf}} and {{default-values-status}}. A possible reason is to ensure that each of those are consistent with what the Group Manager supports, e.g., in terms of signature algorithm and format of authentication credentials used in the OSCORE group.
 
 This ensures that the Group Manager is able to perform the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}}, as to its interactions with joining nodes and current group members for an OSCORE group (see {{Section 14 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
