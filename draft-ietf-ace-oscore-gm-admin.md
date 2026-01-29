@@ -86,6 +86,7 @@ informative:
   RFC5280:
   RFC7959:
   RFC8392:
+  RFC6347:
   RFC9147:
   RFC9176:
   RFC9177:
@@ -164,7 +165,7 @@ This document also refers to the following terminology:
 
 * Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
-* Secure communication association: a security association established between any two of the Administrator, the AS, and the Group Manager and used for protecting their message exchanges. For example, depending on the transport profile of ACE used, this can rely on DTLS {{RFC9147}} as per {{RFC9202}} or on OSCORE {{RFC8613}} as per {{RFC9203}}.
+* Secure communication association: a security association established between any two of the Administrator, the AS, and the Group Manager and used for protecting their message exchanges. For example, depending on the transport profile of ACE used, this can rely on DTLS {{RFC6347}}{{RFC9147}} as per {{RFC9202}} or on OSCORE {{RFC8613}} as per {{RFC9203}}.
 
 # Group Administration # {#overview}
 
