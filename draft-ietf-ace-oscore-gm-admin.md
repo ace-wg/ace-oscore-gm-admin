@@ -1015,15 +1015,17 @@ When receiving such information, each group member uses it to update the corresp
 
 The following holds when the value of specific parameters is updated.
 
-* If the value of the status parameter 'active' is changed from `true` (0xf5) to `false` (0xf4):
+* If the value of the status parameter 'active' is changed from `true` (0xf5) to `false` (0xf4) and thus the group becomes inactive:
 
-   - The Group Manager MUST stop accepting requests for new individual keying material from current group members (see {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5). Until then, the Group Manager MUST reply to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   - The Group Manager stops accepting requests for new individual keying material from current group members (see {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5) and thus the group becomes active again. Until then, the Group Manager replies to a Key Renewal Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.2 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   - The Group Manager MUST stop accepting updated authentication credentials uploaded by current group members (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5). Until then, the Group Manager MUST reply to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   - The Group Manager stops accepting updated authentication credentials uploaded by current group members (see {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}), until the status parameter 'active' is changed back to `true` (0xf5) and thus the group becomes active again. Until then, the Group Manager replies to an Authentication Credential Update Request with a 5.03 (Service Unavailable) response, as defined in {{Section 9.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value `false` (0xf4)), SHOULD stop communicating with other group members within the group.
+* Every group member, upon learning that the OSCORE group has been deactivated (i.e., 'active' has value `false` (0xf4)), stops sending messages to other group members and stops processing messages from other group members, until the group becomes active again. In the meantime, the group member can still interact with the Group Manager, e.g., in order to check whether the group has become active again.
 
-   Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value `true` (0xf5) again), can resume communicating with other group members within the group.
+   Every group member, upon learning that the OSCORE group has been reactivated (i.e., 'active' has value `true` (0xf5) again), can resume taking part in communications with other group members (i.e., sending messages and processing incoming messages).
+
+   A group member can learn about the current group status of a group with group name GROUPNAME by accessing the /ace-group/GROUPNAME/active resource at the Group Manager, as specified in {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}. Optionally, the group member may subscribe for updates to such a resource, e.g., by using CoAP Observe {{RFC7641}}.
 
 * If the value of 'gp_enc_alg' and/or 'alg' is changed, the Group Manager determines the new maximum size NEW_MAX_SIZE that can be used for the OSCORE Sender IDs of the group members, based on the size of the AEAD nonce of such algorithms (see {{Section 2.2 of I-D.ietf-core-oscore-groupcomm}}). In case NEW_MAX_SIZE is strictly smaller than the old, maximum size of the OSCORE Sender IDs used in the OSCORE group, the Group Manager MUST proceed as follows.
 
