@@ -1364,7 +1364,7 @@ When performing its normal operations, the Group Manager is expected to produce 
 
 * Any event that has resulted in the Group Manager sending an error response, as a reply to a request received at any of the resources exported by the interface specified in this document.
 
-  The logged information contains a description of the error occurred in the context of the present document, together with a description of the event related to the error and relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
+  The logged information contains a description of the error occurred in the context of the interface defined in the present document, together with a description of the event related to the error and relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
 
   Note that, if the error response uses the format problem-details defined in {{RFC9290}}, then the "detail" entry in the response payload is meant to convey the diagnostic description of the error, which is meant to be part of the log entry for this event.
 
@@ -1378,11 +1378,11 @@ When performing its normal operations, the Group Manager is expected to produce 
   - The overwriting or selective update of a group configuration.
   - The deletion of an OSCORE group and of its corresponding group configuration. This results in the deletion of a group-configuration resource and of the corresponding group-membership resource.
 
-  The logged information contains a description of the operation performed in the context of the present application profile, together with relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
+  The logged information contains a description of the operation performed in the context of the interface defined in the present document, together with relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
 
 * For each OSCORE group, the evolution of the corresponding group configuration, i.e., starting from the initial configuration that is established when creating the group, and tracking the result of possible overwriting and selective updates.
 
-  In practice, this can be achieved by readily creating and storing dedicated log entries, or instead by producing those when needed, leveraging the logged events that pertain to the group-configuration resource of the group in question.
+  In practice, this can be achieved by readily creating and storing dedicated log entries, or instead by producing those when needed, leveraging the logged events that pertain to the group-configuration resource for the group in question.
 
   The Group Manager is also expected to log the evolution of group configurations that are created, overwritten, updated, and deleted at its own initiative through a local application interface, i.e., without the involvement of an Administrator.
 
