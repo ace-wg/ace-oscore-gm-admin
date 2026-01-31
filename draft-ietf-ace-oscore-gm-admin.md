@@ -111,7 +111,7 @@ The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join
 
 In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, how the group should be configured upon creation, and later on how the group should be updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn may lead to error-prone deployments and is not very flexible.
 
-In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining them during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.
+In other deployments, a separate Administrator entity, such as a Commissioning Tool, is directly responsible for creating and configuring the OSCORE groups at a Group Manager, as well as for maintaining their configurations during their whole lifetime until their deletion. This allows the Group Manager to be agnostic of the specific applications using secure group communication.
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to specify and update their configuration.
 
@@ -403,7 +403,7 @@ In order to get access to the Group Manager for managing OSCORE groups, an Admin
 
    If the request is not formatted correctly (e.g., required fields are not present or are not encoded as expected), the Group Manager MUST reply with a 4.00 (Bad Request) error response.
 
-## Multiple Administrators for the Same OSCORE Group
+## Multiple Administrators for the Same OSCORE Group ## {#multiple-admins}
 
 It is possible that multiple Administrators are authorized to operate on the same Group Manager in the interest of the same OSCORE group, while also taking different responsibilities.
 
@@ -1150,11 +1150,11 @@ An example of message exchange is shown below.
    }
 ~~~~~~~~~~~
 
-### Effects on Joining Nodes ###
+### Effects on Joining Nodes ### {#sssec-effects-update-joining-nodes}
 
 After having selectively updated part of a group configuration, the effects on candidate joining nodes are the same as defined in {{sssec-effects-overwrite-joining-nodes}} for the case of group configuration overwriting.
 
-### Effects on the Group Members ###
+### Effects on the Group Members ### {#sssec-effects-update-group-members}
 
 After having selectively updated part of a group configuration, the effects on the current group members are the same as defined in {{sssec-effects-overwrite-group-members}} for the case of group configuration overwriting.
 
@@ -1198,7 +1198,7 @@ An example of message exchange is shown below.
 <= 2.02 Deleted
 ~~~~~~~~~~~
 
-### Effects on the Group Members ###
+### Effects on the Group Members ### {#sssec-effects-delete-group-members}
 
 After having deleted an OSCORE group, the Group Manager can inform the group members by means of the following two methods. When contacting a group member, the Group Manager uses the pairwise secure communication association established with that member during its joining process (see {{Section 6 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
