@@ -1324,6 +1324,102 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
       This requires that the Administrator finds acceptable to overwrite or update the current group configuration differently than how it was originally intended. If this is not attainable, the Administrator may decide to not take further actions and keep the current group configuration as is, or instead to delete the group configuration altogether (see {{configuration-resource-delete}}).
 
+# Operational Considerations
+
+This section compiles the operational considerations that hold for this document.
+
+The operational considerations from {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with respect to the operations and RESTful interface at the Group Manager that are defined in that document for the management of keying material in OSCORE groups.
+
+## Administration of Groups
+
+The RESTful admin interface at the Group Manager defined in this document is specifically intended for the administration of OSCORE groups. To this end, it provides the set of operations specified in {{interactions}} for interacting with the group-collection resource and the group-configuration resources at the Group Manager (see {{managing-groups}}).
+
+By relying on a data model based on CBOR for the representation of group configurations and their parameters (see {{group-configurations}}), the admin interface enables multiple Administrators to perform administrative operations at the same Group Manager in an interoperable way. {{multiple-admins}} discusses the case where multiple Administrators operate on the same Group Manager in the interest of the same OSCORE group.
+
+Except for the status parameters 'rt', 'ace_groupcomm_profile', and 'joining_uri', the group configuration parameters defined in this document are configurable by authorized Administrators.
+
+Notably, the Group Manager takes the final decision about:
+
+* The name given to a newly created OSCORE group, specified by the 'group_name' status parameter.
+
+* The URI of the group-membership resource {{I-D.ietf-ace-key-groupcomm-oscore}} for joining a newly created group, specified by the 'joining_uri' status parameter.
+
+* The URI of the Authorization Server associated with the Group Manager for an OSCORE group, specified by the 'as_uri' status parameter.
+
+Furthermore, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' cannot be updated after the group has been created with its initial configuration.
+
+Default values for the group configuration parameters are specified in {{default-values}}, building on the default values specified in {{Section 14 of I-D.ietf-ace-key-groupcomm-oscore}} when applicable. As defined in {{default-values}}, it is recommended that the default values used by the Group Manager are the specified ones, but the Group Manager may choose to use different ones.
+
+Given a group, its configuration is available to retrieve to Administrators that are authorized to access the corresponding group-configuration resource at the Group Manager, by means of a GET request (see {{configuration-resource-get}}) or a FETCH request (see {{configuration-resource-fetch}}). In practice, most of the information specified in the group configuration will also be provided to authorized Clients that interact with the Group Manager through the RESTful interface defined in {{I-D.ietf-ace-key-groupcomm-oscore}}, e.g., when joining the group and later on as current group members.
+
+Creating a new group and the corresponding configuration at the Group Manager yields the expectation that traffic will occur between the Group Manager and (candidate) group members, as well as between nodes that have become group members. Conversely, the deletion of a group and of the corresponding configuration anticipates that the traffic mentioned above will cease. In either case, this information can be used to accordingly plan and adjust the allocation of network resources. In particular, this information can be acquired by Administrators that are authorized to access the group-collection resource at the Group Manager, by means of a GET request (see {{collection-resource-get}}) or a FETCH request (see {{collection-resource-fetch}}). Alternatively, it can be acquired by authorized, external management applications and operators, by retrieving relevant log entries about the creation and deletion of groups (see {{ops-cons-logging}}).
+
+Certain operations at the Group Manager could result in side effects on network nodes, in terms of communications with the Group Manager and with one another as members of the same OSCORE group. These side effects are compiled in {{sssec-effects-overwrite-joining-nodes}} and {{sssec-effects-overwrite-group-members}} with respect to the overwriting of an existing group configuration, in {{sssec-effects-update-joining-nodes}} and {{sssec-effects-update-group-members}} with respect to the selective update of an existing group configuration, and in {{sssec-effects-delete-group-members}} with respect to the deletion of an OSCORE group and of its corresponding configuration.
+
+By delegating the creation, (re)-configuration, and deletion of OSCORE groups to an Administrator, the Group Manager can be agnostic of the specific applications using secure group communication. At the same time, even when providing the admin interface defined in this document, the Group Manager could additionally take the initiative in creating, (re-)configuring, and deleting some of its OSCORE groups through a local application interface, i.e., without the involvement of an Administrator.
+
+## Logging ## {#ops-cons-logging}
+
+When performing its normal operations, the Group Manager is expected to produce and store timestamped logs about the following:
+
+* Any event that has resulted in the Group Manager sending an error response, as a reply to a request received at any of the resources exported by the interface specified in this document.
+
+  The logged information contains a description of the error occurred in the context of the present document, together with a description of the event related to the error and relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
+
+  Note that, if the error response uses the format problem-details defined in {{RFC9290}}, then the "detail" entry in the response payload is meant to convey the diagnostic description of the error, which is meant to be part of the log entry for this event.
+
+* Any event consisting in a successfully performed operation that is triggered by a request received at any of the resources exported by the interface specified in this document.
+
+  Such events include:
+
+  - The retrieval of a list of existing OSCORE groups.
+  - The creation of a new OSCORE group. This results in the creation of a group-configuration resource and the corresponding group-membership resource.
+  - The retrieval of (part of) a group configuration.
+  - The overwriting or selective update of a group configuration.
+  - The deletion of an OSCORE group and of its corresponding group configuration. This results in the deletion of a group-configuration resource and of the corresponding group-membership resource.
+
+  The logged information contains a description of the operation performed in the context of the present application profile, together with relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
+
+* For each OSCORE group, the evolution of the corresponding group configuration, i.e., starting from the initial configuration that is established when creating the group, and tracking the result of possible overwriting and selective updates.
+
+  In practice, this can be achieved by readily creating and storing dedicated log entries, or instead by producing those when needed, leveraging the logged events that pertain to the group-configuration resource of the group in question.
+
+  The Group Manager is also expected to log the evolution of group configurations that are created, overwritten, updated, and deleted at its own initiative through a local application interface, i.e., without the involvement of an Administrator.
+
+In addition to what is compiled above, the Group Manager could log additional information. Further details about what the Group Manager logs, with what granularity, and based on what triggering events and conditions are application-specific and left to operators to define.
+
+The Group Manager MUST NOT log any secret or confidential information pertaining to a group and its configuration. Although the configuration parameters and status parameters defined in {{group-configurations}} of this document do not specify secret or confidential information, this requirement is set in preparation for possible new parameters that can be defined in the future.
+
+It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, eldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
+
+It is out of the scope of this document what specific semantics and data model are used by the Group Manager for producing and processing the logs. At the same time, log entries could use the data model defined in {{group-configurations}} to represent group configurations. Specific semantics and data models can be defined by applications and future specifications.
+
+The Group Manager is expected to make the logs produced available to securely access for authorized, external management applications and operators.
+
+In particular, logged information could be retrieved in the following ways.
+
+* By accessing logs at the Group Manager through polling. This can occur in an occasional, regular, or event-driven way.
+
+* Through notifications sent by the Group Manager according to an operator-defined frequency.
+
+* Through notifications asynchronously sent by the Group Manager, throttling them in order to prevent congestion and duplication and to not create attack vectors.
+
+Some of the logged information can be privacy-sensitive. This especially holds for the metadata about an Administrator, i.e., addressing information of the Administrator and, when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association. If external management applications and operators obtain such metadata, they become able to track a given Administrator, as to its interactions with one or multiple Group Managers and its performed operations at those Group Managers.
+
+Therefore, the logged information that is effectively provided to external management applications and operators SHOULD be redacted by the Group Manager, by omitting any privacy-sensitive information element that could enable or facilitate the impairment of Administrators' privacy, e.g., by tracking Administrators across different Group Managers.
+
+Furthermore, within a group configuration, the status parameters 'group_description' and 'app_groups' specify information that can be privacy-sensitive. Therefore, the logged information that is effectively provided to external management applications and operators SHOULD be redacted by the Group Manager, by omitting the information specified in the status parameters 'group_description' and 'app_groups'. The same applies with respect to privacy-sensitive information specified by configuration parameters or status parameters that can be defined in the future.
+
+Exceptions to the omission of logged information could apply, e.g., if the Group Manager can verify that the management application or operator in question is specifically authorized to obtain such privacy-sensitive information and appropriately entitled to obtain it according to enforced privacy policies.
+
+## Access Control
+
+Building on the ACE framework {{RFC9200}}, access control is enforced for Administrators acting as Clients that interact with the interface at the Group Manager specified in this document.
+
+In particular, the granularity of such access control takes into account the resource specifically targeted at the Group Manager, the operation requested by sending a request to that resource, and the specific permission(s) that the requesting Administrator is authorized to have according to its corresponding access token.
+
+Furthermore, the interactions between an Administrator and the Group Manager are secured as per the specific transport profile of ACE used (e.g., {{RFC9202}} and {{RFC9203}}).
+
 # Security Considerations # {#sec-security-considerations}
 
 Security considerations are inherited from the ACE framework for Authentication and Authorization {{RFC9200}} and from the specific transport profile of ACE used between the Administrator and the Group Manager, such as {{RFC9202}} and {{RFC9203}}.
@@ -1689,6 +1785,8 @@ coap_group_oscore_app = 1
 * Aligned with draft-ietf-ace-key-groupcomm-oscore, 'sign_enc_alg' from that document is renamed as 'gp_enc_alg'.
 
 * Fixed error response codes in two error response messages.
+
+* Added the "Operational Considerations" section.
 
 * Clarifications:
 
