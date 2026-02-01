@@ -1356,7 +1356,7 @@ Creating a new group and the corresponding configuration at the Group Manager yi
 
 Certain operations at the Group Manager could result in side effects on network nodes, in terms of communications with the Group Manager and with one another as members of the same OSCORE group. These side effects are compiled in {{sssec-effects-overwrite-joining-nodes}} and {{sssec-effects-overwrite-group-members}} with respect to the overwriting of an existing group configuration, in {{sssec-effects-update-joining-nodes}} and {{sssec-effects-update-group-members}} with respect to the selective update of an existing group configuration, and in {{sssec-effects-delete-group-members}} with respect to the deletion of an OSCORE group and of its corresponding configuration.
 
-By delegating the creation, (re)-configuration, and deletion of OSCORE groups to an Administrator, the Group Manager can be agnostic of the specific applications using secure group communication. At the same time, even when providing the admin interface defined in this document, the Group Manager could additionally take the initiative in creating, (re-)configuring, and deleting some of its OSCORE groups through a local application interface, i.e., without the involvement of an Administrator.
+By delegating the creation, (re)-configuration, and deletion of OSCORE groups to an Administrator, the Group Manager can be agnostic of the specific applications using secure group communication. Nonetheless, even when providing the admin interface defined in this document, the Group Manager could additionally take the initiative in creating, (re-)configuring, and deleting some of its OSCORE groups through a local application interface, i.e., without the involvement of an Administrator.
 
 ## Logging ## {#ops-cons-logging}
 
@@ -1392,7 +1392,7 @@ The Group Manager MUST NOT log any secret or confidential information pertaining
 
 It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, eldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
 
-It is out of the scope of this document what specific semantics and data model are used by the Group Manager for producing and processing the logs. At the same time, log entries could use the data model defined in {{group-configurations}} to represent group configurations. Specific semantics and data models can be defined by applications and future specifications.
+It is out of the scope of this document what specific semantics and data model are used by the Group Manager for producing and processing the logs. Nonetheless, log entries could use the data model defined in {{group-configurations}} to represent group configurations. Specific semantics and data models can be defined by applications and future specifications.
 
 The Group Manager is expected to make the logs produced available to securely access for authorized, external management applications and operators.
 
