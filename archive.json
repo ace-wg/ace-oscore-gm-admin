@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-01T02:26:13.598632+00:00",
+  "timestamp": "2026-02-03T02:07:59.612483+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -250,6 +250,34 @@
       "mergedBy": "marco-tiloca-sics",
       "mergeCommit": {
         "oid": "59d5d3b8b771ce558b46e70d775e368cf4aeeddd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOEOo5987Asasq",
+      "title": "AD review",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/7",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR addresses the comments from the AD review of Paul Wouters archived at https://mailarchive.ietf.org/arch/msg/ace/_vuImZK7vlnIRB-m4F3XnGT8Jxw/\r\n\r\nAdditionally, it addresses the following points:\r\n\r\n* Added a new section \"Operational Considerations\".\r\n\r\n* The parameter 'gp_enc_alg' from draft-ietf-ace-key-groupcomm-oscore is now called with that name in this document too.\r\n\r\n* Two CoAP error response codes have been fixed, to use more appropriate ones.\r\n\r\n* Minor fixes in the examples of message payloads (registered and placeholder codepoints) and in the example algorithm of Appendix A.\r\n\r\n* Minor clarifications and editorial fixes, largely building on applicable feedback from the IETF Last Call of draft-ietf-ace-key-groupcomm-oscore.",
+      "createdAt": "2026-02-01T09:05:33Z",
+      "updatedAt": "2026-02-01T09:17:07Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "dec797895ce89bc6f32613c259f092a320bd9176",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "ad-review",
+      "headRefOid": "bec2b5d8f519d5ab7d00ee03e67c5e828e44dc13",
+      "closedAt": "2026-02-01T09:17:07Z",
+      "mergedAt": "2026-02-01T09:17:07Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "c6b1e8e2ffe69b8c09c13f459a1b3c5b71deeb4a"
       },
       "comments": [],
       "reviews": []
