@@ -1372,11 +1372,11 @@ When performing its normal operations, the Group Manager is expected to produce 
 
   Such events include:
 
-  - The retrieval of a list of existing OSCORE groups.
-  - The creation of a new OSCORE group. This results in the creation of a group-configuration resource and the corresponding group-membership resource.
-  - The retrieval of (part of) a group configuration.
-  - The overwriting or selective update of a group configuration.
-  - The deletion of an OSCORE group and of its corresponding group configuration. This results in the deletion of a group-configuration resource and of the corresponding group-membership resource.
+  - An Administrator retrieving a list of existing OSCORE groups.
+  - An Administrator creating a new OSCORE group. This results in the creation of a group-configuration resource and the corresponding group-membership resource.
+  - An Administrator retrieving (part of) a group configuration.
+  - An Administrator overwriting or selectively updating a group configuration.
+  - An Administrator deleting an OSCORE group and thus the corresponding group configuration. This results in the deletion of a group-configuration resource and of the corresponding group-membership resource.
 
   The logged information contains a description of the operation performed in the context of the interface defined in the present document, together with relevant metadata about the Administrator that has sent the request. For instance, possible metadata include: addressing information of the Administrator; when applicable, (an identifier of) the authentication credential that the Administrator has used to authenticate itself to the Group Manager when establishing their secure communication association.
 
@@ -1779,6 +1779,10 @@ coap_group_oscore_app = 1
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -14 to -15 ## {#sec-14-15}
+
+* Editorial improvements.
 
 ## Version -13 to -14 ## {#sec-13-14}
 
