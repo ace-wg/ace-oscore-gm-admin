@@ -2905,7 +2905,7 @@ Table of Contents
    It is up to the application to specify for how long a log entry is
    retained from the time of its creation and until its deletion.
    Different retention policies could be enforced for different groups.
-   For a given group, eldest log entries are expected to be those
+   For a given group, oldest log entries are expected to be those
    deleted first, and different retention policies could be enforced
    depending on whether the group currently exists or has been deleted.
 
@@ -2916,9 +2916,9 @@ Table of Contents
    and data models can be defined by applications and future
    specifications.
 
-   The Group Manager is expected to make the logs produced available to
-   securely access for authorized, external management applications and
-   operators.
+   The Group Manager is expected to make the logs that it produces
+   available for secure access by authorized external management
+   applications and operators.
 
    In particular, logged information could be retrieved in the following
    ways.
