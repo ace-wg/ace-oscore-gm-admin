@@ -129,20 +129,21 @@ Table of Contents
    Appendix A.  Processing of Group Name Patterns at the AS
    Appendix B.  CDDL Model
    Appendix C.  Document Updates
-     C.1.  Version -13 to -14
-     C.2.  Version -12 to -13
-     C.3.  Version -11 to -12
-     C.4.  Version -10 to -11
-     C.5.  Version -09 to -10
-     C.6.  Version -08 to -09
-     C.7.  Version -07 to -08
-     C.8.  Version -06 to -07
-     C.9.  Version -05 to -06
-     C.10. Version -04 to -05
-     C.11. Version -03 to -04
-     C.12. Version -02 to -03
-     C.13. Version -01 to -02
-     C.14. Version -00 to -01
+     C.1.  Version -14 to -15
+     C.2.  Version -13 to -14
+     C.3.  Version -12 to -13
+     C.4.  Version -11 to -12
+     C.5.  Version -10 to -11
+     C.6.  Version -09 to -10
+     C.7.  Version -08 to -09
+     C.8.  Version -07 to -08
+     C.9.  Version -06 to -07
+     C.10. Version -05 to -06
+     C.11. Version -04 to -05
+     C.12. Version -03 to -04
+     C.13. Version -02 to -03
+     C.14. Version -01 to -02
+     C.15. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -2849,20 +2850,21 @@ Table of Contents
 
       Such events include:
 
-      -  The retrieval of a list of existing OSCORE groups.
+      -  An Administrator retrieving a list of existing OSCORE groups.
 
-      -  The creation of a new OSCORE group.  This results in the
-         creation of a group-configuration resource and the
+      -  An Administrator creating a new OSCORE group.  This results in
+         the creation of a group-configuration resource and the
          corresponding group-membership resource.
 
-      -  The retrieval of (part of) a group configuration.
+      -  An Administrator retrieving (part of) a group configuration.
 
-      -  The overwriting or selective update of a group configuration.
+      -  An Administrator overwriting or selectively updating a group
+         configuration.
 
-      -  The deletion of an OSCORE group and of its corresponding group
-         configuration.  This results in the deletion of a group-
-         configuration resource and of the corresponding group-
-         membership resource.
+      -  An Administrator deleting an OSCORE group and thus the
+         corresponding group configuration.  This results in the
+         deletion of a group-configuration resource and of the
+         corresponding group-membership resource.
 
       The logged information contains a description of the operation
       performed in the context of the interface defined in the present
@@ -3816,7 +3818,11 @@ Appendix C.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-C.1.  Version -13 to -14
+C.1.  Version -14 to -15
+
+   *  Editorial improvements.
+
+C.2.  Version -13 to -14
 
    *  Aligned with draft-ietf-ace-key-groupcomm-oscore, 'sign_enc_alg'
       from that document is renamed as 'gp_enc_alg'.
@@ -3855,7 +3861,7 @@ C.1.  Version -13 to -14
 
    *  Minor fixes and editorial improvements.
 
-C.2.  Version -12 to -13
+C.3.  Version -12 to -13
 
    *  Uri-Path and Location-Path as text strings in examples.
 
@@ -3869,7 +3875,7 @@ C.2.  Version -12 to -13
 
    *  Editorial fixes.
 
-C.3.  Version -11 to -12
+C.4.  Version -11 to -12
 
    *  CBOR diagnostic notation uses placeholders from a CDDL model.
 
@@ -3906,7 +3912,7 @@ C.3.  Version -11 to -12
 
    *  Minor clarifications and editorial improvements.
 
-C.4.  Version -10 to -11
+C.5.  Version -10 to -11
 
    *  Early mentioned that issued access tokens can have other purposes.
 
@@ -3931,7 +3937,7 @@ C.4.  Version -10 to -11
 
    *  Editorial fixes and improvements.
 
-C.5.  Version -09 to -10
+C.6.  Version -09 to -10
 
    *  Consistent use of 4.03 (Forbidden) error responses.
 
@@ -3954,7 +3960,7 @@ C.5.  Version -09 to -10
 
    *  Editorial fixes and improvements.
 
-C.6.  Version -08 to -09
+C.7.  Version -08 to -09
 
    *  Removed use of CoRAL.
 
@@ -3970,7 +3976,7 @@ C.6.  Version -08 to -09
 
    *  Fixes and editorial improvements.
 
-C.7.  Version -07 to -08
+C.8.  Version -07 to -08
 
    *  Consistency of parameter names.
 
@@ -3992,7 +3998,7 @@ C.7.  Version -07 to -08
 
    *  Various clarifications and editorial improvements.
 
-C.8.  Version -06 to -07
+C.9.  Version -06 to -07
 
    *  Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
@@ -4008,7 +4014,7 @@ C.8.  Version -06 to -07
 
    *  Editorial improvements.
 
-C.9.  Version -05 to -06
+C.10.  Version -05 to -06
 
    *  Use and extend the same AIF data model AIF-OSCORE-GROUPCOMM
       defined in [I-D.ietf-ace-key-groupcomm-oscore].
@@ -4029,7 +4035,7 @@ C.9.  Version -05 to -06
 
    *  Editorial improvements.
 
-C.10.  Version -04 to -05
+C.11.  Version -04 to -05
 
    *  Defined format of scope based on a new AIF data model.
 
@@ -4051,7 +4057,7 @@ C.10.  Version -04 to -05
 
    *  Revised order of sections; editorial improvements.
 
-C.11.  Version -03 to -04
+C.12.  Version -03 to -04
 
    *  Clarifications on what to do in case of enhanced error responses.
 
@@ -4066,7 +4072,7 @@ C.11.  Version -03 to -04
 
    *  Editorial improvements.
 
-C.12.  Version -02 to -03
+C.13.  Version -02 to -03
 
    *  Aligned new and old parameters to core-groupcomm-oscore and ace-
       key-groupcomm-oscore.
@@ -4079,7 +4085,7 @@ C.12.  Version -02 to -03
 
    *  New error type "Group currently active".
 
-C.13.  Version -01 to -02
+C.14.  Version -01 to -02
 
    *  Admit multiple Administrators and limited access to admin
       resources.
@@ -4093,7 +4099,7 @@ C.13.  Version -01 to -02
 
    *  Editorial improvements.
 
-C.14.  Version -00 to -01
+C.15.  Version -00 to -01
 
    *  Names of application groups as status parameter.
 
