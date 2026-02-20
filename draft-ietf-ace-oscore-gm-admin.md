@@ -1390,11 +1390,11 @@ In addition to what is compiled above, the Group Manager could log additional in
 
 The Group Manager MUST NOT log any secret or confidential information pertaining to a group and its configuration. Although the configuration parameters and status parameters defined in {{group-configurations}} of this document do not specify secret or confidential information, this requirement is set in preparation for possible new parameters that can be defined in the future.
 
-It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, eldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
+It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, oldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
 
 It is out of the scope of this document what specific semantics and data model are used by the Group Manager for producing and processing the logs. Nonetheless, log entries could use the data model defined in {{group-configurations}} to represent group configurations. Specific semantics and data models can be defined by applications and future specifications.
 
-The Group Manager is expected to make the logs produced available to securely access for authorized, external management applications and operators.
+The Group Manager is expected to make the logs that it produces available for secure access by authorized external management applications and operators.
 
 In particular, logged information could be retrieved in the following ways.
 
