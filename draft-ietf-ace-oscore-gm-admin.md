@@ -1804,7 +1804,15 @@ coap_group_oscore_app = 1
 
 ## Version -14 to -15 ## {#sec-14-15}
 
-* Editorial improvements.
+* Updated section title (removed "full").
+
+* Updated example of FETCH request to group-configuration resource.
+
+* Used numbered steps to describe operations of some resource handlers.
+
+* Security considerations: handling of URIs that should point to the Group Manager but do not.
+
+* Minor fixes and editorial improvements.
 
 ## Version -13 to -14 ## {#sec-13-14}
 
