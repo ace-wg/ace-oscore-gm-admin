@@ -1462,6 +1462,22 @@ Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing t
 
 ## Administrators
 
+{{collection-resource-get}} and {{collection-resource-fetch}} define exchanges where the Administrator sends a GET or FETCH request to the group-collection resource at the Group Manager. The payload of a successful response to those requests can include links to group-configuration resources at the Group Manager. When processing the response, the Administrator MUST NOT accept any of such links whose URI specified as link target does not point to the Group Manager that has sent the response. In particular, the Administrator MUST NOT consider those links as pointing to the alleged group-configuration resources.
+
+From {{collection-resource-post}} to {{configuration-resource-patch}}, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator SHOULD NOT accept the URI encoded by the 'joining_uri' parameter, if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator SHOULD NOT consider that URI as pointing to the alleged group-membership resource.
+
+Exceptions in accepting URIs that allegedly point to group-membership resources ought to be carefully understood and vetted by the Administrator. As a notable example, a trusted CoAP reverse-proxy might stand in for the Group Manager, in such a way that candidate group members can reach the Group Manager by actually interacting with the reverse-proxy. In this case, the host subcomponent of the URI does not refer to the Group Manager, but instead to the reverse-proxy.
+
+The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager, by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.
+
+If the Administrator determines that a URI pointing to an alleged group-membership resource cannot be accepted, the following applies:
+
+* Aligned with what is allowed by the granted authorization, the Administrator can attempt to retrieve the correct URI pointing to the group-membership resource in question, by sending a GET or FETCH request to the corresponding group-configuration resource (see {{configuration-resource-get}} and {{configuration-resource-fetch}}). Also aligned with what is allowed by the granted authorization, the Administrator could ultimately delete the group configuration in question by deleting the corresponding group-configuration resource (see {{configuration-resource-delete}}) and then create a new group configuration (see {{collection-resource-post}}).
+
+* The Administrator MUST NOT register the link to the group-membership resource with URI specified in the 'joining_uri' parameter to a Resource Directory {{RFC9176}} on behalf of the Group Manager.
+
+If the Administrator determines that a URI pointing to an alleged group-configuration resource or group-membership resource cannot be accepted, the Administrator ought to report it as appropriate.
+
 If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group, and how they achieve and maintain such an alignment with each other.
 
 A compromised Administrator could collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
