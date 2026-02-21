@@ -601,7 +601,11 @@ The Group Manager MUST prepare the list L to include in the response as follows.
 
 2. The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.
 
-An example of message exchange is shown below.
+An example of message exchange is shown below. In particular, the following is assumed:
+
+* The Group Manager hosts three group-configuration resources, for the OSCORE groups with names "gp1", "gp2", and "gp3".
+* All the OSCORE groups use the group mode of Group OSCORE, the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10), and the HKDF Algorithm HKDF SHA-256 (specified as the HMAC Algorithm HMAC 256/256, COSE algorithm encoding: 5).
+* The OSCORE groups "gp1" and "gp3" use the Signature Algorithm EdDSA (COSE algorithm encoding: -8), while the OSCORE group "gp2" uses the Signature Algorithm ES256 (COSE algorithm encoding: -7).
 
 ~~~~~~~~~~~
 => 0.05 FETCH
@@ -613,6 +617,7 @@ An example of message exchange is shown below.
    {
      e'group_mode': true,
      e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+       e'sign_alg': -8 / EdDSA /,
            e'hkdf': 5 / HMAC with SHA-256 /
    }
 
@@ -622,7 +627,6 @@ An example of message exchange is shown below.
    Payload:
 
    <coap://[2001:db8::ab]/manage/gp1>;rt="core.osc.gconf",
-   <coap://[2001:db8::ab]/manage/gp2>;rt="core.osc.gconf",
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
 ~~~~~~~~~~~
 
