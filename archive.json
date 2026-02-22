@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-19T02:08:47.516413+00:00",
+  "timestamp": "2026-02-22T02:09:19.717287+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -279,6 +279,32 @@
       "mergeCommit": {
         "oid": "c6b1e8e2ffe69b8c09c13f459a1b3c5b71deeb4a"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOEOo5987FVh69",
+      "title": "SECDIR review",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/8",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR addresses the SECDIR review from Wes Hardaker archived at https://mailarchive.ietf.org/arch/msg/ace/v7pg7P6cSbKD-jOWret7-5-eVP4/",
+      "createdAt": "2026-02-21T12:30:43Z",
+      "updatedAt": "2026-02-21T12:31:28Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "a9da1d6a77b0ace4ed30cbd5054dcd73fe811e5a",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "secdir-review",
+      "headRefOid": "95be11f8236cf3cfa59d3410fcda2a18c35c84be",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
