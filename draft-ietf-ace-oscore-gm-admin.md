@@ -553,7 +553,7 @@ If there are no matching scope entries specifying the permission PERMISSION, the
 
 The Content-Format "application/ace-groupcomm+cbor" defined in {{Section 11.2 of RFC9594}} is used in requests including a payload and in successful responses including a payload, except for successful responses sent in reply to GET and FETCH requests targeting the group-collection resource (for which the Content-Format "application/link-format" is used). Furthermore, the CBOR abbreviations defined in {{groupcomm-parameters}} of this document MUST be used when specifying the corresponding configuration and status parameters.
 
-## Retrieve the Full List of Group Configurations ## {#collection-resource-get}
+## Retrieve a List of Group Configurations ## {#collection-resource-get}
 
 This operation MUST be supported by the Group Manager and an Administrator.
 
@@ -601,7 +601,11 @@ The Group Manager MUST prepare the list L to include in the response as follows.
 
 2. The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.
 
-An example of message exchange is shown below.
+An example of message exchange is shown below. In particular, the following is assumed:
+
+* The Group Manager hosts three group-configuration resources, for the OSCORE groups with names "gp1", "gp2", and "gp3".
+* All the OSCORE groups use the group mode of Group OSCORE, the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10), and the HKDF Algorithm HKDF SHA-256 (specified as the HMAC Algorithm HMAC 256/256, COSE algorithm encoding: 5).
+* The OSCORE groups "gp1" and "gp3" use the Signature Algorithm EdDSA (COSE algorithm encoding: -8), while the OSCORE group "gp2" uses the Signature Algorithm ES256 (COSE algorithm encoding: -7).
 
 ~~~~~~~~~~~
 => 0.05 FETCH
@@ -613,6 +617,7 @@ An example of message exchange is shown below.
    {
      e'group_mode': true,
      e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+       e'sign_alg': -8 / EdDSA /,
            e'hkdf': 5 / HMAC with SHA-256 /
    }
 
@@ -622,7 +627,6 @@ An example of message exchange is shown below.
    Payload:
 
    <coap://[2001:db8::ab]/manage/gp1>;rt="core.osc.gconf",
-   <coap://[2001:db8::ab]/manage/gp2>;rt="core.osc.gconf",
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
 ~~~~~~~~~~~
 
@@ -686,79 +690,81 @@ Otherwise, if any of the following occurs, the Group Manager MUST reply with a 4
 
 After a successful processing of the POST request, the Group Manager performs the following actions.
 
-If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST try to determine an alternative name for the new OSCORE group to create.
+1. The Group Manager selects the name to actually assign to the new OSCORE group.
 
-In addition to that, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.
+   If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager MUST try to determine an alternative name for the new OSCORE group to create.
 
-If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME\* indicated in the 'group_name' parameter of the request, then the following conditions MUST hold.
+   In general, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.
 
-* The chosen name GROUPNAME is available to assign; and
+   If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME\* indicated in the 'group_name' parameter of the request, then the following conditions MUST hold.
 
-* With reference to the 'scope' claim in the stored access token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
+   * The chosen name GROUPNAME is available to assign; and
 
-If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
+   * With reference to the 'scope' claim in the stored access token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* MUST be equal.
 
-Otherwise, the Group Manager creates a new group-configuration resource accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the final name given to the OSCORE group, as either the one indicated in the 'group_name' parameter of the request and confirmed by the Group Manager, or the alternative one that has been determined and uniquely assigned by the Group Manager. The group-collection resource is also updated accordingly.
+   If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 11 ("Unable to determine a group name").
 
-The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters are set, the following applies.
+2. If the previous step has succeeded, the Group Manager creates a new group-configuration resource accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the final name given to the OSCORE group, as either the one indicated in the 'group_name' parameter of the request and confirmed by the Group Manager, or the alternative one that has been determined and uniquely assigned by the Group Manager. The group-collection resource is also updated accordingly.
 
-* The group-configuration resource MUST NOT be accessible through other operations.
+   The operation of creating the new group-configuration resource and accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters are set, the following applies.
 
-* The group-collection resource MUST NOT be updated to reflect the presence of the new group-configuration resource.
+   * The group-configuration resource MUST NOT be accessible through other operations.
 
-When the group-collection resource is eventually updated to reflect the presence of the new group-configuration resource, this update MUST NOT be interrupted by other updates to the group-collection resource due to the creation or deletion of group-configuration resources.
+   * The group-collection resource MUST NOT be updated to reflect the presence of the new group-configuration resource.
 
-In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
+   When the group-collection resource is eventually updated to reflect the presence of the new group-configuration resource, this update MUST NOT be interrupted by other updates to the group-collection resource due to the creation or deletion of group-configuration resources.
 
-If the request specifies the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
+   In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.
 
-For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}.
+   If the request specifies the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see {{Section 12.2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 11 of I-D.ietf-ace-key-groupcomm-oscore}}), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4).
 
-After that, the Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of RFC9594}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}.
 
-From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information and assigns them to the newly created OSCORE group:
+3. The Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in {{Section 6.1 of I-D.ietf-ace-key-groupcomm-oscore}}. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in {{Section 4.1 of RFC9594}} and {{Section 8 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* The OSCORE Master Secret.
+   From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information and assigns them to the newly created OSCORE group:
 
-* The OSCORE Master Salt (optionally).
+   * The OSCORE Master Secret.
 
-* The Group ID, used as OSCORE ID Context, which MUST be unique within the set of OSCORE groups under the Group Manager.
+   * The OSCORE Master Salt (optionally).
 
-Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". One or more Location-Path options MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
+   * The Group ID, used as OSCORE ID Context, which MUST be unique within the set of OSCORE groups under the Group Manager.
 
-The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the following applies.
+4. The Group Manager replies to the Administrator with a 2.01 (Created) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". One or more Location-Path options MUST be included in the response, indicating the location of the just created group-configuration resource. The response MUST NOT include a Location-Query option.
 
-The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri' from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
+   The response payload is a CBOR map, whose possible entries are specified in {{config-repr}}. In particular, the following applies.
 
-* 'group_name', specifying the group name of the OSCORE group. This value can be different from the group name specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
+   The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri' from the status parameters of the newly created OSCORE group (see {{config-repr}}), as detailed below.
 
-* 'joining_uri', specifying the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
+   * 'group_name', specifying the group name of the OSCORE group. This value can be different from the group name specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'group_name' status parameter for the OSCORE group. This parameter MUST be included.
 
-* 'as_uri', specifying the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'as_uri' status parameter for the OSCORE group.
+   * 'joining_uri', specifying the URI of the group-membership resource for joining the newly created OSCORE group. This parameter MUST be included.
 
-If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST also include the 'gid_reuse' parameter encoding the CBOR simple value `false` (0xf4).
+   * 'as_uri', specifying the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter MUST be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'as_uri' status parameter for the OSCORE group.
 
-If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+   If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple value `true` (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value `false` (0xf4), then the response payload MUST also include the 'gid_reuse' parameter encoding the CBOR simple value `false` (0xf4).
 
-The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, e.g., by using the approach described in {{I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
+   If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
-It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
+5. The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory {{RFC9176}}, e.g., by using the approach described in {{I-D.tiloca-core-oscore-discovery}}. The Group Manager considers the current group configuration when specifying additional information for the link to register.
 
-* The name of the OSCORE group MUST take the value specified in the 'group_name' parameter from the 2.01 (Created) response.
+   It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
+   * The name of the OSCORE group MUST take the value specified in the 'group_name' parameter from the 2.01 (Created) response.
 
-* If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI specified in the 'as_uri' parameter from the 2.01 (Created) response.
+   * The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
 
-* As to every other information element describing the current group configuration, the following applies.
+   * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI specified in the 'as_uri' parameter from the 2.01 (Created) response.
 
-   - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
+   * As to every other information element describing the current group configuration, the following applies.
 
-   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} or {{default-values-status}} otherwise.
+    - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
 
-Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.
+    - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} or {{default-values-status}} otherwise.
 
-Therefore, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
+   Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.
+
+   Therefore, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
 An example of message exchange is shown below.
 
@@ -918,45 +924,45 @@ If the updated group configuration would include parameter values that prevent t
 
 If no error occurs and the POST request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
+1. The Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' MUST remain unchanged.
 
-For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value `true` (0xf5).
+   For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value `true` (0xf5).
 
-When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.
+   When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.
 
-* The group-configuration resource MUST NOT be accessible through other operations.
+   * The group-configuration resource MUST NOT be accessible through other operations.
 
-* The group-membership resource MUST NOT be updated to reflect the new group configuration.
+   * The group-membership resource MUST NOT be updated to reflect the new group configuration.
 
-* The filter criteria specified in a FETCH request to the group-collection resource (see Section 6.2) MUST be compared against the representation that the group-configuration resource had before its update started.
+   * The filter criteria specified in a FETCH request to the group-collection resource (see {{collection-resource-fetch}}) MUST be compared against the representation that the group-configuration resource had before its update started.
 
-When the group-membership resource is eventually updated to reflect the new group configuration, this update MUST NOT be interrupted by other operations performed on the group-membership resource.
+   When the group-membership resource is eventually updated to reflect the new group configuration, this update MUST NOT be interrupted by other operations performed on the group-membership resource.
 
-If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and it deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
+   If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and it deletes any possible older set (see {{Section 7.1 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
+   From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
+2. The Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
+   If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in {{default-values-conf}} and {{default-values-status}}, then the response payload MUST also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.
 
-If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration.
+3. If the link to the group-membership resource was registered in the Resource Directory {{RFC9176}}, the Group Manager is responsible to refresh the registration.
 
-It is also possible that the Administrator updates the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
+   It is also possible that the Administrator updates the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.
 
-* The name of the OSCORE group MUST take the value specified in the 'group_name' parameter from the 2.04 (Changed) response.
+   * The name of the OSCORE group MUST take the value specified in the 'group_name' parameter from the 2.04 (Changed) response.
 
-* The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
+   * The names of the application groups using the OSCORE group MUST take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.
 
-* If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI specified in the 'as_uri' parameter from the 2.04 (Changed) response.
+   * If also registering a related link to the Authorization Server associated with the OSCORE group, the related link MUST have as link target the URI specified in the 'as_uri' parameter from the 2.04 (Changed) response.
 
-* As to every other information element describing the current group configuration, the following applies.
+   * As to every other information element describing the current group configuration, the following applies.
 
-   - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
+     - If a certain parameter was specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the POST request otherwise.
 
-   - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} or {{default-values-status}} otherwise.
+     - If a certain parameter was not specified in the POST request, the Administrator MUST use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in {{default-values-conf}} or {{default-values-status}} otherwise.
 
-As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
+   As discussed in {{collection-resource-post}}, it is RECOMMENDED that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.
 
 An example of message exchange is shown below.
 
@@ -1099,29 +1105,29 @@ If the updated group configuration would include parameter values that prevent t
 
 If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
 
-First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also updated accordingly.
+1. The Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also updated accordingly.
 
-The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic. That is, the same as defined in {{configuration-resource-post}} when atomically overwriting a group-configuration resource applies.
+   The operation of updating the group-configuration resource and accordingly updating the group-membership resource MUST be atomic. That is, the same as defined in {{configuration-resource-post}} when atomically overwriting a group-configuration resource applies.
 
-Unlike for the POST request defined in {{configuration-resource-post}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
+   Unlike for the POST request defined in {{configuration-resource-post}}, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.
 
-Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.
+   Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.
 
-* If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.
+   * If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.
 
-* If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+   * If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
 
-* If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
+   * If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.
 
-* The Group Manager deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
+   * The Group Manager deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.
 
-* The Group Manager adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
+   * The Group Manager adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.
 
-After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
+   After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see {{Section 9.1 of I-D.ietf-ace-key-groupcomm-oscore}}) or the current group status (see {{Section 9.9 of I-D.ietf-ace-key-groupcomm-oscore}}).
 
-Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
+2. The Group Manager replies to the Administrator with a 2.04 (Changed) response, which MUST have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in {{collection-resource-post}}.
 
-The same considerations as for the POST request defined in {{configuration-resource-post}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{RFC9176}}.
+3. The same considerations as for the POST request defined in {{configuration-resource-post}} hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory {{RFC9176}}.
 
 An example of message exchange is shown below.
 
@@ -1456,6 +1462,22 @@ Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing t
 
 ## Administrators
 
+{{collection-resource-get}} and {{collection-resource-fetch}} define exchanges where the Administrator sends a GET or FETCH request to the group-collection resource at the Group Manager. The payload of a successful response to those requests can include links to group-configuration resources at the Group Manager. When processing the response, the Administrator MUST NOT accept any of such links whose URI specified as link target does not point to the Group Manager that has sent the response. In particular, the Administrator MUST NOT consider those links as pointing to the alleged group-configuration resources.
+
+From {{collection-resource-post}} to {{configuration-resource-patch}}, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator SHOULD NOT accept the URI encoded by the 'joining_uri' parameter, if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator SHOULD NOT consider that URI as pointing to the alleged group-membership resource.
+
+Exceptions in accepting URIs that allegedly point to group-membership resources ought to be carefully understood and vetted by the Administrator. As a notable example, a trusted CoAP reverse-proxy might stand in for the Group Manager, in such a way that candidate group members can reach the Group Manager by actually interacting with the reverse-proxy. In this case, the host subcomponent of the URI does not refer to the Group Manager, but instead to the reverse-proxy.
+
+The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager, by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.
+
+If the Administrator determines that a URI pointing to an alleged group-membership resource cannot be accepted, the following applies:
+
+* Aligned with what is allowed by the granted authorization, the Administrator can attempt to retrieve the correct URI pointing to the group-membership resource in question, by sending a GET or FETCH request to the corresponding group-configuration resource (see {{configuration-resource-get}} and {{configuration-resource-fetch}}). Also aligned with what is allowed by the granted authorization, the Administrator could ultimately delete the group configuration in question by deleting the corresponding group-configuration resource (see {{configuration-resource-delete}}) and then create a new group configuration (see {{collection-resource-post}}).
+
+* The Administrator MUST NOT register the link to the group-membership resource with URI specified in the 'joining_uri' parameter to a Resource Directory {{RFC9176}} on behalf of the Group Manager.
+
+If the Administrator determines that a URI pointing to an alleged group-configuration resource or group-membership resource cannot be accepted, the Administrator ought to report it as appropriate.
+
 If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group, and how they achieve and maintain such an alignment with each other.
 
 A compromised Administrator could collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.
@@ -1782,7 +1804,15 @@ coap_group_oscore_app = 1
 
 ## Version -14 to -15 ## {#sec-14-15}
 
-* Editorial improvements.
+* Updated section title (removed "full").
+
+* Updated example of FETCH request to group-configuration resource.
+
+* Used numbered steps to describe operations of some resource handlers.
+
+* Security considerations: handling of URIs that should point to the Group Manager but do not.
+
+* Minor fixes and editorial improvements.
 
 ## Version -13 to -14 ## {#sec-13-14}
 
@@ -2051,6 +2081,6 @@ coap_group_oscore_app = 1
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
-The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Meir Goldman}}}, {{{Jim Schaad}}}, {{{Göran Selander}}}, {{{Cigdem Sengul}}}, and {{{Paul Wouters}}} for their comments and feedback.
+The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Meir Goldman}}}, {{{Wes Hardaker}}}, {{{Jim Schaad}}}, {{{Göran Selander}}}, {{{Cigdem Sengul}}}, and {{{Paul Wouters}}} for their comments and feedback.
 
 The work on this document has been partly supported by the Sweden's Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and CYPRESS; and by the H2020 project SIFIS-Home (Grant agreement 952652).
