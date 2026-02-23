@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 24 August 2026</td>
+<td class="center">Expires 27 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ace-oscore-gm-admin-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-20" class="published">20 February 2026</time>
+<time datetime="2026-02-23" class="published">23 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-24">24 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-27">27 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1126,7 +1126,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 24 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1224,10 +1224,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-interactions-with-the-group" class="internal xref">Interactions with the Group Manager</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-retrieve-the-full-list-of-g" class="internal xref">Retrieve the Full List of Group Configurations</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-retrieve-a-list-of-group-co" class="internal xref">Retrieve a List of Group Configurations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-retrieve-a-list-of-group-co" class="internal xref">Retrieve a List of Group Configurations by Filters</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-retrieve-a-list-of-group-con" class="internal xref">Retrieve a List of Group Configurations by Filters</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-create-a-new-group-configur" class="internal xref">Create a New Group Configuration</a></p>
@@ -2068,8 +2068,8 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
 <p id="section-6-7">The Content-Format "application/ace-groupcomm+cbor" defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-11.2" class="relref">Section 11.2</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span> is used in requests including a payload and in successful responses including a payload, except for successful responses sent in reply to GET and FETCH requests targeting the group-collection resource (for which the Content-Format "application/link-format" is used). Furthermore, the CBOR abbreviations defined in <a href="#groupcomm-parameters" class="auto internal xref">Section 7</a> of this document <span class="bcp14">MUST</span> be used when specifying the corresponding configuration and status parameters.<a href="#section-6-7" class="pilcrow">¶</a></p>
 <div id="collection-resource-get">
 <section id="section-6.1">
-        <h3 id="name-retrieve-the-full-list-of-g">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-retrieve-the-full-list-of-g" class="section-name selfRef">Retrieve the Full List of Group Configurations</a>
+        <h3 id="name-retrieve-a-list-of-group-co">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-retrieve-a-list-of-group-co" class="section-name selfRef">Retrieve a List of Group Configurations</a>
         </h3>
 <p id="section-6.1-1">This operation <span class="bcp14">MUST</span> be supported by the Group Manager and an Administrator.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This list is returned as a list of links to the corresponding group-configuration resources. In particular, a successful 2.05 (Content) response <span class="bcp14">MUST</span> have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
@@ -2105,8 +2105,8 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
 </div>
 <div id="collection-resource-fetch">
 <section id="section-6.2">
-        <h3 id="name-retrieve-a-list-of-group-co">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-retrieve-a-list-of-group-co" class="section-name selfRef">Retrieve a List of Group Configurations by Filters</a>
+        <h3 id="name-retrieve-a-list-of-group-con">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-retrieve-a-list-of-group-con" class="section-name selfRef">Retrieve a List of Group Configurations by Filters</a>
         </h3>
 <p id="section-6.2-1">This operation <span class="bcp14">MUST</span> be supported by the Group Manager and <span class="bcp14">MAY</span> be supported by an Administrator.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This list is returned as a list of links to the corresponding group-configuration resources. In particular, the request <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor", while a successful 2.05 (Content) response <span class="bcp14">MUST</span> have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
@@ -2122,8 +2122,19 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
             <p id="section-6.2-7.2.1">The Group Manager applies the filter criteria specified in the FETCH request to the list L from the previous step. The result is the list L to include in the response.<a href="#section-6.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-6.2-8">An example of message exchange is shown below.<a href="#section-6.2-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.2-9">
+<p id="section-6.2-8">An example of message exchange is shown below. In particular, the following is assumed:<a href="#section-6.2-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2-9.1">
+            <p id="section-6.2-9.1.1">The Group Manager hosts three group-configuration resources, for the OSCORE groups with names "gp1", "gp2", and "gp3".<a href="#section-6.2-9.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-9.2">
+            <p id="section-6.2-9.2.1">All the OSCORE groups use the group mode of Group OSCORE, the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10), and the HKDF Algorithm HKDF SHA-256 (specified as the HMAC Algorithm HMAC 256/256, COSE algorithm encoding: 5).<a href="#section-6.2-9.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-9.3">
+            <p id="section-6.2-9.3.1">The OSCORE groups "gp1" and "gp3" use the Signature Algorithm EdDSA (COSE algorithm encoding: -8), while the OSCORE group "gp2" uses the Signature Algorithm ES256 (COSE algorithm encoding: -7).<a href="#section-6.2-9.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div class="alignLeft art-text artwork" id="section-6.2-10">
 <pre>
 =&gt; 0.05 FETCH
    Uri-Path: "manage"
@@ -2134,6 +2145,7 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
    {
      e'group_mode': true,
      e'gp_enc_alg': 10 / AES-CCM-16-64-128 /,
+       e'sign_alg': -8 / EdDSA /,
            e'hkdf': 5 / HMAC with SHA-256 /
    }
 
@@ -2143,20 +2155,19 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
    Payload:
 
    &lt;coap://[2001:db8::ab]/manage/gp1&gt;;rt="core.osc.gconf",
-   &lt;coap://[2001:db8::ab]/manage/gp2&gt;;rt="core.osc.gconf",
    &lt;coap://[2001:db8::ab]/manage/gp3&gt;;rt="core.osc.gconf"
-</pre><a href="#section-6.2-9" class="pilcrow">¶</a>
+</pre><a href="#section-6.2-10" class="pilcrow">¶</a>
 </div>
-<p id="section-6.2-10">The following, additional example considers a request payload that uses both configuration parameters and status parameters as filter criteria. In particular, the following is assumed.<a href="#section-6.2-10" class="pilcrow">¶</a></p>
+<p id="section-6.2-11">The following, additional example considers a request payload that uses both configuration parameters and status parameters as filter criteria. In particular, the following is assumed.<a href="#section-6.2-11" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2-11.1">
-            <p id="section-6.2-11.1.1">In the URI of every group-configuration resource, the path component is /manage/GROUPNAME, where GROUPNAME is the group name of the associated OSCORE group.<a href="#section-6.2-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2-12.1">
+            <p id="section-6.2-12.1.1">In the URI of every group-configuration resource, the path component is /manage/GROUPNAME, where GROUPNAME is the group name of the associated OSCORE group.<a href="#section-6.2-12.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.2-11.2">
-            <p id="section-6.2-11.2.1">The Group Manager hosts four group-configuration resources, for the OSCORE groups with names "gp4", "gp5", "gp6", and "foo". All the OSCORE groups use the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10). Also, all the OSCORE groups are currently active, except for "gp6".<a href="#section-6.2-11.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.2-12.2">
+            <p id="section-6.2-12.2.1">The Group Manager hosts four group-configuration resources, for the OSCORE groups with names "gp4", "gp5", "gp6", and "foo". All the OSCORE groups use the AEAD Algorithm AES-CCM-16-64-128 (COSE algorithm encoding: 10). Also, all the OSCORE groups are currently active, except for "gp6".<a href="#section-6.2-12.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<div class="alignLeft art-text artwork" id="section-6.2-12">
+<div class="alignLeft art-text artwork" id="section-6.2-13">
 <pre>
 =&gt; 0.05 FETCH
    Uri-Path: "manage"
@@ -2177,7 +2188,7 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
 
    &lt;coap://[2001:db8::ab]/manage/gp4&gt;;rt="core.osc.gconf",
    &lt;coap://[2001:db8::ab]/manage/gp5&gt;;rt="core.osc.gconf"
-</pre><a href="#section-6.2-12" class="pilcrow">¶</a>
+</pre><a href="#section-6.2-13" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2217,89 +2228,117 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
 </li>
         </ul>
 <p id="section-6.3-11">After a successful processing of the POST request, the Group Manager performs the following actions.<a href="#section-6.3-11" class="pilcrow">¶</a></p>
-<p id="section-6.3-12">If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager <span class="bcp14">MUST</span> try to determine an alternative name for the new OSCORE group to create.<a href="#section-6.3-12" class="pilcrow">¶</a></p>
-<p id="section-6.3-13">In addition to that, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.<a href="#section-6.3-13" class="pilcrow">¶</a></p>
-<p id="section-6.3-14">If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME* indicated in the 'group_name' parameter of the request, then the following conditions <span class="bcp14">MUST</span> hold.<a href="#section-6.3-14" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.3-12">
+<li id="section-6.3-12.1">
+            <p id="section-6.3-12.1.1">The Group Manager selects the name to actually assign to the new OSCORE group.<a href="#section-6.3-12.1.1" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.1.2">
+If the 'group_name' parameter specifies the group name of an already existing OSCORE group, the Group Manager <span class="bcp14">MUST</span> try to determine an alternative name for the new OSCORE group to create.<a href="#section-6.3-12.1.2" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.1.3">
+In general, the final decision about the name assigned to the new OSCORE group is always of the Group Manager, which may have more constraints than the Administrator can be aware of, possibly beyond the availability of suggested names. For example, the Group Manager may specifically want to use a randomized character string as the name of a newly created group.<a href="#section-6.3-12.1.3" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.1.4">
+If the Group Manager has selected a name GROUPNAME different from the name GROUPNAME* indicated in the 'group_name' parameter of the request, then the following conditions <span class="bcp14">MUST</span> hold.<a href="#section-6.3-12.1.4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3-15.1">
-            <p id="section-6.3-15.1.1">The chosen name GROUPNAME is available to assign; and<a href="#section-6.3-15.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3-12.1.5.1">
+                <p id="section-6.3-12.1.5.1.1">The chosen name GROUPNAME is available to assign; and<a href="#section-6.3-12.1.5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.3-15.2">
-            <p id="section-6.3-15.2.1">With reference to the 'scope' claim in the stored access token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* <span class="bcp14">MUST</span> be equal.<a href="#section-6.3-15.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3-12.1.5.2">
+                <p id="section-6.3-12.1.5.2.1">With reference to the 'scope' claim in the stored access token for the Administrator, let us define PERM* as the union of the permission sets associated with the scope entries such that GROUPNAME* matches with the specified group name pattern. Also, let us define PERM as the union of the permission sets associated with the scope entries such that GROUPNAME matches with the specified group name pattern. Then, PERM and PERM* <span class="bcp14">MUST</span> be equal.<a href="#section-6.3-12.1.5.2.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
-<p id="section-6.3-16">If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager <span class="bcp14">MUST</span> reply with a 5.03 (Service Unavailable) response. The response <span class="bcp14">MUST</span> have Content-Format set to "application/concise-problem-details+cbor" <span>[<a href="#RFC9290" class="cite xref">RFC9290</a>]</span> and is formatted as defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span>. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field <span class="bcp14">MUST</span> be set to 11 ("Unable to determine a group name").<a href="#section-6.3-16" class="pilcrow">¶</a></p>
-<p id="section-6.3-17">Otherwise, the Group Manager creates a new group-configuration resource accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the final name given to the OSCORE group, as either the one indicated in the 'group_name' parameter of the request and confirmed by the Group Manager, or the alternative one that has been determined and uniquely assigned by the Group Manager. The group-collection resource is also updated accordingly.<a href="#section-6.3-17" class="pilcrow">¶</a></p>
-<p id="section-6.3-18">The operation of creating the new group-configuration resource and accordingly updating the group-collection resource <span class="bcp14">MUST</span> be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters are set, the following applies.<a href="#section-6.3-18" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-6.3-12.1.6">
+If the Group Manager does not manage to determine a group name for which both the above conditions hold, the Group Manager <span class="bcp14">MUST</span> reply with a 5.03 (Service Unavailable) response. The response <span class="bcp14">MUST</span> have Content-Format set to "application/concise-problem-details+cbor" <span>[<a href="#RFC9290" class="cite xref">RFC9290</a>]</span> and is formatted as defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span>. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field <span class="bcp14">MUST</span> be set to 11 ("Unable to determine a group name").<a href="#section-6.3-12.1.6" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.3-12.2">
+            <p id="section-6.3-12.2.1">If the previous step has succeeded, the Group Manager creates a new group-configuration resource accessible to the Administrator at /manage/GROUPNAME, where GROUPNAME is the final name given to the OSCORE group, as either the one indicated in the 'group_name' parameter of the request and confirmed by the Group Manager, or the alternative one that has been determined and uniquely assigned by the Group Manager. The group-collection resource is also updated accordingly.<a href="#section-6.3-12.2.1" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.2.2">
+The operation of creating the new group-configuration resource and accordingly updating the group-collection resource <span class="bcp14">MUST</span> be atomic. That is, until the request processing fails, or the group-configuration resource is fully created and the values of its parameters are set, the following applies.<a href="#section-6.3-12.2.2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3-19.1">
-            <p id="section-6.3-19.1.1">The group-configuration resource <span class="bcp14">MUST NOT</span> be accessible through other operations.<a href="#section-6.3-19.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3-12.2.3.1">
+                <p id="section-6.3-12.2.3.1.1">The group-configuration resource <span class="bcp14">MUST NOT</span> be accessible through other operations.<a href="#section-6.3-12.2.3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.3-19.2">
-            <p id="section-6.3-19.2.1">The group-collection resource <span class="bcp14">MUST NOT</span> be updated to reflect the presence of the new group-configuration resource.<a href="#section-6.3-19.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3-12.2.3.2">
+                <p id="section-6.3-12.2.3.2.1">The group-collection resource <span class="bcp14">MUST NOT</span> be updated to reflect the presence of the new group-configuration resource.<a href="#section-6.3-12.2.3.2.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
-<p id="section-6.3-20">When the group-collection resource is eventually updated to reflect the presence of the new group-configuration resource, this update <span class="bcp14">MUST NOT</span> be interrupted by other updates to the group-collection resource due to the creation or deletion of group-configuration resources.<a href="#section-6.3-20" class="pilcrow">¶</a></p>
-<p id="section-6.3-21">In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.<a href="#section-6.3-21" class="pilcrow">¶</a></p>
-<p id="section-6.3-22">If the request specifies the 'gid_reuse' parameter encoding the CBOR simple value <code>true</code> (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-12.2.1.1" class="relref">Section 12.2.1.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-11" class="relref">Section 11</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value <code>false</code> (0xf4).<a href="#section-6.3-22" class="pilcrow">¶</a></p>
-<p id="section-6.3-23">For each parameter not specified in the POST request, the Group Manager refers to default values as specified in <a href="#default-values" class="auto internal xref">Section 5.2</a>.<a href="#section-6.3-23" class="pilcrow">¶</a></p>
-<p id="section-6.3-24">After that, the Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.1" class="relref">Section 6.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-6.3-24" class="pilcrow">¶</a></p>
-<p id="section-6.3-25">From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information and assigns them to the newly created OSCORE group:<a href="#section-6.3-25" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-6.3-12.2.4">
+When the group-collection resource is eventually updated to reflect the presence of the new group-configuration resource, this update <span class="bcp14">MUST NOT</span> be interrupted by other updates to the group-collection resource due to the creation or deletion of group-configuration resources.<a href="#section-6.3-12.2.4" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.2.5">
+In the newly created group-configuration resource, the value of the status parameter 'rt' is set to "core.osc.gconf". The values of other parameters specified in the request are used as group configuration information for the newly created OSCORE group.<a href="#section-6.3-12.2.5" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.2.6">
+If the request specifies the 'gid_reuse' parameter encoding the CBOR simple value <code>true</code> (0xf5) and the Group Manager does not support the reassignment of OSCORE Group ID values (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-12.2.1.1" class="relref">Section 12.2.1.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-11" class="relref">Section 11</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), then the Group Manager sets the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value <code>false</code> (0xf4).<a href="#section-6.3-12.2.6" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.2.7">
+For each parameter not specified in the POST request, the Group Manager refers to default values as specified in <a href="#default-values" class="auto internal xref">Section 5.2</a>.<a href="#section-6.3-12.2.7" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.3-12.3">
+            <p id="section-6.3-12.3.1">The Group Manager creates a new group-membership resource accessible at /ace-group/GROUPNAME to nodes that want to join the OSCORE group, as specified in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.1" class="relref">Section 6.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. Note that such group membership-resource comprises a number of sub-resources intended to current group members, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#section-6.3-12.3.1" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.3.2">
+From then on, the Group Manager will rely on the current group configuration to build the Join Response message defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, when handling the joining of a new group member. Furthermore, the Group Manager generates the following pieces of information and assigns them to the newly created OSCORE group:<a href="#section-6.3-12.3.2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3-26.1">
-            <p id="section-6.3-26.1.1">The OSCORE Master Secret.<a href="#section-6.3-26.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3-12.3.3.1">
+                <p id="section-6.3-12.3.3.1.1">The OSCORE Master Secret.<a href="#section-6.3-12.3.3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.3-26.2">
-            <p id="section-6.3-26.2.1">The OSCORE Master Salt (optionally).<a href="#section-6.3-26.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3-12.3.3.2">
+                <p id="section-6.3-12.3.3.2.1">The OSCORE Master Salt (optionally).<a href="#section-6.3-12.3.3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.3-26.3">
-            <p id="section-6.3-26.3.1">The Group ID, used as OSCORE ID Context, which <span class="bcp14">MUST</span> be unique within the set of OSCORE groups under the Group Manager.<a href="#section-6.3-26.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-6.3-27">Finally, the Group Manager replies to the Administrator with a 2.01 (Created) response, which <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor". One or more Location-Path options <span class="bcp14">MUST</span> be included in the response, indicating the location of the just created group-configuration resource. The response <span class="bcp14">MUST NOT</span> include a Location-Query option.<a href="#section-6.3-27" class="pilcrow">¶</a></p>
-<p id="section-6.3-28">The response payload is a CBOR map, whose possible entries are specified in <a href="#config-repr" class="auto internal xref">Section 5.1</a>. In particular, the following applies.<a href="#section-6.3-28" class="pilcrow">¶</a></p>
-<p id="section-6.3-29">The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri' from the status parameters of the newly created OSCORE group (see <a href="#config-repr" class="auto internal xref">Section 5.1</a>), as detailed below.<a href="#section-6.3-29" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.3-30.1">
-            <p id="section-6.3-30.1.1">'group_name', specifying the group name of the OSCORE group. This value can be different from the group name specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'group_name' status parameter for the OSCORE group. This parameter <span class="bcp14">MUST</span> be included.<a href="#section-6.3-30.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.3-30.2">
-            <p id="section-6.3-30.2.1">'joining_uri', specifying the URI of the group-membership resource for joining the newly created OSCORE group. This parameter <span class="bcp14">MUST</span> be included.<a href="#section-6.3-30.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.3-30.3">
-            <p id="section-6.3-30.3.1">'as_uri', specifying the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter <span class="bcp14">MUST</span> be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'as_uri' status parameter for the OSCORE group.<a href="#section-6.3-30.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-6.3-31">If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple value <code>true</code> (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value <code>false</code> (0xf4), then the response payload <span class="bcp14">MUST</span> also include the 'gid_reuse' parameter encoding the CBOR simple value <code>false</code> (0xf4).<a href="#section-6.3-31" class="pilcrow">¶</a></p>
-<p id="section-6.3-32">If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> and <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a>, then the response payload <span class="bcp14">MUST</span> also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.<a href="#section-6.3-32" class="pilcrow">¶</a></p>
-<p id="section-6.3-33">The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>, e.g., by using the approach described in <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="cite xref">I-D.tiloca-core-oscore-discovery</a>]</span>. The Group Manager considers the current group configuration when specifying additional information for the link to register.<a href="#section-6.3-33" class="pilcrow">¶</a></p>
-<p id="section-6.3-34">It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.<a href="#section-6.3-34" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.3-35.1">
-            <p id="section-6.3-35.1.1">The name of the OSCORE group <span class="bcp14">MUST</span> take the value specified in the 'group_name' parameter from the 2.01 (Created) response.<a href="#section-6.3-35.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.3-35.2">
-            <p id="section-6.3-35.2.1">The names of the application groups using the OSCORE group <span class="bcp14">MUST</span> take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.<a href="#section-6.3-35.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.3-35.3">
-            <p id="section-6.3-35.3.1">If also registering a related link to the Authorization Server associated with the OSCORE group, the related link <span class="bcp14">MUST</span> have as link target the URI specified in the 'as_uri' parameter from the 2.01 (Created) response.<a href="#section-6.3-35.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.3-35.4">
-            <p id="section-6.3-35.4.1">As to every other information element describing the current group configuration, the following applies.<a href="#section-6.3-35.4.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.3-35.4.2.1">
-                <p id="section-6.3-35.4.2.1.1">If a certain parameter was specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.<a href="#section-6.3-35.4.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-6.3-35.4.2.2">
-                <p id="section-6.3-35.4.2.2.1">If a certain parameter was not specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> or <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a> otherwise.<a href="#section-6.3-35.4.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3-12.3.3.3">
+                <p id="section-6.3-12.3.3.3.1">The Group ID, used as OSCORE ID Context, which <span class="bcp14">MUST</span> be unique within the set of OSCORE groups under the Group Manager.<a href="#section-6.3-12.3.3.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-        </ul>
-<p id="section-6.3-36">Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.<a href="#section-6.3-36" class="pilcrow">¶</a></p>
-<p id="section-6.3-37">Therefore, it is <span class="bcp14">RECOMMENDED</span> that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.<a href="#section-6.3-37" class="pilcrow">¶</a></p>
-<p id="section-6.3-38">An example of message exchange is shown below.<a href="#section-6.3-38" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.3-39">
+          <li id="section-6.3-12.4">
+            <p id="section-6.3-12.4.1">The Group Manager replies to the Administrator with a 2.01 (Created) response, which <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor". One or more Location-Path options <span class="bcp14">MUST</span> be included in the response, indicating the location of the just created group-configuration resource. The response <span class="bcp14">MUST NOT</span> include a Location-Query option.<a href="#section-6.3-12.4.1" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.4.2">
+The response payload is a CBOR map, whose possible entries are specified in <a href="#config-repr" class="auto internal xref">Section 5.1</a>. In particular, the following applies.<a href="#section-6.3-12.4.2" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.4.3">
+The response payload specifies the parameters 'group_name', 'joining_uri', and 'as_uri' from the status parameters of the newly created OSCORE group (see <a href="#config-repr" class="auto internal xref">Section 5.1</a>), as detailed below.<a href="#section-6.3-12.4.3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.3-12.4.4.1">
+                <p id="section-6.3-12.4.4.1.1">'group_name', specifying the group name of the OSCORE group. This value can be different from the group name specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'group_name' status parameter for the OSCORE group. This parameter <span class="bcp14">MUST</span> be included.<a href="#section-6.3-12.4.4.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.4.4.2">
+                <p id="section-6.3-12.4.4.2.1">'joining_uri', specifying the URI of the group-membership resource for joining the newly created OSCORE group. This parameter <span class="bcp14">MUST</span> be included.<a href="#section-6.3-12.4.4.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.4.4.3">
+                <p id="section-6.3-12.4.4.3.1">'as_uri', specifying the URI of the Authorization Server associated with the Group Manager for the newly created OSCORE group. This parameter <span class="bcp14">MUST</span> be included. Its value can be different from the URI possibly specified by the Administrator in the POST request, and it reflects the final choice of the Group Manager, as the value of the 'as_uri' status parameter for the OSCORE group.<a href="#section-6.3-12.4.4.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-6.3-12.4.5">
+If the POST request specified the 'gid_reuse' parameter encoding the CBOR simple value <code>true</code> (0xf5) but the Group Manager has set the value of the 'gid_reuse' status parameter in the group-configuration resource to the CBOR simple value <code>false</code> (0xf4), then the response payload <span class="bcp14">MUST</span> also include the 'gid_reuse' parameter encoding the CBOR simple value <code>false</code> (0xf4).<a href="#section-6.3-12.4.5" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.4.6">
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> and <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a>, then the response payload <span class="bcp14">MUST</span> also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.<a href="#section-6.3-12.4.6" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.3-12.5">
+            <p id="section-6.3-12.5.1">The Group Manager can register the link to the group-membership resource with URI specified in 'joining_uri' to a Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>, e.g., by using the approach described in <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="cite xref">I-D.tiloca-core-oscore-discovery</a>]</span>. The Group Manager considers the current group configuration when specifying additional information for the link to register.<a href="#section-6.3-12.5.1" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.5.2">
+It is also possible that the Administrator performs the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to register.<a href="#section-6.3-12.5.2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.3-12.5.3.1">
+                <p id="section-6.3-12.5.3.1.1">The name of the OSCORE group <span class="bcp14">MUST</span> take the value specified in the 'group_name' parameter from the 2.01 (Created) response.<a href="#section-6.3-12.5.3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.5.3.2">
+                <p id="section-6.3-12.5.3.2.1">The names of the application groups using the OSCORE group <span class="bcp14">MUST</span> take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.<a href="#section-6.3-12.5.3.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.5.3.3">
+                <p id="section-6.3-12.5.3.3.1">If also registering a related link to the Authorization Server associated with the OSCORE group, the related link <span class="bcp14">MUST</span> have as link target the URI specified in the 'as_uri' parameter from the 2.01 (Created) response.<a href="#section-6.3-12.5.3.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.5.3.4">
+                <p id="section-6.3-12.5.3.4.1">As to every other information element describing the current group configuration, the following applies.<a href="#section-6.3-12.5.3.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.5.3.5">
+                <p id="section-6.3-12.5.3.5.1">If a certain parameter was specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the value specified in the POST request otherwise.<a href="#section-6.3-12.5.3.5.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.3-12.5.3.6">
+                <p id="section-6.3-12.5.3.6.1">If a certain parameter was not specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.01 (Created) response, if the Group Manager specified one, or the corresponding default value recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> or <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a> otherwise.<a href="#section-6.3-12.5.3.6.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-6.3-12.5.4">
+Note that, compared to the Group Manager, the Administrator is less likely to remain closely aligned with possible changes and updates that would require a prompt update to the registration in the Resource Directory. This applies especially to the address of the Group Manager, as well as the URI of the group-membership resource or of the Authorization Server associated with the Group Manager.<a href="#section-6.3-12.5.4" class="pilcrow">¶</a></p>
+<p id="section-6.3-12.5.5">
+Therefore, it is <span class="bcp14">RECOMMENDED</span> that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.<a href="#section-6.3-12.5.5" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-6.3-13">An example of message exchange is shown below.<a href="#section-6.3-13" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.3-14">
 <pre>
 =&gt; 0.02 POST
    Uri-Path: "manage"
@@ -2330,7 +2369,7 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
      e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
           e'as_uri': "coap://as.example.com/token"
    }
-</pre><a href="#section-6.3-39" class="pilcrow">¶</a>
+</pre><a href="#section-6.3-14" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2454,52 +2493,68 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
 <p id="section-6.6-6">If the group-configuration resource targeted by the POST request does not currently exist, then the Group Manager <span class="bcp14">MUST NOT</span> create the resource and <span class="bcp14">MUST</span> reply with a 4.04 (Not Found) error response.<a href="#section-6.6-6" class="pilcrow">¶</a></p>
 <p id="section-6.6-7">If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager <span class="bcp14">MUST</span> reply with a 5.03 (Service Unavailable) response. The response <span class="bcp14">MUST</span> have Content-Format set to "application/concise-problem-details+cbor" <span>[<a href="#RFC9290" class="cite xref">RFC9290</a>]</span> and is formatted as defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span>. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field <span class="bcp14">MUST</span> be set to 12 ("Unsupported group configuration") and the 'detail' field <span class="bcp14">SHOULD</span> be included in order to provide additional context.<a href="#section-6.6-7" class="pilcrow">¶</a></p>
 <p id="section-6.6-8">If no error occurs and the POST request is successfully processed, the Group Manager performs the following actions.<a href="#section-6.6-8" class="pilcrow">¶</a></p>
-<p id="section-6.6-9">First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' <span class="bcp14">MUST</span> remain unchanged.<a href="#section-6.6-9" class="pilcrow">¶</a></p>
-<p id="section-6.6-10">For each parameter not specified in the POST request, the Group Manager refers to default values as specified in <a href="#default-values" class="auto internal xref">Section 5.2</a>. Note that the default value recommended for the status parameter 'active' is the CBOR simple value <code>false</code> (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value <code>true</code> (0xf5).<a href="#section-6.6-10" class="pilcrow">¶</a></p>
-<p id="section-6.6-11">When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources <span class="bcp14">MUST</span> be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.<a href="#section-6.6-11" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.6-9">
+<li id="section-6.6-9.1">
+            <p id="section-6.6-9.1.1">The Group Manager updates the group-configuration resource, consistently with the values indicated in the POST request from the Administrator. When doing so, the configuration parameters 'group_mode' and 'pairwise_mode' as well as the status parameters 'group_name' and 'gid_reuse' <span class="bcp14">MUST</span> remain unchanged.<a href="#section-6.6-9.1.1" class="pilcrow">¶</a></p>
+<p id="section-6.6-9.1.2">
+For each parameter not specified in the POST request, the Group Manager refers to default values as specified in <a href="#default-values" class="auto internal xref">Section 5.2</a>. Note that the default value recommended for the status parameter 'active' is the CBOR simple value <code>false</code> (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value <code>true</code> (0xf5).<a href="#section-6.6-9.1.2" class="pilcrow">¶</a></p>
+<p id="section-6.6-9.1.3">
+When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources <span class="bcp14">MUST</span> be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.<a href="#section-6.6-9.1.3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.6-12.1">
-            <p id="section-6.6-12.1.1">The group-configuration resource <span class="bcp14">MUST NOT</span> be accessible through other operations.<a href="#section-6.6-12.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.6-9.1.4.1">
+                <p id="section-6.6-9.1.4.1.1">The group-configuration resource <span class="bcp14">MUST NOT</span> be accessible through other operations.<a href="#section-6.6-9.1.4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.6-12.2">
-            <p id="section-6.6-12.2.1">The group-membership resource <span class="bcp14">MUST NOT</span> be updated to reflect the new group configuration.<a href="#section-6.6-12.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.6-9.1.4.2">
+                <p id="section-6.6-9.1.4.2.1">The group-membership resource <span class="bcp14">MUST NOT</span> be updated to reflect the new group configuration.<a href="#section-6.6-9.1.4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.6-12.3">
-            <p id="section-6.6-12.3.1">The filter criteria specified in a FETCH request to the group-collection resource (see Section 6.2) <span class="bcp14">MUST</span> be compared against the representation that the group-configuration resource had before its update started.<a href="#section-6.6-12.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-6.6-13">When the group-membership resource is eventually updated to reflect the new group configuration, this update <span class="bcp14">MUST NOT</span> be interrupted by other operations performed on the group-membership resource.<a href="#section-6.6-13" class="pilcrow">¶</a></p>
-<p id="section-6.6-14">If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and it deletes any possible older set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-7.1" class="relref">Section 7.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>).<a href="#section-6.6-14" class="pilcrow">¶</a></p>
-<p id="section-6.6-15">From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.1" class="relref">Section 9.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>) or the current group status (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.9" class="relref">Section 9.9</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>).<a href="#section-6.6-15" class="pilcrow">¶</a></p>
-<p id="section-6.6-16">Then, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>.<a href="#section-6.6-16" class="pilcrow">¶</a></p>
-<p id="section-6.6-17">If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> and <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a>, then the response payload <span class="bcp14">MUST</span> also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.<a href="#section-6.6-17" class="pilcrow">¶</a></p>
-<p id="section-6.6-18">If the link to the group-membership resource was registered in the Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>, the Group Manager is responsible to refresh the registration.<a href="#section-6.6-18" class="pilcrow">¶</a></p>
-<p id="section-6.6-19">It is also possible that the Administrator updates the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.<a href="#section-6.6-19" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.6-20.1">
-            <p id="section-6.6-20.1.1">The name of the OSCORE group <span class="bcp14">MUST</span> take the value specified in the 'group_name' parameter from the 2.04 (Changed) response.<a href="#section-6.6-20.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.6-20.2">
-            <p id="section-6.6-20.2.1">The names of the application groups using the OSCORE group <span class="bcp14">MUST</span> take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.<a href="#section-6.6-20.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.6-20.3">
-            <p id="section-6.6-20.3.1">If also registering a related link to the Authorization Server associated with the OSCORE group, the related link <span class="bcp14">MUST</span> have as link target the URI specified in the 'as_uri' parameter from the 2.04 (Changed) response.<a href="#section-6.6-20.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.6-20.4">
-            <p id="section-6.6-20.4.1">As to every other information element describing the current group configuration, the following applies.<a href="#section-6.6-20.4.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.6-20.4.2.1">
-                <p id="section-6.6-20.4.2.1.1">If a certain parameter was specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the POST request otherwise.<a href="#section-6.6-20.4.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-6.6-20.4.2.2">
-                <p id="section-6.6-20.4.2.2.1">If a certain parameter was not specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> or <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a> otherwise.<a href="#section-6.6-20.4.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.6-9.1.4.3">
+                <p id="section-6.6-9.1.4.3.1">The filter criteria specified in a FETCH request to the group-collection resource (see <a href="#collection-resource-fetch" class="auto internal xref">Section 6.2</a>) <span class="bcp14">MUST</span> be compared against the representation that the group-configuration resource had before its update started.<a href="#section-6.6-9.1.4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-6.6-9.1.5">
+When the group-membership resource is eventually updated to reflect the new group configuration, this update <span class="bcp14">MUST NOT</span> be interrupted by other operations performed on the group-membership resource.<a href="#section-6.6-9.1.5" class="pilcrow">¶</a></p>
+<p id="section-6.6-9.1.6">
+If a new value N' is specified for the 'max_stale_sets' status parameter and N' is smaller than the current value N, the Group Manager preserves the (up to) N' most recent sets of stale OSCORE Sender IDs associated with the group, and it deletes any possible older set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-7.1" class="relref">Section 7.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>).<a href="#section-6.6-9.1.6" class="pilcrow">¶</a></p>
+<p id="section-6.6-9.1.7">
+From then on, the Group Manager relies on the latest updated configuration to build the Join Response message defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.1" class="relref">Section 9.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>) or the current group status (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.9" class="relref">Section 9.9</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>).<a href="#section-6.6-9.1.7" class="pilcrow">¶</a></p>
 </li>
-        </ul>
-<p id="section-6.6-21">As discussed in <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>, it is <span class="bcp14">RECOMMENDED</span> that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.<a href="#section-6.6-21" class="pilcrow">¶</a></p>
-<p id="section-6.6-22">An example of message exchange is shown below.<a href="#section-6.6-22" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.6-23">
+          <li id="section-6.6-9.2">
+            <p id="section-6.6-9.2.1">The Group Manager replies to the Administrator with a 2.04 (Changed) response, which <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>.<a href="#section-6.6-9.2.1" class="pilcrow">¶</a></p>
+<p id="section-6.6-9.2.2">
+If the POST request did not specify certain parameters and the Group Manager used default values different from the ones recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> and <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a>, then the response payload <span class="bcp14">MUST</span> also include those parameters, specifying the values chosen by the Group Manager for the current group configuration.<a href="#section-6.6-9.2.2" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.6-9.3">
+            <p id="section-6.6-9.3.1">If the link to the group-membership resource was registered in the Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>, the Group Manager is responsible to refresh the registration.<a href="#section-6.6-9.3.1" class="pilcrow">¶</a></p>
+<p id="section-6.6-9.3.2">
+It is also possible that the Administrator updates the registration in the Resource Directory on behalf of the Group Manager, acting as Commissioning Tool. The Administrator considers the following when specifying additional information for the link to update.<a href="#section-6.6-9.3.2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.6-9.3.3.1">
+                <p id="section-6.6-9.3.3.1.1">The name of the OSCORE group <span class="bcp14">MUST</span> take the value specified in the 'group_name' parameter from the 2.04 (Changed) response.<a href="#section-6.6-9.3.3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.6-9.3.3.2">
+                <p id="section-6.6-9.3.3.2.1">The names of the application groups using the OSCORE group <span class="bcp14">MUST</span> take the values possibly specified by the elements of the 'app_groups' parameter in the POST request.<a href="#section-6.6-9.3.3.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.6-9.3.3.3">
+                <p id="section-6.6-9.3.3.3.1">If also registering a related link to the Authorization Server associated with the OSCORE group, the related link <span class="bcp14">MUST</span> have as link target the URI specified in the 'as_uri' parameter from the 2.04 (Changed) response.<a href="#section-6.6-9.3.3.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.6-9.3.3.4">
+                <p id="section-6.6-9.3.3.4.1">As to every other information element describing the current group configuration, the following applies.<a href="#section-6.6-9.3.3.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.6-9.3.3.4.2.1">
+                    <p id="section-6.6-9.3.3.4.2.1.1">If a certain parameter was specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the value specified in the POST request otherwise.<a href="#section-6.6-9.3.3.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-6.6-9.3.3.4.2.2">
+                    <p id="section-6.6-9.3.3.4.2.2.1">If a certain parameter was not specified in the POST request, the Administrator <span class="bcp14">MUST</span> use either the value specified in the 2.04 (Changed) response, if the Group Manager specified one, or the corresponding default value recommended in <a href="#default-values-conf" class="auto internal xref">Section 5.2.1</a> or <a href="#default-values-status" class="auto internal xref">Section 5.2.2</a> otherwise.<a href="#section-6.6-9.3.3.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+<p id="section-6.6-9.3.4">
+As discussed in <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>, it is <span class="bcp14">RECOMMENDED</span> that registrations of links to group-membership resources in the Resource Directory are made (and possibly updated) directly by the Group Manager, rather than by the Administrator.<a href="#section-6.6-9.3.4" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-6.6-10">An example of message exchange is shown below.<a href="#section-6.6-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.6-11">
 <pre>
 =&gt; 0.02 POST
    Uri-Path: "manage"
@@ -2523,7 +2578,7 @@ This parameter <span class="bcp14">MUST NOT</span> be present if the configurati
      e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
           e'as_uri': "coap://as.example.com/token"
    }
-</pre><a href="#section-6.6-23" class="pilcrow">¶</a>
+</pre><a href="#section-6.6-11" class="pilcrow">¶</a>
 </div>
 <div id="sssec-effects-overwrite-joining-nodes">
 <section id="section-6.6.1">
@@ -2691,32 +2746,44 @@ The 4.09 (Conflict) response <span class="bcp14">MAY</span> include the current 
 <p id="section-6.7-10">When performing the authorization checks, the Group Manager uses GROUPNAME as TARGETNAME, and "Write" as PERMISSION.<a href="#section-6.7-10" class="pilcrow">¶</a></p>
 <p id="section-6.7-11">If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager <span class="bcp14">MUST</span> reply with a 5.03 (Service Unavailable) response. The response <span class="bcp14">MUST</span> have Content-Format set to "application/concise-problem-details+cbor" <span>[<a href="#RFC9290" class="cite xref">RFC9290</a>]</span> and is formatted as defined in <span><a href="https://rfc-editor.org/rfc/rfc9594#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#RFC9594" class="cite xref">RFC9594</a>]</span>. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field <span class="bcp14">MUST</span> be set to 12 ("Unsupported group configuration") and the 'detail' field <span class="bcp14">SHOULD</span> be included in order to provide additional context.<a href="#section-6.7-11" class="pilcrow">¶</a></p>
 <p id="section-6.7-12">If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.<a href="#section-6.7-12" class="pilcrow">¶</a></p>
-<p id="section-6.7-13">First, the Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also updated accordingly.<a href="#section-6.7-13" class="pilcrow">¶</a></p>
-<p id="section-6.7-14">The operation of updating the group-configuration resource and accordingly updating the group-membership resource <span class="bcp14">MUST</span> be atomic. That is, the same as defined in <a href="#configuration-resource-post" class="auto internal xref">Section 6.6</a> when atomically overwriting a group-configuration resource applies.<a href="#section-6.7-14" class="pilcrow">¶</a></p>
-<p id="section-6.7-15">Unlike for the POST request defined in <a href="#configuration-resource-post" class="auto internal xref">Section 6.6</a>, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.<a href="#section-6.7-15" class="pilcrow">¶</a></p>
-<p id="section-6.7-16">Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.<a href="#section-6.7-16" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.7-13">
+<li id="section-6.7-13.1">
+            <p id="section-6.7-13.1.1">The Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also updated accordingly.<a href="#section-6.7-13.1.1" class="pilcrow">¶</a></p>
+<p id="section-6.7-13.1.2">
+The operation of updating the group-configuration resource and accordingly updating the group-membership resource <span class="bcp14">MUST</span> be atomic. That is, the same as defined in <a href="#configuration-resource-post" class="auto internal xref">Section 6.6</a> when atomically overwriting a group-configuration resource applies.<a href="#section-6.7-13.1.2" class="pilcrow">¶</a></p>
+<p id="section-6.7-13.1.3">
+Unlike for the POST request defined in <a href="#configuration-resource-post" class="auto internal xref">Section 6.6</a>, the Group Manager does not alter the value of configuration parameters and status parameters for which updated values are not specified in the request payload. In particular, the Group Manager does not assign possible default values to those parameters.<a href="#section-6.7-13.1.3" class="pilcrow">¶</a></p>
+<p id="section-6.7-13.1.4">
+Special processing occurs when updating the 'app_groups' status parameter by difference, as defined below. The Administrator should not expect the Group Manager to add or delete names of application group names according to any particular order.<a href="#section-6.7-13.1.4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.7-17.1">
-            <p id="section-6.7-17.1.1">If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.<a href="#section-6.7-17.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.7-13.1.5.1">
+                <p id="section-6.7-13.1.5.1.1">If the name of an application group to add (delete) is specified multiple times, the Group Manager considers it only once for addition to (deletion from) the 'app_groups' status parameter.<a href="#section-6.7-13.1.5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.7-17.2">
-            <p id="section-6.7-17.2.1">If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.<a href="#section-6.7-17.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.7-13.1.5.2">
+                <p id="section-6.7-13.1.5.2.1">If the name of an application group to delete is not present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.<a href="#section-6.7-13.1.5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.7-17.3">
-            <p id="section-6.7-17.3.1">If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.<a href="#section-6.7-17.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.7-13.1.5.3">
+                <p id="section-6.7-13.1.5.3.1">If the name of an application group to add is already present in the 'app_groups' status parameter before any change is applied, the Group Manager ignores that name.<a href="#section-6.7-13.1.5.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.7-17.4">
-            <p id="section-6.7-17.4.1">The Group Manager deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.<a href="#section-6.7-17.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.7-13.1.5.4">
+                <p id="section-6.7-13.1.5.4.1">The Group Manager deletes from the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_del' CBOR array of the 'app_groups_diff' field.<a href="#section-6.7-13.1.5.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.7-17.5">
-            <p id="section-6.7-17.5.1">The Group Manager adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.<a href="#section-6.7-17.5.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.7-13.1.5.5">
+                <p id="section-6.7-13.1.5.5.1">The Group Manager adds to the 'app_groups' status parameter the names of the application groups specified in the inner 'app_groups_add' CBOR array of the 'app_groups_diff' field.<a href="#section-6.7-13.1.5.5.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
-<p id="section-6.7-18">After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.1" class="relref">Section 9.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>) or the current group status (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.9" class="relref">Section 9.9</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>).<a href="#section-6.7-18" class="pilcrow">¶</a></p>
-<p id="section-6.7-19">Finally, the Group Manager replies to the Administrator with a 2.04 (Changed) response, which <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>.<a href="#section-6.7-19" class="pilcrow">¶</a></p>
-<p id="section-6.7-20">The same considerations as for the POST request defined in <a href="#configuration-resource-post" class="auto internal xref">Section 6.6</a> hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>.<a href="#section-6.7-20" class="pilcrow">¶</a></p>
-<p id="section-6.7-21">An example of message exchange is shown below.<a href="#section-6.7-21" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.7-22">
+            </ul>
+<p id="section-6.7-13.1.6">
+After having updated the group-configuration resource, from then on the Group Manager relies on the new group configuration to build the Join Response message defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>, when handling the joining of a new group member. Similarly, the Group Manager relies on the new group configuration when building responses specifying (part of) the group configuration to a current group member. For instance, this applies when a group member retrieves from the Group Manager the updated group keying material (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.1" class="relref">Section 9.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>) or the current group status (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-19#section-9.9" class="relref">Section 9.9</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>).<a href="#section-6.7-13.1.6" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.7-13.2">
+            <p id="section-6.7-13.2.1">The Group Manager replies to the Administrator with a 2.04 (Changed) response, which <span class="bcp14">MUST</span> have Content-Format set to "application/ace-groupcomm+cbor". The payload of the response is a CBOR map and it has the same format as that of the 2.01 (Created) response defined in <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>.<a href="#section-6.7-13.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.7-13.3">
+            <p id="section-6.7-13.3.1">The same considerations as for the POST request defined in <a href="#configuration-resource-post" class="auto internal xref">Section 6.6</a> hold also in this case, with respect to refreshing a possible registration of the link to the group-membership resource in the Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>.<a href="#section-6.7-13.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-6.7-14">An example of message exchange is shown below.<a href="#section-6.7-14" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.7-15">
 <pre>
 =&gt; 0.06 PATCH
    Uri-Path: "manage"
@@ -2740,7 +2807,7 @@ The 4.09 (Conflict) response <span class="bcp14">MAY</span> include the current 
      e'joining_uri': "coap://[2001:db8::ab]/ace-group/gp4/",
           e'as_uri': "coap://as.example.com/token"
    }
-</pre><a href="#section-6.7-22" class="pilcrow">¶</a>
+</pre><a href="#section-6.7-15" class="pilcrow">¶</a>
 </div>
 <div id="sssec-effects-update-joining-nodes">
 <section id="section-6.7.1">
@@ -3260,9 +3327,23 @@ After a change of group configuration, a group member <span class="bcp14">MUST</
         <h3 id="name-administrators">
 <a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-administrators" class="section-name selfRef">Administrators</a>
         </h3>
-<p id="section-10.3-1">If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group, and how they achieve and maintain such an alignment with each other.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
-<p id="section-10.3-2">A compromised Administrator could collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
-<p id="section-10.3-3">When an Administrator is found compromised, the pertaining access tokens <span class="bcp14">MUST</span> be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked access tokens is defined in <span>[<a href="#RFC9770" class="cite xref">RFC9770</a>]</span>.<a href="#section-10.3-3" class="pilcrow">¶</a></p>
+<p id="section-10.3-1"><a href="#collection-resource-get" class="auto internal xref">Section 6.1</a> and <a href="#collection-resource-fetch" class="auto internal xref">Section 6.2</a> define exchanges where the Administrator sends a GET or FETCH request to the group-collection resource at the Group Manager. The payload of a successful response to those requests can include links to group-configuration resources at the Group Manager. When processing the response, the Administrator <span class="bcp14">MUST NOT</span> accept any of such links whose URI specified as link target does not point to the Group Manager that has sent the response. In particular, the Administrator <span class="bcp14">MUST NOT</span> consider those links as pointing to the alleged group-configuration resources.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+<p id="section-10.3-2">From <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a> to <a href="#configuration-resource-patch" class="auto internal xref">Section 6.7</a>, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator <span class="bcp14">SHOULD NOT</span> accept the URI encoded by the 'joining_uri' parameter, if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator <span class="bcp14">SHOULD NOT</span> consider that URI as pointing to the alleged group-membership resource.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
+<p id="section-10.3-3">Exceptions in accepting URIs that allegedly point to group-membership resources ought to be carefully understood and vetted by the Administrator. As a notable example, a trusted CoAP reverse-proxy might stand in for the Group Manager, in such a way that candidate group members can reach the Group Manager by actually interacting with the reverse-proxy. In this case, the host subcomponent of the URI does not refer to the Group Manager, but instead to the reverse-proxy.<a href="#section-10.3-3" class="pilcrow">¶</a></p>
+<p id="section-10.3-4">The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager, by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.<a href="#section-10.3-4" class="pilcrow">¶</a></p>
+<p id="section-10.3-5">If the Administrator determines that a URI pointing to an alleged group-membership resource cannot be accepted, the following applies:<a href="#section-10.3-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.3-6.1">
+            <p id="section-10.3-6.1.1">Aligned with what is allowed by the granted authorization, the Administrator can attempt to retrieve the correct URI pointing to the group-membership resource in question, by sending a GET or FETCH request to the corresponding group-configuration resource (see <a href="#configuration-resource-get" class="auto internal xref">Section 6.4</a> and <a href="#configuration-resource-fetch" class="auto internal xref">Section 6.5</a>). Also aligned with what is allowed by the granted authorization, the Administrator could ultimately delete the group configuration in question by deleting the corresponding group-configuration resource (see <a href="#configuration-resource-delete" class="auto internal xref">Section 6.8</a>) and then create a new group configuration (see <a href="#collection-resource-post" class="auto internal xref">Section 6.3</a>).<a href="#section-10.3-6.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.3-6.2">
+            <p id="section-10.3-6.2.1">The Administrator <span class="bcp14">MUST NOT</span> register the link to the group-membership resource with URI specified in the 'joining_uri' parameter to a Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> on behalf of the Group Manager.<a href="#section-10.3-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-10.3-7">If the Administrator determines that a URI pointing to an alleged group-configuration resource or group-membership resource cannot be accepted, the Administrator ought to report it as appropriate.<a href="#section-10.3-7" class="pilcrow">¶</a></p>
+<p id="section-10.3-8">If multiple Administrators are responsible for the same OSCORE group, they are expected to be aware of each other and of their shared responsibility, as well as to be aligned on what is in the best interest of the OSCORE group and its secure operation. It is out of the scope of this document to define how different Administrators are appointed as responsible for an OSCORE group, and how they achieve and maintain such an alignment with each other.<a href="#section-10.3-8" class="pilcrow">¶</a></p>
+<p id="section-10.3-9">A compromised Administrator could collude with unauthorized parties. Within the extent of the granted access rights, the compromised Administrator may leak group configurations, change them in such a way that communications in the OSCORE groups do not attain the originally intended security level, or delete OSCORE groups altogether thus impeding their secure operation.<a href="#section-10.3-9" class="pilcrow">¶</a></p>
+<p id="section-10.3-10">When an Administrator is found compromised, the pertaining access tokens <span class="bcp14">MUST</span> be revoked by the Authorization Server. A possible way for the Authorization Server to notify the affected Group Managers about such revoked access tokens is defined in <span>[<a href="#RFC9770" class="cite xref">RFC9770</a>]</span>.<a href="#section-10.3-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4032,7 +4113,19 @@ coap_group_oscore_app = 1
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-C.1-1.1">
-            <p id="appendix-C.1-1.1.1">Editorial improvements.<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.1.1">Updated section title (removed "full").<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.2">
+            <p id="appendix-C.1-1.2.1">Updated example of FETCH request to group-configuration resource.<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.3">
+            <p id="appendix-C.1-1.3.1">Used numbered steps to describe operations of some resource handlers.<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.4">
+            <p id="appendix-C.1-1.4.1">Security considerations: handling of URIs that should point to the Group Manager but do not.<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.5">
+            <p id="appendix-C.1-1.5.1">Minor fixes and editorial improvements.<a href="#appendix-C.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -4526,7 +4619,7 @@ coap_group_oscore_app = 1
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
 <p id="appendix-D-1">Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
-<p id="appendix-D-2">The authors sincerely thank <span class="contact-name">Christian Amsüss</span>, <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Meir Goldman</span>, <span class="contact-name">Jim Schaad</span>, <span class="contact-name">Göran Selander</span>, <span class="contact-name">Cigdem Sengul</span>, and <span class="contact-name">Paul Wouters</span> for their comments and feedback.<a href="#appendix-D-2" class="pilcrow">¶</a></p>
+<p id="appendix-D-2">The authors sincerely thank <span class="contact-name">Christian Amsüss</span>, <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Meir Goldman</span>, <span class="contact-name">Wes Hardaker</span>, <span class="contact-name">Jim Schaad</span>, <span class="contact-name">Göran Selander</span>, <span class="contact-name">Cigdem Sengul</span>, and <span class="contact-name">Paul Wouters</span> for their comments and feedback.<a href="#appendix-D-2" class="pilcrow">¶</a></p>
 <p id="appendix-D-3">The work on this document has been partly supported by the Sweden's Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and CYPRESS; and by the H2020 project SIFIS-Home (Grant agreement 952652).<a href="#appendix-D-3" class="pilcrow">¶</a></p>
 </section>
 </div>
