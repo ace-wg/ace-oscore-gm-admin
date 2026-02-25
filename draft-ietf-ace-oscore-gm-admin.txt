@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 27 August 2026                                  P. van der Stok
+Expires: 29 August 2026                                  P. van der Stok
                                                                         
                                                             F. Palombini
                                                              Ericsson AB
-                                                        23 February 2026
+                                                        25 February 2026
 
 
               Admin Interface for the OSCORE Group Manager
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 August 2026.
+   This Internet-Draft will expire on 29 August 2026.
 
 Copyright Notice
 
@@ -4217,8 +4217,8 @@ Acknowledgments
    resource model based on group collection and group configurations.
 
    The authors sincerely thank Christian Amsüss, Carsten Bormann, Meir
-   Goldman, Wes Hardaker, Jim Schaad, Göran Selander, Cigdem Sengul, and
-   Paul Wouters for their comments and feedback.
+   Goldman, Bron Gondwana, Wes Hardaker, Jim Schaad, Göran Selander,
+   Cigdem Sengul, and Paul Wouters for their comments and feedback.
 
    The work on this document has been partly supported by the Sweden's
    Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and
