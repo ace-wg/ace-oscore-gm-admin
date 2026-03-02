@@ -97,7 +97,7 @@ entity:
 
 --- abstract
 
-Group communication for the Constrained Application Protocol (CoAP) can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible for handling the joining of new group members, as well as for managing and distributing the group keying material. This document defines a RESTful admin interface at the Group Manager that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The ACE framework for Authentication and Authorization is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof of possession, and server authentication.
+Group communication for the Constrained Application Protocol (CoAP) can be secured using Group Object Security for Constrained RESTful Environments (Group OSCORE). A Group Manager is responsible for handling the joining of new group members, as well as for managing and distributing the group keying material. This document defines a RESTful admin interface at the Group Manager that allows an Administrator entity to create and delete OSCORE groups, as well as to retrieve and update their configuration. The Authentication and Authorization for Constrained Environments (ACE) framework is used to enforce authentication and authorization of the Administrator at the Group Manager. Protocol-specific transport profiles of ACE are used to achieve communication security, proof of possession, and server authentication.
 
 --- middle
 
@@ -107,7 +107,7 @@ The Constrained Application Protocol (CoAP) {{RFC7252}} can be used for group co
 
 When group communication for CoAP is protected with Group OSCORE, nodes are required to join the correct OSCORE group explicitly. To this end, a joining node interacts with a Group Manager (GM) entity responsible for that group, and retrieves the required keying material to securely communicate with other group members using Group OSCORE.
 
-The method in {{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. That method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
+{{I-D.ietf-ace-key-groupcomm-oscore}} specifies how nodes can join an OSCORE group through the respective Group Manager. That method builds on the ACE framework for Authentication and Authorization {{RFC9200}}, ensuring a secure joining process as well as authentication and authorization of joining nodes (clients) at the Group Manager (resource server).
 
 In some deployments, the application running on the Group Manager may know when a new OSCORE group has to be created, how the group should be configured upon creation, and later on how the group should be updated or deleted, e.g., based on the current application state or pre-installed policies. In this case, the Group Manager application can create and configure OSCORE groups when needed, by using a local application interface. However, this requires the Group Manager to be application-specific, which in turn may lead to error-prone deployments and is not very flexible.
 
@@ -115,19 +115,13 @@ In other deployments, a separate Administrator entity, such as a Commissioning T
 
 This document specifies a RESTful admin interface at the Group Manager, intended for an Administrator as a separate entity external to the Group Manager and its application. The interface allows the Administrator to create and delete OSCORE groups, as well as to specify and update their configuration.
 
-Interaction examples are provided in the CoRE Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR extended diagnostic notation as defined in {{Section 8 of RFC8949}} and {{Appendix G of RFC8610}} ("diagnostic notation"). Diagnostic notation comments are often used to provide a textual representation of the numeric parameter names and values.
-
-In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': 10} stands for {-13: "gp1", -4: 10}.
-
-Note to RFC Editor: Please delete the paragraph immediately preceding this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
-
 The ACE framework is used to ensure authentication and authorization of the Administrator (client) at the Group Manager (resource server). In order to achieve communication security, proof of possession, and server authentication, the Administrator and the Group Manager leverage protocol-specific transport profiles of ACE, such as {{RFC9202}}{{RFC9203}}. These include also possible forthcoming transport profiles that comply with the requirements in {{Section C of RFC9200}}.
 
 ## Terminology ## {#terminology}
 
 {::boilerplate bcp14-tagged}
 
-Readers are expected to be familiar with the terms and concepts from the following specifications.
+Readers are expected to be familiar with the terms and concepts from the following specifications:
 
 * CDDL {{RFC8610}}, CBOR {{RFC8949}}, and COSE {{RFC9052}}{{RFC9053}}.
 
@@ -137,7 +131,7 @@ Readers are expected to be familiar with the terms and concepts from the followi
 
    - "security group", as a set of CoAP nodes that share the same security material and use it to protect and verify exchanged messages.
 
-* The security protocols OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}. These especially include the following concepts.
+* The security protocols OSCORE {{RFC8613}} and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}. These especially include the following concepts:
 
    - Group Manager, as the entity responsible for a set of OSCORE groups where communications among members are secured using Group OSCORE. An OSCORE group is used as a security group for one or many application groups.
 
@@ -166,6 +160,14 @@ This document also refers to the following terminology:
 * Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
 * Secure communication association: a security association established between any two of the Administrator, the AS, and the Group Manager and used for protecting their message exchanges. For example, depending on the transport profile of ACE used, this can rely on DTLS {{RFC6347}}{{RFC9147}} as per {{RFC9202}} or on OSCORE {{RFC8613}} as per {{RFC9203}}.
+
+## Notations
+
+Interaction examples are provided in the CoRE Link Format {{RFC6690}} and in CBOR {{RFC8949}}. The examples in CBOR are expressed in CBOR extended diagnostic notation as defined in {{Section 8 of RFC8949}} and {{Appendix G of RFC8610}} ("diagnostic notation"). Diagnostic notation comments are often used to provide a textual representation of the numeric parameter names and values.
+
+In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': 10} stands for {-13: "gp1", -4: 10}.
+
+> Note to RFC Editor: Please delete the paragraph immediately preceding this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
 
 # Group Administration # {#overview}
 
@@ -339,7 +341,7 @@ The coexistence of user scope entries and admin scope entries within the same sc
 
 ## On Using Group Name Patterns
 
-Having the object identifier ("Toid") specialized as a pattern confers a number of advantages.
+Having the object identifier ("Toid") specialized as a pattern confers a number of advantages:
 
 * When relying on wildcard patterns and complex patterns, the encoded scope can be compact in size while allowing the Administrator to operate on large pools of group names.
 
@@ -363,7 +365,7 @@ Note to RFC Editor: In the previous paragraph, please replace "TAG_NUMBER" with 
 
 This indicates that the binary encoded scope, as conveying the actual access control information, follows the scope semantics of the AIF data model AIF-OSCORE-GROUPCOMM defined in {{Section 3 of I-D.ietf-ace-key-groupcomm-oscore}} and extended as per {{scope-format}} of this document.
 
-In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps.
+In order to get access to the Group Manager for managing OSCORE groups, an Administrator performs the following steps:
 
 1. The Administrator requests an access token from the AS, in order to access the group-collection and group-configuration resources on the Group Manager. To this end, the Administrator sends to the AS an Authorization Request as defined in {{Section 5.8.1 of RFC9200}}.
 
@@ -437,7 +439,7 @@ Unless stated otherwise, these parameters are defined in this document and their
 
 ### Configuration Parameters ### {#config-repr-config-properties}
 
-The CBOR map includes the following configuration parameters.
+The CBOR map includes the following configuration parameters:
 
 * 'hkdf', which specifies the HKDF Algorithm used in the OSCORE group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}), encoded as a CBOR text string or a CBOR integer. The HKDF Algorithm is specified by the HMAC Algorithm value. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256. This parameter can take the same values as the 'hkdf' parameter of the Group_OSCORE_Input_Material object, defined in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -467,7 +469,7 @@ The CBOR map includes the following configuration parameters.
 
 ### Status Parameters ### {#config-repr-status-properties}
 
-The CBOR map includes the following status parameters.
+The CBOR map includes the following status parameters:
 
 * 'rt', which specifies the resource type "core.osc.gconf" associated with group-configuration resources, encoded as a CBOR text string.
 
@@ -503,7 +505,7 @@ This ensures that the Group Manager is able to perform the operations defined in
 
 ### Configuration Parameters {#default-values-conf}
 
-For each of the configuration parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.
+For each of the configuration parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator:
 
 * 'group_mode' - The Group Manager SHOULD use the CBOR simple value `true` (0xf5).
 
@@ -521,7 +523,7 @@ For any other configuration parameter, the Group Manager SHOULD use the same def
 
 ### Status Parameters {#default-values-status}
 
-For each of the status parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator.
+For each of the status parameters listed below, the Group Manager uses the following pre-configured default value, if that parameter is not specified by the Administrator:
 
 * 'active' - The Group Manager SHOULD use the CBOR simple value `false` (0xf4).
 
@@ -543,7 +545,7 @@ For each operation, it is defined whether that operation is required or optional
 
 When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
-Upon receiving from the Administrator a POST request to the group-collection resource or a request to a group-configuration resource, the Group Manager performs the following authorization checks, consistently with what is defined at Step 4 of {{getting-access}}.
+Upon receiving from the Administrator a POST request to the group-collection resource or a request to a group-configuration resource, the Group Manager performs the following authorization checks, consistently with what is defined at Step 4 of {{getting-access}}:
 
 * The Group Manager MUST check whether the group name TARGETNAME pertaining to the request matches with the group name pattern specified in any scope entry of the 'scope' claim in the stored access token for the Administrator.
 
@@ -595,7 +597,7 @@ Entry values are the ones admitted for the corresponding labels in the POST requ
 
 In such a case, the 'group_name' parameter expresses a group name pattern in the same way as a complex pattern Toid does in a scope entry (see {{scope-format}}). In particular, the filter criterion is satisfied by any group name that matches with the group name pattern specified by the 'group_name' parameter in the payload of the FETCH request.
 
-The Group Manager MUST prepare the list L to include in the response as follows.
+The Group Manager MUST prepare the list L to include in the response as follows:
 
 1. The Group Manager prepares a preliminary version of the list L, as specified in {{collection-resource-get}} for the processing of a GET request to the group-collection resource.
 
@@ -630,7 +632,7 @@ An example of message exchange is shown below. In particular, the following is a
    <coap://[2001:db8::ab]/manage/gp3>;rt="core.osc.gconf"
 ~~~~~~~~~~~
 
-The following, additional example considers a request payload that uses both configuration parameters and status parameters as filter criteria. In particular, the following is assumed.
+The following, additional example considers a request payload that uses both configuration parameters and status parameters as filter criteria. In particular, the following is assumed:
 
 * In the URI of every group-configuration resource, the path component is /manage/GROUPNAME, where GROUPNAME is the group name of the associated OSCORE group.
 
@@ -928,7 +930,7 @@ If no error occurs and the POST request is successfully processed, the Group Man
 
    For each parameter not specified in the POST request, the Group Manager refers to default values as specified in {{default-values}}. Note that the default value recommended for the status parameter 'active' is the CBOR simple value `false` (0xf4). Therefore, if the Administrator intends to preserve the current status of the group as active, then the payload of the POST request has to include the 'active' parameter specifying the CBOR simple value `true` (0xf5).
 
-   When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies.
+   When updating the group-configuration resource, the corresponding group-membership resource is also updated accordingly. The operation of overwriting such two resources MUST be atomic. That is, until the request processing fails, or the group-configuration resource has been fully updated and the values of its parameters are set, the following applies:
 
    * The group-configuration resource MUST NOT be accessible through other operations.
 
@@ -1019,7 +1021,7 @@ Alternatively, group members can obtain the information above by accessing the g
 
 When receiving such information, each group member uses it to update the corresponding parameters in the Group OSCORE Security Context of the group in question (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If any of 'gp_enc_alg', 'sign_alg', 'alg', and 'ecdh_alg' has as value the CBOR simple value `null` (0xf6), then the corresponding parameter in the Group OSCORE Security Context becomes unset if it is not already. According to the new parameter values, each group member derives new Sender/Recipient Keys, a new Common IV, and new Pairwise Keys. When doing so, a group member MUST NOT reset the Sender Sequence Number in its Sender Context or re-initialize the Replay Window in its Recipient Contexts.
 
-The following holds when the value of specific parameters is updated.
+The following holds when the value of specific parameters is updated:
 
 * If the value of the status parameter 'active' is changed from `true` (0xf5) to `false` (0xf4) and thus the group becomes inactive:
 
@@ -1085,7 +1087,7 @@ The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as
 
 The Group Manager MUST reply with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
-The error handling for the PATCH/iPATCH request is the same as that for the POST request defined in {{configuration-resource-post}}, with the following additions.
+The error handling for the PATCH/iPATCH request is the same as that for the POST request defined in {{configuration-resource-post}}, with the following additions:
 
 * The set of group configuration parameters to update MUST NOT be empty. The Group Manager MUST reply with a 4.00 (Bad Request) response, if the request payload includes an empty CBOR map.
 
@@ -1103,7 +1105,7 @@ When performing the authorization checks, the Group Manager uses GROUPNAME as TA
 
 If the updated group configuration would include parameter values that prevent the Group Manager from performing the operations defined in {{I-D.ietf-ace-key-groupcomm-oscore}} (e.g., due to the Group Manager not supporting a format of authentication credentials), the Group Manager MUST reply with a 5.03 (Service Unavailable) response. The response MUST have Content-Format set to "application/concise-problem-details+cbor" {{RFC9290}} and is formatted as defined in {{Section 4.1.2 of RFC9594}}. Within the Custom Problem Detail entry 'ace-groupcomm-error', the value of the 'error-id' field MUST be set to 12 ("Unsupported group configuration") and the 'detail' field SHOULD be included in order to provide additional context.
 
-If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions.
+If no error occurs and the PATCH/iPATCH request is successfully processed, the Group Manager performs the following actions:
 
 1. The Group Manager updates the group-configuration resource, consistently with the values indicated in the PATCH/iPATCH request from the Administrator. The corresponding group-membership resource is also updated accordingly.
 
@@ -1180,7 +1182,7 @@ After a successful processing of the DELETE request, the Group Manager performs 
 
 First, the Group Manager deletes the OSCORE group, deallocates both the group-configuration resource as well as the group-membership resource associated with that group, and accordingly updates the group-collection resource.
 
-The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails or the group-configuration resource is deleted, the following applies.
+The operation of deleting the group-configuration resource and the corresponding group-membership resource, as well as of accordingly updating the group-collection resource MUST be atomic. That is, until the request processing fails or the group-configuration resource is deleted, the following applies:
 
 * The group-configuration resource MUST NOT be accessible through other operations.
 
@@ -1269,7 +1271,7 @@ Note that the media type "application/ace-groupcomm+cbor" MUST be used when thes
 | app_groups_diff   | -28      | array                    | {{&SELF}} |
 {: #tab-ACE-Groupcomm-Parameters title="ACE Groupcomm Parameters" align="center"}
 
-The following holds for the Group Manager.
+The following holds for the Group Manager:
 
 * It MUST support the parameters 'ace_groupcomm_profile', 'exp', and 'group_policies', which are defined in {{Section 8 of RFC9594}}.
 
@@ -1332,7 +1334,7 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
 # Operational Considerations
 
-This section compiles the operational considerations that hold for this document.
+In addition to the considerations already discussed in the document (default values, etc.), this section compiles additional operational considerations that hold for this document.
 
 The operational considerations from {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with respect to the operations and RESTful interface at the Group Manager that are defined in that document for the management of keying material in OSCORE groups.
 
@@ -1402,7 +1404,7 @@ It is out of the scope of this document what specific semantics and data model a
 
 The Group Manager is expected to make the logs that it produces available for secure access by authorized external management applications and operators.
 
-In particular, logged information could be retrieved in the following ways.
+In particular, logged information could be retrieved in the following ways:
 
 * By accessing logs at the Group Manager through polling. This can occur in an occasional, regular, or event-driven way.
 
@@ -1492,7 +1494,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group.
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
 
 * Name: hkdf
 * CBOR Key: -1 (suggested)
@@ -1655,7 +1657,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group.
+IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
 
 * Value: 10 (suggested)
 * Description: Group currently active
@@ -1675,7 +1677,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Errors" re
 
 ## Resource Types # {#iana-rt}
 
-IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
+IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group:
 
 * Value: core.osc.gcoll
 * Description: Group-collection resource of an OSCORE Group Manager
@@ -1735,7 +1737,7 @@ The following specifically refers only to "admin scope entries", i.e., scope ent
 
 Also, it is assumed that the AS stores the access policies as a set of "admin policy entries", which have the same format of the scope entries according to the AIF data model AIF-OSCORE-GROUPCOMM (see {{scope-format}}). The following specifically considers only "admin policy entries", i.e., policy entries for Administrators of OSCORE groups hereafter shortly referred to as "policy entries".
 
-The AS performs the following steps.
+The AS performs the following steps:
 
 1. The AS initializes an empty set of scope entries, namely S_OUT.
 
