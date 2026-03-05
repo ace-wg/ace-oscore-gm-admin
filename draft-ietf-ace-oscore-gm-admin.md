@@ -79,6 +79,26 @@ normative:
     date: false
     title: COSE Algorithms
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+  ACE.Groupcomm.Parameters:
+    author:
+      org: IANA
+    date: false
+    title: ACE Groupcomm Parameters
+    target: https://www.iana.org/assignments/ace/ace.xhtml#ace-groupcomm-parameters
+
+  ACE.Groupcomm.Errors:
+    author:
+      org: IANA
+    date: false
+    title: ACE Groupcomm Errors
+    target: https://www.iana.org/assignments/ace/ace.xhtml#ace-groupcomm-errors
+
+  Resource.Type.Values:
+    author:
+      org: IANA
+    date: false
+    title: Resource Type (rt=) Link Target Attribute Values
+    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#rt-link-target-att-value
 
 informative:
   I-D.tiloca-core-oscore-discovery:
@@ -1494,7 +1514,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry {{ACE.Groupcomm.Parameters}} within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
 
 * Name: hkdf
 * CBOR Key: -1 (suggested)
@@ -1657,7 +1677,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
+IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry {{ACE.Groupcomm.Errors}} within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
 
 * Value: 10 (suggested)
 * Description: Group currently active
@@ -1677,7 +1697,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Errors" re
 
 ## Resource Types # {#iana-rt}
 
-IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group:
+IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry {{Resource.Type.Values}} within the "Constrained Restful Environments (CoRE) Parameters" registry group:
 
 * Value: core.osc.gcoll
 * Description: Group-collection resource of an OSCORE Group Manager
@@ -1809,6 +1829,8 @@ coap_group_oscore_app = 1
 * More details in the definition of a column in the new IANA registry.
 
 * Added reference to Section 4.1 of RFC 8126.
+
+* Added references to IANA registries.
 
 * Minor fixes and editorial improvements.
 
