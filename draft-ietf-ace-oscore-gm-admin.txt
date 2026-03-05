@@ -3498,9 +3498,9 @@ Table of Contents
       Manager.
 
    *  Value: The numeric identifier for this permission.  Integer values
-      greater than 65535 are marked as "Private Use".  All other values
-      use the registration policy "Expert Review" (see Section 4.5 of
-      [RFC8126]).
+      greater than 65535 are marked as "Private Use" (see Section 4.1 of
+      [RFC8126]).  All other values use the registration policy "Expert
+      Review" (see Section 4.5 of [RFC8126]).
 
       Note that, in general, a single permission can be associated with
       multiple different operations that are possible to be performed
