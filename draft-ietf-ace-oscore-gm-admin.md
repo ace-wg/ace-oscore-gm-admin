@@ -1334,7 +1334,7 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
 # Operational Considerations
 
-In addition to the considerations already discussed in the document (default values, etc.), this section compiles additional operational considerations that hold for this document.
+In addition to the considerations already discussed in this document (e.g., regarding default values), this section compiles additional operational considerations that hold for this document.
 
 The operational considerations from {{I-D.ietf-ace-key-groupcomm-oscore}} also apply, with respect to the operations and RESTful interface at the Group Manager that are defined in that document for the management of keying material in OSCORE groups.
 
