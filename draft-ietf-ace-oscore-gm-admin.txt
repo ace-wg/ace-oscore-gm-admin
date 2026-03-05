@@ -130,21 +130,22 @@ Table of Contents
    Appendix A.  Processing of Group Name Patterns at the AS
    Appendix B.  CDDL Model
    Appendix C.  Document Updates
-     C.1.  Version -14 to -15
-     C.2.  Version -13 to -14
-     C.3.  Version -12 to -13
-     C.4.  Version -11 to -12
-     C.5.  Version -10 to -11
-     C.6.  Version -09 to -10
-     C.7.  Version -08 to -09
-     C.8.  Version -07 to -08
-     C.9.  Version -06 to -07
-     C.10. Version -05 to -06
-     C.11. Version -04 to -05
-     C.12. Version -03 to -04
-     C.13. Version -02 to -03
-     C.14. Version -01 to -02
-     C.15. Version -00 to -01
+     C.1.  Version -15 to -16
+     C.2.  Version -14 to -15
+     C.3.  Version -13 to -14
+     C.4.  Version -12 to -13
+     C.5.  Version -11 to -12
+     C.6.  Version -10 to -11
+     C.7.  Version -09 to -10
+     C.8.  Version -08 to -09
+     C.9.  Version -07 to -08
+     C.10. Version -06 to -07
+     C.11. Version -05 to -06
+     C.12. Version -04 to -05
+     C.13. Version -03 to -04
+     C.14. Version -02 to -03
+     C.15. Version -01 to -02
+     C.16. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -3916,7 +3917,16 @@ Appendix C.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-C.1.  Version -14 to -15
+C.1.  Version -15 to -16
+
+   *  More details in the definition of a column in the new IANA
+      registry.
+
+   *  Added reference to Section 4.1 of RFC 8126.
+
+   *  Minor fixes and editorial improvements.
+
+C.2.  Version -14 to -15
 
    *  Updated section title (removed "full").
 
@@ -3930,7 +3940,7 @@ C.1.  Version -14 to -15
 
    *  Minor fixes and editorial improvements.
 
-C.2.  Version -13 to -14
+C.3.  Version -13 to -14
 
    *  Aligned with draft-ietf-ace-key-groupcomm-oscore, 'sign_enc_alg'
       from that document is renamed as 'gp_enc_alg'.
@@ -3969,7 +3979,7 @@ C.2.  Version -13 to -14
 
    *  Minor fixes and editorial improvements.
 
-C.3.  Version -12 to -13
+C.4.  Version -12 to -13
 
    *  Uri-Path and Location-Path as text strings in examples.
 
@@ -3983,7 +3993,7 @@ C.3.  Version -12 to -13
 
    *  Editorial fixes.
 
-C.4.  Version -11 to -12
+C.5.  Version -11 to -12
 
    *  CBOR diagnostic notation uses placeholders from a CDDL model.
 
@@ -4020,7 +4030,7 @@ C.4.  Version -11 to -12
 
    *  Minor clarifications and editorial improvements.
 
-C.5.  Version -10 to -11
+C.6.  Version -10 to -11
 
    *  Early mentioned that issued access tokens can have other purposes.
 
@@ -4045,7 +4055,7 @@ C.5.  Version -10 to -11
 
    *  Editorial fixes and improvements.
 
-C.6.  Version -09 to -10
+C.7.  Version -09 to -10
 
    *  Consistent use of 4.03 (Forbidden) error responses.
 
@@ -4068,7 +4078,7 @@ C.6.  Version -09 to -10
 
    *  Editorial fixes and improvements.
 
-C.7.  Version -08 to -09
+C.8.  Version -08 to -09
 
    *  Removed use of CoRAL.
 
@@ -4084,7 +4094,7 @@ C.7.  Version -08 to -09
 
    *  Fixes and editorial improvements.
 
-C.8.  Version -07 to -08
+C.9.  Version -07 to -08
 
    *  Consistency of parameter names.
 
@@ -4106,7 +4116,7 @@ C.8.  Version -07 to -08
 
    *  Various clarifications and editorial improvements.
 
-C.9.  Version -06 to -07
+C.10.  Version -06 to -07
 
    *  Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
@@ -4122,7 +4132,7 @@ C.9.  Version -06 to -07
 
    *  Editorial improvements.
 
-C.10.  Version -05 to -06
+C.11.  Version -05 to -06
 
    *  Use and extend the same AIF data model AIF-OSCORE-GROUPCOMM
       defined in [I-D.ietf-ace-key-groupcomm-oscore].
@@ -4143,7 +4153,7 @@ C.10.  Version -05 to -06
 
    *  Editorial improvements.
 
-C.11.  Version -04 to -05
+C.12.  Version -04 to -05
 
    *  Defined format of scope based on a new AIF data model.
 
@@ -4165,7 +4175,7 @@ C.11.  Version -04 to -05
 
    *  Revised order of sections; editorial improvements.
 
-C.12.  Version -03 to -04
+C.13.  Version -03 to -04
 
    *  Clarifications on what to do in case of enhanced error responses.
 
@@ -4180,7 +4190,7 @@ C.12.  Version -03 to -04
 
    *  Editorial improvements.
 
-C.13.  Version -02 to -03
+C.14.  Version -02 to -03
 
    *  Aligned new and old parameters to core-groupcomm-oscore and ace-
       key-groupcomm-oscore.
@@ -4193,7 +4203,7 @@ C.13.  Version -02 to -03
 
    *  New error type "Group currently active".
 
-C.14.  Version -01 to -02
+C.15.  Version -01 to -02
 
    *  Admit multiple Administrators and limited access to admin
       resources.
@@ -4207,7 +4217,7 @@ C.14.  Version -01 to -02
 
    *  Editorial improvements.
 
-C.15.  Version -00 to -01
+C.16.  Version -00 to -01
 
    *  Names of application groups as status parameter.
 
