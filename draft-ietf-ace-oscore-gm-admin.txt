@@ -2755,9 +2755,9 @@ Table of Contents
 
 9.  Operational Considerations
 
-   In addition to the considerations already discussed in the document
-   (default values, etc.), this section compiles additional operational
-   considerations that hold for this document.
+   In addition to the considerations already discussed in this document
+   (e.g., regarding default values), this section compiles additional
+   operational considerations that hold for this document.
 
    The operational considerations from
    [I-D.ietf-ace-key-groupcomm-oscore] also apply, with respect to the
