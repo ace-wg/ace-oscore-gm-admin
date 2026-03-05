@@ -1699,7 +1699,7 @@ The columns of this registry are:
 
 * Name: A value that can be used in documents for easier comprehension, to identify a possible permission that Administrators can perform when interacting with an OSCORE Group Manager.
 
-* Value: The numeric identifier for this permission. Integer values greater than 65535 are marked as "Private Use" (see {{Section 4.1 of RFC8126}}). All other values use the registration policy "Expert Review" (see {{Section 4.5 of RFC8126}}).
+* Value: The numeric identifier for this permission. These values MUST be unique. The value can be an integer greater than or equal to 0. Integer values greater than 65535 are marked as "Private Use" (see {{Section 4.1 of RFC8126}}). All other values use the registration policy "Expert Review" (see {{Section 4.5 of RFC8126}}).
 
    Note that, in general, a single permission can be associated with multiple different operations that are possible to be performed when interacting with the Group Manager.
 
