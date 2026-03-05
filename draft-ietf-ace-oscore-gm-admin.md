@@ -149,7 +149,7 @@ This document also refers to the following terminology:
 
 * Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager and MUST be consistent with the ABNF rule "segment = *pchar" defined in {{Section 3.3 of RFC3986}}.
 
-* Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups or to create a new OSCORE group, under that Group Manager.
+* Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve a list of existing OSCORE groups or to create a new OSCORE group, under that Group Manager.
 
    When defining operations at the Group Manager and providing examples, this document uses /manage as the url-path of the group-collection resource; implementations can use a different url-path.
 
@@ -201,7 +201,7 @@ Collection  \___/
 
 The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" registered in {{iana-rt}} of this document. The interface for the group-collection resource defined in {{interactions}} allows the Administrator, if permitted, to:
 
-* Retrieve the list of existing OSCORE groups.
+* Retrieve a list of existing OSCORE groups.
 
 * Retrieve a list of existing OSCORE groups matching with specified filter criteria.
 
@@ -1312,7 +1312,7 @@ If the Administrator supports the problem-details format {{RFC9290}} and the Cus
 
    - The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.
 
-      In order to not inadvertently suggest a new group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
+      In order to not inadvertently suggest a new group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve a list of existing groups from the Group Manager, as defined in {{collection-resource-get}}. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.
 
       The Administrator should choose the new group name GROUPNAME to suggest, in such a way that it does not renounce permissions that were granted per the old group name GROUPNAME*. This is the case if the following holds.
 
