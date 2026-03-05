@@ -1804,6 +1804,14 @@ coap_group_oscore_app = 1
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
+## Version -15 to -16 ## {#sec-15-16}
+
+* More details in the definition of a column in the new IANA registry.
+
+* Added reference to Section 4.1 of RFC 8126.
+
+* Minor fixes and editorial improvements.
+
 ## Version -14 to -15 ## {#sec-14-15}
 
 * Updated section title (removed "full").
