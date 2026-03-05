@@ -363,7 +363,7 @@ The coexistence of user scope entries and admin scope entries within the same sc
 
 Having the object identifier ("Toid") specialized as a pattern confers a number of advantages:
 
-* When relying on wildcard patterns and complex patterns, the encoded scope can be compact in size while allowing the Administrator to operate on large pools of group names.
+* When relying on wildcard patterns and complex patterns, the encoded scope can have a small size while allowing the Administrator to operate on large pools of group names.
 
 * When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know the exact group names for requesting and issuing an access token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group when creating it (see {{collection-resource-post}}).
 
@@ -1418,7 +1418,7 @@ In addition to what is compiled above, the Group Manager could log additional in
 
 The Group Manager MUST NOT log any secret or confidential information pertaining to a group and its configuration. Although the configuration parameters and status parameters defined in {{group-configurations}} of this document do not specify secret or confidential information, this requirement is set in preparation for possible new parameters that can be defined in the future.
 
-It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, oldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
+It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, the oldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
 
 It is out of the scope of this document what specific semantics and data model are used by the Group Manager for producing and processing the logs. Nonetheless, log entries could use the data model defined in {{group-configurations}} to represent group configurations. Specific semantics and data models can be defined by applications and future specifications.
 
@@ -1476,21 +1476,21 @@ With respect to changing group configurations, the following security considerat
 
 ## Group Manager
 
-In addition to what is discussed in {{Section 10.1 of RFC9594}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
+In addition to what is discussed in {{Section 10.1 of RFC9594}}, a compromised Group Manager would allow an adversary to monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
 
 Although this is undesirable, it is not worse than the control that the adversary would gain on the group keying material through the compromised Group Manager (see {{Section 10.1 of RFC9594}}).
 
-Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for, after having experienced a reboot.
+Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for after having experienced a reboot.
 
 ## Administrators
 
 {{collection-resource-get}} and {{collection-resource-fetch}} define exchanges where the Administrator sends a GET or FETCH request to the group-collection resource at the Group Manager. The payload of a successful response to those requests can include links to group-configuration resources at the Group Manager. When processing the response, the Administrator MUST NOT accept any of such links whose URI specified as link target does not point to the Group Manager that has sent the response. In particular, the Administrator MUST NOT consider those links as pointing to the alleged group-configuration resources.
 
-From {{collection-resource-post}} to {{configuration-resource-patch}}, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator SHOULD NOT accept the URI encoded by the 'joining_uri' parameter, if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator SHOULD NOT consider that URI as pointing to the alleged group-membership resource.
+From {{collection-resource-post}} to {{configuration-resource-patch}}, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator SHOULD NOT accept the URI encoded by the 'joining_uri' parameter if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator SHOULD NOT consider that URI as pointing to the alleged group-membership resource.
 
 Exceptions in accepting URIs that allegedly point to group-membership resources ought to be carefully understood and vetted by the Administrator. As a notable example, a trusted CoAP reverse-proxy might stand in for the Group Manager, in such a way that candidate group members can reach the Group Manager by actually interacting with the reverse-proxy. In this case, the host subcomponent of the URI does not refer to the Group Manager, but instead to the reverse-proxy.
 
-The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager, by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.
+The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.
 
 If the Administrator determines that a URI pointing to an alleged group-membership resource cannot be accepted, the following applies:
 
