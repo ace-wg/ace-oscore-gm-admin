@@ -1469,7 +1469,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <p id="section-1.1-6.2.1">Group name: stable and invariant name of an OSCORE group. The group name <span class="bcp14">MUST</span> be unique under the same Group Manager and <span class="bcp14">MUST</span> be consistent with the ABNF rule "segment = *pchar" defined in <span><a href="https://rfc-editor.org/rfc/rfc3986#section-3.3" class="relref">Section 3.3</a> of [<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>.<a href="#section-1.1-6.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-6.3">
-            <p id="section-1.1-6.3.1">Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve the list of existing OSCORE groups or to create a new OSCORE group, under that Group Manager.<a href="#section-1.1-6.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-6.3.1">Group-collection resource: a single-instance resource hosted by the Group Manager. An Administrator accesses a group-collection resource to retrieve a list of existing OSCORE groups or to create a new OSCORE group, under that Group Manager.<a href="#section-1.1-6.3.1" class="pilcrow">¶</a></p>
 <p id="section-1.1-6.3.2">
 When defining operations at the Group Manager and providing examples, this document uses /manage as the url-path of the group-collection resource; implementations can use a different url-path.<a href="#section-1.1-6.3.2" class="pilcrow">¶</a></p>
 </li>
@@ -1580,7 +1580,7 @@ The AS <span class="bcp14">MAY</span> issue access tokens to the Administrator f
 <p id="section-2.1-3">The Group Manager exports a single group-collection resource, with resource type "core.osc.gcoll" registered in <a href="#iana-rt" class="auto internal xref">Section 11.3</a> of this document. The interface for the group-collection resource defined in <a href="#interactions" class="auto internal xref">Section 6</a> allows the Administrator, if permitted, to:<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-4.1">
-            <p id="section-2.1-4.1.1">Retrieve the list of existing OSCORE groups.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.1.1">Retrieve a list of existing OSCORE groups.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.2">
             <p id="section-2.1-4.2.1">Retrieve a list of existing OSCORE groups matching with specified filter criteria.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
@@ -3144,7 +3144,7 @@ This is consistent with what is defined in <span><a href="https://rfc-editor.org
             <li class="normal" id="section-8-4.2.2.2">
               <p id="section-8-4.2.2.2.1">The Administrator sends a new POST request to the group-collection resource right away, specifying a different group name than the one suggested in the previous request that triggered the error response.<a href="#section-8-4.2.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.2">
-In order to not inadvertently suggest a new group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve the list of existing groups from the Group Manager, as defined in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a>. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
+In order to not inadvertently suggest a new group name that is already assigned to an existing OSCORE group, the Administrator can first retrieve a list of existing groups from the Group Manager, as defined in <a href="#collection-resource-get" class="auto internal xref">Section 6.1</a>. In the payload of the response from the Group Manager, each specified link indicates the name of an existing OSCORE group as the last segment of its url-path.<a href="#section-8-4.2.2.2.2" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.3">
 The Administrator should choose the new group name GROUPNAME to suggest, in such a way that it does not renounce permissions that were granted per the old group name GROUPNAME*. This is the case if the following holds.<a href="#section-8-4.2.2.2.3" class="pilcrow">¶</a></p>
 <p id="section-8-4.2.2.2.4">
