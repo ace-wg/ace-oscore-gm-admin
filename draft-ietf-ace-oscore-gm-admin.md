@@ -561,7 +561,7 @@ For each of the status parameters listed below, the Group Manager uses the follo
 
 This section describes the operations that are possible to perform on the group-collection resource and the group-configuration resources at the Group Manager.
 
-For each operation, it is defined whether that operation is required or optional to support for an Administrator and for the Group Manager. If an Administrator supports an operation, then the Administrator is able to produce and send the request associated with that operation. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support (i.e., the CoAP method used in the request is not supported by the targeted resource), then the Group Manager replies with a 4.05 (Method Not Allowed) response (see {{Section 5.8 of RFC7252}}).
+For each operation, it is defined whether that operation is required or optional to support for the Group Manager. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support (i.e., the CoAP method used in the request is not supported by the targeted resource), then the Group Manager replies with a 4.05 (Method Not Allowed) response (see {{Section 5.8 of RFC7252}}).
 
 When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
@@ -577,7 +577,7 @@ The Content-Format "application/ace-groupcomm+cbor" defined in {{Section 11.2 of
 
 ## Retrieve a List of Group Configurations ## {#collection-resource-get}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This list is returned as a list of links to the corresponding group-configuration resources. In particular, a successful 2.05 (Content) response MUST have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format {{RFC6690}}.
 
@@ -607,7 +607,7 @@ An example of message exchange is shown below.
 
 ## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
 
-This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This list is returned as a list of links to the corresponding group-configuration resources. In particular, the request MUST have Content-Format set to "application/ace-groupcomm+cbor", while a successful 2.05 (Content) response MUST have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format {{RFC6690}}.
 
@@ -682,7 +682,7 @@ The following, additional example considers a request payload that uses both con
 
 ## Create a New Group Configuration ## {#collection-resource-post}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. In particular, the request MUST have Content-Format set to "application/ace-groupcomm+cbor".
 
@@ -824,7 +824,7 @@ An example of message exchange is shown below.
 
 ## Retrieve a Group Configuration ## {#configuration-resource-get}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a GET request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve the complete current configuration of that group.
 
@@ -877,7 +877,7 @@ An example of message exchange is shown below.
 
 ## Retrieve Part of a Group Configuration by Filters ## {#configuration-resource-fetch}
 
-This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a FETCH request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
@@ -930,7 +930,7 @@ An example of message exchange is shown below.
 
 ## Overwrite a Group Configuration ## {#configuration-resource-post}
 
-This operation MAY be supported by the Group Manager and an Administrator.
+This operation MAY be supported by the Group Manager.
 
 The Administrator can send a POST request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
 
@@ -1085,7 +1085,7 @@ As discussed above, after the group configuration has been updated, some group m
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
-This operation MAY be supported by the Group Manager and an Administrator.
+This operation MAY be supported by the Group Manager.
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
@@ -1188,7 +1188,7 @@ After having selectively updated part of a group configuration, the effects on t
 
 ## Delete a Group Configuration ## {#configuration-resource-delete}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a DELETE request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to delete that OSCORE group.
 
@@ -1825,6 +1825,8 @@ coap_group_oscore_app = 1
 {:removeinrfc}
 
 ## Version -15 to -16 ## {#sec-15-16}
+
+* Removed requirements on operations to be supported by the Administrator.
 
 * More details in the definition of a column in the new IANA registry.
 
