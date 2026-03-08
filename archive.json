@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-05T02:05:30.792700+00:00",
+  "timestamp": "2026-03-08T02:07:05.250547+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -315,20 +315,56 @@
       "id": "PR_kwDOEOo5987HTEZ0",
       "title": "Minor edits/nits from Med's IESG review",
       "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/9",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "boucadair",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-03-02T10:57:39Z",
-      "updatedAt": "2026-03-02T10:57:40Z",
+      "updatedAt": "2026-03-05T18:44:00Z",
       "baseRepository": "ace-wg/ace-oscore-gm-admin",
       "baseRefName": "master",
       "baseRefOid": "8ab3394cd8c98f1fbe603d98b339f8027ebb86e2",
       "headRepository": "boucadair/ace-oscore-gm-admin",
       "headRefName": "patch-1",
       "headRefOid": "c102f5b459bf70ce1d7c6fbd1bcb2aa5078ced42",
+      "closedAt": "2026-03-05T18:37:04Z",
+      "mergedAt": "2026-03-05T18:37:04Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "1b333c35d340c48f2278e2327e01a988c41547cd"
+      },
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for this! Now merged.",
+          "createdAt": "2026-03-05T18:43:59Z",
+          "updatedAt": "2026-03-05T18:43:59Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOEOo5987Id4oz",
+      "title": "Mike Bishop's review",
+      "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/10",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR addresses the review from Mike Bishop archived at https://mailarchive.ietf.org/arch/msg/ace/wrAxqQD_iVm7cChqTAD12yqneu0/\r\n",
+      "createdAt": "2026-03-06T10:50:33Z",
+      "updatedAt": "2026-03-06T10:50:34Z",
+      "baseRepository": "ace-wg/ace-oscore-gm-admin",
+      "baseRefName": "master",
+      "baseRefOid": "6c29121b08ac257c9f3b0a1451488cf7f1ddc2a7",
+      "headRepository": "ace-wg/ace-oscore-gm-admin",
+      "headRefName": "mike-review",
+      "headRefOid": "bc929178675da7011d2cce0a7f782b264484f6bb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
