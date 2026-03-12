@@ -1728,7 +1728,7 @@ In general, a single permission can be associated with multiple different operat
       </table>
 </div>
 <p id="section-3-12">The following CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in <a href="#tab-permission-values" class="auto internal xref">Table 1</a>.<a href="#section-3-12" class="pilcrow">¶</a></p>
-<div class="lang-CDDL sourcecode" id="section-3-13">
+<div class="lang-cddl sourcecode" id="section-3-13">
 <pre>
    ;# include rfc9237
 
@@ -1749,7 +1749,7 @@ In general, a single permission can be associated with multiple different operat
 </pre><a href="#section-3-13" class="pilcrow">¶</a>
 </div>
 <p id="section-3-14">The following example in CBOR diagnostic notation shows a CBOR array including five scope entries as its elements.<a href="#section-3-14" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-15">
+<div class="lang-cbor-diag sourcecode" id="section-3-15">
 <pre>
 [[true,   / Toid (wildcard pattern) /
   5       / Tperm (List + Read) /
@@ -2728,7 +2728,7 @@ Consistently, the group member has to retrieve the new authentication credential
 <p id="section-6.7-5">The CDDL definition <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> of the CBOR array 'app_groups_diff' formatted as in the request from the Administrator is provided below.<a href="#section-6.7-5" class="pilcrow">¶</a></p>
 <span id="name-cddl-definition-of-the-app_"></span><div id="cddl-diff">
 <figure id="figure-2">
-          <div class="alignLeft art-CDDL art-text artwork" id="section-6.7-6.1">
+          <div class="alignLeft art-cddl art-text artwork" id="section-6.7-6.1">
 <pre>
    app-group-name = tstr
    name-patch = [* app-group-name]
@@ -4092,7 +4092,7 @@ b. If the AS could not determine a group name pattern TOID_AUX for a given polic
 <p id="appendix-B-1">This section is to be removed before publishing as an RFC.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <span id="name-cddl-model-2"></span><div id="fig-cddl-model">
 <figure id="figure-3">
-        <div class="alignLeft art-CDDL art-text artwork" id="appendix-B-2.1">
+        <div class="alignLeft art-cddl art-text artwork" id="appendix-B-2.1">
 <pre>
 ; ACE Groupcomm Parameters
 hkdf = -1
