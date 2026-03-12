@@ -79,6 +79,26 @@ normative:
     date: false
     title: COSE Algorithms
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+  ACE.Groupcomm.Parameters:
+    author:
+      org: IANA
+    date: false
+    title: ACE Groupcomm Parameters
+    target: https://www.iana.org/assignments/ace/ace.xhtml#ace-groupcomm-parameters
+
+  ACE.Groupcomm.Errors:
+    author:
+      org: IANA
+    date: false
+    title: ACE Groupcomm Errors
+    target: https://www.iana.org/assignments/ace/ace.xhtml#ace-groupcomm-errors
+
+  Resource.Type.Values:
+    author:
+      org: IANA
+    date: false
+    title: Resource Type (rt=) Link Target Attribute Values
+    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#rt-link-target-att-value
 
 informative:
   I-D.tiloca-core-oscore-discovery:
@@ -343,7 +363,7 @@ The coexistence of user scope entries and admin scope entries within the same sc
 
 Having the object identifier ("Toid") specialized as a pattern confers a number of advantages:
 
-* When relying on wildcard patterns and complex patterns, the encoded scope can be compact in size while allowing the Administrator to operate on large pools of group names.
+* When relying on wildcard patterns and complex patterns, the encoded scope can have a small size while allowing the Administrator to operate on large pools of group names.
 
 * When relying on wildcard patterns and complex patterns, the Administrator and the AS do not need to know the exact group names for requesting and issuing an access token, respectively (see {{getting-access}}). In turn, the Group Manager can effectively take the final decision about the name to assign to an OSCORE group when creating it (see {{collection-resource-post}}).
 
@@ -541,7 +561,7 @@ For each of the status parameters listed below, the Group Manager uses the follo
 
 This section describes the operations that are possible to perform on the group-collection resource and the group-configuration resources at the Group Manager.
 
-For each operation, it is defined whether that operation is required or optional to support for an Administrator and for the Group Manager. If an Administrator supports an operation, then the Administrator is able to produce and send the request associated with that operation. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support (i.e., the CoAP method used in the request is not supported by the targeted resource), then the Group Manager replies with a 4.05 (Method Not Allowed) response (see {{Section 5.8 of RFC7252}}).
+For each operation, it is defined whether that operation is required or optional to support for the Group Manager. If the Group Manager supports an operation, then the Group Manager must be able to correctly handle authorized and valid requests sent by the Administrator to carry out that operation. If the Group Manager receives an authorized and valid request to perform an operation that it does not support (i.e., the CoAP method used in the request is not supported by the targeted resource), then the Group Manager replies with a 4.05 (Method Not Allowed) response (see {{Section 5.8 of RFC7252}}).
 
 When checking the scope claim of a stored access token to verify that any of the requests defined in the following is authorized, the Group Manager only considers scope entries expressing permissions for administrative operations, namely "admin scope entries" as defined in {{scope-format}}. The alternative "user scope entries" defined in {{I-D.ietf-ace-key-groupcomm-oscore}} are not considered. That is, when handling any of the requests for administrative operations defined in the following, the Group Manager ignores possible "user scope entries" specified in the scope of a stored access token.
 
@@ -557,7 +577,7 @@ The Content-Format "application/ace-groupcomm+cbor" defined in {{Section 11.2 of
 
 ## Retrieve a List of Group Configurations ## {#collection-resource-get}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a GET request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups at the Group Manager. This list is returned as a list of links to the corresponding group-configuration resources. In particular, a successful 2.05 (Content) response MUST have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format {{RFC6690}}.
 
@@ -587,7 +607,7 @@ An example of message exchange is shown below.
 
 ## Retrieve a List of Group Configurations by Filters ## {#collection-resource-fetch}
 
-This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a FETCH request to the group-collection resource, in order to retrieve a list of the existing OSCORE groups that fully match a set of specified filter criteria. This list is returned as a list of links to the corresponding group-configuration resources. In particular, the request MUST have Content-Format set to "application/ace-groupcomm+cbor", while a successful 2.05 (Content) response MUST have Content-Format set to "application/link-format" and its payload specifies the list of links in the CoRE Link Format {{RFC6690}}.
 
@@ -662,7 +682,7 @@ The following, additional example considers a request payload that uses both con
 
 ## Create a New Group Configuration ## {#collection-resource-post}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a POST request to the group-collection resource, in order to create a new OSCORE group at the Group Manager. In particular, the request MUST have Content-Format set to "application/ace-groupcomm+cbor".
 
@@ -804,7 +824,7 @@ An example of message exchange is shown below.
 
 ## Retrieve a Group Configuration ## {#configuration-resource-get}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a GET request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve the complete current configuration of that group.
 
@@ -857,7 +877,7 @@ An example of message exchange is shown below.
 
 ## Retrieve Part of a Group Configuration by Filters ## {#configuration-resource-fetch}
 
-This operation MUST be supported by the Group Manager and MAY be supported by an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a FETCH request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to retrieve part of the current configuration of that group.
 
@@ -910,7 +930,7 @@ An example of message exchange is shown below.
 
 ## Overwrite a Group Configuration ## {#configuration-resource-post}
 
-This operation MAY be supported by the Group Manager and an Administrator.
+This operation MAY be supported by the Group Manager.
 
 The Administrator can send a POST request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to overwrite the current configuration of that group with a new one.
 
@@ -1065,7 +1085,7 @@ As discussed above, after the group configuration has been updated, some group m
 
 ## Selective Update of a Group Configuration ## {#configuration-resource-patch}
 
-This operation MAY be supported by the Group Manager and an Administrator.
+This operation MAY be supported by the Group Manager.
 
 The Administrator can send a PATCH/iPATCH request {{RFC8132}} to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to update the value of only part of the group configuration.
 
@@ -1168,7 +1188,7 @@ After having selectively updated part of a group configuration, the effects on t
 
 ## Delete a Group Configuration ## {#configuration-resource-delete}
 
-This operation MUST be supported by the Group Manager and an Administrator.
+This operation MUST be supported by the Group Manager.
 
 The Administrator can send a DELETE request to the group-configuration resource /manage/GROUPNAME associated with an OSCORE group with group name GROUPNAME, in order to delete that OSCORE group.
 
@@ -1398,7 +1418,7 @@ In addition to what is compiled above, the Group Manager could log additional in
 
 The Group Manager MUST NOT log any secret or confidential information pertaining to a group and its configuration. Although the configuration parameters and status parameters defined in {{group-configurations}} of this document do not specify secret or confidential information, this requirement is set in preparation for possible new parameters that can be defined in the future.
 
-It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, oldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
+It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different groups. For a given group, the oldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group currently exists or has been deleted.
 
 It is out of the scope of this document what specific semantics and data model are used by the Group Manager for producing and processing the logs. Nonetheless, log entries could use the data model defined in {{group-configurations}} to represent group configurations. Specific semantics and data models can be defined by applications and future specifications.
 
@@ -1456,21 +1476,21 @@ With respect to changing group configurations, the following security considerat
 
 ## Group Manager
 
-In addition to what is discussed in {{Section 10.1 of RFC9594}}, a compromised Group Manager would allow an adversary to also monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
+In addition to what is discussed in {{Section 10.1 of RFC9594}}, a compromised Group Manager would allow an adversary to monitor the group configurations specified by an Administrator, or to enforce group configurations different from the specified ones, which can result in communications in the OSCORE groups not attaining the originally intended security level.
 
 Although this is undesirable, it is not worse than the control that the adversary would gain on the group keying material through the compromised Group Manager (see {{Section 10.1 of RFC9594}}).
 
-Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for, after having experienced a reboot.
+Unlike what is defined in {{Section 10.2 of RFC9594}} with respect to renewing the group keying material, the Group Manager does not have to change the group configurations of the OSCORE groups it is responsible for after having experienced a reboot.
 
 ## Administrators
 
 {{collection-resource-get}} and {{collection-resource-fetch}} define exchanges where the Administrator sends a GET or FETCH request to the group-collection resource at the Group Manager. The payload of a successful response to those requests can include links to group-configuration resources at the Group Manager. When processing the response, the Administrator MUST NOT accept any of such links whose URI specified as link target does not point to the Group Manager that has sent the response. In particular, the Administrator MUST NOT consider those links as pointing to the alleged group-configuration resources.
 
-From {{collection-resource-post}} to {{configuration-resource-patch}}, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator SHOULD NOT accept the URI encoded by the 'joining_uri' parameter, if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator SHOULD NOT consider that URI as pointing to the alleged group-membership resource.
+From {{collection-resource-post}} to {{configuration-resource-patch}}, other exchanges are defined where the Administrator sends different requests to the group-collection resource or a group-configuration resource at the Group Manager. The payload of a successful response to those requests has to or can include the 'joining_uri' status parameter. When processing the response, the Administrator SHOULD NOT accept the URI encoded by the 'joining_uri' parameter if the URI does not point to the Group Manager that has sent the response. In particular, the Administrator SHOULD NOT consider that URI as pointing to the alleged group-membership resource.
 
 Exceptions in accepting URIs that allegedly point to group-membership resources ought to be carefully understood and vetted by the Administrator. As a notable example, a trusted CoAP reverse-proxy might stand in for the Group Manager, in such a way that candidate group members can reach the Group Manager by actually interacting with the reverse-proxy. In this case, the host subcomponent of the URI does not refer to the Group Manager, but instead to the reverse-proxy.
 
-The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager, by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.
+The Administrator can verify that a URI retrieved from a response sent by the Group Manager points to the same Group Manager by comparing the host subcomponent of the URI with the host subcomponent of the corresponding request URI. If one host subcomponent consists of an IP literal and the other host subcomponent consists of a hostname, the comparison could require resolving the hostname to an IP address.
 
 If the Administrator determines that a URI pointing to an alleged group-membership resource cannot be accepted, the following applies:
 
@@ -1494,7 +1514,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## ACE Groupcomm Parameters ## {#iana-ace-groupcomm-parameters}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
+IANA is asked to register the following entries in the "ACE Groupcomm Parameters" registry {{ACE.Groupcomm.Parameters}} within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
 
 * Name: hkdf
 * CBOR Key: -1 (suggested)
@@ -1657,7 +1677,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Parameters
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
+IANA is asked to register the following entries in the "ACE Groupcomm Errors" registry {{ACE.Groupcomm.Errors}} within the "Authentication and Authorization for Constrained Environments (ACE)" registry group:
 
 * Value: 10 (suggested)
 * Description: Group currently active
@@ -1677,7 +1697,7 @@ IANA is asked to register the following entries in the "ACE Groupcomm Errors" re
 
 ## Resource Types # {#iana-rt}
 
-IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group:
+IANA is asked to register the following entries in the "Resource Type (rt=) Link Target Attribute Values" registry {{Resource.Type.Values}} within the "Constrained Restful Environments (CoRE) Parameters" registry group:
 
 * Value: core.osc.gcoll
 * Description: Group-collection resource of an OSCORE Group Manager
@@ -1806,9 +1826,13 @@ coap_group_oscore_app = 1
 
 ## Version -15 to -16 ## {#sec-15-16}
 
+* Removed requirements on operations to be supported by the Administrator.
+
 * More details in the definition of a column in the new IANA registry.
 
 * Added reference to Section 4.1 of RFC 8126.
+
+* Added references to IANA registries.
 
 * Minor fixes and editorial improvements.
 
@@ -2091,6 +2115,6 @@ coap_group_oscore_app = 1
 
 Klaus Hartke provided substantial contribution in defining the resource model based on group collection and group configurations.
 
-The authors sincerely thank {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Mohamed Boucadair}}}, {{{Roman Danyliw}}}, {{{Meir Goldman}}}, {{{Bron Gondwana}}}, {{{Wes Hardaker}}}, {{{Jim Schaad}}}, {{{Göran Selander}}}, {{{Cigdem Sengul}}}, and {{{Paul Wouters}}} for their comments and feedback.
+The authors sincerely thank {{{Christian Amsüss}}}, {{{Mike Bishop}}}, {{{Carsten Bormann}}}, {{{Mohamed Boucadair}}}, {{{Roman Danyliw}}}, {{{Meir Goldman}}}, {{{Bron Gondwana}}}, {{{Wes Hardaker}}}, {{{Jim Schaad}}}, {{{Göran Selander}}}, {{{Cigdem Sengul}}}, and {{{Paul Wouters}}} for their comments and feedback.
 
 The work on this document has been partly supported by the Sweden's Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and CYPRESS; and by the H2020 project SIFIS-Home (Grant agreement 952652).
