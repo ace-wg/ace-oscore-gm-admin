@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 6 September 2026                                P. van der Stok
+Expires: 13 September 2026                               P. van der Stok
                                                                         
                                                             F. Palombini
                                                              Ericsson AB
-                                                            5 March 2026
+                                                           12 March 2026
 
 
               Admin Interface for the OSCORE Group Manager
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 September 2026.
+   This Internet-Draft will expire on 13 September 2026.
 
 Copyright Notice
 
@@ -646,7 +646,7 @@ Table of Contents
    confers a number of advantages:
 
    *  When relying on wildcard patterns and complex patterns, the
-      encoded scope can be compact in size while allowing the
+      encoded scope can have a small size while allowing the
       Administrator to operate on large pools of group names.
 
    *  When relying on wildcard patterns and complex patterns, the
@@ -1189,17 +1189,15 @@ Table of Contents
    at the Group Manager.
 
    For each operation, it is defined whether that operation is required
-   or optional to support for an Administrator and for the Group
-   Manager.  If an Administrator supports an operation, then the
-   Administrator is able to produce and send the request associated with
-   that operation.  If the Group Manager supports an operation, then the
-   Group Manager must be able to correctly handle authorized and valid
-   requests sent by the Administrator to carry out that operation.  If
-   the Group Manager receives an authorized and valid request to perform
-   an operation that it does not support (i.e., the CoAP method used in
-   the request is not supported by the targeted resource), then the
-   Group Manager replies with a 4.05 (Method Not Allowed) response (see
-   Section 5.8 of [RFC7252]).
+   or optional to support for the Group Manager.  If the Group Manager
+   supports an operation, then the Group Manager must be able to
+   correctly handle authorized and valid requests sent by the
+   Administrator to carry out that operation.  If the Group Manager
+   receives an authorized and valid request to perform an operation that
+   it does not support (i.e., the CoAP method used in the request is not
+   supported by the targeted resource), then the Group Manager replies
+   with a 4.05 (Method Not Allowed) response (see Section 5.8 of
+   [RFC7252]).
 
    When checking the scope claim of a stored access token to verify that
    any of the requests defined in the following is authorized, the Group
@@ -1242,8 +1240,7 @@ Table of Contents
 
 6.1.  Retrieve a List of Group Configurations
 
-   This operation MUST be supported by the Group Manager and an
-   Administrator.
+   This operation MUST be supported by the Group Manager.
 
    The Administrator can send a GET request to the group-collection
    resource, in order to retrieve a list of the existing OSCORE groups
@@ -1283,8 +1280,7 @@ Table of Contents
 
 6.2.  Retrieve a List of Group Configurations by Filters
 
-   This operation MUST be supported by the Group Manager and MAY be
-   supported by an Administrator.
+   This operation MUST be supported by the Group Manager.
 
    The Administrator can send a FETCH request to the group-collection
    resource, in order to retrieve a list of the existing OSCORE groups
@@ -1396,8 +1392,7 @@ Table of Contents
 
 6.3.  Create a New Group Configuration
 
-   This operation MUST be supported by the Group Manager and an
-   Administrator.
+   This operation MUST be supported by the Group Manager.
 
    The Administrator can send a POST request to the group-collection
    resource, in order to create a new OSCORE group at the Group Manager.
@@ -1703,8 +1698,7 @@ Table of Contents
 
 6.4.  Retrieve a Group Configuration
 
-   This operation MUST be supported by the Group Manager and an
-   Administrator.
+   This operation MUST be supported by the Group Manager.
 
    The Administrator can send a GET request to the group-configuration
    resource /manage/GROUPNAME associated with an OSCORE group with group
@@ -1766,8 +1760,7 @@ Table of Contents
 
 6.5.  Retrieve Part of a Group Configuration by Filters
 
-   This operation MUST be supported by the Group Manager and MAY be
-   supported by an Administrator.
+   This operation MUST be supported by the Group Manager.
 
    The Administrator can send a FETCH request to the group-configuration
    resource /manage/GROUPNAME associated with an OSCORE group with group
@@ -1840,8 +1833,7 @@ Table of Contents
 
 6.6.  Overwrite a Group Configuration
 
-   This operation MAY be supported by the Group Manager and an
-   Administrator.
+   This operation MAY be supported by the Group Manager.
 
    The Administrator can send a POST request to the group-configuration
    resource /manage/GROUPNAME associated with an OSCORE group with group
@@ -2228,8 +2220,7 @@ Table of Contents
 
 6.7.  Selective Update of a Group Configuration
 
-   This operation MAY be supported by the Group Manager and an
-   Administrator.
+   This operation MAY be supported by the Group Manager.
 
    The Administrator can send a PATCH/iPATCH request [RFC8132] to the
    group-configuration resource /manage/GROUPNAME associated with an
@@ -2430,8 +2421,7 @@ Table of Contents
 
 6.8.  Delete a Group Configuration
 
-   This operation MUST be supported by the Group Manager and an
-   Administrator.
+   This operation MUST be supported by the Group Manager.
 
    The Administrator can send a DELETE request to the group-
    configuration resource /manage/GROUPNAME associated with an OSCORE
@@ -2939,7 +2929,7 @@ Table of Contents
    It is up to the application to specify for how long a log entry is
    retained from the time of its creation and until its deletion.
    Different retention policies could be enforced for different groups.
-   For a given group, oldest log entries are expected to be those
+   For a given group, the oldest log entries are expected to be those
    deleted first, and different retention policies could be enforced
    depending on whether the group currently exists or has been deleted.
 
@@ -3089,8 +3079,8 @@ Table of Contents
 10.2.  Group Manager
 
    In addition to what is discussed in Section 10.1 of [RFC9594], a
-   compromised Group Manager would allow an adversary to also monitor
-   the group configurations specified by an Administrator, or to enforce
+   compromised Group Manager would allow an adversary to monitor the
+   group configurations specified by an Administrator, or to enforce
    group configurations different from the specified ones, which can
    result in communications in the OSCORE groups not attaining the
    originally intended security level.
@@ -3102,7 +3092,7 @@ Table of Contents
    Unlike what is defined in Section 10.2 of [RFC9594] with respect to
    renewing the group keying material, the Group Manager does not have
    to change the group configurations of the OSCORE groups it is
-   responsible for, after having experienced a reboot.
+   responsible for after having experienced a reboot.
 
 10.3.  Administrators
 
@@ -3122,7 +3112,7 @@ Table of Contents
    payload of a successful response to those requests has to or can
    include the 'joining_uri' status parameter.  When processing the
    response, the Administrator SHOULD NOT accept the URI encoded by the
-   'joining_uri' parameter, if the URI does not point to the Group
+   'joining_uri' parameter if the URI does not point to the Group
    Manager that has sent the response.  In particular, the Administrator
    SHOULD NOT consider that URI as pointing to the alleged group-
    membership resource.
@@ -3137,7 +3127,7 @@ Table of Contents
    proxy.
 
    The Administrator can verify that a URI retrieved from a response
-   sent by the Group Manager points to the same Group Manager, by
+   sent by the Group Manager points to the same Group Manager by
    comparing the host subcomponent of the URI with the host subcomponent
    of the corresponding request URI.  If one host subcomponent consists
    of an IP literal and the other host subcomponent consists of a
@@ -3196,8 +3186,9 @@ Table of Contents
 11.1.  ACE Groupcomm Parameters
 
    IANA is asked to register the following entries in the "ACE Groupcomm
-   Parameters" registry within the "Authentication and Authorization for
-   Constrained Environments (ACE)" registry group:
+   Parameters" registry [ACE.Groupcomm.Parameters] within the
+   "Authentication and Authorization for Constrained Environments (ACE)"
+   registry group:
 
    *  Name: hkdf
 
@@ -3430,8 +3421,8 @@ Table of Contents
 11.2.  ACE Groupcomm Errors
 
    IANA is asked to register the following entries in the "ACE Groupcomm
-   Errors" registry within the "Authentication and Authorization for
-   Constrained Environments (ACE)" registry group:
+   Errors" registry [ACE.Groupcomm.Errors] within the "Authentication
+   and Authorization for Constrained Environments (ACE)" registry group:
 
    *  Value: 10 (suggested)
 
@@ -3458,8 +3449,9 @@ Table of Contents
 11.3.  Resource Types
 
    IANA is asked to register the following entries in the "Resource Type
-   (rt=) Link Target Attribute Values" registry within the "Constrained
-   Restful Environments (CoRE) Parameters" registry group:
+   (rt=) Link Target Attribute Values" registry [Resource.Type.Values]
+   within the "Constrained Restful Environments (CoRE) Parameters"
+   registry group:
 
    *  Value: core.osc.gcoll
 
@@ -3564,6 +3556,16 @@ Table of Contents
 
 12.1.  Normative References
 
+   [ACE.Groupcomm.Errors]
+              IANA, "ACE Groupcomm Errors",
+              <https://www.iana.org/assignments/ace/ace.xhtml#ace-
+              groupcomm-errors>.
+
+   [ACE.Groupcomm.Parameters]
+              IANA, "ACE Groupcomm Parameters",
+              <https://www.iana.org/assignments/ace/ace.xhtml#ace-
+              groupcomm-parameters>.
+
    [COSE.Algorithms]
               IANA, "COSE Algorithms",
               <https://www.iana.org/assignments/cose/
@@ -3593,6 +3595,11 @@ Table of Contents
               Internet-Draft, draft-ietf-core-oscore-groupcomm-28, 23
               December 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-core-oscore-groupcomm-28>.
+
+   [Resource.Type.Values]
+              IANA, "Resource Type (rt=) Link Target Attribute Values",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#rt-link-target-att-value>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -3919,10 +3926,15 @@ Appendix C.  Document Updates
 
 C.1.  Version -15 to -16
 
+   *  Removed requirements on operations to be supported by the
+      Administrator.
+
    *  More details in the definition of a column in the new IANA
       registry.
 
    *  Added reference to Section 4.1 of RFC 8126.
+
+   *  Added references to IANA registries.
 
    *  Minor fixes and editorial improvements.
 
@@ -4236,10 +4248,10 @@ Acknowledgments
    Klaus Hartke provided substantial contribution in defining the
    resource model based on group collection and group configurations.
 
-   The authors sincerely thank Christian Amsüss, Carsten Bormann,
-   Mohamed Boucadair, Roman Danyliw, Meir Goldman, Bron Gondwana, Wes
-   Hardaker, Jim Schaad, Göran Selander, Cigdem Sengul, and Paul Wouters
-   for their comments and feedback.
+   The authors sincerely thank Christian Amsüss, Mike Bishop, Carsten
+   Bormann, Mohamed Boucadair, Roman Danyliw, Meir Goldman, Bron
+   Gondwana, Wes Hardaker, Jim Schaad, Göran Selander, Cigdem Sengul,
+   and Paul Wouters for their comments and feedback.
 
    The work on this document has been partly supported by the Sweden's
    Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and
