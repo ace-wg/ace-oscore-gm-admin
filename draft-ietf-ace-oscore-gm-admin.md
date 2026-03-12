@@ -306,7 +306,7 @@ Then, the following applies for each admin scope entry intended to express autho
 
 The following CDDL {{RFC8610}} notation defines an admin scope entry that uses the data model AIF-OSCORE-GROUPCOMM and expresses a set of permissions from those in {{tab-permission-values}}.
 
-~~~~~~~~~~~~~~~~~~~~ CDDL
+~~~~~~~~~~~~~~~~~~~~ cddl
    ;# include rfc9237
 
    AIF-OSCORE-GROUPCOMM = AIF-Generic<oscore-gname, oscore-gperm>
@@ -327,7 +327,7 @@ The following CDDL {{RFC8610}} notation defines an admin scope entry that uses t
 
 The following example in CBOR diagnostic notation shows a CBOR array including five scope entries as its elements.
 
-~~~~~~~~~~~
+~~~~~~~~~~~ cbor-diag
 [[true,   / Toid (wildcard pattern) /
   5       / Tperm (List + Read) /
  ],
@@ -1097,7 +1097,7 @@ The request MUST have Content-Format set to "application/ace-groupcomm+cbor" and
 
 The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as in the request from the Administrator is provided below.
 
-~~~~~~~~~~~ CDDL
+~~~~~~~~~~~ cddl
    app-group-name = tstr
    name-patch = [* app-group-name]
    app_groups_diff = [app_groups_del: name-patch,
@@ -1790,7 +1790,7 @@ The AS performs the following steps:
 # CDDL Model # {#sec-cddl-model}
 {:removeinrfc}
 
-~~~~~~~~~~~~~~~~~~~~ CDDL
+~~~~~~~~~~~~~~~~~~~~ cddl
 ; ACE Groupcomm Parameters
 hkdf = -1
 cred_fmt = -2
