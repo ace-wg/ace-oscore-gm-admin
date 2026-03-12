@@ -4263,7 +4263,7 @@ Authors' Addresses
    Marco Tiloca
    RISE AB
    Isafjordsgatan 22
-   SE-16440 Stockholm Kista
+   SE-164 40 Kista
    Sweden
    Email: marco.tiloca@ri.se
 
@@ -4271,7 +4271,7 @@ Authors' Addresses
    Rikard Höglund
    RISE AB
    Isafjordsgatan 22
-   SE-16440 Stockholm Kista
+   SE-164 40 Kista
    Sweden
    Email: rikard.hoglund@ri.se
 
@@ -4283,6 +4283,6 @@ Authors' Addresses
    Francesca Palombini
    Ericsson AB
    Torshamnsgatan 23
-   SE-16440 Stockholm Kista
+   SE-164 40 Kista
    Sweden
    Email: francesca.palombini@ericsson.com
