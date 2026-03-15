@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-12T02:06:47.545046+00:00",
+  "timestamp": "2026-03-15T02:26:47.610514+00:00",
   "repo": "ace-wg/ace-oscore-gm-admin",
   "labels": [
     {
@@ -351,25 +351,35 @@
       "id": "PR_kwDOEOo5987Id4oz",
       "title": "Mike Bishop's review",
       "url": "https://github.com/ace-wg/ace-oscore-gm-admin/pull/10",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "marco-tiloca-sics",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR addresses the review from Mike Bishop archived at https://mailarchive.ietf.org/arch/msg/ace/wrAxqQD_iVm7cChqTAD12yqneu0/\r\n",
       "createdAt": "2026-03-06T10:50:33Z",
-      "updatedAt": "2026-03-06T10:50:34Z",
+      "updatedAt": "2026-03-12T15:49:49Z",
       "baseRepository": "ace-wg/ace-oscore-gm-admin",
       "baseRefName": "master",
       "baseRefOid": "6c29121b08ac257c9f3b0a1451488cf7f1ddc2a7",
       "headRepository": "ace-wg/ace-oscore-gm-admin",
       "headRefName": "mike-review",
       "headRefOid": "bc929178675da7011d2cce0a7f782b264484f6bb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2026-03-12T15:49:49Z",
+      "mergedAt": "2026-03-12T15:49:49Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "51973983ba6a6f904606d8019c907d00a14c1aa2"
+      },
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hearing no objections, merging this.",
+          "createdAt": "2026-03-12T15:49:43Z",
+          "updatedAt": "2026-03-12T15:49:43Z"
+        }
+      ],
       "reviews": []
     }
   ]
