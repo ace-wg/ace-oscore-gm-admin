@@ -175,7 +175,7 @@ This document also refers to the following terminology:
 
 * Group-configuration resource: a resource hosted by the Group Manager and associated with an OSCORE group under that Group Manager. A group-configuration resource is identifiable with the invariant group name of the respective OSCORE group. An Administrator accesses a group-configuration resource to retrieve or change the configuration of the respective OSCORE group, or to delete that group.
 
-   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this same construct and can define their own instead.
+   The url-path to a group-configuration resource has GROUPNAME as last segment, with GROUPNAME the invariant group name assigned upon its creation. Aligned with that, a group name has to be consistent with the semantics of URI path segments (see {{Section 3.3 of RFC3986}}). Building on the considered url-path of the group-collection resource, this document uses /manage/GROUPNAME as the url-path of a group-configuration resource; implementations are not required to use this same construct and can define their own instead.
 
 * Admin resource: a group-collection resource or a group-configuration resource hosted by the Group Manager.
 
@@ -278,6 +278,8 @@ Then, the following applies for each admin scope entry intended to express autho
    - Wildcard pattern: "Toid" is specialized as the CBOR simple value `true` (0xf5), specifying the wildcard pattern. That is, any group name matches with this group name pattern.
 
    - Literal pattern: "Toid" is specialized as a CBOR text string, whose value specifies an exact group name as a literal string. That is, only one specific group name expressed as a literal text string matches with this group name pattern.
+
+     Consistent with the definition of group-configuration resource (see {{terminology}}), the specified group name has to be consistent with the semantics of URI path segments (see {{Section 3.3 of RFC3986}}).
 
    - Complex pattern: "Toid" is specialized as a tagged CBOR data item, specifying a more complex group name pattern with the semantics signaled by the CBOR tag. That is, multiple group names expressed as a literal text string match with this group name pattern.
 
@@ -1823,6 +1825,10 @@ coap_group_oscore_app = 1
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -16 to -17 ## {#sec-16-17}
+
+* Clarified that group names are consistent with the semantics of URI path segments.
 
 ## Version -15 to -16 ## {#sec-15-16}
 
