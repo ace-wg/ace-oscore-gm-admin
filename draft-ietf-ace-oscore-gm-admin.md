@@ -351,7 +351,7 @@ The following example in CBOR diagnostic notation shows a CBOR array including f
 ]
 ~~~~~~~~~~~
 
-Future specifications that define new permissions on the admin resources at the Group Manager MUST register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
+Future specifications that define new permissions on the admin resources at the Group Manager must register a corresponding numeric identifier in the "Group OSCORE Admin Permissions" registry defined in {{ssec-iana-group-oscore-admin-permissions-registry}} of this document.
 
 When using the scope format as defined in this section, the permission set ("Tperm") of each admin scope entry MUST include the "List" permission. It follows that, when expressing permissions for Administrators of OSCORE groups as defined in this document, an admin scope entry has the least significant bit of "Tperm" always set to 1.
 
@@ -1829,6 +1829,8 @@ coap_group_oscore_app = 1
 ## Version -16 to -17 ## {#sec-16-17}
 
 * Clarified that group names are consistent with the semantics of URI path segments.
+
+* Removed unnecessary normative language.
 
 ## Version -15 to -16 ## {#sec-15-16}
 
