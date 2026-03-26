@@ -187,7 +187,7 @@ Interaction examples are provided in the CoRE Link Format {{RFC6690}} and in CBO
 
 In the CBOR diagnostic notation used in this document, constructs of the form e'SOME_NAME' are replaced by the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. For example, {e'group_name': "gp1", e'gp_enc_alg': 10} stands for {-13: "gp1", -4: 10}.
 
-> Note to RFC Editor: Please delete the paragraph immediately preceding this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
+Note to RFC Editor: Please delete the paragraph immediately preceding this note. Also, in the CBOR diagnostic notation used in this document, please replace the constructs of the form e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL model shown in {{fig-cddl-model}} of {{sec-cddl-model}}. Finally, please delete this note.
 
 # Group Administration # {#overview}
 
@@ -265,7 +265,7 @@ This document extends the same AIF data model AIF-OSCORE-GROUPCOMM as defined be
 
 Like in the original definition of the data model AIF-OSCORE-GROUPCOMM, and with reference to the generic AIF model
 
-~~~~~~~~~~~
+~~~~~~~~~~~ cddl
    AIF-Generic<Toid, Tperm> = [* [Toid, Tperm]]
 ~~~~~~~~~~~
 
@@ -1105,7 +1105,7 @@ The CDDL definition {{RFC8610}} of the CBOR array 'app_groups_diff' formatted as
    app_groups_diff = [app_groups_del: name-patch,
                       app_groups_add: name-patch]
 ~~~~~~~~~~~
-{: #cddl-diff title="CDDL definition of the 'app_groups_diff' field" artwork-align="left"}
+{: #cddl-diff title="CDDL definition of the 'app_groups_diff' field"}
 
 The Group Manager MUST reply with a 4.00 (Bad Request) response in case: both the inner CBOR arrays 'app_groups_del' and 'app_groups_add' are empty; or the CBOR map in the request payload includes both the 'app_groups' field and the 'app_groups_diff' field.
 
@@ -1821,7 +1821,7 @@ app_groups_diff = -28
 ; ACE Groupcomm Profiles
 coap_group_oscore_app = 1
 ~~~~~~~~~~~~~~~~~~~~
-{: #fig-cddl-model title="CDDL model" artwork-align="left"}
+{: #fig-cddl-model title="CDDL model"}
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
@@ -1831,6 +1831,10 @@ coap_group_oscore_app = 1
 * Clarified that group names are consistent with the semantics of URI path segments.
 
 * Removed unnecessary normative language.
+
+* Ensured that sourcecode snippets are marked as CDDL in the XML file.
+
+* Fixed nits.
 
 ## Version -15 to -16 ## {#sec-15-16}
 
