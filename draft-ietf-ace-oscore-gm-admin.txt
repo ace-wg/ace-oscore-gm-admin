@@ -5,11 +5,11 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                R. Höglund
 Intended status: Standards Track                                 RISE AB
-Expires: 13 September 2026                               P. van der Stok
+Expires: 30 September 2026                               P. van der Stok
                                                                         
                                                             F. Palombini
                                                              Ericsson AB
-                                                           12 March 2026
+                                                           29 March 2026
 
 
               Admin Interface for the OSCORE Group Manager
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 September 2026.
+   This Internet-Draft will expire on 30 September 2026.
 
 Copyright Notice
 
@@ -130,22 +130,23 @@ Table of Contents
    Appendix A.  Processing of Group Name Patterns at the AS
    Appendix B.  CDDL Model
    Appendix C.  Document Updates
-     C.1.  Version -15 to -16
-     C.2.  Version -14 to -15
-     C.3.  Version -13 to -14
-     C.4.  Version -12 to -13
-     C.5.  Version -11 to -12
-     C.6.  Version -10 to -11
-     C.7.  Version -09 to -10
-     C.8.  Version -08 to -09
-     C.9.  Version -07 to -08
-     C.10. Version -06 to -07
-     C.11. Version -05 to -06
-     C.12. Version -04 to -05
-     C.13. Version -03 to -04
-     C.14. Version -02 to -03
-     C.15. Version -01 to -02
-     C.16. Version -00 to -01
+     C.1.  Version -16 to -17
+     C.2.  Version -15 to -16
+     C.3.  Version -14 to -15
+     C.4.  Version -13 to -14
+     C.5.  Version -12 to -13
+     C.6.  Version -11 to -12
+     C.7.  Version -10 to -11
+     C.8.  Version -09 to -10
+     C.9.  Version -08 to -09
+     C.10. Version -07 to -08
+     C.11. Version -06 to -07
+     C.12. Version -05 to -06
+     C.13. Version -04 to -05
+     C.14. Version -03 to -04
+     C.15. Version -02 to -03
+     C.16. Version -01 to -02
+     C.17. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -292,11 +293,13 @@ Table of Contents
 
       The url-path to a group-configuration resource has GROUPNAME as
       last segment, with GROUPNAME the invariant group name assigned
-      upon its creation.  Building on the considered url-path of the
-      group-collection resource, this document uses /manage/GROUPNAME as
-      the url-path of a group-configuration resource; implementations
-      are not required to use this same construct and can define their
-      own instead.
+      upon its creation.  Aligned with that, a group name has to be
+      consistent with the semantics of URI path segments (see
+      Section 3.3 of [RFC3986]).  Building on the considered url-path of
+      the group-collection resource, this document uses /manage/
+      GROUPNAME as the url-path of a group-configuration resource;
+      implementations are not required to use this same construct and
+      can define their own instead.
 
    *  Admin resource: a group-collection resource or a group-
       configuration resource hosted by the Group Manager.
@@ -323,12 +326,11 @@ Table of Contents
    {e'group_name': "gp1", e'gp_enc_alg': 10} stands for {-13: "gp1", -4:
    10}.
 
-      Note to RFC Editor: Please delete the paragraph immediately
-      preceding this note.  Also, in the CBOR diagnostic notation used
-      in this document, please replace the constructs of the form
-      e'SOME_NAME' with the value assigned to SOME_NAME in the CDDL
-      model shown in Figure 3 of Appendix B.  Finally, please delete
-      this note.
+   Note to RFC Editor: Please delete the paragraph immediately preceding
+   this note.  Also, in the CBOR diagnostic notation used in this
+   document, please replace the constructs of the form e'SOME_NAME' with
+   the value assigned to SOME_NAME in the CDDL model shown in Figure 3
+   of Appendix B.  Finally, please delete this note.
 
 2.  Group Administration
 
@@ -496,6 +498,11 @@ Table of Contents
          That is, only one specific group name expressed as a literal
          text string matches with this group name pattern.
 
+         Consistent with the definition of group-configuration resource
+         (see Section 1.1), the specified group name has to be
+         consistent with the semantics of URI path segments (see
+         Section 3.3 of [RFC3986]).
+
       -  Complex pattern: "Toid" is specialized as a tagged CBOR data
          item, specifying a more complex group name pattern with the
          semantics signaled by the CBOR tag.  That is, multiple group
@@ -608,7 +615,7 @@ Table of Contents
    ]
 
    Future specifications that define new permissions on the admin
-   resources at the Group Manager MUST register a corresponding numeric
+   resources at the Group Manager must register a corresponding numeric
    identifier in the "Group OSCORE Admin Permissions" registry defined
    in Section 11.4 of this document.
 
@@ -3576,9 +3583,9 @@ Table of Contents
               Object Security for Constrained RESTful Environments
               (Group OSCORE) Using Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-20, 25
-              February 2026, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-ace-key-groupcomm-oscore-20>.
+              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-21, 14
+              March 2026, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-ace-key-groupcomm-oscore-21>.
 
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
@@ -3924,7 +3931,19 @@ Appendix C.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-C.1.  Version -15 to -16
+C.1.  Version -16 to -17
+
+   *  Clarified that group names are consistent with the semantics of
+      URI path segments.
+
+   *  Removed unnecessary normative language.
+
+   *  Ensured that sourcecode snippets are marked as CDDL in the XML
+      file.
+
+   *  Fixed nits.
+
+C.2.  Version -15 to -16
 
    *  Removed requirements on operations to be supported by the
       Administrator.
@@ -3938,7 +3957,7 @@ C.1.  Version -15 to -16
 
    *  Minor fixes and editorial improvements.
 
-C.2.  Version -14 to -15
+C.3.  Version -14 to -15
 
    *  Updated section title (removed "full").
 
@@ -3952,7 +3971,7 @@ C.2.  Version -14 to -15
 
    *  Minor fixes and editorial improvements.
 
-C.3.  Version -13 to -14
+C.4.  Version -13 to -14
 
    *  Aligned with draft-ietf-ace-key-groupcomm-oscore, 'sign_enc_alg'
       from that document is renamed as 'gp_enc_alg'.
@@ -3991,7 +4010,7 @@ C.3.  Version -13 to -14
 
    *  Minor fixes and editorial improvements.
 
-C.4.  Version -12 to -13
+C.5.  Version -12 to -13
 
    *  Uri-Path and Location-Path as text strings in examples.
 
@@ -4005,7 +4024,7 @@ C.4.  Version -12 to -13
 
    *  Editorial fixes.
 
-C.5.  Version -11 to -12
+C.6.  Version -11 to -12
 
    *  CBOR diagnostic notation uses placeholders from a CDDL model.
 
@@ -4042,7 +4061,7 @@ C.5.  Version -11 to -12
 
    *  Minor clarifications and editorial improvements.
 
-C.6.  Version -10 to -11
+C.7.  Version -10 to -11
 
    *  Early mentioned that issued access tokens can have other purposes.
 
@@ -4067,7 +4086,7 @@ C.6.  Version -10 to -11
 
    *  Editorial fixes and improvements.
 
-C.7.  Version -09 to -10
+C.8.  Version -09 to -10
 
    *  Consistent use of 4.03 (Forbidden) error responses.
 
@@ -4090,7 +4109,7 @@ C.7.  Version -09 to -10
 
    *  Editorial fixes and improvements.
 
-C.8.  Version -08 to -09
+C.9.  Version -08 to -09
 
    *  Removed use of CoRAL.
 
@@ -4106,7 +4125,7 @@ C.8.  Version -08 to -09
 
    *  Fixes and editorial improvements.
 
-C.9.  Version -07 to -08
+C.10.  Version -07 to -08
 
    *  Consistency of parameter names.
 
@@ -4128,7 +4147,7 @@ C.9.  Version -07 to -08
 
    *  Various clarifications and editorial improvements.
 
-C.10.  Version -06 to -07
+C.11.  Version -06 to -07
 
    *  Alignment with renaming in draft-ietf-ace-key-groupcomm.
 
@@ -4144,7 +4163,7 @@ C.10.  Version -06 to -07
 
    *  Editorial improvements.
 
-C.11.  Version -05 to -06
+C.12.  Version -05 to -06
 
    *  Use and extend the same AIF data model AIF-OSCORE-GROUPCOMM
       defined in [I-D.ietf-ace-key-groupcomm-oscore].
@@ -4165,7 +4184,7 @@ C.11.  Version -05 to -06
 
    *  Editorial improvements.
 
-C.12.  Version -04 to -05
+C.13.  Version -04 to -05
 
    *  Defined format of scope based on a new AIF data model.
 
@@ -4187,7 +4206,7 @@ C.12.  Version -04 to -05
 
    *  Revised order of sections; editorial improvements.
 
-C.13.  Version -03 to -04
+C.14.  Version -03 to -04
 
    *  Clarifications on what to do in case of enhanced error responses.
 
@@ -4202,7 +4221,7 @@ C.13.  Version -03 to -04
 
    *  Editorial improvements.
 
-C.14.  Version -02 to -03
+C.15.  Version -02 to -03
 
    *  Aligned new and old parameters to core-groupcomm-oscore and ace-
       key-groupcomm-oscore.
@@ -4215,7 +4234,7 @@ C.14.  Version -02 to -03
 
    *  New error type "Group currently active".
 
-C.15.  Version -01 to -02
+C.16.  Version -01 to -02
 
    *  Admit multiple Administrators and limited access to admin
       resources.
@@ -4229,7 +4248,7 @@ C.15.  Version -01 to -02
 
    *  Editorial improvements.
 
-C.16.  Version -00 to -01
+C.17.  Version -00 to -01
 
    *  Names of application groups as status parameter.
 
